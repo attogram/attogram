@@ -7,3 +7,8 @@ Attogram quick specs:
 * PHP5, Apache2, SQLite, Plugin architecture
 * IP protected backend, web-based database management
 * Open source, MIT/GPL dual license
+
+Coming Soon to Github!
+========
+
+Alpha preview available at: http://getitdaily.com/attogram/
