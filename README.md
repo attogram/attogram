@@ -11,4 +11,8 @@ Attogram quick specs:
 Coming Soon to Github!
 ========
 
-Alpha preview available at: http://getitdaily.com/attogram/
+Alpha preview available:
+* Homepage: http://getitdaily.com/attogram/
+* Documentation: http://getitdaily.com/attogram/documentation/
+* License: http://getitdaily.com/attogram/license/
+* Contact the Attogram Developers: http://getitdaily.com/attogram/contact/
