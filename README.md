@@ -8,9 +8,6 @@ Attogram quick specs:
 * IP protected backend, web-based database management
 * Open source, MIT/GPL dual license
 
-Coming Soon to Github!
-========
-
 Alpha preview available:
 * Homepage: http://getitdaily.com/attogram/
 * Documentation: http://getitdaily.com/attogram/documentation/
