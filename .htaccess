@@ -1,0 +1,4 @@
+ErrorDocument 403 /attogram/404.php
+ErrorDocument 404 /attogram/404.php
+DirectoryIndex index.php
+FallbackResource /attogram/index.php
