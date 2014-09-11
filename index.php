@@ -41,7 +41,7 @@ class attogram {
     $p = parse_url($_SERVER['REQUEST_URI']);
     $a = explode('/', $p['path']);
     for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); }
-    $uri = $a
+    $uri = $a;
     if( !$uri || !is_array($uri) ) { $this->error404(); }
 
     if( $uri[0]=='' && !isset($uri[1]) ) {
