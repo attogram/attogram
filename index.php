@@ -128,12 +128,13 @@ class attogram {
   function query( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
+    if( !$db ) { $this->hook('ERROR-QUERY'); return array(); }
     $statement = $db->prepare($sql);
-    if( !$statement ) { $this->hook('ERROR_QUERY'); return array(); }
+    if( !$statement ) { $this->hook('ERROR-QUERY'); return array(); }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }	
-    if( !$statement->execute() ) { $this->hook('ERROR_QUERY'); return array(); }
+    if( !$statement->execute() ) { $this->hook('ERROR-QUERY'); return array(); }
     $r = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if( !$r && $this->db->errorCode() != '00000') { $this->hook('ERROR_QUERY'); $r = array(); }
+    if( !$r && $this->db->errorCode() != '00000') { $this->hook('ERROR-QUERY'); $r = array(); }
     $this->hook('POST-QUERY');
     return $r;
   }
@@ -141,10 +142,12 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function queryb( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
-    $statement = $this->get_db()->prepare($sql);
-    if( !$statement ) { $this->hook('ERROR_QUERY'); return false; }
+    $db = $this->get_db();
+    if( !$db ) { $this->hook('ERROR-QUERY'); return false; }    
+    $statement = $db()->prepare($sql);
+    if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) {  $this->hook('ERROR_QUERY'); return false; }
+    if( !$statement->execute() ) {  $this->hook('ERROR-QUERY'); return false; }
     $this->hook('POST-QUERY');
     return true;
   }
