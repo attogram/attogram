@@ -45,14 +45,12 @@ class attogram {
     if( !$uri || !is_array($uri) ) { $this->error404(); }
 
     if( $uri[0]=='' && !isset($uri[1]) ) {
-       $uri[0] = 'home'; // The Homepage
-    } elseif( !isset($uri[2]) && isset($uri[1]) && $uri[1]=='' ) {
-      if( !in_array($uri[0],$this->get_actions()) ) { $this->error404(); }
-    } else {
-      $this->error404();
+      $uri[0]='home'; $uri[1]=''; // The Homepage
+    } elseif( !in_array($uri[0],$this->get_actions()) ) {
+       $this->error404();
     }
     $this->hook('POST-ROUTE');
-  
+
     if( preg_match('/^admin/',$uri[0]) ) {
       if( !$this->is_admin() ) { $this->error404(); } // admin only
     }
