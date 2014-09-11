@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework 
-version 0.0.2
+version 0.0.3
 
 Copyright (c) 2014 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -11,7 +11,6 @@ Dual licensed: MIT License and/or GNU General Public License V3
 function __construct() - loads config, routes request
 function error404() - load ./404.php
 function hook($hook, $return=false) - call a plugin hook
-function urisplit($base=0) - split the url for routing
 function get_plugins() - get array of active plugin objects
 function get_actions() - get array of action names
 function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
@@ -26,30 +25,48 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $admins, $actions, $plugins, $db; 
+  var $version, $path, $admins, $actions, $plugins, $db; 
 
   ////////////////////////////////////////////////////////////////////
   function __construct() { 
 
     $this->hook('INIT');
-    $this->version = '0.0.2';
-    include_once('libs/config.php'); // sets $base, $admins
+    $this->version = '0.0.3';
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
+	
+    include_once('libs/config.php'); // sets $admins array
     $this->admins = $admins; 
 
     $this->hook('ROUTE');
-    $uri = $this->urisplit($base); if( !$uri || !is_array($uri) ) { $this->error404(); }
+    $base = substr_count($this->path, '/') + 1;
+    $p = parse_url($_SERVER['REQUEST_URI']);
+    $a = explode('/', $p['path']);
+    if( $base ) { for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); } }
+    $uri = $a
+
+	if( !$uri || !is_array($uri) ) { $this->error404(); }
+
     if( $uri[0]=='' && !isset($uri[1]) ) { 
       $this->hook('PRE-ACTION');
       include('actions/home.php'); 
       $this->hook('POST-ACTION');
       exit; 
     } 
+
     $actions = $this->get_actions();
+
     if( !isset($uri[2]) && isset($uri[1]) && $uri[1]=='' ) {
       if( !in_array($uri[0],$actions) ) { $this->error404(); }
-    } else { $this->error404(); }
-    if($uri[sizeof($uri)-1]!='') { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
-    if( preg_match('/^admin/',$uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
+    } else {
+	  $this->error404();
+	}
+
+    if($uri[sizeof($uri)-1]!='') {
+	  header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
+    }
+	if( preg_match('/^admin/',$uri[0]) ) {
+	  if( !$this->is_admin() ) { $this->error404(); } // admin only
+	}
 
     $this->hook('PRE-ACTION');
     $db = $this->get_db();
@@ -76,14 +93,6 @@ class attogram {
     if( $return ) { return $r; } 
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function urisplit($base=0) {
-    $p = parse_url($_SERVER['REQUEST_URI']);
-    $a = explode('/', $p['path']);
-    if( $base ) { for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); } } 
-    return $a;
-  }
-
   //////////////////////////////////////////////////////////////////////
   function get_plugins() {
     if( is_array($this->plugins) ) { return $this->plugins; } 
@@ -92,7 +101,7 @@ class attogram {
     foreach( array_diff(scandir($dir), array('.','..','.htaccess')) as $f ) { 
       if( is_file("$dir/$f") && is_readable("$dir/$f") && preg_match('/\.php$/',$f) ) { // php files only
         include_once("$dir/$f"); 
-	$pn = 'plugin_' . str_replace('.php','',$f); 
+        $pn = 'plugin_' . str_replace('.php','',$f); 
         if( !class_exists($pn) ) { continue; } 
         $pno = new $pn( $this );
         if( !method_exists($pno,'is_active') ) { continue; } 

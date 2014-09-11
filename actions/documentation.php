@@ -15,7 +15,7 @@ Setup:
 * or Download zip: <a href="https://github.com/attogram/attogram/archive/master.zip">https://github.com/attogram/attogram/archive/master.zip</a>
 * install code in web accessible area
 * edit ./.htaccess - set correct path name for ErrorDocument 403 and 404, FallBackResource
-* copy ./libs/config.sample.cphp to config.php and edit: add your admin ip, url base level
+* copy ./libs/config.sample.cphp to config.php and add your admin ip
 * chmod 777 ./db/ 
 * chmod 777 ./db/global
 
