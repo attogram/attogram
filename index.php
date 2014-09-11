@@ -55,11 +55,12 @@ class attogram {
     if($uri[sizeof($uri)-1]!='') {
       header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
     }
-
-    $db = $this->get_db();
     
     $this->hook('PRE-ACTION');
-    include('actions/' . $uri[0] . '.php');
+    $f = 'actions/' . $uri[0] . '.php';
+    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
+    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }  
+    include($f);
     $this->hook('POST-ACTION');
   }
 
