@@ -32,20 +32,21 @@ class attogram {
 
     $this->hook('INIT');
     $this->version = '0.0.3';
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
 
     include_once('libs/config.php'); // sets $admins array
-    $this->admins = $admins; 
+    if( is_array($admins) && $admins ) { $this->admins = $admins; }
+     
 
-    $this->hook('ROUTE');
+    $this->hook('PRE-ROUTE');
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());    
     $base = substr_count($this->path, '/') + 1;
     $p = parse_url($_SERVER['REQUEST_URI']);
     $a = explode('/', $p['path']);
-    if( $base ) { for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); } }
+    for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); }
     $uri = $a
-
     if( !$uri || !is_array($uri) ) { $this->error404(); }
-
+    $this->hook('POST-ROUTE');
+    
     if( $uri[0]=='' && !isset($uri[1]) ) {
       $this->hook('PRE-ACTION');
       include('actions/home.php');
@@ -129,7 +130,7 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function is_admin() {
     if( isset($_GET['noadmin']) ) { return false; }
-    if( !$this->admins || !is_array($this->admins) ) { return false; }
+    if( !isset($this->admins) || !is_array($this->admins) ) { return false; }
     if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) { return true; }
     return false;
   }
