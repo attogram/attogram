@@ -32,10 +32,8 @@ class attogram {
 
     $this->hook('INIT');
     $this->version = '0.0.3';
-
     include_once('libs/config.php'); // sets $admins array
     if( is_array($admins) && $admins ) { $this->admins = $admins; }
-     
 
     $this->hook('PRE-ROUTE');
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());    
@@ -45,32 +43,26 @@ class attogram {
     for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); }
     $uri = $a
     if( !$uri || !is_array($uri) ) { $this->error404(); }
-    $this->hook('POST-ROUTE');
-    
+
     if( $uri[0]=='' && !isset($uri[1]) ) {
-      $this->hook('PRE-ACTION');
-      include('actions/home.php');
-      $this->hook('POST-ACTION');
-      exit; 
-    } 
-
-    $actions = $this->get_actions();
-
-    if( !isset($uri[2]) && isset($uri[1]) && $uri[1]=='' ) {
-      if( !in_array($uri[0],$actions) ) { $this->error404(); }
+       $uri[0] = 'home'; // The Homepage
+    } elseif( !isset($uri[2]) && isset($uri[1]) && $uri[1]=='' ) {
+      if( !in_array($uri[0],$this->get_actions()) ) { $this->error404(); }
     } else {
       $this->error404();
     }
-
-    if($uri[sizeof($uri)-1]!='') {
-      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
-    }
+    $this->hook('POST-ROUTE');
+  
     if( preg_match('/^admin/',$uri[0]) ) {
       if( !$this->is_admin() ) { $this->error404(); } // admin only
     }
+    if($uri[sizeof($uri)-1]!='') {
+      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
+    }
 
-    $this->hook('PRE-ACTION');
     $db = $this->get_db();
+    
+    $this->hook('PRE-ACTION');
     include('actions/' . $uri[0] . '.php');
     $this->hook('POST-ACTION');
   }
