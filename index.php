@@ -43,10 +43,9 @@ class attogram {
     for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); }
     $uri = $a;
     if( !$uri || !is_array($uri) ) { $this->error404(); }
-
     if( $uri[0]=='' && !isset($uri[1]) ) {
       $uri[0]='home'; $uri[1]=''; // The Homepage
-    } elseif( !in_array($uri[0],$this->get_actions()) ) {
+    } elseif( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) {
        $this->error404();
     }
     $this->hook('POST-ROUTE');
