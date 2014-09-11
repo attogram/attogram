@@ -32,15 +32,14 @@ class attogram {
 
     $this->hook('INIT');
     $this->version = '0.0.3';
-    include_once('libs/config.php'); // sets $admins array
+    $config = 'libs/config.php';
+    if( is_file($config) && is_readable($config) ) { include_once($config); }
     if( is_array($admins) && $admins ) { $this->admins = $admins; }
 
     $this->hook('PRE-ROUTE');
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());    
-    $base = substr_count($this->path, '/') + 1;
-    $p = parse_url($_SERVER['REQUEST_URI']);
-    $a = explode('/', $p['path']);
-    for( $i = 0; $i < $base; $i++ ) { $b = array_shift($a); }
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
+    $a = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    for( $i = 0; $i < (substr_count($this->path, '/')+1); $i++ ) { $b = array_shift($a); }
     $uri = $a;
     if( !$uri || !is_array($uri) ) { $this->error404(); }
     if( $uri[0]=='' && !isset($uri[1]) ) {
