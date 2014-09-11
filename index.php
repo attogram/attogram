@@ -144,7 +144,7 @@ class attogram {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
     if( !$db ) { $this->hook('ERROR-QUERY'); return false; }    
-    $statement = $db()->prepare($sql);
+    $statement = $db->prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) {  $this->hook('ERROR-QUERY'); return false; }
