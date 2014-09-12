@@ -13,8 +13,7 @@ class plugin_timer {
     switch($hook) { 
       case 'POST-ADMIN': print '<br />plugin_timer: ' . ($this->is_active() ? 'ACTIVE' : 'DISABLED'); break;
       case 'INIT': $this->start_timer(); break;
-      //case 'POST-FOOTER': $this->end_timer(); break;
-      case 'POST-ACTION': $this->end_timer(); break;
+      case 'POST-FOOTER': $this->end_timer(); break;
     } 
   } 
 
