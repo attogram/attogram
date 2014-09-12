@@ -25,9 +25,8 @@ class plugin_timer {
     $end = microtime(1);
     $diff = round( $end - $this->start, 18);
     $attoseconds = number_format( pow(10,18)*$diff, $decimals=0 );
-    print '<div class="body" style="font-size:9pt;">'
-    . 'Powered by <a target="code" href="http://getitdaily.com/attogram/">Attogram</a> &nbsp;|&nbsp; '
-    . 'Page generated in ' . $attoseconds . ' attoseconds (' . round($diff,4) . ' seconds)</div>';
+    print '<div class="footer">Powered by <a target="code" href="http://getitdaily.com/attogram/">Attogram</a> &nbsp;|&nbsp; '
+    . 'Page generated in ' . $attoseconds . ' attoseconds (' . round($diff,5) . ' seconds)</div>';
   }
 
 } // END of class plugin_timer
