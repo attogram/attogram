@@ -30,32 +30,32 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function __construct() {
 
-    $this->hook('INIT');
+    $this->hook('PRE-INIT');
     $this->version = '0.0.3';
     $config = 'libs/config.php';
-    if( is_file($config) && is_readable($config) ) { include_once($config); }
-    if( is_array($admins) && $admins ) { $this->admins = $admins; }
+    if( is_file($config) && is_readable($config) ) {
+      include_once($config);
+      if( is_array($admins) && $admins ) { $this->admins = $admins; }
+    }
+    $this->hook('POST-INIT');
 
     $this->hook('PRE-ROUTE');
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
-    $a = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    for( $i = 0; $i < (substr_count($this->path, '/')+1); $i++ ) { $b = array_shift($a); }
-    $uri = $a;
+    $uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    for( $i = 0; $i < (substr_count($this->path, '/')+1); $i++ ) { $b = array_shift($uri); }
     if( !$uri || !is_array($uri) ) { $this->error404(); }
     if( $uri[0]=='' && !isset($uri[1]) ) {
       $uri[0]='home'; $uri[1]=''; // The Homepage
     } elseif( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) {
        $this->error404();
     }
-    $this->hook('POST-ROUTE');
-
     if( preg_match('/^admin/',$uri[0]) ) {
       if( !$this->is_admin() ) { $this->error404(); } // admin only
     }
     if($uri[sizeof($uri)-1]!='') {
       header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
     }
-    
+    $this->hook('POST-ROUTE');
+
     $this->hook('PRE-ACTION');
     $f = 'actions/' . $uri[0] . '.php';
     if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
