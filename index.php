@@ -153,16 +153,16 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
-    $this->hook('PRE_DB');
-    if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {  $this->hook('ERROR_DB'); return false; }
+    $this->hook('PRE-DB');
+    if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {  $this->hook('ERROR-DB'); return false; }
     $db_name = 'db/global';
     try {
       $this->db = new PDO('sqlite:'. $db_name);
     } catch(PDOException $e) {
-      $this->hook('ERROR_DB');
+      $this->hook('ERROR-DB');
       $this->db = false;
     }
-    $this->hook('POST_DB');
+    $this->hook('POST-DB');
     return $this->db;
   }
 
