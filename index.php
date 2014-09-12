@@ -76,10 +76,7 @@ class attogram {
   function hook($hook, $return=false) {
     $p = $this->get_plugins();
     $r = '';
-    foreach( $p as $plugin ) {
-      if( !method_exists($plugin,'hook') ) { continue; }
-      $r .= $plugin->hook($hook);
-    }
+    foreach( $p as $plugin ) { $r .= $plugin->hook($hook); }
     if( $return ) { return $r; }
   }
 
@@ -87,20 +84,21 @@ class attogram {
   function get_plugins() {
     if( is_array($this->plugins) ) { return $this->plugins; }
     $this->plugins = array();
-    $dir = 'plugins'; 
+    $dir = 'plugins';
     foreach( array_diff(scandir($dir), array('.','..','.htaccess')) as $f ) {
-      if( is_file("$dir/$f") && is_readable("$dir/$f") && preg_match('/\.php$/',$f) ) { // php files only
-        include_once("$dir/$f");
-        $pn = 'plugin_' . str_replace('.php','',$f);
-        if( !class_exists($pn) ) { continue; }
-        $pno = new $pn( $this );
-        if( !method_exists($pno,'is_active') ) { continue; }
-        if( !$pno->is_active() ) { continue; }
-        $this->plugins[] = $pno;
-      }
+      if( !is_file("$dir/$f") || !is_readable("$dir/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+      include_once("$dir/$f");
+      $p = 'plugin_' . str_replace('.php','',$f);
+      if( !class_exists($p) ) { continue; }
+      $po = new $p( $this );
+      if( !method_exists($po,'is_active') ) { continue; }
+      if( !$po->is_active() ) { continue; }
+      if( !method_exists($po,'hook') ) { continue; }
+      $this->plugins[] = $po;
     }
     return $this->plugins;
-  } 
+  }
+
 
   //////////////////////////////////////////////////////////////////////
   function get_actions() {
