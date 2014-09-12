@@ -7,12 +7,12 @@ class plugin_timer {
 
   function is_active() { return true; } 
 
-  function __construct($attogram='') { $this->attogram = $attogram; }
+  function __construct($attogram='') { }
 
   function hook($hook) { 
     switch($hook) { 
       case 'POST-ADMIN': print '<br />plugin_timer: ' . ($this->is_active() ? 'ACTIVE' : 'DISABLED'); break;
-      case 'INIT': $this->start_timer(); break;
+      case 'PRE-INIT': $this->start_timer(); break;
       case 'POST-FOOTER': $this->end_timer(); break;
     } 
   } 
