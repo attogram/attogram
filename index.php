@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.3
+version 0.0.4
 
 Copyright (c) 2014 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -31,7 +31,7 @@ class attogram {
   function __construct() {
 
     $this->hook('PRE-INIT');
-    $this->version = '0.0.3';
+    $this->version = '0.0.4';
     $config = 'libs/config.php';
     if( is_file($config) && is_readable($config) ) {
       include_once($config);
