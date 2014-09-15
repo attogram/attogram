@@ -31,7 +31,7 @@ class attogram {
   function __construct() {
 
     $this->hook('PRE-INIT');
-    $this->version = '0.0.4';
+    $this->version = '0.0.5';
     $config = 'libs/config.php';
     if( is_file($config) && is_readable($config) ) {
       include_once($config);
