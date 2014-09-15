@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.4
+version 0.0.5
 
 Copyright (c) 2014 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -10,7 +10,7 @@ Dual licensed: MIT License and/or GNU General Public License V3
 
 function __construct() - loads config, routes request
 function error404() - load ./404.php
-function hook($hook, $return=false) - call a plugin hook
+function hook( $hook, $return=false ) - call a plugin hook
 function get_plugins() - get array of active plugin objects
 function get_actions() - get array of action names
 function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
@@ -44,17 +44,10 @@ class attogram {
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
     for( $i = 0; $i < (substr_count($this->path, '/')+1); $i++ ) { $b = array_shift($uri); }
     if( !$uri || !is_array($uri) ) { $this->error404(); }
-    if( $uri[0]=='' && !isset($uri[1]) ) {
-      $uri[0]='home'; $uri[1]=''; // The Homepage
-    } elseif( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) {
-       $this->error404();
-    }
-    if( preg_match('/^admin/',$uri[0]) ) {
-      if( !$this->is_admin() ) { $this->error404(); } // admin only
-    }
-    if($uri[sizeof($uri)-1]!='') {
-      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; // add trailing slash
-    }
+    if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; } // The Homepage
+    if( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) { $this->error404(); } // available actions
+    if( preg_match('/^admin/',$uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
+    if($uri[sizeof($uri)-1]!='') { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
     $this->hook('POST-ROUTE');
 
     $this->hook('PRE-ACTION');
@@ -74,7 +67,7 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function hook($hook, $return=false) {
+  function hook( $hook, $return=false ) {
     $p = $this->get_plugins();
     $r = '';
     foreach( $p as $plugin ) { $r .= $plugin->hook($hook); }
@@ -86,6 +79,7 @@ class attogram {
     if( is_array($this->plugins) ) { return $this->plugins; }
     $this->plugins = array();
     $dir = 'plugins';
+    if( !is_dir($dir) || !is_readable($dir) ) { return $this->plugins; } 
     foreach( array_diff(scandir($dir), array('.','..','.htaccess')) as $f ) {
       if( !is_file("$dir/$f") || !is_readable("$dir/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
       include_once("$dir/$f");
@@ -106,6 +100,7 @@ class attogram {
     if( is_array($this->actions) ) { return $this->actions; }
     $this->actions = array();
     $dir = 'actions';
+    if( !is_dir($dir) || !is_readable($dir) ) { return $this->actions; } 
     foreach( array_diff(scandir($dir), array('.','..','.htaccess','home.php')) as $f ) {
       if( is_file("$dir/$f") && is_readable("$dir/$f") && preg_match('/\.php$/',$f) ) { // php files only
         if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
