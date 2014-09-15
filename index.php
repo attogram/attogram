@@ -47,7 +47,7 @@ class attogram {
     if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; goto postroute; } // The Homepage
     if( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) { $this->error404(); } // available actions
     if( preg_match('/^admin/',$uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
-    if($uri[sizeof($uri)-1]!='') { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
+    if( $uri[sizeof($uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
     postroute: $this->hook('POST-ROUTE');
 
     $this->hook('PRE-ACTION');
