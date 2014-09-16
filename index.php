@@ -102,10 +102,9 @@ class attogram {
     $dir = 'actions';
     if( !is_dir($dir) || !is_readable($dir) ) { return $this->actions; } 
     foreach( array_diff(scandir($dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( is_file("$dir/$f") && is_readable("$dir/$f") && preg_match('/\.php$/',$f) ) { // php files only
-        if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
-        $this->actions[] = str_replace('.php','',$f);
-      }
+      if( !is_file("$dir/$f") || !is_readable("$dir/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+      if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
+      $this->actions[] = str_replace('.php','',$f);
     }
     return $this->actions;
   }
