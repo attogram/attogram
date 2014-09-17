@@ -31,6 +31,7 @@ Maximum Setup
 =========
 
 A full setup with all available actions and plugins, database, and an admin interface:
+
     .
     |-- .htaccess - sets index.php keyhole, 403 and 404 errors
     |-- index.php - This is Attogram.  Attogram controls everything.
