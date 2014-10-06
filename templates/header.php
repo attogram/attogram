@@ -6,18 +6,18 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 
 ?><!doctype html><html><head>
 <title><?php print $title; ?></title>
-<meta charset="utf-8" /><meta name="viewport" content="initial-scale=1" />
-<link rel="stylesheet" type="text/css" href="/attogram/css.css">
-</head><body><div class="header"><a href="/attogram/">Attogram PHP Framework</a>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="<?php print $this->path; ?>/css.css">
+</head><body><div class="header"><a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
 <?php
 
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
 foreach( $this->get_actions() as $a ) { 
   if( preg_match('/^admin/',$a) ) { continue; } 
-  print $spacer . '<a href="/attogram/' . $a . '/">' . $a . '</a>'; 
+  print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>'; 
 }
 
-if( $this->is_admin() ) { print $spacer . '<a href="/attogram/admin/">admin</a>'; } 
+if( $this->is_admin() ) { print $spacer . '<a href="' . $this->path . '/admin/">admin</a>'; } 
 ?>
 </div>
 <?php
