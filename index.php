@@ -37,7 +37,11 @@ class attogram {
       include_once($config);
       if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
       if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
-    }
+    } else {
+		$this->hook('ERROR-CONFIG');
+		print 'Missing config file.  Please copy libs/config.sample.php to libs/config.php';
+		exit;
+	}
     $this->hook('POST-INIT');
 
     $this->hook('PRE-ROUTE');
