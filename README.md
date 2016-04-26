@@ -41,7 +41,7 @@ A full setup with all available actions and plugins, database, and an admin inte
     |   |-- .htaccess - deny all web access to this directory
     |   |-- admin.php - admin backend homepage
     |   |-- admin-check.php - admin system check
-    |   |-- admin-db.php - web-based SQLite database management via phpLiteAdmin v1.9.8
+    |   |-- admin-db.php - web-based SQLite database management via phpLiteAdmin v1.9.6
     |   |-- admin-messages.php - view/edit/delete messages from the contact form
     |   |-- home.php - homepage
     |   |-- contact.php - contact form, saves messages to database 
