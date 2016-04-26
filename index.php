@@ -99,7 +99,6 @@ class attogram {
     return $this->plugins;
   }
 
-
   //////////////////////////////////////////////////////////////////////
   function get_actions() {
     if( is_array($this->actions) ) { return $this->actions; }

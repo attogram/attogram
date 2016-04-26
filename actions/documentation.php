@@ -58,7 +58,6 @@ Attogram object:
 function __construct() - loads config, routes request
 function error404() - load ./404.php
 function hook($hook, $return=false) - call a plugin hook
-function urisplit($base=0) - split the url for routing
 function get_plugins() - get array of active plugin objects
 function get_actions() - get array of action names
 function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
@@ -85,6 +84,7 @@ PRE-HEADER, POST-HEADER
 PRE-FOOTER, POST-FOOTER
 PRE-HOME,   POST-HOME
 PRE-ADMIN,  POST-ADMIN
+PRE-PHPLITEADMIN
 </pre>
 </div>
 <?php
