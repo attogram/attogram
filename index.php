@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.5
+version 0.0.6.dev
 
 Copyright (c) 2014 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -25,7 +25,7 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $path, $admins, $actions, $plugins, $db;
+  var $version, $path, $admins, $base, $actions, $plugins, $db;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
@@ -35,14 +35,16 @@ class attogram {
     $config = 'libs/config.php';
     if( is_file($config) && is_readable($config) ) {
       include_once($config);
-      if( is_array($admins) && $admins ) { $this->admins = $admins; }
+      if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
+      if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
     }
     $this->hook('POST-INIT');
 
     $this->hook('PRE-ROUTE');
     $uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
-    for( $i = 0; $i < (substr_count($this->path, '/')+1); $i++ ) { $b = array_shift($uri); }
+	
+    for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($uri); }
     if( !$uri || !is_array($uri) ) { $this->error404(); }
     if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; goto postroute; } // The Homepage
     if( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) { $this->error404(); } // available actions
