@@ -42,7 +42,7 @@ class attogram {
 
     $this->hook('PRE-ROUTE');
     $uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());  // oops - doesn't work on windows
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));  
     for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($uri); }
     if( !$uri || !is_array($uri) ) { $this->error404(); }
     if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; goto postroute; } // The Homepage
