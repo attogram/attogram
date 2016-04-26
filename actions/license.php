@@ -11,7 +11,7 @@ Attogram is an open source project dual licensed under
 
 <hr /><pre>
 
-Copyright (c) 2014 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+Copyright (c) 2014,2015,2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 <hr />
     Attogram PHP Framework  
-    Copyright (C) 2014 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+    Copyright (C) 2014,2015,2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.6.dev
+version 0.0.6
 
 Copyright (c) 2014 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -31,7 +31,7 @@ class attogram {
   function __construct() {
 
     $this->hook('PRE-INIT');
-    $this->version = '0.0.5';
+    $this->version = '0.0.6';
     $config = 'libs/config.php';
     if( is_file($config) && is_readable($config) ) {
       include_once($config);
@@ -42,8 +42,7 @@ class attogram {
 
     $this->hook('PRE-ROUTE');
     $uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());
-	
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',getcwd());  // oops - doesn't work on windows
     for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($uri); }
     if( !$uri || !is_array($uri) ) { $this->error404(); }
     if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; goto postroute; } // The Homepage
