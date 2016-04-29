@@ -33,12 +33,12 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function __construct() {
     $this->hook('PRE-INIT');
-	$this->version = '0.0.7';
+    $this->version = '0.0.7';
     $this->config = './config.php';
-	$this->load_config();
+    $this->load_config();
     $this->hook('POST-INIT');	  
-	$this->route();
-	$this->action();
+    $this->route();
+    $this->action();
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ class attogram {
     include($f);
     $this->hook('POST-ACTION'); 
   }
-  
+ 
   ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
@@ -59,13 +59,13 @@ class attogram {
       if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
       if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
     } else {
-		$this->hook('ERROR-CONFIG');
-		print 'Missing config file.  Please copy libs/config.sample.php to libs/config.php';
-		exit;
-	}
+      $this->hook('ERROR-CONFIG');
+      print 'Missing config file.  Please copy libs/config.sample.php to libs/config.php';
+      exit;
+    }
     $this->hook('POST-CONFIG');
   }
-  
+ 
   ////////////////////////////////////////////////////////////////////
   function route() {
     $this->hook('PRE-ROUTE');
@@ -79,7 +79,7 @@ class attogram {
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
     postroute: $this->hook('POST-ROUTE');	  
   }
- 
+
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');
