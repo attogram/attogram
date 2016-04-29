@@ -12,6 +12,6 @@ HT="./libs/.htaccess"; echo $HT; cat $HT; echo;
 HT="./db/.htaccess"; echo $HT; cat $HT; echo;
 
 
-CO="./libs/config.php"; echo $CO; echo "<textarea rows='10' cols='95'>"; cat $CO; echo "</textarea>";
+CO="./config.php"; echo $CO; echo "<textarea rows='10' cols='95'>"; cat $CO; echo "</textarea>";
 
 echo END CHECK; 

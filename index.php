@@ -2,13 +2,16 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.6
+version 0.0.7
 
-Copyright (c) 2014 Attogram Developers 
+Copyright (c) 2016 Attogram Developers 
 https://github.com/attogram/attogram/
 Dual licensed: MIT License and/or GNU General Public License V3
 
-function __construct() - loads config, routes request
+function __construct() - run attogram
+function load_config() - load config file
+function route() - decide what to action to do
+function action() - load an action
 function error404() - load ./404.php
 function hook( $hook, $return=false ) - call a plugin hook
 function get_plugins() - get array of active plugin objects
@@ -25,16 +28,34 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $path, $admins, $base, $actions, $plugins, $db;
+  var $version, $config, $path, $admins, $base, $uri, $actions, $plugins, $db;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
-
     $this->hook('PRE-INIT');
-    $this->version = '0.0.6';
-    $config = 'libs/config.php';
-    if( is_file($config) && is_readable($config) ) {
-      include_once($config);
+	$this->version = '0.0.7';
+    $this->config = './config.php';
+	$this->load_config();
+    $this->hook('POST-INIT');	  
+	$this->route();
+	$this->action();
+  }
+
+  ////////////////////////////////////////////////////////////////////
+  function action() {
+    $this->hook('PRE-ACTION');
+    $f = 'actions/' . $this->uri[0] . '.php';
+    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
+    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }  
+    include($f);
+    $this->hook('POST-ACTION'); 
+  }
+  
+  ////////////////////////////////////////////////////////////////////
+  function load_config() {
+    $this->hook('PRE-CONFIG');
+    if( is_file($this->config) && is_readable($this->config) ) {
+      include_once($this->config);
       if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
       if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
     } else {
@@ -42,27 +63,23 @@ class attogram {
 		print 'Missing config file.  Please copy libs/config.sample.php to libs/config.php';
 		exit;
 	}
-    $this->hook('POST-INIT');
-
-    $this->hook('PRE-ROUTE');
-    $uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));  
-    for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($uri); }
-    if( !$uri || !is_array($uri) ) { $this->error404(); }
-    if( $uri[0]=='' && !isset($uri[1]) ) { $uri[0]='home'; $uri[1]=''; goto postroute; } // The Homepage
-    if( !in_array($uri[0],$this->get_actions()) || !$uri[1]=='' || isset($uri[2]) ) { $this->error404(); } // available actions
-    if( preg_match('/^admin/',$uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
-    if( $uri[sizeof($uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
-    postroute: $this->hook('POST-ROUTE');
-
-    $this->hook('PRE-ACTION');
-    $f = 'actions/' . $uri[0] . '.php';
-    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
-    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }  
-    include($f);
-    $this->hook('POST-ACTION');
+    $this->hook('POST-CONFIG');
   }
-
+  
+  ////////////////////////////////////////////////////////////////////
+  function route() {
+    $this->hook('PRE-ROUTE');
+    $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));  
+    for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($this->uri); }
+    if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
+    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]='home'; $this->uri[1]=''; goto postroute; } // The Homepage
+    if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
+    if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
+    if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
+    postroute: $this->hook('POST-ROUTE');	  
+  }
+ 
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');

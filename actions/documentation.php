@@ -24,6 +24,7 @@ File structure:
 .
 |-- .htaccess - sets index.php keyhole, 403 and 404 errors
 |-- <a href="../">index.php</a> - This is Attogram.  Attogram controls everything.
+|-- config.php - base URL setting, admin IP whitelist
 |-- <a href="../404.php">404.php</a> - Error 404 Page Not Found 
 |-- <a href="../css.css">css.css</a> - global CSS, included in templates/header.php
 |-- actions - the 'pages' 
@@ -41,8 +42,7 @@ File structure:
 |   `-- global - the global SQLite database
 |-- libs - support code
 |   |-- .htaccess - deny all web access to this directory
-|   |-- check.sh - unix shell script for system check
-|   `-- config.php - base URL setting, admin IP whitelist
+|   `-- check.sh - unix shell script for system check
 |-- plugins - attogram plugins
 |   |-- .htaccess - deny all web access to this directory
 |   |-- error.php - error reporting plugin 
@@ -55,9 +55,12 @@ File structure:
 
 Attogram object:
 
-function __construct() - loads config, routes request
+function __construct() - run attogram
+function load_config() - load config file
+function route() - decide what to action to do
+function action() - load an action
 function error404() - load ./404.php
-function hook($hook, $return=false) - call a plugin hook
+function hook( $hook, $return=false ) - call a plugin hook
 function get_plugins() - get array of active plugin objects
 function get_actions() - get array of action names
 function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
@@ -74,8 +77,8 @@ Plugins:
 
 Hooks:
 
-INIT
-ROUTE
+PRE-INIT,   POST-INIT
+PRE-CONFIG, POST-CONFIG
 PRE-ACTION, POST-ACTION
 PRE-404,    POST-404
 PRE-QUERY,  POST-QUERY, ERROR_QUERY

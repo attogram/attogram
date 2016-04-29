@@ -22,6 +22,7 @@ A simple setup with only the home page, and no plugins:
     .
     |-- .htaccess - apache setup for index.php keyhole, 403 and 404 errors
     |-- index.php - This is Attogram. Attogram controls everything.
+	|-- config.php - system configuration, admin IPs
     |-- 404.php - Error 404 Page Not Found
     `-- actions
         |-- .htaccess - apache setup to deny all web access to this directory
@@ -35,6 +36,7 @@ A full setup with all available actions and plugins, database, and an admin inte
     .
     |-- .htaccess - sets index.php keyhole, 403 and 404 errors
     |-- index.php - This is Attogram.  Attogram controls everything.
+	|-- config.php - base URL setting, admin IP whitelist
     |-- 404.php - Error 404 Page Not Found 
     |-- css.css - global CSS, included in templates/header.php
     |-- actions - the 'pages' 
@@ -52,8 +54,7 @@ A full setup with all available actions and plugins, database, and an admin inte
     |   `-- global - the global SQLite database
     |-- libs - support code
     |   |-- .htaccess - deny all web access to this directory
-    |   |-- check.sh - unix shell script for system check
-    |   `-- config.php - base URL setting, admin IP whitelist
+    |   `-- check.sh - unix shell script for system check
     |-- plugins - attogram plugins
     |   |-- .htaccess - deny all web access to this directory
     |   |-- error.php - error reporting plugin 
