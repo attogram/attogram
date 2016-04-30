@@ -33,8 +33,10 @@ File structure:
 |   |-- <a href="../admin-check/">admin-check.php</a> - admin system check
 |   |-- <a href="../admin-db/">admin-db.php</a> - web-based SQLite database management via phpLiteAdmin v1.9.8
 |   |-- <a href="../admin-messages/">admin-messages.php</a> - view/edit/delete messages from the contact form
+|   |-- <a href="../admin-users/">admin-users.php</a> - view/edit/delete users
 |   |-- <a href="../">home.php</a> - homepage
 |   |-- <a href="../contact/">contact.php</a> - contact form, saves messages to database 
+|   |-- <a href="../login/">login.php</a> - login form
 |   |-- <a href="../documentation/">documentation.php</a> - sub-page
 |   `-- <a href="../license/">license.php</a> - sub-page
 |-- db - the database(s) directory
@@ -52,21 +54,6 @@ File structure:
     |-- .htaccess - deny all web access to this directory
     |-- footer.php - global HTML footer
     `-- header.php - global HTML header
-
-Attogram object:
-
-function __construct() - run attogram
-function load_config() - load config file
-function route() - decide what to action to do
-function action() - load an action
-function error404() - load ./404.php
-function hook( $hook, $return=false ) - call a plugin hook
-function get_plugins() - get array of active plugin objects
-function get_actions() - get array of action names
-function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
-function query( $sql, $bind=array() ) - database query, return results as array
-function queryb( $sql, $bind=array() ) - database query, return boolean true/false
-function get_db() - get the PDO database object
 
 Plugins:
 
