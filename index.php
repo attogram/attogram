@@ -15,7 +15,8 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $config, $path, $admins, $base, $uri, 
+  var $version, $config, $admins,
+      $path, $base, $uri, 
       $db, $db_name,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
@@ -44,7 +45,7 @@ class attogram {
       if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
     } else {
       $this->hook('ERROR-CONFIG');
-      print 'Missing config file.  Please copy libs/config.sample.php to libs/config.php';
+      print 'Missing config file.  Please copy ./config.sample.php to ./config.php';
       exit;
     }
     $this->hook('POST-CONFIG');
@@ -57,11 +58,11 @@ class attogram {
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
     for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($this->uri); }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
-    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]=$this->default_action; $this->uri[1]=''; goto postroute; } // The Homepage
+    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]=$this->default_action; $this->uri[1]=''; $this->hook('POST-ROUTE'); return; } // The Homepage
     if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
     if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
-    postroute: $this->hook('POST-ROUTE');
+    $this->hook('POST-ROUTE');
   }
   
   ////////////////////////////////////////////////////////////////////
@@ -165,7 +166,7 @@ class attogram {
     $statement = $db->prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) {  $this->hook('ERROR-QUERY'); return false; }
+    if( !$statement->execute() ) { $this->hook('ERROR-QUERY'); return false; }
     $this->hook('POST-QUERY');
     return true;
   }
