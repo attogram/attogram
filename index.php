@@ -8,19 +8,6 @@ Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
 Dual licensed: MIT License and/or GNU General Public License V3
 
-function __construct() - run attogram
-function load_config() - load config file
-function route() - decide what to action to do
-function action() - load an action
-function error404() - load ./404.php
-function hook( $hook, $return=false ) - call a plugin hook
-function get_plugins() - get array of active plugin objects
-function get_actions() - get array of action names
-function is_admin() - is admin? based on admin IP whitelist in ./libs/config.php
-function query( $sql, $bind=array() ) - database query, return results as array
-function queryb( $sql, $bind=array() ) - database query, return boolean true/false
-function get_db() - get the PDO database object
-
 ******************************************************************* */
 
 $a = new attogram();
@@ -103,13 +90,25 @@ class attogram {
     if( $return ) { return $r; }
   }
 
+  ////////////////////////////////////////////////////////////////////
+  function is_readable_dir($dir) {
+    if( is_dir($dir) && is_readable($dir) ) { return TRUE; }
+    return FALSE;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  function is_readable_php_file($file) {
+    if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) { return TRUE; }
+	return FALSE;
+  }
+
   //////////////////////////////////////////////////////////////////////
   function get_plugins() {
     if( is_array($this->plugins) ) { return $this->plugins; }
     $this->plugins = array();
-    if( !is_dir($this->plugins_dir ) || !is_readable($this->plugins_dir ) ) { return $this->plugins; }
+    if( !$this->is_readable_dir($this->plugins_dir) ) { return $this->plugins; }
     foreach( array_diff(scandir($this->plugins_dir), array('.','..','.htaccess')) as $f ) {
-      if( !is_file($this->plugins_dir . "/$f") || !is_readable($this->plugins_dir . "/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+      if( !$this->is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
       include_once($this->plugins_dir . "/$f");
       $p = 'plugin_' . str_replace('.php','',$f);
       if( !class_exists($p) ) { continue; }
@@ -126,9 +125,9 @@ class attogram {
   function get_actions() {
     if( is_array($this->actions) ) { return $this->actions; }
     $this->actions = array();
-    if( !is_dir($this->actions_dir) || !is_readable($this->actions_dir) ) { return $this->actions; }
+    if( !$this->is_readable_dir($this->actions_dir) ) { return $this->actions; }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( !is_file($this->actions_dir . "/$f") || !is_readable($this->actions_dir . "/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+      if( !$this->is_readable_php_file($this->actions_dir . "/$f") ) { continue; } // php files only
       if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
       $this->actions[] = str_replace('.php','',$f);
     }
