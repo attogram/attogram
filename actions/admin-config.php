@@ -8,9 +8,7 @@ include('templates/header.php');
 <a href="./">Config: Database Tables</a>
 <ul>
 <li><a href="./?create">Create Attogram Tables</a>
-<li><a href="./?check">Check Attogram Tables</a>
 </ul>
-
 <?php
   if( isset($_GET['create']) ) { create_tables($this); }
 ?>
@@ -18,11 +16,16 @@ include('templates/header.php');
 <?php
 include('templates/footer.php');
 
-
 function create_tables($attogram) {
 	$create = array();
-	$create['contact'] = "CREATE TABLE 'contact' ( 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-      'time' DATETIME, 'email' TEXT, 'msg' TEXT, 'ip' TEXT, 'agent' TEXT)";
+	$create['contact'] = "CREATE TABLE 'contact' ( 
+ 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+ 'time' DATETIME, 
+ 'email' TEXT, 
+ 'msg' TEXT, 
+ 'ip' TEXT, 
+ 'agent' TEXT
+)";
 	$create['user'] = "CREATE TABLE 'user' (
  'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
  'username' TEXT UNIQUE NOT NULL,

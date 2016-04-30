@@ -11,7 +11,8 @@ Attogram is an open source project dual licensed under
 
 <hr /><pre>
 
-Copyright (c) 2014,2015,2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+Attogram PHP Framework
+Copyright (c) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +33,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 <hr />
-    Attogram PHP Framework  
-    Copyright (C) 2014,2015,2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+    Attogram PHP Framework
+    Copyright (C) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,7 +50,7 @@ THE SOFTWARE.
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
- Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;
+ Copyright (C) 2007 Free Software Foundation, Inc. &lt;<a href="http://fsf.org/">http://fsf.org/</a>&gt;
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
@@ -712,14 +713,14 @@ might be different; for a GUI interface, you would use an "about box".
   You should also get your employer (if you work as a programmer) or school,
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU GPL, see
-&lt;http://www.gnu.org/licenses/&gt;.
+&lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.
 
   The GNU General Public License does not permit incorporating your program
 into proprietary programs.  If your program is a subroutine library, you
 may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
-&lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.
+&lt;<a href="http://www.gnu.org/philosophy/why-not-lgpl.html">http://www.gnu.org/philosophy/why-not-lgpl.html</a>&gt;.
 
 </pre>
 <hr />

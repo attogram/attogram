@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.7
+version 0.0.8
 
 Copyright (c) 2016 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -28,27 +28,24 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $config, $path, $admins, $base, $uri, $actions, $plugins, $db;
+  var $version, $config, $path, $admins, $base, $uri, 
+      $db, $db_name,
+      $plugins_dir, $plugins,
+      $actions_dir, $default_action, $actions;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
+    $this->plugins_dir = 'plugins';	  
     $this->hook('PRE-INIT');
-    $this->version = '0.0.7';
+    $this->version = '0.0.8';
+    $this->actions_dir = 'actions';
+    $this->default_action = 'home';
+    $this->db_name = 'db/global';
     $this->config = './config.php';
     $this->load_config();
-    $this->hook('POST-INIT');	  
+    $this->hook('POST-INIT');
     $this->route();
     $this->action();
-  }
-
-  ////////////////////////////////////////////////////////////////////
-  function action() {
-    $this->hook('PRE-ACTION');
-    $f = 'actions/' . $this->uri[0] . '.php';
-    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
-    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }  
-    include($f);
-    $this->hook('POST-ACTION'); 
   }
  
   ////////////////////////////////////////////////////////////////////
@@ -70,16 +67,26 @@ class attogram {
   function route() {
     $this->hook('PRE-ROUTE');
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));  
+    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
     for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($this->uri); }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
-    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]='home'; $this->uri[1]=''; goto postroute; } // The Homepage
+    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]=$this->default_action; $this->uri[1]=''; goto postroute; } // The Homepage
     if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
     if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
-    postroute: $this->hook('POST-ROUTE');	  
+    postroute: $this->hook('POST-ROUTE');
   }
-
+  
+  ////////////////////////////////////////////////////////////////////
+  function action() {
+    $this->hook('PRE-ACTION');
+    $f = $this->actions_dir . '/' . $this->uri[0] . '.php';
+    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
+    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }
+    include($f);
+    $this->hook('POST-ACTION');
+  }
+  
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');
@@ -100,11 +107,10 @@ class attogram {
   function get_plugins() {
     if( is_array($this->plugins) ) { return $this->plugins; }
     $this->plugins = array();
-    $dir = 'plugins';
-    if( !is_dir($dir) || !is_readable($dir) ) { return $this->plugins; } 
-    foreach( array_diff(scandir($dir), array('.','..','.htaccess')) as $f ) {
-      if( !is_file("$dir/$f") || !is_readable("$dir/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
-      include_once("$dir/$f");
+    if( !is_dir($this->plugins_dir ) || !is_readable($this->plugins_dir ) ) { return $this->plugins; }
+    foreach( array_diff(scandir($this->plugins_dir), array('.','..','.htaccess')) as $f ) {
+      if( !is_file($this->plugins_dir . "/$f") || !is_readable($this->plugins_dir . "/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+      include_once($this->plugins_dir . "/$f");
       $p = 'plugin_' . str_replace('.php','',$f);
       if( !class_exists($p) ) { continue; }
       $po = new $p( $this );
@@ -120,10 +126,9 @@ class attogram {
   function get_actions() {
     if( is_array($this->actions) ) { return $this->actions; }
     $this->actions = array();
-    $dir = 'actions';
-    if( !is_dir($dir) || !is_readable($dir) ) { return $this->actions; } 
-    foreach( array_diff(scandir($dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( !is_file("$dir/$f") || !is_readable("$dir/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
+    if( !is_dir($this->actions_dir) || !is_readable($this->actions_dir) ) { return $this->actions; }
+    foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
+      if( !is_file($this->actions_dir . "/$f") || !is_readable($this->actions_dir . "/$f") || !preg_match('/\.php$/',$f) ) { continue; } // php files only
       if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
       $this->actions[] = str_replace('.php','',$f);
     }
@@ -145,7 +150,7 @@ class attogram {
     if( !$db ) { $this->hook('ERROR-QUERY'); return array(); }
     $statement = $db->prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return array(); }
-    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }	
+    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) { $this->hook('ERROR-QUERY'); return array(); }
     $r = $statement->fetchAll(PDO::FETCH_ASSOC);
     if( !$r && $this->db->errorCode() != '00000') { $this->hook('ERROR-QUERY'); $r = array(); }
@@ -157,7 +162,7 @@ class attogram {
   function queryb( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
-    if( !$db ) { $this->hook('ERROR-QUERY'); return false; }    
+    if( !$db ) { $this->hook('ERROR-QUERY'); return false; }
     $statement = $db->prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
@@ -171,9 +176,8 @@ class attogram {
     if( is_object($this->db) ) { return $this->db; }
     $this->hook('PRE-DB');
     if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {  $this->hook('ERROR-DB'); return false; }
-    $db_name = 'db/global';
     try {
-      $this->db = new PDO('sqlite:'. $db_name);
+      $this->db = new PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->hook('ERROR-DB');
       $this->db = false;
