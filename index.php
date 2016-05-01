@@ -15,7 +15,7 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $config, $admins, $fof,
+  var $version, $config, $admins, $fof, $error,
       $path, $uri, $db, $db_name,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
@@ -66,8 +66,16 @@ class attogram {
   function action() {
     $this->hook('PRE-ACTION');
     $f = $this->actions_dir . '/' . $this->uri[0] . '.php';
-    if( !is_file($f) ) { $this->hook('ERROR-ACTION'); print 'Missing action.  Please create: ' . $f; exit; }
-    if( !is_readable($f) ) { $this->hook('ERROR-ACTION'); print 'Unreadable action.  Please make readable: ' . $f; exit; }
+    if( !is_file($f) ) {
+	  $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
+      $this->hook('ERROR-ACTION');
+	  exit; 
+	}
+    if( !is_readable($f) ) {
+		$this->error = 'Unreadable action. Please make readable ' . htmlspecialchars($f);
+		$this->hook('ERROR-ACTION');
+		exit;
+	}
     include($f);
     $this->hook('POST-ACTION');
   }
@@ -168,7 +176,7 @@ class attogram {
     $statement = $db->prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) { $this->hook('ERROR-QUERY'); return false; }
+    if( !$statement->execute() ) {$this->hook('ERROR-QUERY'); return false; }
     $this->hook('POST-QUERY');
     return true;
   }
@@ -177,10 +185,14 @@ class attogram {
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
     $this->hook('PRE-DB');
-    if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {  $this->hook('ERROR-DB'); return false; }
+    if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {
+      $this->error = 'sqlite PDO driver not found';
+      $this->hook('ERROR-DB');
+     return false; }
     try {
       $this->db = new PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
+      $this->error = 'error connnecting to PDO sqlite database';
       $this->hook('ERROR-DB');
       $this->db = false;
     }
