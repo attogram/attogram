@@ -39,14 +39,9 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
-    if( $this->is_readable_php_file($this->config) ) {
-      include_once($this->config);
-      if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
-    } else {
-      $this->hook('ERROR-CONFIG');
-      print 'Missing config file.  Please copy ./config.sample.php to ./config.php';
-      exit;
-    }
+    if( !$this->is_readable_php_file($this->config) ) { return; }
+    include_once($this->config);
+    if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
     $this->hook('POST-CONFIG');
   }
 
