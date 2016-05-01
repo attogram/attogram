@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.0.8
+version 0.0.9
 
 Copyright (c) 2016 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -16,7 +16,7 @@ $a = new attogram();
 class attogram {
 
   var $version, $config, $admins, $fof,
-      $path, $base, $uri, $db, $db_name,
+      $path, $uri, $db, $db_name,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
 
@@ -24,25 +24,24 @@ class attogram {
   function __construct() {
     $this->plugins_dir = 'plugins';	  
     $this->hook('PRE-INIT');
-    $this->version = '0.0.8';
+    $this->version = '0.0.9';
     $this->actions_dir = 'actions';
     $this->default_action = 'home';
     $this->db_name = './db/global';
-	$this->fof = './404.php';
+    $this->fof = './404.php';
     $this->config = './config.php';
     $this->load_config();
     $this->hook('POST-INIT');
     $this->route();
     $this->action();
   }
- 
+
   ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
-    if( is_file($this->config) && is_readable($this->config) ) {
+    if( $this->is_readable_php_file($this->config) ) {
       include_once($this->config);
       if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
-      if( isset($base) && is_numeric($base) && $base ) { $this->base = $base; }
     } else {
       $this->hook('ERROR-CONFIG');
       print 'Missing config file.  Please copy ./config.sample.php to ./config.php';
@@ -50,13 +49,16 @@ class attogram {
     }
     $this->hook('POST-CONFIG');
   }
- 
+
   ////////////////////////////////////////////////////////////////////
   function route() {
     $this->hook('PRE-ROUTE');
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
-    for( $i = 0; $i < (substr_count($this->path, '/') + $this->base); $i++ ) { $b = array_shift($this->uri); }
+    for( $i = 0; $i < sizeof($this->uri); $i++ ) { 
+      if( $this->uri[$i] == basename($this->path) ) { break; }
+      $trash = array_shift($this->uri); 
+    }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
     if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]=$this->default_action; $this->uri[1]=''; $this->hook('POST-ROUTE'); return; } // The Homepage
     if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
@@ -64,7 +66,7 @@ class attogram {
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
     $this->hook('POST-ROUTE');
   }
-  
+
   ////////////////////////////////////////////////////////////////////
   function action() {
     $this->hook('PRE-ACTION');
@@ -74,17 +76,16 @@ class attogram {
     include($f);
     $this->hook('POST-ACTION');
   }
-  
+
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');
-
-    if( $this->is_readable_php_file($this->fof) ) { 
-		include($this->fof); 
-	} else {
-		header('HTTP/1.0 404 Not Found'); 
-		print '404 Not Found';
-	}
+    if( $this->is_readable_php_file($this->fof) ) {
+      include($this->fof);
+    } else {
+      header('HTTP/1.0 404 Not Found');
+      print '404 Not Found';
+    }
     $this->hook('POST-404');
     exit;
   }
@@ -106,7 +107,7 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function is_readable_php_file($file) {
     if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) { return TRUE; }
-	return FALSE;
+    return FALSE;
   }
 
   //////////////////////////////////////////////////////////////////////
