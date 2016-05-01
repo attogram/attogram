@@ -2,7 +2,7 @@
 // Attogram - templates - header
 
 $this->hook('PRE-HEADER');
-if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; } 
+if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 
 ?><!doctype html><html><head>
 <title><?php print $title; ?></title>
@@ -12,12 +12,12 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 <?php
 
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
-foreach( $this->get_actions() as $a ) { 
-  if( preg_match('/^admin/',$a) ) { continue; } 
-  print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>'; 
+foreach( $this->get_actions() as $a ) {
+  if( preg_match('/^admin/',$a) ) { continue; }
+  print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>';
 }
 
-if( $this->is_admin() ) { print $spacer . '<a href="' . $this->path . '/admin/">admin</a>'; } 
+if( $this->is_admin() ) { print $spacer . '<a href="' . $this->path . '/admin/">admin</a>'; }
 ?>
 </div>
 <?php

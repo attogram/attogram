@@ -3,7 +3,7 @@
 $title = 'Attogram - Contact';
 include('templates/header.php');
 
-if( isset($_POST['msg']) && isset($_POST['email']) ) { 
+if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
   $sql = 'INSERT INTO contact (time,email,msg,ip,agent) VALUES (DATETIME("now"),:email,:msg,:ip,:agent)';
 
@@ -14,14 +14,14 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
    'agent'=>@$_SERVER['HTTP_USER_AGENT'],
   );
 
-  $ok_msg = '<p>Thank You.  Message received.</p>'; 
+  $ok_msg = '<p>Thank You.  Message received.</p>';
 
   if( $this->queryb($sql,$bind) ) { 
     print $ok_msg; include('templates/footer.php'); $this->hook('POST-ACTION'); exit;
   }
 
   if( $this->get_db()->errorCode() == 'HY000' ) { 
-  if( $this->queryb("CREATE TABLE IF NOT EXISTS 'contact' ( 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  if( $this->queryb("CREATE TABLE IF NOT EXISTS 'contact' ( 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       'time' DATETIME, 'email' TEXT, 'msg' TEXT, 'ip' TEXT, 'agent' TEXT)") ) { 
     if( $this->queryb($sql,$bind) ) {
       print '<p>contact table created OK</p>'.$ok_msg; include('templates/footer.php'); $this->hook('POST-ACTION'); exit;

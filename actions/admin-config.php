@@ -17,17 +17,17 @@ include('templates/header.php');
 include('templates/footer.php');
 
 function create_tables($attogram) {
-	$create = array();
-	$create['contact'] = "CREATE TABLE 'contact' ( 
- 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
- 'time' DATETIME, 
- 'email' TEXT, 
- 'msg' TEXT, 
- 'ip' TEXT, 
+    $create = array();
+    $create['contact'] = "CREATE TABLE 'contact' (
+ 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ 'time' DATETIME,
+ 'email' TEXT,
+ 'msg' TEXT,
+ 'ip' TEXT,
  'agent' TEXT
 )";
-	$create['user'] = "CREATE TABLE 'user' (
- 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+    $create['user'] = "CREATE TABLE 'user' (
+ 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  'username' TEXT UNIQUE NOT NULL,
  'password' TEXT NOT NULL,
  'email' TEXT NOT NULL,
@@ -38,9 +38,9 @@ function create_tables($attogram) {
  'last_host' TEXT NOT NULL
 )";
 
-	print 'Create Tables:<br />';
-	foreach($create as $c) {
-		print "<hr>$c<br />";
-		if( $attogram->queryb($c) ) { print 'OK'; } else { print 'ERROR'; }
-	}
+    print 'Create Tables:<br />';
+    foreach($create as $c) {
+        print "<hr>$c<br />";
+        if( $attogram->queryb($c) ) { print 'OK'; } else { print 'ERROR'; }
+    }
 }

@@ -67,15 +67,15 @@ class attogram {
     $this->hook('PRE-ACTION');
     $f = $this->actions_dir . '/' . $this->uri[0] . '.php';
     if( !is_file($f) ) {
-	  $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
+    $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
       $this->hook('ERROR-ACTION');
-	  exit; 
-	}
+    exit; 
+    }
     if( !is_readable($f) ) {
-		$this->error = 'Unreadable action. Please make readable ' . htmlspecialchars($f);
-		$this->hook('ERROR-ACTION');
-		exit;
-	}
+      $this->error = 'Unreadable action. Please make readable ' . htmlspecialchars($f);
+      $this->hook('ERROR-ACTION');
+      exit;
+    }
     include($f);
     $this->hook('POST-ACTION');
   }

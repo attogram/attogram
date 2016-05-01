@@ -11,13 +11,12 @@ include('templates/header.php');
 <p><input type="submit" value="                Login                "></p>
 </form>
 <?php
-	if( isset($_POST['login']) ) { login(); }
+    if( isset($_POST['login']) ) { login(); }
 ?>
 </div>
 <?php
 include('templates/footer.php');
 
 function login() {
-	
-	print "<PRE>POST: " . print_r($_POST,1) . '</PRE>';
+    print "<PRE>POST: " . print_r($_POST,1) . '</PRE>';
 }

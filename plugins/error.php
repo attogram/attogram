@@ -5,7 +5,7 @@ class plugin_error {
 
   var $attogram;
 
-  function is_active() { return true; } 
+  function is_active() { return true; }
 
   function __construct($attogram='') { $this->attogram = $attogram; } 
 
