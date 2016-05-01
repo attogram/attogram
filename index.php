@@ -15,9 +15,8 @@ $a = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $config, $admins,
-      $path, $base, $uri, 
-      $db, $db_name,
+  var $version, $config, $admins, $fof,
+      $path, $base, $uri, $db, $db_name,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
 
@@ -28,7 +27,8 @@ class attogram {
     $this->version = '0.0.8';
     $this->actions_dir = 'actions';
     $this->default_action = 'home';
-    $this->db_name = 'db/global';
+    $this->db_name = './db/global';
+	$this->fof = './404.php';
     $this->config = './config.php';
     $this->load_config();
     $this->hook('POST-INIT');
@@ -78,7 +78,13 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');
-    include('404.php'); 
+
+    if( $this->is_readable_php_file($this->fof) ) { 
+		include($this->fof); 
+	} else {
+		header('HTTP/1.0 404 Not Found'); 
+		print '404 Not Found';
+	}
     $this->hook('POST-404');
     exit;
   }
