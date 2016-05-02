@@ -20,6 +20,10 @@ foreach($info as $key => $var) {
 print '<tr><td class="e">Database size </td><td class="v">' 
 . (file_exists($this->db_name) ? filesize($this->db_name) : 'NULL') . ' bytes</td></tr>';
 
+
+print '<tr><td class="e">Session ID </td><td class="v">' . session_id() . '</td></tr>';
+print '<tr><td class="e">_SESSION </td><td class="v">' . print_r($_SESSION,1) . '</td></tr>';
+
 print '</table>';
 
 phpinfo();

@@ -445,7 +445,7 @@ if (isset($_GET['resource'])) {
 
 // don't mess with this - required for the login session
 ini_set('session.cookie_httponly', '1');
-session_start();
+@session_start(); // Attogram - session already started
 
 if($debug==true)
 {
@@ -4139,6 +4139,10 @@ printf($lang['page_gen'], $pageTimer);
 echo "</span>";
 echo "</td></tr></table>";
 $db->close(); //close the database
+
+//Attogram
+$this->hook('POST-PHPLITEADMIN');
+include('templates/footer.php');
 echo "</body>";
 echo "</html>";
 

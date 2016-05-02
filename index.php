@@ -22,8 +22,9 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
-    $this->plugins_dir = 'plugins';	  
+    $this->plugins_dir = 'plugins'; 
     $this->hook('PRE-INIT');
+	session_start();
     $this->version = '0.0.9';
     $this->actions_dir = 'actions';
     $this->default_action = 'home';
