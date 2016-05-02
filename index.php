@@ -57,11 +57,13 @@ class attogram {
 	  $_SESSION['attogram_id'] = $user['id'];
 	  $_SESSION['attogram_username'] = $user['username'];
 	  $_SESSION['attogram_level'] = $user['level'];
+	  $_SESSION['attogram_email'] = $user['email'];
 
 	  $this->hook('POST-LOGIN');
 	  return TRUE;
   }
 
+  ////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
