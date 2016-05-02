@@ -6,7 +6,20 @@ include('templates/header.php');
 ?>
 <div class="body"><pre><?php
 
-$m = $this->query('SELECT * FROM contact ORDER BY id DESC');
+$sql = 'SELECT * FROM contact ORDER BY id DESC';
+$m = $this->query($sql);
+
+if( $this->get_db()->errorCode() == 'HY000' ) { 
+  if( $this->create_table('contact') ) {
+    $this->error = 'Created contact table';
+    $this->hook('ERROR-FIXED');
+  }
+  $m = $this->query($sql);
+  if( $this->get_db()->errorCode() == 'HY000' ) { 
+    $this->error = 'Failed getting contact table';
+    $this->hook('ERROR-CONTACT');
+  }
+}
 
 print count($m) . ' Messages from the <a href="../contact/">Contact form</a>:<hr />';
 
