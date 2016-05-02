@@ -12,8 +12,8 @@ Attogram quick specs:
 Requirements
 ============
 
-* PHP5 with SQLite PDO
-* Apache2 with AllowOveride all
+* PHP5, with SQLite PDO driver
+* Apache 2.2.16 or higher, with setting: AllowOveride all
 
 
 Installation
