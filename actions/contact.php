@@ -25,8 +25,16 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
   if( $this->get_db()->errorCode() == 'HY000' ) { 
     if( $this->create_table('contact') ) { 
-      print '<p>contact table created OK</p>'.$ok_msg; 
-	  include('templates/footer.php'); $this->hook('POST-ACTION'); 
+	  $this->error = 'Created contact table';
+	  $this->hook('ERROR-FIXED');
+      if( $this->queryb($sql,$bind) ) { 
+		print $ok_msg; 
+	  } else {
+		$this->error = 'Failed to save message';
+		$this->hook('ERROR-CONTACT');
+	  }
+	  include('templates/footer.php'); 
+	  $this->hook('POST-ACTION'); 
 	  exit;
     } 
   } 
