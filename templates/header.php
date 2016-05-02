@@ -17,9 +17,6 @@ foreach( $this->get_actions() as $a ) {
   print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>';
 }
 
-if( $this->is_admin() ) { print $spacer . '<a href="' . $this->path . '/admin/">admin</a>'; }
-?>
-</div>
+?></div>
 <?php
 $this->hook('POST-HEADER');
-
