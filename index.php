@@ -47,7 +47,7 @@ class attogram {
 	  if( !isset($_POST['p']) || !$_POST['p'] ) { $this->error ='Missing password'; $this->hook('ERROR-LOGIN'); return FALSE; }
 	  
 	  $user = $this->query(
-	    'SELECT * FROM user WHERE username = :u AND password = :p',
+	    'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
 	    $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 		
       if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
@@ -58,6 +58,11 @@ class attogram {
 	  $_SESSION['attogram_username'] = $user['username'];
 	  $_SESSION['attogram_level'] = $user['level'];
 	  $_SESSION['attogram_email'] = $user['email'];
+
+      $s = $this->queryb(
+	    "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
+		$bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR']) 
+	  );
 
 	  $this->hook('POST-LOGIN');
 	  return TRUE;
