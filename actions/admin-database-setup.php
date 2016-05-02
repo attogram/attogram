@@ -32,8 +32,6 @@ function create_tables($attogram) {
  'password' TEXT NOT NULL,
  'email' TEXT NOT NULL,
  'level' INTEGER NOT NULL DEFAULT '0',
- 'created' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
- 'updated' DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
  'last_host' TEXT NOT NULL
 )";

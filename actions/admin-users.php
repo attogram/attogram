@@ -17,8 +17,6 @@ print '<table border="1"><tr>
 <td>password</td>
 <td>email</td>
 <td>level</td>
-<td>created</td>
-<td>updated</td>
 <td>last_login</td>
 <td>last_host</td>
 </tr>';
@@ -30,8 +28,6 @@ foreach($users as $u) {
     print '<td>' . $u['password'] . '</td>';
     print '<td>' . $u['email'] . '</td>';
     print '<td>' . $u['level'] . '</td>';
-    print '<td>' . $u['created'] . '</td>';
-    print '<td>' . $u['updated'] . '</td>';
     print '<td>' . $u['last_login'] . '</td>';
     print '<td>' . $u['last_host'] . '</td></tr>';
 }
