@@ -3,27 +3,39 @@
 
 $title = 'Attogram - Admin - Users';
 include('templates/header.php');
-print '<div class="body">Attogram - Users<hr />';
+print '<div class="body">';
 
 $users = $this->query('SELECT * FROM user');
 
-print count($users) . ' users';
-print ' - <a href="../admin-db/?table=user&action=row_create">New User<a><pre>';
-
+print '<p><b>' . count($users) . '</b> Users</p>';
+print '<p><a href="../admin-db/?table=user&action=row_create">Create New User<a></p>';
+print '<table border="1"><tr>
+<td>ID</td>
+<td>edit</td>
+<td>delete</td>
+<td>username</td>
+<td>password</td>
+<td>email</td>
+<td>level</td>
+<td>created</td>
+<td>updated</td>
+<td>last_login</td>
+<td>last_host</td>
+</tr>';
 foreach($users as $u) {	
-    print '<hr />ID        : ' . $u['id'];
-    print ' <a href="../admin-db/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=edit">edit</a>';
-    print ' <a href="../admin-db/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=delete">delete</a>';
-    print '<br />username  : ' . $u['username'];
-    print '<br />password  : ' . $u['password'];
-    print '<br />email     : ' . $u['email'];
-    print '<br />level     : ' . $u['level'];
-    print '<br />created   : ' . $u['created'];
-    print '<br />updated   : ' . $u['updated'];
-    print '<br />last_login: ' . $u['last_login'];
-    print '<br />last_host : ' . $u['last_host'];
+    print '<tr><td>' . $u['id'] . '</td>';
+    print '<td><a href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=edit">edit</a></td>';
+    print '<td><a href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=delete">delete</a></td>';
+    print '<td>' . $u['username'] . '</td>';
+    print '<td>' . $u['password'] . '</td>';
+    print '<td>' . $u['email'] . '</td>';
+    print '<td>' . $u['level'] . '</td>';
+    print '<td>' . $u['created'] . '</td>';
+    print '<td>' . $u['updated'] . '</td>';
+    print '<td>' . $u['last_login'] . '</td>';
+    print '<td>' . $u['last_host'] . '</td></tr>';
 }
-print '</pre></div>';
+print '</table></div>';
 
 include('templates/footer.php');
 
