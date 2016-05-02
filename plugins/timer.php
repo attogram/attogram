@@ -11,7 +11,6 @@ class plugin_timer {
 
   function hook($hook) { 
     switch($hook) { 
-      case 'POST-ADMIN': print '<br />plugin_timer: ' . ($this->is_active() ? 'ACTIVE' : 'DISABLED'); break;
       case 'PRE-INIT': $this->start_timer(); break;
       case 'POST-FOOTER': $this->end_timer(); break;
     } 
@@ -24,10 +23,7 @@ class plugin_timer {
   function end_timer() {
     $end = microtime(1);
     $diff = round( $end - $this->start, 18);
-    //$attoseconds = number_format( pow(10,18)*$diff, $decimals=0 );
-    print 'Page generated in ' . round($diff,3) . ' seconds'
-    //. " ($attoseconds attoseconds )"
-	;
+    print 'Page generated in ' . round($diff,3) . ' seconds';
   }
 
 } // END of class plugin_timer

@@ -11,16 +11,19 @@ class plugin_error {
 
   function hook($hook) {
 
-    if( $hook == 'POST-ADMIN' ) { print '<br />plugin_error: ' . ($this->is_active() ? 'ACTIVE' : 'DISABLED'); return; }
     if( !preg_match('/^ERROR/', $hook) ) { return; }
+
     switch( $hook ) {
+
       case 'ERROR-QUERY':
         $ei = @$this->attogram->db->errorInfo();
         print '<pre>ERROR-QUERY: ' . @$this->attogram->db->errorCode() . ' ' . $ei[2] . '</pre>';
         break;
+
       default:
         print '<pre>' . $hook . ' ' . @$this->attogram->error . '</pre>';
         break;
+
     }
   }
 

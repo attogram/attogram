@@ -15,9 +15,7 @@ foreach( $this->get_actions() as $a ) {
 }
 ?>
 </ul>
-<br /><br /><hr />
-Plugins:
-<?php $this->hook('POST-ADMIN'); ?>
 </div>
 <?php
+$this->hook('POST-ADMIN');
 include('templates/footer.php');
