@@ -13,11 +13,11 @@ if( $this->get_db()->errorCode() == 'HY000' ) {
   if( $this->create_table('contact') ) {
     $this->error = 'Created contact table';
     $this->hook('ERROR-FIXED');
-  }
-  $m = $this->query($sql);
-  if( $this->get_db()->errorCode() == 'HY000' ) { 
-    $this->error = 'Failed getting contact table';
-    $this->hook('ERROR-CONTACT');
+    $m = $this->query($sql);
+    if( $this->get_db()->errorCode() == 'HY000' ) { 
+      $this->error = 'Failed getting contacts';
+      $this->hook('ERROR-CONTACT');
+    }
   }
 }
 

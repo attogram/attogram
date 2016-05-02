@@ -50,19 +50,12 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 ?>
 <div class="body">
 <form action="." method="POST">
-Contact the <a target="code" href="https://github.com/attogram/attogram/">Attogram Developers</a>, we're here to help!
+Contact us:
 <br />
 <br />Your Email: <input type="text" name="email" size="55" value="" />
 <br />
 <br />Your Message:
-<br /><textarea name="msg" rows="10" cols="70" />
-Dear Attogram Developers,
-
-  (your message here)
-
-Sincerely,
-(your name and contact info here)
-</textarea>
+<br /><textarea name="msg" rows="10" cols="70" /></textarea>
 <br />
 <br /><input type="submit" value="          Send your message now          " />
 <br />
