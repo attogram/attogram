@@ -1,9 +1,9 @@
 <?php
 // Attogram - action - user
 
-if( !isset($_SESSION['attogram_username']) ) {
-	header('Location: ' . $this->path . '/login/');
-	exit;
+if( !$this->is_logged_in() ) {
+  header('Location: ' . $this->path . '/login/');
+  exit;
 }
 $title = 'Attogram - User';
 include('templates/header.php');
@@ -19,4 +19,3 @@ email: ' . @$_SESSION['attogram_email'] . '
 </div>';
 
 include('templates/footer.php');
-

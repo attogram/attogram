@@ -15,19 +15,19 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
 foreach( $this->get_actions() as $a ) {
   if( preg_match('/^admin/',$a) ) { continue; }
-  if( $a == 'login' && isset($_SESSION['attogram_username']) ) { continue; }
-  if( $a == 'user' && !isset($_SESSION['attogram_username']) ) { continue; }
-  if( $a == 'user' && isset($_SESSION['attogram_username']) ) {
-    print $spacer . '<a href="' . $this->path . '/user/">User: <b>' 
-	. $_SESSION['attogram_username'] . '</b></a>';
-	continue;
+  if( $a == 'login' && $this->is_logged_in() ) { continue; }
+  if( $a == 'user' && !$this->is_logged_in() ) { continue; }
+  if( $a == 'user' && $this->is_logged_in() ) {
+  print $spacer . '<a href="' . $this->path . '/user/">User: <b>'
+  . $_SESSION['attogram_username'] . '</b></a>';
+  continue;
   }
   print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>';
 }
 
-if( isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) {
-	
-	print $spacer . '<a href="?logoff">logoff</a>';
+if( $this->is_logged_in() ) {
+  
+ print $spacer . '<a href="?logoff">logoff</a>';
 }
 ?></div>
 <?php

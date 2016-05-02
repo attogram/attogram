@@ -22,10 +22,10 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
-    $this->plugins_dir = 'plugins'; 
+    $this->plugins_dir = 'plugins';
     $this->hook('PRE-INIT');
-	session_start();
-	if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
+    session_start();
+    if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
     $this->version = '0.1.0';
     $this->actions_dir = 'actions';
     $this->default_action = 'home';
@@ -40,32 +40,38 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function login() {
-	  $this->hook('PRE-LOGIN');
-	  if( !isset($_POST['login']) || !$_POST['login'] ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  if( (!isset($_POST['u']) && !isset($_POST['u'])) || (!$_POST['u'] && !$_POST['p']) ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  if( !isset($_POST['u']) || !$_POST['u'] ) { $this->error = 'Missing username'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  if( !isset($_POST['p']) || !$_POST['p'] ) { $this->error ='Missing password'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  
-	  $user = $this->query(
-	    'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
-	    $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
-		
-      if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-      if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  
-	  $user = $user[0];
-	  $_SESSION['attogram_id'] = $user['id'];
-	  $_SESSION['attogram_username'] = $user['username'];
-	  $_SESSION['attogram_level'] = $user['level'];
-	  $_SESSION['attogram_email'] = $user['email'];
+    $this->hook('PRE-LOGIN');
+    if( !isset($_POST['login']) || !$_POST['login'] ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( (!isset($_POST['u']) && !isset($_POST['u'])) || (!$_POST['u'] && !$_POST['p']) ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( !isset($_POST['u']) || !$_POST['u'] ) { $this->error = 'Missing username'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( !isset($_POST['p']) || !$_POST['p'] ) { $this->error ='Missing password'; $this->hook('ERROR-LOGIN'); return FALSE; }
 
-      $s = $this->queryb(
-	    "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
-		$bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR']) 
-	  );
+    $user = $this->query(
+      'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
+      $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-	  $this->hook('POST-LOGIN');
-	  return TRUE;
+    if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+
+    $user = $user[0];
+    $_SESSION['attogram_id'] = $user['id'];
+    $_SESSION['attogram_username'] = $user['username'];
+    $_SESSION['attogram_level'] = $user['level'];
+    $_SESSION['attogram_email'] = $user['email'];
+
+    $s = $this->queryb(
+      "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
+      $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
+    );
+
+    $this->hook('POST-LOGIN');
+    return TRUE;
+  }
+
+  ////////////////////////////////////////////////////////////////////
+  function is_logged_in() {
+    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) { return TRUE; }
+    return FALSE;
   }
 
   ////////////////////////////////////////////////////////////////////
