@@ -7,7 +7,7 @@ $this->hook('PRE-HOME');
 
 <p>Welcome to the <b>Attogram PHP Framework</b> version <?php print $this->version; ?></p>
 
-<p>User Actions:<ul><?php
+<p>Pages:<ul><?php
 foreach( $this->actions as $action ){
 	if( preg_match('/^admin/',$action) ) { continue; }
 	print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
@@ -17,7 +17,7 @@ foreach( $this->actions as $action ){
 </ul></p>
 
 <?php if( $this->is_admin() ) { ?>
-<p>Admin Actions:<ul><?php
+<p>Admin Pages:<ul><?php
 foreach( $this->actions as $action ){
 	if( !preg_match('/^admin/',$action) ) { continue; }
 	print '<li><a href="./' . $action . '/">' . preg_replace('/^admin-/', '', $action) . '</a></li>';

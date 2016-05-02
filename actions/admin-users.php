@@ -8,7 +8,7 @@ $users = $this->query('SELECT * FROM user ORDER BY id');
 
 print '<div class="body"><p><b>' . count($users) . '</b> <a href=".">Users</a>';
 print ' - <a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
-print '<table border="1"><tr>
+print '<table class="atto"><tr>
 <td>ID</td>
 <td>edit</td>
 <td>delete</td>
