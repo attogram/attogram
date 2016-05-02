@@ -3,12 +3,11 @@
 
 $title = 'Attogram - Admin - Users';
 include('templates/header.php');
-print '<div class="body">';
 
-$users = $this->query('SELECT * FROM user');
+$users = $this->query('SELECT * FROM user ORDER BY id');
 
-print '<p><b>' . count($users) . '</b> Users</p>';
-print '<p><a href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
+print '<div class="body"><p><b>' . count($users) . '</b> <a href=".">Users</a>';
+print ' - <a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
 print '<table border="1"><tr>
 <td>ID</td>
 <td>edit</td>
@@ -22,14 +21,14 @@ print '<table border="1"><tr>
 </tr>';
 foreach($users as $u) {	
     print '<tr><td>' . $u['id'] . '</td>';
-    print '<td><a href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=edit">edit</a></td>';
-    print '<td><a href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=delete">delete</a></td>';
-    print '<td>' . $u['username'] . '</td>';
-    print '<td>' . $u['password'] . '</td>';
-    print '<td>' . $u['email'] . '</td>';
-    print '<td>' . $u['level'] . '</td>';
-    print '<td>' . $u['last_login'] . '</td>';
-    print '<td>' . $u['last_host'] . '</td></tr>';
+    print '<td><a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=edit">edit</a></td>';
+    print '<td><a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=delete">delete</a></td>';
+    print '<td>' . htmlentities($u['username']) . '</td>';
+    print '<td>' . htmlentities($u['password']) . '</td>';
+    print '<td>' . htmlentities($u['email']) . '</td>';
+    print '<td>' . htmlentities($u['level']) . '</td>';
+    print '<td>' . htmlentities($u['last_login']) . '</td>';
+    print '<td>' . htmlentities($u['last_host']) . '</td></tr>';
 }
 print '</table></div>';
 
