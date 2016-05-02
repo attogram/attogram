@@ -3,9 +3,9 @@
 
 $this->hook('PRE-FOOTER');
 ?><div class="footer">
-<a href="<?php print $this->path; ?>/">Attogram PHP Framework</a> 
-version <?php print $this->version; ?> @ <?php print gmdate('Y-m-d H:i:s'); ?> UTC<br />
-<?php if( $this->is_admin() ) { ?><a href="<?php print $this->path; ?>/admin/">admin</a>:<?php } ?>
-user: <?php print $_SERVER['REMOTE_ADDR']; ?>
+Powered by <a href="<?php print $this->path; ?>/">Attogram PHP Framework</a> 
+&nbsp; - &nbsp;
+<a target="code" href="https://github.com/attogram/attogram">Attogram @ GitHub</a>
+&nbsp; - &nbsp;
 <?php $this->hook('POST-FOOTER'); ?>
 </div></body></html>
