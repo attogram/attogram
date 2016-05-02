@@ -9,7 +9,7 @@ $users = $this->query('SELECT * FROM user');
 
 print '<p><b>' . count($users) . '</b> Users</p>';
 print '<p><a href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
-print '<table border="1"><th>
+print '<table border="1"><tr>
 <td>ID</td>
 <td>edit</td>
 <td>delete</td>
@@ -21,7 +21,7 @@ print '<table border="1"><th>
 <td>updated</td>
 <td>last_login</td>
 <td>last_host</td>
-</th>';
+</tr>';
 foreach($users as $u) {	
     print '<tr><td>' . $u['id'] . '</td>';
     print '<td><a href="../admin-database-phpLiteAdmin/?table=user&action=row_editordelete&pk=[' . $u['id'] . ']&type=edit">edit</a></td>';
