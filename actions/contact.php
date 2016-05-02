@@ -24,7 +24,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
   }
 
   if( $this->get_db()->errorCode() == 'HY000' ) { 
-    if( $this->creat_table('contact') ) { 
+    if( $this->create_table('contact') ) { 
       print '<p>contact table created OK</p>'.$ok_msg; 
 	  include('templates/footer.php'); $this->hook('POST-ACTION'); 
 	  exit;
