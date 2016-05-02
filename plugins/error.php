@@ -21,7 +21,7 @@ class plugin_error {
         break;
 
       default:
-        print '<pre>' . $hook . ' ' . @$this->attogram->error . '</pre>';
+        print '<pre>' . $hook . ': ' . @$this->attogram->error . '</pre>';
         break;
 
     }

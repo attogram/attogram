@@ -238,4 +238,40 @@ class attogram {
     return $this->db;
   }
 
+  //////////////////////////////////////////////////////////////////////
+  function create_table($table='') {
+    switch($table) {
+		
+      default: return FALSE; break;
+		
+        case 'user': 
+          $sql = "CREATE TABLE 'user' (
+ 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ 'username' TEXT UNIQUE NOT NULL,
+ 'password' TEXT NOT NULL,
+ 'email' TEXT NOT NULL,
+ 'level' INTEGER NOT NULL DEFAULT '0',
+ 'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+ 'last_host' TEXT NOT NULL
+)";
+        break;
+
+        case 'contact':
+          $sql = "CREATE TABLE 'contact' (
+ 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+ 'time' DATETIME,
+ 'email' TEXT,
+ 'msg' TEXT,
+ 'ip' TEXT,
+ 'agent' TEXT
+)";
+        break;
+	}
+    if( $this->queryb($sql) ) { return TRUE; }
+	
+	$this->error = 'Cannot create table';
+	$this->hook('ERROR-CREATE-TABLE');
+	return FALSE;
+  }
+  
 } // END of class attogram

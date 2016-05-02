@@ -17,20 +17,23 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
   $ok_msg = '<p>Thank You.  Message received.</p>';
 
   if( $this->queryb($sql,$bind) ) { 
-    print $ok_msg; include('templates/footer.php'); $this->hook('POST-ACTION'); exit;
+    print $ok_msg; 
+	include('templates/footer.php'); 
+	$this->hook('POST-ACTION'); 
+	exit;
   }
 
   if( $this->get_db()->errorCode() == 'HY000' ) { 
-  if( $this->queryb("CREATE TABLE IF NOT EXISTS 'contact' ( 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      'time' DATETIME, 'email' TEXT, 'msg' TEXT, 'ip' TEXT, 'agent' TEXT)") ) { 
-    if( $this->queryb($sql,$bind) ) {
-      print '<p>contact table created OK</p>'.$ok_msg; include('templates/footer.php'); $this->hook('POST-ACTION'); exit;
-    }
-  } 
+    if( $this->creat_table('contact') ) { 
+      print '<p>contact table created OK</p>'.$ok_msg; 
+	  include('templates/footer.php'); $this->hook('POST-ACTION'); 
+	  exit;
+    } 
   } 
   print 'ERROR: message not saved.';
-  include('templates/footer.php'); $this->hook('POST-ACTION'); exit;
-
+  include('templates/footer.php'); 
+  $this->hook('POST-ACTION'); 
+  exit;
 }
 
 if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
