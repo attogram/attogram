@@ -2,9 +2,9 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.3
+version 0.1.4
 
-Copyright (c) 2016 Attogram Developers 
+Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
 Dual licensed: MIT License and/or GNU General Public License V3
 
@@ -43,7 +43,7 @@ class attogram {
   function login() {
     $this->hook('PRE-LOGIN');
     if( !isset($_POST['login']) || !$_POST['login'] ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-    if( (!isset($_POST['u']) && !isset($_POST['u'])) || (!$_POST['u'] && !$_POST['p']) ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( (!isset($_POST['u']) && !isset($_POST['p'])) || (!$_POST['u'] && !$_POST['p']) ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
     if( !isset($_POST['u']) || !$_POST['u'] ) { $this->error = 'Missing username'; $this->hook('ERROR-LOGIN'); return FALSE; }
     if( !isset($_POST['p']) || !$_POST['p'] ) { $this->error ='Missing password'; $this->hook('ERROR-LOGIN'); return FALSE; }
 
@@ -98,7 +98,7 @@ class attogram {
         return;
       } else {
         $trash = array_shift($this->uri);
-      } 
+      }
     } else { // sub level install
       for( $i = 0; $i < sizeof($this->uri); $i++ ) {
         if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { print '<pre>BREAK</pre>'; break; }
