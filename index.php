@@ -91,9 +91,19 @@ class attogram {
     $this->hook('PRE-ROUTE');
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
-    for( $i = 0; $i < sizeof($this->uri); $i++ ) { 
-      if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { break; }
-      $trash = array_shift($this->uri); 
+    if( $this->path == '' ) { // top level install
+      if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
+        $this->uri[0] = $this->default_action;
+        $this->hook('POST-ROUTE');
+        return;
+      } else {
+        $trash = array_shift($this->uri);
+      } 
+    } else { // sub level install
+      for( $i = 0; $i < sizeof($this->uri); $i++ ) {
+        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { print '<pre>BREAK</pre>'; break; }
+        $trash = array_shift($this->uri);
+      }
     }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
     if( // The Homepage
