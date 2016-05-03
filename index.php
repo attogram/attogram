@@ -50,8 +50,10 @@ class attogram {
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-    if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-    if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( $this->db->errorCode() != '00000') { $this->error = 'Login system offline'; $this->hook('ERROR-LOGIN'); return FALSE; }
+	  
+    if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // no user, or wrong password
+    if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // corrupt data
 
     $user = $user[0];
     $_SESSION['attogram_id'] = $user['id'];

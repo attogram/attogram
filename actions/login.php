@@ -1,17 +1,25 @@
 <?php
 // Attogram - action - login
 
-if( isset($_POST['login']) ) { 
+// attempt to login, buffer notices to show later
+if( isset($_POST['login']) ) {
+  ob_start();
   if( $this->login() ) {
-	header('Location: ' . $this->path);
-	exit;
+    ob_end_clean();
+    header('Location: ' . $this->path);
+    exit;
   }
+  $notices = ob_get_contents();
+  ob_end_clean();
 }
 
 
 include('templates/header.php');
 ?>
 <div class="body">
+<?php
+  if( isset($notices) ) { print $notices; }
+?>
 <form action="" method="POST">
 <input type="hidden" name="login" value="login">
 <p>Username: <input type="text" name="u" size="25"></p>
