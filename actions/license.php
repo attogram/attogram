@@ -4,21 +4,17 @@ $title = 'Attogram - License';
 include('templates/header.php');
 ?>
 <div class="body">
-
 <p>Attogram is an open source project.</p>
-
 <p>It is dual licensed under 
-<a href="http://opensource.org/licenses/MIT">The MIT License</a> and/or the 
-<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License, version 3</a>.</p>
-
+<a href="http://opensource.org/licenses/MIT">The MIT License</a> and the 
+<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.</p>
 <hr />
 
 <p>
 Attogram PHP Framework
 <br />
 Copyright (c) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
-</p>
-<p>
+</p><p>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -53,7 +49,8 @@ THE SOFTWARE.
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-</p>	
+</p>
+<hr />	
 <div dir="ltr">
 <h3 style="text-align: center;">GNU GENERAL PUBLIC LICENSE</h3>
 <p style="text-align: center;">Version 3, 29 June 2007</p>

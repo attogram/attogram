@@ -19,7 +19,7 @@ if( $this->get_db()->errorCode() == 'HY000' ) { // table not found
   
 print '<div class="body"><p><b>' . count($users) . '</b> <a href=".">Users</a>';
 print ' - <a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
-print '<table class="atto"><tr>
+print '<table><tr>
 <td>ID</td>
 <td>edit</td>
 <td>delete</td>
