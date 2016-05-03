@@ -28,7 +28,7 @@ class attogram {
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
     $this->version = '0.1.3';
     $this->actions_dir = 'actions';
-	$this->templates_dir = 'templates';
+    $this->templates_dir = 'templates';
     $this->default_action = 'home';
     $this->db_name = 'db/global';
     $this->fof = '404.php';
@@ -52,7 +52,7 @@ class attogram {
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
     if( $this->db->errorCode() != '00000') { $this->error = 'Login system offline'; $this->hook('ERROR-LOGIN'); return FALSE; }
-	  
+
     if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // no user, or wrong password
     if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // corrupt data
 
@@ -97,14 +97,14 @@ class attogram {
     }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
     if( // The Homepage
-	    ($this->uri[0]=='' && !isset($this->uri[1])) //  top level: host/
-	 || ($this->uri[0]=='' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
-    {  
+        ($this->uri[0]=='' && !isset($this->uri[1])) //  top level: host/
+     || ($this->uri[0]=='' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
+    {
       $this->uri[0]=$this->default_action;
-	  $this->uri[1]='';
-	  $this->hook('POST-ROUTE');
-	  return; 
-	}
+      $this->uri[1]='';
+      $this->hook('POST-ROUTE');
+      return;
+    }
     if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
     if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
@@ -117,8 +117,8 @@ class attogram {
     $f = $this->actions_dir . '/' . $this->uri[0] . '.php';
     if( !is_file($f) ) {
     $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
-      $this->hook('ERROR-ACTION');
-    exit; 
+    $this->hook('ERROR-ACTION');
+    exit;
     }
     if( !is_readable($f) ) {
       $this->error = 'Unreadable action. Please make readable ' . htmlspecialchars($f);
@@ -252,9 +252,9 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function create_table($table='') {
     switch($table) {
-		
+
       default: return FALSE; break;
-		
+
         case 'user': 
           $sql = "CREATE TABLE 'user' (
  'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -277,12 +277,12 @@ class attogram {
  'agent' TEXT
 )";
         break;
-	}
+    }
     if( $this->queryb($sql) ) { return TRUE; }
-	
-	$this->error = 'Cannot create table';
-	$this->hook('ERROR-CREATE-TABLE');
-	return FALSE;
+
+    $this->error = 'Cannot create table';
+    $this->hook('ERROR-CREATE-TABLE');
+    return FALSE;
   }
   
 } // END of class attogram
