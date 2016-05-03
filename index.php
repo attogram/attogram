@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.2
+version 0.1.3
 
 Copyright (c) 2016 Attogram Developers 
 https://github.com/attogram/attogram/
@@ -26,12 +26,12 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.2';
+    $this->version = '0.1.3';
     $this->actions_dir = 'actions';
 	$this->templates_dir = 'templates';
     $this->default_action = 'home';
     $this->db_name = 'db/global';
-    $this->fof = './404.php';
+    $this->fof = '404.php';
     $this->config = 'config.php';
     $this->load_config();
     $this->hook('POST-INIT');
