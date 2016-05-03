@@ -2,7 +2,7 @@
 // Attogram - action - admin - info
  
 $title = 'Attogram - Admin - Info';
-include('templates/header.php');
+include($this->templates_dir . '/header.php');
 
 function to_list($x) {
   if( is_array($x) ) {
@@ -45,4 +45,4 @@ print '</table>';
 
 phpinfo();
 
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');

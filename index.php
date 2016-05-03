@@ -16,7 +16,7 @@ $a = new attogram();
 class attogram {
 
   var $version, $config, $admins, $fof, $error,
-      $path, $uri, $db, $db_name,
+      $path, $uri, $db, $db_name, $templates_dir,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
 
@@ -28,10 +28,11 @@ class attogram {
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
     $this->version = '0.1.2';
     $this->actions_dir = 'actions';
+	$this->templates_dir = 'templates';
     $this->default_action = 'home';
-    $this->db_name = './db/global';
+    $this->db_name = 'db/global';
     $this->fof = './404.php';
-    $this->config = './config.php';
+    $this->config = 'config.php';
     $this->load_config();
     $this->hook('POST-INIT');
     $this->route();

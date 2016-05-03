@@ -923,7 +923,7 @@ if ($auth->isAuthorized())
 //- HTML: output starts here
 header('Content-Type: text/html; charset=utf-8');
 
-include('templates/header.php'); /* Attogram */ 
+include($this->templates_dir . '/header.php'); /* Attogram */ 
 
 //<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 //<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -4142,7 +4142,7 @@ $db->close(); //close the database
 
 //Attogram
 $this->hook('POST-PHPLITEADMIN');
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');
 echo "</body>";
 echo "</html>";
 

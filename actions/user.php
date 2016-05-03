@@ -6,7 +6,7 @@ if( !$this->is_logged_in() ) {
   exit;
 }
 $title = 'Attogram - User';
-include('templates/header.php');
+include($this->templates_dir . '/header.php');
 
 print '<div class="body">
 ID: ' . @$_SESSION['attogram_id'] . '
@@ -15,4 +15,4 @@ ID: ' . @$_SESSION['attogram_id'] . '
 <br />email: ' . @htmlentities($_SESSION['attogram_email']) . '
 </div>';
 
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');

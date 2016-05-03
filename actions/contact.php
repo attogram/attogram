@@ -1,7 +1,7 @@
 <?php 
 // Attogram - action - contact
 $title = 'Attogram - Contact';
-include('templates/header.php');
+include($this->templates_dir . '/header.php');
 
 if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
@@ -18,7 +18,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
   if( $this->queryb($sql,$bind) ) {
     print $ok_msg;
-    include('templates/footer.php');
+    include($this->templates_dir . '/footer.php');
     $this->hook('POST-ACTION'); 
     exit;
   }
@@ -39,7 +39,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
     } 
   } 
   print 'ERROR: message not saved.';
-  include('templates/footer.php'); 
+  include($this->templates_dir . '/footer.php');
   $this->hook('POST-ACTION'); 
   exit;
 }
@@ -65,4 +65,4 @@ Contact us:
 </form>
 </div>
 <?php
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');

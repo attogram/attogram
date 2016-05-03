@@ -13,8 +13,7 @@ if( isset($_POST['login']) ) {
   ob_end_clean();
 }
 
-
-include('templates/header.php');
+include($this->templates_dir . '/header.php');
 ?>
 <div class="body">
 <?php
@@ -29,4 +28,4 @@ include('templates/header.php');
 
 </div>
 <?php
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');

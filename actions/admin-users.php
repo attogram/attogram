@@ -2,7 +2,7 @@
 // Attogram - action - admin - users
 
 $title = 'Attogram - Admin - Users';
-include('templates/header.php');
+include($this->templates_dir . '/header.php');
 
 $users = $this->query('SELECT * FROM user ORDER BY id');
 
@@ -43,4 +43,4 @@ foreach($users as $u) {
 }
 print '</table></div>';
 
-include('templates/footer.php');
+include($this->templates_dir . '/footer.php');
