@@ -92,7 +92,7 @@ class attogram {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
     for( $i = 0; $i < sizeof($this->uri); $i++ ) { 
-      if( $this->uri[$i] == basename($this->path) ) { break; }
+      if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { break; }
       $trash = array_shift($this->uri); 
     }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
