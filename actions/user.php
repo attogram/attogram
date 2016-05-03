@@ -9,10 +9,10 @@ $title = 'Attogram - User';
 include('templates/header.php');
 
 print '<div class="body">
-ID: ' . $_SESSION['attogram_id'] . ' 
-<br />username: ' . $_SESSION['attogram_username'] . ' 
-<br />level: ' . @$_SESSION['attogram_level'] . ' 
-<br />email: ' . @$_SESSION['attogram_email'] . ' 
+ID: ' . @$_SESSION['attogram_id'] . '
+<br />username: ' . @htmlentities($_SESSION['attogram_username']) . '
+<br />level: ' . @htmlentities($_SESSION['attogram_level']) . '
+<br />email: ' . @htmlentities($_SESSION['attogram_email']) . '
 </div>';
 
 include('templates/footer.php');

@@ -16,26 +16,26 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
   $ok_msg = '<p>Thank You.  Message received.</p>';
 
-  if( $this->queryb($sql,$bind) ) { 
-    print $ok_msg; 
-	include('templates/footer.php'); 
-	$this->hook('POST-ACTION'); 
-	exit;
+  if( $this->queryb($sql,$bind) ) {
+    print $ok_msg;
+    include('templates/footer.php');
+    $this->hook('POST-ACTION'); 
+    exit;
   }
 
-  if( $this->get_db()->errorCode() == 'HY000' ) { 
+  if( $this->get_db()->errorCode() == 'HY000' ) {
     if( $this->create_table('contact') ) { 
-	  $this->error = 'Created contact table';
-	  $this->hook('ERROR-FIXED');
-      if( $this->queryb($sql,$bind) ) { 
-		print $ok_msg; 
-	  } else {
-		$this->error = 'Failed to save message';
-		$this->hook('ERROR-CONTACT');
-	  }
-	  include('templates/footer.php'); 
-	  $this->hook('POST-ACTION'); 
-	  exit;
+      $this->error = 'Created contact table';
+      $this->hook('ERROR-FIXED');
+      if( $this->queryb($sql,$bind) ) {
+        print $ok_msg;
+      } else {
+        $this->error = 'Failed to save message';
+        $this->hook('ERROR-CONTACT');
+      }
+      include('templates/footer.php');
+      $this->hook('POST-ACTION'); 
+      exit;
     } 
   } 
   print 'ERROR: message not saved.';
@@ -52,7 +52,9 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 <form action="." method="POST">
 Contact us:
 <br />
-<br />Your Email: <input type="text" name="email" size="55" value="" />
+<br />Your Email: <input type="text" name="email" size="55" value="<?php 
+  if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); } 
+?>" />
 <br />
 <br />Your Message:
 <br /><textarea name="msg" rows="10" cols="70" /></textarea>
