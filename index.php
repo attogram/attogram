@@ -95,7 +95,15 @@ class attogram {
       $trash = array_shift($this->uri); 
     }
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
-    if( $this->uri[0]=='' && !isset($this->uri[1]) ) { $this->uri[0]=$this->default_action; $this->uri[1]=''; $this->hook('POST-ROUTE'); return; } // The Homepage
+    if( // The Homepage
+	    ($this->uri[0]=='' && !isset($this->uri[1])) //  top level: host/
+	 || ($this->uri[0]=='' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
+    {  
+      $this->uri[0]=$this->default_action;
+	  $this->uri[1]='';
+	  $this->hook('POST-ROUTE');
+	  return; 
+	}
     if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
     if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
     if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
