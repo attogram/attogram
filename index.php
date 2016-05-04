@@ -51,7 +51,20 @@ class attogram {
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-    if( $this->db->errorCode() != '00000') { $this->error = 'Login system offline'; $this->hook('ERROR-LOGIN'); return FALSE; }
+    if( $this->db->errorCode() != '00000' ) { // query failed...
+      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+      if( $sqlstate = 'HY000' && $error_code == '1' && $error_string == 'no such table: user' ) { // table not found
+        if( $this->create_table('user') ) {
+          $this->error = 'Created table: user';
+          $this->hook('ERROR-FIXED');
+          return FALSE;
+        } else {
+          $this->error = 'Login system offline'; 
+          $this->hook('ERROR-LOGIN'); 
+          return FALSE;          
+        }
+      }
+    }
 
     if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // no user, or wrong password
     if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // corrupt data
