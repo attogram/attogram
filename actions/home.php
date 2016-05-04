@@ -9,8 +9,8 @@ $this->hook('PRE-HOME');
 
 <p>Pages:<ul><?php
 foreach( $this->actions as $action ){
-	if( preg_match('/^admin/',$action) ) { continue; }
-	print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
+  if( preg_match('/^admin/',$action) ) { continue; }
+  print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
 }
 ?>
 <li><a href="README.md">README.md</a></li>
@@ -19,8 +19,8 @@ foreach( $this->actions as $action ){
 <?php if( $this->is_admin() ) { ?>
 <p>Admin Pages:<ul><?php
 foreach( $this->actions as $action ){
-	if( !preg_match('/^admin/',$action) ) { continue; }
-	print '<li><a href="./' . $action . '/">' . preg_replace('/^admin-/', '', $action) . '</a></li>';
+  if( !preg_match('/^admin/',$action) ) { continue; }
+  print '<li><a href="./' . $action . '/">' . preg_replace('/^admin-/', '', $action) . '</a></li>';
 }
 ?></ul></p>
 <?php } ?>

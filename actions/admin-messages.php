@@ -10,12 +10,12 @@ include($this->templates_dir . '/header.php');
 $sql = 'SELECT * FROM contact ORDER BY id DESC';
 $m = $this->query($sql);
 
-if( $this->get_db()->errorCode() == 'HY000' ) { 
+if( $this->get_db()->errorCode() == 'HY000' ) {
   if( $this->create_table('contact') ) {
     $this->error = 'Created contact table';
     $this->hook('ERROR-FIXED');
     $m = $this->query($sql);
-    if( $this->get_db()->errorCode() == 'HY000' ) { 
+    if( $this->get_db()->errorCode() == 'HY000' ) {
       $this->error = 'Failed getting contacts';
       $this->hook('ERROR-CONTACT');
     }

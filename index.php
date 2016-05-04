@@ -26,7 +26,7 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.3';
+    $this->version = '0.1.4';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
     $this->default_action = 'home';
