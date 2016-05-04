@@ -42,7 +42,7 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 Contact us:
 <br />
 <br />Your Email: <input type="text" name="email" size="55" value="<?php 
-  if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); } 
+  if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); }
 ?>" />
 <br />
 <br />Your Message:

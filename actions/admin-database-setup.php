@@ -5,7 +5,7 @@ $title = 'Attogram - Admin - DB setup';
 include($this->templates_dir . '/header.php');
 ?>
 <div class="body">
-<a href="./">Config: Database Tables</a>
+Config: <a href="./">Database Tables</a>
 <ul>
 <li><a href="./?create">Create Attogram Tables</a>
 </ul>
@@ -13,7 +13,7 @@ include($this->templates_dir . '/header.php');
   if( isset($_GET['create']) ) {
     print '<br />Creating table <b>user</b>: ';
     if( $this->create_table('user') ) { print 'OK'; } else { print 'ERROR'; }
-	print '<br />Creating table <b>contact</b>: ';
+    print '<br />Creating table <b>contact</b>: ';
     if( $this->create_table('contact') ) { print 'OK'; } else { print 'ERROR'; }
   }
 ?>

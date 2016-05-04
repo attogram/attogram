@@ -28,4 +28,3 @@ foreach( $this->actions as $action ){
 <?php
 $this->hook('POST-HOME');
 include($this->templates_dir . '/footer.php');
-
