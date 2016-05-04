@@ -225,7 +225,7 @@ class attogram {
       $this->hook('ERROR-QUERY');
       return array();
     }
-    $statement = $this->db->prepare($sql);
+    $statement = $this->query_prepare($sql);
     if( !$statement ) { 
       $this->error = 'Can not prepare sql';
       $this->hook('ERROR-QUERY');
@@ -249,14 +249,14 @@ class attogram {
 
   //////////////////////////////////////////////////////////////////////
   function queryb( $sql, $bind=array() ) {
-    $this->hook('PRE-QUERY');
+    $this->hook('PRE-QUERYB');
     $db = $this->get_db();
-    if( !$this->db ) { $this->hook('ERROR-QUERY'); return false; }
+    if( !$this->db ) { $this->hook('ERROR-QUERYB'); return false; }
     $statement = $this->query_prepare($sql);
-    if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
+    if( !$statement ) { $this->hook('ERROR-QUERYB'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) {$this->hook('ERROR-QUERY'); return false; }
-    $this->hook('POST-QUERY');
+    if( !$statement->execute() ) {$this->hook('ERROR-QUERYB'); return false; }
+    $this->hook('POST-QUERYB');
     return true;
   }
 
@@ -265,21 +265,21 @@ class attogram {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     $this->error = 'Can not prepare sql';
-    $this->hook('ERROR-QUERY');
+    $this->hook('ERROR-PREPARE');
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table
         $this->error = 'Created table: ' . $table;
-        $this->hook('ERROR-FIXED');
+        $this->hook('ERROR-PREPARE');
         $statement = $this->db->prepare($sql);
         if( $statement ) { return $statement; } // try again
         $this->error = 'Still can not prepare sql';
-        $this->hook('ERROR-QUERY');
+        $this->hook('ERROR-PREPARE');
         return FALSE;
       } else {
         $this->error = 'Can not create table'; 
-        $this->hook('ERROR-QUERY'); 
+        $this->hook('ERROR-PREPARE'); 
         return FALSE;          
       }      
     }
