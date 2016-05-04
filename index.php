@@ -251,9 +251,9 @@ class attogram {
   function queryb( $sql, $bind=array() ) {
     $this->hook('PRE-QUERYB');
     $db = $this->get_db();
-    if( !$this->db ) { $this->hook('ERROR-QUERYB'); return false; }
+    if( !$this->db ) { return false; }
     $statement = $this->query_prepare($sql);
-    if( !$statement ) { $this->hook('ERROR-QUERYB'); return false; }
+    if( !$statement ) { return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) {$this->hook('ERROR-QUERYB'); return false; }
     $this->hook('POST-QUERYB');
@@ -288,10 +288,10 @@ class attogram {
   //////////////////////////////////////////////////////////////////////
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
-    $this->hook('PRE-DB');
+    $this->hook('PRE-GET-DB');
     if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {
       $this->error = 'sqlite PDO driver not found';
-      $this->hook('ERROR-DB');
+      $this->hook('ERROR-GET-DB');
       $this->db = false;
       return false;
     }
@@ -299,11 +299,11 @@ class attogram {
       $this->db = new PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->error = 'error connnecting to PDO sqlite database';
-      $this->hook('ERROR-DB');
+      $this->hook('ERROR-GET-DB');
       $this->db = false;
       return false;
     }
-    $this->hook('POST-DB');
+    $this->hook('POST-GET-DB');
     return $this->db;
   }
 
@@ -338,8 +338,8 @@ class attogram {
     }
     if( $this->queryb($sql) ) { return TRUE; }
 
-    $this->error = 'Cannot create table';
-    $this->hook('ERROR-CREATE-TABLE');
+    //$this->error = 'Cannot create table';
+    //$this->hook('ERROR-CREATE-TABLE');
     return FALSE;
   }
 
