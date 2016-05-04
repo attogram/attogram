@@ -220,35 +220,15 @@ class attogram {
   function query( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
-    if( !$db ) {
+    if( !$this->db ) {
       $this->error = 'Can not get database';
       $this->hook('ERROR-QUERY');
       return array();
     }
-    $statement = $db->prepare($sql);
+    $statement = $this->db->prepare($sql);
     if( !$statement ) { 
       $this->error = 'Can not prepare sql';
       $this->hook('ERROR-QUERY');
-      
-      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-      if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
-        $table = str_replace('no such table: ', '', $error_string); // get table name
-        if( $this->create_table($table) ) { // create table
-          $this->error = 'Created table: ' . $table;
-          $this->hook('ERROR-FIXED');
-          $statement = $db->prepare($sql);
-          if( !$statement ) {
-            $this->error = 'Still can not prepare sql';
-            $this->hook('ERROR-QUERY');
-            return FALSE;
-          }
-        } else {
-          $this->error = 'Can not create table'; 
-          $this->hook('ERROR-QUERY'); 
-          return FALSE;          
-        } 
-      }
-
       return array();
     }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
@@ -271,8 +251,8 @@ class attogram {
   function queryb( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
-    if( !$db ) { $this->hook('ERROR-QUERY'); return false; }
-    $statement = $db->prepare($sql);
+    if( !$this->db ) { $this->hook('ERROR-QUERY'); return false; }
+    $statement = $this->query_prepare($sql);
     if( !$statement ) { $this->hook('ERROR-QUERY'); return false; }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) {$this->hook('ERROR-QUERY'); return false; }
@@ -281,19 +261,47 @@ class attogram {
   }
 
   //////////////////////////////////////////////////////////////////////
+  function query_prepare($sql) {
+    $statement = $this->db->prepare($sql);
+    if( $statement ) { return $statement; }
+    $this->error = 'Can not prepare sql';
+    $this->hook('ERROR-QUERY');
+    list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+    if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
+      $table = str_replace('no such table: ', '', $error_string); // get table name
+      if( $this->create_table($table) ) { // create table
+        $this->error = 'Created table: ' . $table;
+        $this->hook('ERROR-FIXED');
+        $statement = $this->db->prepare($sql);
+        if( $statement ) { return $statement; } // try again
+        $this->error = 'Still can not prepare sql';
+        $this->hook('ERROR-QUERY');
+        return FALSE;
+      } else {
+        $this->error = 'Can not create table'; 
+        $this->hook('ERROR-QUERY'); 
+        return FALSE;          
+      }      
+    }
+  }
+  
+  //////////////////////////////////////////////////////////////////////
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
     $this->hook('PRE-DB');
     if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {
       $this->error = 'sqlite PDO driver not found';
       $this->hook('ERROR-DB');
-     return false; }
+      $this->db = false;
+      return false;
+    }
     try {
       $this->db = new PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->error = 'error connnecting to PDO sqlite database';
       $this->hook('ERROR-DB');
       $this->db = false;
+      return false;
     }
     $this->hook('POST-DB');
     return $this->db;

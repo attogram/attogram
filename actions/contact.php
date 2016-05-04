@@ -24,24 +24,13 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
   }
 
   if( $this->get_db()->errorCode() == 'HY000' ) {
-    if( $this->create_table('contact') ) { 
-      $this->error = 'Created contact table';
-      $this->hook('ERROR-FIXED');
-      if( $this->queryb($sql,$bind) ) {
-        print $ok_msg;
-      } else {
-        $this->error = 'Failed to save message';
-        $this->hook('ERROR-CONTACT');
-      }
-      include('templates/footer.php');
-      $this->hook('POST-ACTION'); 
-      exit;
-    } 
-  } 
-  print 'ERROR: message not saved.';
-  include($this->templates_dir . '/footer.php');
-  $this->hook('POST-ACTION'); 
-  exit;
+    $this->error = 'Message system offline';
+    $this->hook('ERROR-CONTACT');
+    include($this->templates_dir . '/footer.php');
+    $this->hook('POST-ACTION'); 
+    exit;
+  }
+
 }
 
 if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
