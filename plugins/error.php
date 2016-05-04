@@ -17,7 +17,7 @@ class plugin_error {
 
       case 'ERROR-QUERY':
         $ei = @$this->attogram->db->errorInfo();
-        print '<pre>ERROR-QUERY: SQLSTATE:' . @$ei[0] . ' code:' . @$ei[1] . ' message:' . @$ei[2] . '</pre>';
+        print '<pre>ERROR-QUERY: ' . @$this->attogram->error . ' SQLSTATE:' . @$ei[0] . ' code:' . @$ei[1] . ' message:' . @$ei[2] . '</pre>';
         break;
 
       default:

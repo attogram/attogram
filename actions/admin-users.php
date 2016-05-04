@@ -6,17 +6,6 @@ include($this->templates_dir . '/header.php');
 
 $users = $this->query('SELECT * FROM user ORDER BY id');
 
-if( $this->get_db()->errorCode() == 'HY000' ) { // table not found
-  if( !$this->create_table('user') ) { 
-    $this->error = 'Cannot create user table';
-      $this->hook('ERROR-CREATE-TABLE');
-    } else {
-      $this->error = 'Created user table';
-      $this->hook('ERROR-FIXED');
-      $users = $this->query('SELECT * FROM user ORDER BY id'); // try 1 more time
-    }
-  } 
-
 print '<div class="body"><p><b>' . count($users) . '</b> <a href="">Users</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
 print '<table><tr>

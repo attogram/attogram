@@ -19,7 +19,7 @@ class attogram {
       $path, $uri, $db, $db_name, $templates_dir,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
-
+  
   ////////////////////////////////////////////////////////////////////
   function __construct() {
     $this->plugins_dir = 'plugins';
@@ -52,18 +52,9 @@ class attogram {
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
     if( $this->db->errorCode() != '00000' ) { // query failed...
-      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-      if( $sqlstate = 'HY000' && $error_code == '1' && $error_string == 'no such table: user' ) { // table not found
-        if( $this->create_table('user') ) {
-          $this->error = 'Created table: user';
-          $this->hook('ERROR-FIXED');
-          return FALSE;
-        } else {
-          $this->error = 'Login system offline'; 
-          $this->hook('ERROR-LOGIN'); 
-          return FALSE;          
-        }
-      }
+      $this->error = 'Login system offline'; 
+      $this->hook('ERROR-LOGIN'); 
+      return FALSE;          
     }
 
     if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // no user, or wrong password
@@ -229,13 +220,49 @@ class attogram {
   function query( $sql, $bind=array() ) {
     $this->hook('PRE-QUERY');
     $db = $this->get_db();
-    if( !$db ) { $this->hook('ERROR-QUERY'); return array(); }
+    if( !$db ) {
+      $this->error = 'Can not get database';
+      $this->hook('ERROR-QUERY');
+      return array();
+    }
     $statement = $db->prepare($sql);
-    if( !$statement ) { $this->hook('ERROR-QUERY'); return array(); }
+    if( !$statement ) { 
+      $this->error = 'Can not prepare sql';
+      $this->hook('ERROR-QUERY');
+      
+      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+      if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
+        $table = str_replace('no such table: ', '', $error_string); // get table name
+        if( $this->create_table($table) ) { // create table
+          $this->error = 'Created table: ' . $table;
+          $this->hook('ERROR-FIXED');
+          $statement = $db->prepare($sql);
+          if( !$statement ) {
+            $this->error = 'Still can not prepare sql';
+            $this->hook('ERROR-QUERY');
+            return FALSE;
+          }
+        } else {
+          $this->error = 'Can not create table'; 
+          $this->hook('ERROR-QUERY'); 
+          return FALSE;          
+        } 
+      }
+
+      return array();
+    }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) { $this->hook('ERROR-QUERY'); return array(); }
+    if( !$statement->execute() ) { 
+      $this->error = 'Can not execute query';
+      $this->hook('ERROR-QUERY'); 
+      return array(); 
+    }
     $r = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if( !$r && $this->db->errorCode() != '00000') { $this->hook('ERROR-QUERY'); $r = array(); }
+    if( !$r && $this->db->errorCode() != '00000') { // query failed
+      $this->error = 'Query failed';
+      $this->hook('ERROR-QUERY'); 
+      $r = array(); 
+    }
     $this->hook('POST-QUERY');
     return $r;
   }
