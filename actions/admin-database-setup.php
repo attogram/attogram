@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - admin
 
+$attogram_tables = array('user','contact');
+
 $title = 'Attogram - Admin - DB setup';
 include($this->templates_dir . '/header.php');
 ?>
@@ -10,12 +12,12 @@ Config: <a href="./">Database Tables</a>
 <li><a href="./?create">Create Attogram Tables</a>
 </ul>
 <?php
-  if( isset($_GET['create']) ) {
-    print '<br />Creating table <b>user</b>: ';
-    if( $this->create_table('user') ) { print 'OK'; } else { print 'ERROR'; }
-    print '<br />Creating table <b>contact</b>: ';
-    if( $this->create_table('contact') ) { print 'OK'; } else { print 'ERROR'; }
+if( isset($_GET['create']) ) {
+  foreach($attogram_tables as $table) {
+    print "<br />Creating table <b>$table</b>: ";
+    if( $this->create_table($table) ) { print 'OK'; } else { print 'ERROR'; }    
   }
+}
 ?>
 </div>
 <?php
