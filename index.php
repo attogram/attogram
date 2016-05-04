@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.4
+version 0.1.5
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -26,7 +26,7 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.4';
+    $this->version = '0.1.5';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
     $this->default_action = 'home';
@@ -278,13 +278,13 @@ class attogram {
         $this->hook('ERROR-PREPARE');
         return FALSE;
       } else {
-        $this->error = 'Can not create table'; 
+        $this->error = 'Can not create table';
         $this->hook('ERROR-PREPARE'); 
-        return FALSE;          
-      }      
+        return FALSE;
+      }
     }
   }
-  
+
   //////////////////////////////////////////////////////////////////////
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
@@ -342,5 +342,5 @@ class attogram {
     $this->hook('ERROR-CREATE-TABLE');
     return FALSE;
   }
-  
+
 } // END of class attogram
