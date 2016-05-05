@@ -1,7 +1,7 @@
 <?php
 // Attogram - action - admin
 
-$attogram_tables = array('user','contact');
+$attogram_tables = array('user','contact','list');
 
 $title = 'Attogram - Admin - DB setup';
 include($this->templates_dir . '/header.php');

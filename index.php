@@ -346,7 +346,16 @@ class attogram {
  'agent' TEXT
 )";
         break;
-    }
+
+        case 'list':
+          $sql = "CREATE TABLE 'list' (
+   'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+   'list' TEXT NOT NULL, 
+   'item' TEXT NOT NULL, 
+   'ordering' INTEGER NOT NULL DEFAULT 0
+)";
+        break;
+    }     
     if( $this->queryb($sql) ) { return TRUE; }
 
     //$this->error = 'Cannot create table';
