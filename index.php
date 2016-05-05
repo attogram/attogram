@@ -19,7 +19,7 @@ class attogram {
       $path, $uri, $db, $db_name, $templates_dir,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions;
-  
+
   ////////////////////////////////////////////////////////////////////
   function __construct() {
     $this->plugins_dir = 'plugins';
@@ -41,24 +41,35 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function login() {
+
     $this->hook('PRE-LOGIN');
-    if( !isset($_POST['login']) || !$_POST['login'] ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-    if( (!isset($_POST['u']) && !isset($_POST['p'])) || (!$_POST['u'] && !$_POST['p']) ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; }
-    if( !isset($_POST['u']) || !$_POST['u'] ) { $this->error = 'Missing username'; $this->hook('ERROR-LOGIN'); return FALSE; }
-    if( !isset($_POST['p']) || !$_POST['p'] ) { $this->error ='Missing password'; $this->hook('ERROR-LOGIN'); return FALSE; }
+
+    if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
+      $this->error = 'Please enter username and password';
+      $this->hook('ERROR-LOGIN');
+      return FALSE;
+    }
 
     $user = $this->query(
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-    if( $this->db->errorCode() != '00000' ) { // query failed...
-      $this->error = 'Login system offline'; 
-      $this->hook('ERROR-LOGIN'); 
-      return FALSE;          
+    if( $this->db->errorCode() != '00000' ) { // query failed
+      $this->error = 'Login system offline';
+      $this->hook('ERROR-LOGIN');
+      return FALSE;
     }
 
-    if( !$user ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // no user, or wrong password
-    if( !sizeof($user) == 1 ) { $this->error = 'Invalid login'; $this->hook('ERROR-LOGIN'); return FALSE; } // corrupt data
+    if( !$user ) { // no user, or wrong password
+      $this->error = 'Invalid login'; 
+      $this->hook('ERROR-LOGIN'); 
+      return FALSE; 
+    }
+    if( !sizeof($user) == 1 ) { // corrupt data
+      $this->error = 'Invalid login'; 
+      $this->hook('ERROR-LOGIN'); 
+      return FALSE; 
+    }
 
     $user = $user[0];
     $_SESSION['attogram_id'] = $user['id'];

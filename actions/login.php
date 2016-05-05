@@ -1,8 +1,7 @@
 <?php
 // Attogram - action - login
 
-// attempt to login, buffer notices to show later
-if( isset($_POST['login']) ) {
+if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
   ob_start();
   if( $this->login() ) {
     ob_end_clean();
