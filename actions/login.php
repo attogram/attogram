@@ -5,7 +5,7 @@ if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
   ob_start();
   if( $this->login() ) {
     ob_end_clean();
-    header('Location: ' . $this->path);
+    header('Location: ' . $this->path . '/');
     exit;
   }
   $notices = ob_get_contents();
