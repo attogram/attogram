@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - admin - info
- 
+
+namespace Attogram;
+
 $title = 'Attogram - Admin - Info';
 include($this->templates_dir . '/header.php');
 

@@ -1,6 +1,8 @@
 <?php
 // Attogram - plugin - error
 
+namespace Attogram;
+
 class plugin_error {
 
   var $attogram;

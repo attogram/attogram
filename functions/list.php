@@ -1,6 +1,8 @@
 <?php
 // Attogram - functions - list
 
+namespace Attogram;
+
 function to_list($x) {
   if( is_array($x) ) {
     $r = '';

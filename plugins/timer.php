@@ -1,6 +1,8 @@
 <?php
 // Attogram - plugin - timer
 
+namespace Attogram;
+
 class plugin_timer {
  
   var $start;

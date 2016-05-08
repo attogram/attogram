@@ -10,6 +10,8 @@ Dual licensed: MIT License and/or GNU General Public License V3
 
 ******************************************************************* */
 
+namespace Attogram;
+
 $a = new attogram();
 
 //////////////////////////////////////////////////////////////////////
@@ -276,7 +278,7 @@ class attogram {
       $this->hook('ERROR-QUERY'); 
       return array(); 
     }
-    $r = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if( !$r && $this->db->errorCode() != '00000') { // query failed
       $this->error = 'Query failed';
       $this->hook('ERROR-QUERY'); 
@@ -328,14 +330,14 @@ class attogram {
   function get_db() {
     if( is_object($this->db) ) { return $this->db; }
     $this->hook('PRE-GET-DB');
-    if( !in_array('sqlite', PDO::getAvailableDrivers() ) ) {
+    if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->error = 'sqlite PDO driver not found';
       $this->hook('ERROR-GET-DB');
       $this->db = false;
       return false;
     }
     try {
-      $this->db = new PDO('sqlite:'. $this->db_name);
+      $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->error = 'error connnecting to PDO sqlite database';
       $this->hook('ERROR-GET-DB');

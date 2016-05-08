@@ -1,6 +1,8 @@
 <?php
 // Attogram - plugin - test
 
+namespace Attogram;
+
 class plugin_test {
 
   function is_active() { return false; }
