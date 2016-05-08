@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.6
+version 0.1.7
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -16,9 +16,9 @@ $a = new attogram();
 class attogram {
 
   var $version, $config, $admins, $fof, $error,
-      $path, $uri, $db, $db_name, $templates_dir,
+      $path, $uri, $db, $db_name, $templates_dir, $functions_dir,
       $plugins_dir, $plugins,
-      $actions_dir, $default_action, $actions;
+      $actions_dir, $default_action, $actions, $action;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
@@ -26,14 +26,16 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.6';
+    $this->version = '0.1.7';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
+    $this->functions_dir = 'functions';
     $this->default_action = 'home';
     $this->db_name = 'db/global';
     $this->fof = '404.php';
     $this->config = 'config.php';
     $this->load_config();
+    $this->get_functions();
     $this->hook('POST-INIT');
     $this->route();
     $this->action();
@@ -106,9 +108,10 @@ class attogram {
     $this->hook('PRE-ROUTE');
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
+
     if( $this->path == '' ) { // top level install
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
-        $this->uri[0] = $this->default_action;
+        $this->uri[0] = $this->action = $this->default_action;
         $this->hook('POST-ROUTE');
         return;
       } else {
@@ -116,30 +119,46 @@ class attogram {
       }
     } else { // sub level install
       for( $i = 0; $i < sizeof($this->uri); $i++ ) {
-        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { print '<pre>BREAK</pre>'; break; }
+        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { break; }
         $trash = array_shift($this->uri);
       }
     }
+
     if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
+
+    
     if( // The Homepage
-        ($this->uri[0]=='' && !isset($this->uri[1])) //  top level: host/
-     || ($this->uri[0]=='' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
+        ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
+     || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
-      $this->uri[0]=$this->default_action;
-      $this->uri[1]='';
+      $this->uri[0] = $this->action = $this->default_action;
+      $this->uri[1] = '';
       $this->hook('POST-ROUTE');
       return;
     }
-    if( !in_array($this->uri[0],$this->get_actions()) || !$this->uri[1]=='' || isset($this->uri[2]) ) { $this->error404(); } // available actions
-    if( preg_match('/^admin/',$this->uri[0]) ) { if( !$this->is_admin() ) { $this->error404(); } } // admin only
-    if( $this->uri[sizeof($this->uri)-1]!='' ) { header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); exit; } // add trailing slash
+ 
+    if( !in_array($this->uri[0],$this->get_actions()) // is action not available?
+      || !$this->uri[1]=='' // is not correct slash format?
+      || isset($this->uri[2]) // if has subpath
+      || (preg_match('/^admin/',$this->uri[0]) && !$this->is_admin() ) // admin only actions
+    ) { 
+      $this->error404(); 
+    }
+      
+    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
+      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); 
+      exit; 
+    } 
+    
+    $this->action = $this->uri[0];
+    
     $this->hook('POST-ROUTE');
   }
 
   ////////////////////////////////////////////////////////////////////
   function action() {
     $this->hook('PRE-ACTION');
-    $f = $this->actions_dir . '/' . $this->uri[0] . '.php';
+    $f = $this->actions_dir . '/' . $this->action . '.php';
     if( !is_file($f) ) {
     $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
     $this->hook('ERROR-ACTION');
@@ -176,13 +195,13 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function is_readable_dir($dir) {
+  function is_readable_dir( $dir ) {
     if( is_dir($dir) && is_readable($dir) ) { return TRUE; }
     return FALSE;
   }
 
   //////////////////////////////////////////////////////////////////////
-  function is_readable_php_file($file) {
+  function is_readable_php_file( $file ) {
     if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) { return TRUE; }
     return FALSE;
   }
@@ -219,6 +238,15 @@ class attogram {
     return $this->actions;
   }
 
+  //////////////////////////////////////////////////////////////////////
+  function get_functions() {
+    if( !$this->is_readable_dir($this->functions_dir) ) { return FALSE; }
+    foreach( array_diff(scandir($this->functions_dir), array('.','..','.htaccess')) as $f ) {
+      $file = $this->functions_dir . "/$f";
+      if( !$this->is_readable_php_file($file) ) { continue; } // php files only
+      include_once($file);
+    }    
+  }
   //////////////////////////////////////////////////////////////////////
   function is_admin() {
     if( isset($_GET['noadmin']) ) { return false; }
@@ -272,7 +300,7 @@ class attogram {
   }
 
   //////////////////////////////////////////////////////////////////////
-  function query_prepare($sql) {
+  function query_prepare( $sql ) {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     $this->error = 'Can not prepare sql';
@@ -319,7 +347,7 @@ class attogram {
   }
 
   //////////////////////////////////////////////////////////////////////
-  function create_table($table='') {
+  function create_table( $table='' ) {
     switch($table) {
 
       default: return FALSE; break;
