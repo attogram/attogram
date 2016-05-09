@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.7
+version 0.1.8
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -28,7 +28,7 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.7';
+    $this->version = '0.1.8';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
     $this->functions_dir = 'functions';
@@ -216,8 +216,11 @@ class attogram {
     foreach( array_diff(scandir($this->plugins_dir), array('.','..','.htaccess')) as $f ) {
       if( !$this->is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
       include_once($this->plugins_dir . "/$f");
-      $p = 'plugin_' . str_replace('.php','',$f);
-      if( !class_exists($p) ) { continue; }
+      $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
+      if( !class_exists($p) ) { 
+        //print "<pre>ERROR: no class $p in file $f</pre>";
+        continue; 
+      }
       $po = new $p( $this );
       if( !method_exists($po,'is_active') ) { continue; }
       if( !$po->is_active() ) { continue; }
@@ -388,8 +391,8 @@ class attogram {
     }     
     if( $this->queryb($sql) ) { return TRUE; }
 
-    //$this->error = 'Cannot create table';
-    //$this->hook('ERROR-CREATE-TABLE');
+    $this->error = 'Cannot create table';
+    $this->hook('ERROR-CREATE-TABLE');
     return FALSE;
   }
 
