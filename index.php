@@ -34,6 +34,9 @@ class attogram {
     $this->functions_dir = 'functions';
     $this->default_action = 'home';
     $this->db_name = 'db/global';
+    
+    $this->sqlite_database = new sqlite_database();
+    
     $this->fof = '404.php';
     $this->config = 'config.php';
     $this->load_config();
@@ -397,3 +400,135 @@ class attogram {
   }
 
 } // END of class attogram
+
+
+//////////////////////////////////////////////////////////////////////
+class sqlite_database {
+  
+  var $db, $db_name, $tables, $error;
+  
+  //////////////////////////////////////////////////////////////////////
+  function __construct() {
+    $this->db_name = 'db/global';
+    $this->error = false;
+    $this->tables = array(
+          
+      'user' => "CREATE TABLE 'user' (
+       'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+       'username' TEXT UNIQUE NOT NULL,
+       'password' TEXT NOT NULL,
+       'email' TEXT NOT NULL,
+       'level' INTEGER NOT NULL DEFAULT '0',
+       'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+       'last_host' TEXT NOT NULL
+      )",
+
+      'contact' => "CREATE TABLE 'contact' (
+       'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+       'time' DATETIME,
+       'email' TEXT,
+       'msg' TEXT,
+       'ip' TEXT,
+       'agent' TEXT
+      )",
+
+      'list' => "CREATE TABLE 'list' (
+         'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+         'list' TEXT NOT NULL, 
+         'item' TEXT NOT NULL, 
+         'ordering' INTEGER NOT NULL DEFAULT 0
+      )",  
+    );
+  }
+  
+  //////////////////////////////////////////////////////////////////////
+  function query( $sql, $bind=array() ) {
+    $db = $this->get_db();
+    if( !$this->db ) {
+      $this->error = 'Can not get database';
+      return array();
+    }
+    $statement = $this->query_prepare($sql);
+    if( !$statement ) { 
+      $this->error .= 'Can not prepare sql';
+      return array();
+    }
+    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
+    if( !$statement->execute() ) { 
+      $this->error = 'Can not execute query';
+      return array(); 
+    }
+    $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
+    if( !$r && $this->db->errorCode() != '00000') { // query failed
+      $this->error = 'Query failed';
+      $r = array(); 
+    }
+    return $r;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  function queryb( $sql, $bind=array() ) {
+    $db = $this->get_db();
+    if( !$this->db ) { return false; }
+    $statement = $this->query_prepare($sql);
+    if( !$statement ) { return false; }
+    while( $x = each($bind) ) {
+      $statement->bindParam($x[0], $x[1]);
+    }
+    if( !$statement->execute() ) { return false; }
+    return true;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  function query_prepare( $sql ) {
+    $statement = $this->db->prepare($sql);
+    if( $statement ) { return $statement; }
+    $this->error = 'Can not prepare sql';
+    list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+    if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
+      $table = str_replace('no such table: ', '', $error_string); // get table name
+      if( $this->create_table($table) ) { // create table
+        $this->error .= ' - Created table: ' . $table;
+        $statement = $this->db->prepare($sql);
+        if( $statement ) { return $statement; } // try again
+        $this->error .= ' - Still can not prepare sql';
+        return FALSE;
+      } else {
+        $this->error .= ' - Can not create table';
+        return FALSE;
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  function get_db() {
+    if( is_object($this->db) ) { return $this->db; }
+    if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
+      $this->error = 'sqlite PDO driver not found';
+      $this->db = false;
+      return false;
+    }
+    try {
+      $this->db = new \PDO('sqlite:'. $this->db_name);
+    } catch(PDOException $e) {
+      $this->error = 'error connnecting to PDO sqlite database';
+      $this->db = false;
+      return false;
+    }
+    return $this->db;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  function create_table( $table='' ) {
+    if( !isset($this->tables[$table]) ) {
+      $this->error = 'Unknown table';
+      return FALSE;
+    }
+    if( !$this->queryb( $this->tables[$table] ) ) { 
+      $this->error .= ' - Cannot create table';
+      return FALSE;
+    }
+    return TRUE;
+  }
+  
+} // END of class sqlite_database
