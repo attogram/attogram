@@ -65,56 +65,25 @@ class attogram {
       return;
     }
 
-    if( isset($config['admins']) && is_array($config['admins'])  ) {
-      $this->admins = $config['admins'];
-    } else {
-      $this->admins = array( '127.0.0.1', '::1' );  // Default value: IP4 localhost, IP6 localhost
-    }
-
-    if( isset($config['admin_dir']) && is_string($config['admin_dir']) ) {
-      $this->admin_dir = $config['admin_dir'];
-    } else {
-      $this->admin_dir = 'admin';
-    }
-    
-    if( isset($config['default_action']) && is_string($config['default_action']) ) {
-      $this->default_action = $config['default_action'];
-    } else {
-      $this->default_action = 'home';
-    }
-
-    if( isset($config['actions_dir']) && is_string($config['actions_dir']) ) {
-      $this->actions_dir = $config['actions_dir'];
-    } else {
-      $this->actions_dir = 'actions';
-    }
-
-    if( isset($config['plugins_dir']) && is_string($config['plugins_dir']) ) {
-      $this->plugins_dir = $config['plugins_dir'];
-    } else {
-      $this->plugins_dir = 'plugins';
-    }
-
-    if( isset($config['templates_dir']) && is_string($config['templates_dir']) ) {
-      $this->templates_dir = $config['templates_dir'];
-    } else {
-      $this->templates_dir = 'templates';
-    }
-
-    if( isset($config['functions_dir']) && is_string($config['functions_dir']) ) {
-      $this->functions_dir = $config['functions_dir'];
-    } else {
-      $this->functions_dir = 'functions';
-    }
-
-    if( isset($config['fof']) && is_string($config['fof']) ) {
-      $this->fof = $config['fof'];
-    } else {
-      $this->fof = '404.php';
-    }
-
+    $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
+    $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin');
+    $this->set_config( 'default_action', @$config['default_action'], 'home');
+    $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions');
+    $this->set_config( 'plugins_dir',    @$config['plugins_dir'],    'plugins');
+    $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates');
+    $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions');
+    $this->set_config( 'fof',            @$config['fof'],            '404.php');
   }
 
+  ////////////////////////////////////////////////////////////////////
+  function set_config( $var_name, $config_val='', $default_val ) {
+    if( $config_val ) {
+      $this->{$var_name} = $config_val;
+    } else {
+      $this->{$var_name} = $default_val;
+    }
+  }
+  
   ////////////////////////////////////////////////////////////////////
   function route() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
