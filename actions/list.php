@@ -7,10 +7,10 @@ include($this->templates_dir . '/header.php');
 print '<div class="body">';
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
-$lists = $this->query($sql);
+$lists = $this->sqlite_database->query($sql);
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
-$items = $this->query($sql);
+$items = $this->sqlite_database->query($sql);
 
 
 foreach( $lists as $list ) { 

@@ -17,7 +17,7 @@ foreach($info as $key => $var) {
 }
 
 print '<tr><td class="e">Database size </td><td class="v">'
-. (file_exists($this->db_name) ? filesize($this->db_name) : 'NULL') . ' bytes</td></tr>';
+. (file_exists($this->sqlite_database->db_name) ? filesize($this->sqlite_database->db_name) : 'NULL') . ' bytes</td></tr>';
 
 
 print '<tr><td class="e">attogram_id </td><td class="v">' . htmlentities(@$_SESSION['attogram_id']) . '</td></tr>';

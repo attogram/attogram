@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.1.8
+version 0.1.9
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -12,13 +12,13 @@ Dual licensed: MIT License and/or GNU General Public License V3
 
 namespace Attogram;
 
-$a = new attogram();
+$attogram = new attogram();
 
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
   var $version, $config, $admins, $fof, $error,
-      $path, $uri, $db, $db_name, $templates_dir, $functions_dir,
+      $path, $uri, $sqlite_database, $templates_dir, $functions_dir,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions, $action;
 
@@ -28,12 +28,11 @@ class attogram {
     $this->hook('PRE-INIT');
     session_start();
     if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.1.8';
+    $this->version = '0.1.9';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
     $this->functions_dir = 'functions';
     $this->default_action = 'home';
-    $this->db_name = 'db/global';
     
     $this->sqlite_database = new sqlite_database();
     
@@ -57,11 +56,11 @@ class attogram {
       return FALSE;
     }
 
-    $user = $this->query(
+    $user = $this->sqlite_database->query(
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-    if( $this->db->errorCode() != '00000' ) { // query failed
+    if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
       $this->error = 'Login system offline';
       $this->hook('ERROR-LOGIN');
       return FALSE;
@@ -84,7 +83,7 @@ class attogram {
     $_SESSION['attogram_level'] = $user['level'];
     $_SESSION['attogram_email'] = $user['email'];
 
-    $s = $this->queryb(
+    $s = $this->sqlite_database->queryb(
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
     );
@@ -263,142 +262,6 @@ class attogram {
     return false;
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function query( $sql, $bind=array() ) {
-    $this->hook('PRE-QUERY');
-    $db = $this->get_db();
-    if( !$this->db ) {
-      $this->error = 'Can not get database';
-      $this->hook('ERROR-QUERY');
-      return array();
-    }
-    $statement = $this->query_prepare($sql);
-    if( !$statement ) { 
-      $this->error = 'Can not prepare sql';
-      $this->hook('ERROR-QUERY');
-      return array();
-    }
-    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) { 
-      $this->error = 'Can not execute query';
-      $this->hook('ERROR-QUERY'); 
-      return array(); 
-    }
-    $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
-    if( !$r && $this->db->errorCode() != '00000') { // query failed
-      $this->error = 'Query failed';
-      $this->hook('ERROR-QUERY'); 
-      $r = array(); 
-    }
-    $this->hook('POST-QUERY');
-    return $r;
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function queryb( $sql, $bind=array() ) {
-    $this->hook('PRE-QUERYB');
-    $db = $this->get_db();
-    if( !$this->db ) { return false; }
-    $statement = $this->query_prepare($sql);
-    if( !$statement ) { return false; }
-    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) {$this->hook('ERROR-QUERYB'); return false; }
-    $this->hook('POST-QUERYB');
-    return true;
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function query_prepare( $sql ) {
-    $statement = $this->db->prepare($sql);
-    if( $statement ) { return $statement; }
-    $this->error = 'Can not prepare sql';
-    $this->hook('ERROR-PREPARE');
-    list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-    if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
-      $table = str_replace('no such table: ', '', $error_string); // get table name
-      if( $this->create_table($table) ) { // create table
-        $this->error = 'Created table: ' . $table;
-        $this->hook('ERROR-PREPARE');
-        $statement = $this->db->prepare($sql);
-        if( $statement ) { return $statement; } // try again
-        $this->error = 'Still can not prepare sql';
-        $this->hook('ERROR-PREPARE');
-        return FALSE;
-      } else {
-        $this->error = 'Can not create table';
-        $this->hook('ERROR-PREPARE'); 
-        return FALSE;
-      }
-    }
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function get_db() {
-    if( is_object($this->db) ) { return $this->db; }
-    $this->hook('PRE-GET-DB');
-    if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
-      $this->error = 'sqlite PDO driver not found';
-      $this->hook('ERROR-GET-DB');
-      $this->db = false;
-      return false;
-    }
-    try {
-      $this->db = new \PDO('sqlite:'. $this->db_name);
-    } catch(PDOException $e) {
-      $this->error = 'error connnecting to PDO sqlite database';
-      $this->hook('ERROR-GET-DB');
-      $this->db = false;
-      return false;
-    }
-    $this->hook('POST-GET-DB');
-    return $this->db;
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function create_table( $table='' ) {
-    switch($table) {
-
-      default: return FALSE; break;
-
-        case 'user': 
-          $sql = "CREATE TABLE 'user' (
- 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
- 'username' TEXT UNIQUE NOT NULL,
- 'password' TEXT NOT NULL,
- 'email' TEXT NOT NULL,
- 'level' INTEGER NOT NULL DEFAULT '0',
- 'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
- 'last_host' TEXT NOT NULL
-)";
-        break;
-
-        case 'contact':
-          $sql = "CREATE TABLE 'contact' (
- 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
- 'time' DATETIME,
- 'email' TEXT,
- 'msg' TEXT,
- 'ip' TEXT,
- 'agent' TEXT
-)";
-        break;
-
-        case 'list':
-          $sql = "CREATE TABLE 'list' (
-   'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-   'list' TEXT NOT NULL, 
-   'item' TEXT NOT NULL, 
-   'ordering' INTEGER NOT NULL DEFAULT 0
-)";
-        break;
-    }     
-    if( $this->queryb($sql) ) { return TRUE; }
-
-    $this->error = 'Cannot create table';
-    $this->hook('ERROR-CREATE-TABLE');
-    return FALSE;
-  }
-
 } // END of class attogram
 
 
@@ -412,32 +275,28 @@ class sqlite_database {
     $this->db_name = 'db/global';
     $this->error = false;
     $this->tables = array(
-          
       'user' => "CREATE TABLE 'user' (
-       'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-       'username' TEXT UNIQUE NOT NULL,
-       'password' TEXT NOT NULL,
-       'email' TEXT NOT NULL,
-       'level' INTEGER NOT NULL DEFAULT '0',
-       'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-       'last_host' TEXT NOT NULL
-      )",
+        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        'username' TEXT UNIQUE NOT NULL,
+        'password' TEXT NOT NULL,
+        'email' TEXT NOT NULL,
+        'level' INTEGER NOT NULL DEFAULT '0',
+        'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+        'last_host' TEXT NOT NULL )",
 
       'contact' => "CREATE TABLE 'contact' (
-       'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-       'time' DATETIME,
-       'email' TEXT,
-       'msg' TEXT,
-       'ip' TEXT,
-       'agent' TEXT
-      )",
+        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        'time' DATETIME,
+        'email' TEXT,
+        'msg' TEXT,
+        'ip' TEXT,
+        'agent' TEXT )",
 
       'list' => "CREATE TABLE 'list' (
-         'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-         'list' TEXT NOT NULL, 
-         'item' TEXT NOT NULL, 
-         'ordering' INTEGER NOT NULL DEFAULT 0
-      )",  
+        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        'list' TEXT NOT NULL, 
+        'item' TEXT NOT NULL, 
+        'ordering' INTEGER NOT NULL DEFAULT 0 )",  
     );
   }
   
@@ -483,8 +342,9 @@ class sqlite_database {
   function query_prepare( $sql ) {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
-    $this->error = 'Can not prepare sql';
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+    $this->error = "Can not prepare sql: $sqlstate $error_code $error_string";
+
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table

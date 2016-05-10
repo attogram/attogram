@@ -8,7 +8,7 @@ include($this->templates_dir . '/header.php');
 <?php
 
 $sql = 'SELECT * FROM contact ORDER BY id DESC';
-$m = $this->query($sql);
+$m = $this->sqlite_database->query($sql);
 
 print '<b>' . count($m) . '</b> <a href="">Messages</a><hr />';
 

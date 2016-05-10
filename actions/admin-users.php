@@ -4,7 +4,7 @@
 $title = 'Attogram - Admin - Users';
 include($this->templates_dir . '/header.php');
 
-$users = $this->query('SELECT * FROM user ORDER BY id');
+$users = $this->sqlite_database->query('SELECT * FROM user ORDER BY id');
 
 print '<div class="body"><p><b>' . count($users) . '</b> <a href="">Users</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../admin-database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';

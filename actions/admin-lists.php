@@ -8,12 +8,12 @@ include($this->templates_dir . '/header.php');
 <?php
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
-$lists = $this->query($sql);
+$lists = $this->sqlite_database->query($sql);
 print '<b>' . count($lists) . '</b> <a href="">Lists</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../admin-database-phpLiteAdmin/?table=list&action=row_create">Create New Item<a></p>';
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
-$items = $this->query($sql);
+$items = $this->sqlite_database->query($sql);
 
 print '<ul>';
 foreach( $lists as $list ) { 
@@ -31,8 +31,6 @@ foreach( $lists as $list ) {
   print '</ol>';
 }
 print '</ul>';
-
-
 
 ?>
 </div>
