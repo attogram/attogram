@@ -37,8 +37,13 @@ class attogram {
     }
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
+
     $this->route();
-    $this->action();
+
+    if( !$this->action() ) {
+      $this->error404();
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -79,6 +84,8 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function route() {
 
+    // todo: force trailing slash
+    
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
 
@@ -130,16 +137,20 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function action() {
-    $f = $this->action;
-    if( !is_file($f) ) {
-      $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
-      exit;
+    if( !isset($this->action) || !$this->action ) {
+      $this->error[] = 'ACTION: action undefined';
+      return FALSE;
     }
-    if( !is_readable($f) ) {
-      $this->error[] = 'ACTION:  Unreadable action. Please make readable ' . htmlspecialchars($f);
-      exit;
+    if( !is_file($this->action) ) {
+      $this->error[] = 'ACTION: Missing action: ' . htmlspecialchars($this->action);
+      return FALSE;
     }
-    include($f);
+    if( !is_readable($this->action) ) {
+      $this->error[] = 'ACTION:  Unreadable action: ' . htmlspecialchars($this->action);
+      return FALSE;
+    }
+    include($this->action);
+    return TRUE;
   }
 
   ////////////////////////////////////////////////////////////////////
