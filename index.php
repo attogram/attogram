@@ -26,16 +26,17 @@ class attogram {
   function __construct() {
 
     $this->version = '0.2.1';
-    
-    $this->functions_dir = 'functions';    
-    $this->get_functions(); // Get all global utility functions
-    
+
     $this->plugins_dir = 'plugins';
+    $this->hook('PRE-INIT');
+
+    $this->functions_dir = 'functions';
+    $this->get_functions();
+
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
     $this->default_action = 'home';
     $this->fof = '404.php';
-    $this->config = 'config.php';
 
     session_start();
     if( isset($_GET['logoff']) ) {
@@ -44,11 +45,13 @@ class attogram {
       session_start();
     }
 
+    $this->config = 'config.php';
     $this->load_config();
 
     $this->sqlite_database = new sqlite_database();
 
     $this->route();
+
     $this->action();
   }
 
