@@ -78,6 +78,7 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function route() {
+
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
 
@@ -106,40 +107,29 @@ class attogram {
         ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
-
       $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
-      $this->uri[1] = '';
       return;
     }
 
-    if( !in_array($this->uri[0],$this->get_actions()) // is action not available?
-      //|| !$this->uri[1]=='' // is not correct slash format?
-      || isset($this->uri[2]) // if has subpath
-      || (preg_match('/^admin/',$this->uri[0]) && !$this->is_admin() ) // admin only actions
-    ) {
+    if( isset($this->uri[2]) ) { // if has subpath
+      $this->error[] = 'ROUTE: subpath not supported';
+      $this->error404();
+    }
 
-      if( $this->is_admin() ) { // check admin actions
-        if( in_array($this->uri[0],$this->get_admin_actions()) ) {
-          $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
-          return;
-        }
+    if( !in_array($this->uri[0],$this->get_actions()) ) { // is action not available?
+      if( $this->is_admin() && in_array($this->uri[0],$this->get_admin_actions()) ) { // check admin actions
+        $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
+        return;
       }
       $this->error[] = 'ROUTE: action not found';
       $this->error404();
-  }
-
-// buggy with ?vars at end of url
-//    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
-//      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301);
-//      exit;
-//    }
+    }
 
     $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';
 }
 
   ////////////////////////////////////////////////////////////////////
   function action() {
-    //$f = $this->actions_dir . '/' . $this->action . '.php';
     $f = $this->action;
     if( !is_file($f) ) {
       $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
