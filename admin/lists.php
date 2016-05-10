@@ -10,7 +10,7 @@ include($this->templates_dir . '/header.php');
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
 $lists = $this->sqlite_database->query($sql);
 print '<b>' . count($lists) . '</b> <a href="">Lists</a>';
-print ' &nbsp; - &nbsp; <a target="_db" href="../admin-database-phpLiteAdmin/?table=list&action=row_create">Create New Item<a></p>';
+print ' &nbsp; - &nbsp; <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_create">Create New Item<a></p>';
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
 $items = $this->sqlite_database->query($sql);
