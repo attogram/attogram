@@ -17,10 +17,12 @@ $attogram = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $admins, $fof, $error,
-      $path, $uri, $sqlite_database, $templates_dir, $functions_dir,
-      $plugins_dir, $plugins,
-      $actions_dir, $default_action, $actions, $action;
+  public $version, $admins, $fof, $error,
+         $path, $uri, $sqlite_database, 
+         $templates_dir, $functions_dir,
+         $plugins_dir, $plugins,
+         $actions_dir, $default_action, $actions, $action,
+         $admin_dir, $admin_actions;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
@@ -68,7 +70,13 @@ class attogram {
     } else {
       $this->admins = array( '127.0.0.1', '::1' );  // Default value: IP4 localhost, IP6 localhost
     }
- 
+
+    if( isset($config['admin_dir']) && is_string($config['admin_dir']) ) {
+      $this->admin_dir = $config['admin_dir'];
+    } else {
+      $this->admin_dir = 'admin';
+    }
+    
     if( isset($config['default_action']) && is_string($config['default_action']) ) {
       $this->default_action = $config['default_action'];
     } else {
@@ -160,8 +168,8 @@ class attogram {
   function action() {
     $f = $this->actions_dir . '/' . $this->action . '.php';
     if( !is_file($f) ) {
-    $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
-    exit;
+      $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
+      exit;
     }
     if( !is_readable($f) ) {
       $this->error[] = 'ACTION:  Unreadable action. Please make readable ' . htmlspecialchars($f);
@@ -304,15 +312,12 @@ class attogram {
 //////////////////////////////////////////////////////////////////////
 class sqlite_database {
 
-  var $db_name, $db,
-      $tables_directory, $tables, 
-      $error;
+  public $db_name, $db, $tables_directory, $tables, $error;
 
   //////////////////////////////////////////////////////////////////////
   function __construct( $db_name='' ) {
     $this->db_name = $db_name ? $db_name : 'db/global'; // default name
     $this->tables_directory = 'tables';
-    $this->error = false;
   }
 
   //////////////////////////////////////////////////////////////////////
