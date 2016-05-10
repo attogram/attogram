@@ -42,7 +42,7 @@ class attogram {
     }
 
     $this->get_functions();
-        
+            
     $this->sqlite_database = new sqlite_database();
 
     $this->route();
@@ -221,17 +221,46 @@ class attogram {
 
   //////////////////////////////////////////////////////////////////////
   function get_actions() {
-    if( is_array($this->actions) ) { return $this->actions; }
+    if( is_array($this->actions) ) {
+      return $this->actions;
+    }
     $this->actions = array();
-    if( !is_readable_dir($this->actions_dir) ) { return $this->actions; }
+    if( !is_readable_dir($this->actions_dir) ) {
+      return $this->actions;
+    }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( !is_readable_php_file($this->actions_dir . "/$f") ) { continue; } // php files only
-      if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
+      if( !is_readable_php_file($this->actions_dir . "/$f") ) {
+        continue; // php files only 
+      } 
+    //  if( preg_match('/^admin/',$f) && !$this->is_admin() ) {
+    //    continue; // admin only
+    //  } 
       $this->actions[] = str_replace('.php','',$f);
     }
     return $this->actions;
   }
 
+  //////////////////////////////////////////////////////////////////////
+  function get_admin_actions() {
+    if( !$this->is_admin() ) {
+      return FALSE;
+    }
+    if( is_array($this->admin_actions) ) {
+      return $this->admin_actions;
+    }
+    $this->admin_actions = array();
+    if( !is_readable_dir($this->admin_dir) ) {
+      return $this->admin_actions;
+    }
+    foreach( array_diff(scandir($this->admin_dir), array('.','..','.htaccess')) as $f ) {
+      if( !is_readable_php_file($this->admin_dir . "/$f") ) {
+        continue; // php files only
+      } 
+      $this->admin_actions[] = str_replace('.php','',$f);
+    }
+    return $this->admin_actions;
+  }
+  
   //////////////////////////////////////////////////////////////////////
   function get_functions() {
     if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
@@ -239,7 +268,7 @@ class attogram {
     }
     foreach( array_diff(scandir($this->functions_dir), array('.','..','.htaccess')) as $f ) {
       $file = $this->functions_dir . "/$f";
-      if( !is_file($file) || !is_readable($file) || !preg_match('/\.php$/',$file) ) { continue; } // php files only
+      if( !is_readable_php_file($file) ) { continue; } // php files only
       include_once($file);
     }
   }
