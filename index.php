@@ -273,6 +273,27 @@ class sqlite_database {
   }
 
   //////////////////////////////////////////////////////////////////////
+  function get_db() {
+
+    if( is_object($this->db) && get_class($this->db) == 'PDO' ) { 
+      return $this->db; // if PDO database object already set
+    } 
+    
+    if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
+      $this->error = 'sqlite PDO driver not found';
+      return $this->db = FALSE;
+    }
+    try {
+      $this->db = new \PDO('sqlite:'. $this->db_name);
+    } catch(PDOException $e) {
+      $this->error = 'error connnecting to PDO sqlite database';
+      return $this->db = FALSE;
+    }
+    print "<PRE>GOT DB: get_class: '" . get_class($this->db) . "'</PRE>";
+    return $this->db;
+  }
+
+  //////////////////////////////////////////////////////////////////////
   function query( $sql, $bind=array() ) {
     $db = $this->get_db();
     if( !$this->db ) {
@@ -330,24 +351,6 @@ class sqlite_database {
         return FALSE;
       }
     }
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function get_db() {
-    if( is_object($this->db) ) { return $this->db; }
-    if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
-      $this->error = 'sqlite PDO driver not found';
-      $this->db = false;
-      return false;
-    }
-    try {
-      $this->db = new \PDO('sqlite:'. $this->db_name);
-    } catch(PDOException $e) {
-      $this->error = 'error connnecting to PDO sqlite database';
-      $this->db = false;
-      return false;
-    }
-    return $this->db;
   }
 
   //////////////////////////////////////////////////////////////////////
