@@ -17,36 +17,27 @@ $attogram = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  public $version, $admins, $fof, $error,
-         $path, $uri, $sqlite_database,
+  public $version, $path, $uri, $fof, $error,  
+         $sqlite_database, $db_name, $tables_dir,
          $templates_dir, $functions_dir,
          $plugins_dir, $plugins,
          $actions_dir, $default_action, $actions, $action,
-         $admin_dir, $admin_actions;
+         $admins, $admin_dir, $admin_actions;
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
-
     $this->version = '0.2.2';
-
     $this->load_config('config.php');
-
     $this->hook('INIT');
-
     session_start();
-
     if( isset($_GET['logoff']) ) {
       $_SESSION = array();
       session_destroy();
       session_start();
     }
-
     $this->get_functions();
-
-    $this->sqlite_database = new sqlite_database();
-
+    $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
-
     $this->action();
   }
 
@@ -55,24 +46,25 @@ class attogram {
 
     if( !is_readable_php_file($config_file) ) {
       $this->error[] = 'LOAD_CONFIG: config file unreadable';
-      return;
+    } else {
+      include_once($config_file);
     }
-
-    include_once($config_file);
 
     if( !isset($config) || !is_array($config) ) {
       $this->error[] = 'LOAD_CONFIG: config array not found';
-      return;
     }
 
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
-    $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin');
-    $this->set_config( 'default_action', @$config['default_action'], 'home');
-    $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions');
-    $this->set_config( 'plugins_dir',    @$config['plugins_dir'],    'plugins');
-    $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates');
-    $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions');
-    $this->set_config( 'fof',            @$config['fof'],            '404.php');
+    $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
+    $this->set_config( 'default_action', @$config['default_action'], 'home' );
+    $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions' );
+    $this->set_config( 'plugins_dir',    @$config['plugins_dir'],    'plugins' );
+    $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
+    $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
+    $this->set_config( 'fof',            @$config['fof'],            '404.php' );
+    $this->set_config( 'db_name',        @$config['db_name'],        'db/global' );
+    $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
+
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -143,9 +135,6 @@ class attogram {
 //    } 
 
     $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';  
-
-    $this->error[] = 'ROUTE: action: ' . $this->action;
-
 }
 
   ////////////////////////////////////////////////////////////////////
@@ -329,9 +318,9 @@ class sqlite_database {
   public $db_name, $db, $tables_directory, $tables, $error;
 
   //////////////////////////////////////////////////////////////////////
-  function __construct( $db_name='' ) {
-    $this->db_name = $db_name ? $db_name : 'db/global'; // default name
-    $this->tables_directory = 'tables';
+  function __construct( $db_name, $tables_dir ) {
+    $this->db_name = $db_name;
+    $this->tables_directory = $tables_dir;
   }
 
   //////////////////////////////////////////////////////////////////////

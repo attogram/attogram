@@ -22,8 +22,8 @@ foreach( $lists as $list ) {
     if( $item['list'] != $list['list'] ) { continue; }
     print '<li><b>' .  $item['item'] . '</b>'
     . ' &nbsp; - &nbsp; ('
-    . ' <a target="_db" href="../admin-database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=edit">edit</a>'
-    . ' <a target="_db" href="../admin-database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=delete">delete</a>'
+    . ' <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=edit">edit</a>'
+    . ' <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=delete">delete</a>'
     . ' ID:' . $item['id']
     . ' order:' . $item['ordering']
     . ')';
