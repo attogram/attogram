@@ -122,26 +122,32 @@ class attogram {
 
     if( $this->path == '' ) { // top level install
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
-        $this->uri[0] = $this->action = $this->default_action;
+        $this->action = $this->actions_dir . '/' . $this->default_action . '.php';  
         return;
       } else {
         $trash = array_shift($this->uri);
       }
     } else { // sub level install
       for( $i = 0; $i < sizeof($this->uri); $i++ ) {
-        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) { break; }
+        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) {
+          break; // found our level
+        }
         $trash = array_shift($this->uri);
       }
     }
 
-    if( !$this->uri || !is_array($this->uri) ) { $this->error404(); }
+    if( !$this->uri || !is_array($this->uri) ) {
+      $this->error[] = 'ROUTE: Invalid URI';
+      $this->error404();
+    }
 
     
     if( // The Homepage
         ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
-      $this->uri[0] = $this->action = $this->default_action;
+
+      $this->action = $this->actions_dir . '/' . $this->default_action . '.php';  
       $this->uri[1] = '';
       return;
     }
@@ -150,8 +156,16 @@ class attogram {
       //|| !$this->uri[1]=='' // is not correct slash format?
       || isset($this->uri[2]) // if has subpath
       || (preg_match('/^admin/',$this->uri[0]) && !$this->is_admin() ) // admin only actions
-    ) { 
-      $this->error404(); 
+    ) {
+      
+      if( $this->is_admin() ) { // check admin actions
+        if( in_array($this->uri[0],$this->get_admin_actions()) ) {
+          $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
+          return;          
+        }
+      }
+      $this->error[] = 'ROUTE: action not found';
+      $this->error404();
     }
     
 // buggy with ?vars at end of url    
@@ -160,13 +174,16 @@ class attogram {
 //      exit; 
 //    } 
     
-    $this->action = $this->uri[0];
+    $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';  
+    
+    $this->error[] = 'ROUTE: action: ' . $this->action;
 
 }
 
   ////////////////////////////////////////////////////////////////////
   function action() {
-    $f = $this->actions_dir . '/' . $this->action . '.php';
+    //$f = $this->actions_dir . '/' . $this->action . '.php';
+    $f = $this->action;
     if( !is_file($f) ) {
       $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
       exit;
