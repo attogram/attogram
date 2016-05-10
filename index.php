@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.2.0
+version 0.2.1
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -24,36 +24,41 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
+
+    $this->version = '0.2.1';
+    
     $this->functions_dir = 'functions';    
     $this->get_functions(); // Get all global utility functions
+    
     $this->plugins_dir = 'plugins';
-    $this->hook('PRE-INIT');
-    session_start();
-    if( isset($_GET['logoff']) ) { $_SESSION = array(); session_destroy(); session_start(); }
-    $this->version = '0.2.0';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
-
     $this->default_action = 'home';
+    $this->fof = '404.php';
+    $this->config = 'config.php';
+
+    session_start();
+    if( isset($_GET['logoff']) ) {
+      $_SESSION = array();
+      session_destroy();
+      session_start();
+    }
+
+    $this->load_config();
 
     $this->sqlite_database = new sqlite_database();
 
-    $this->fof = '404.php';
-    $this->config = 'config.php';
-    $this->load_config();
-
-    $this->hook('POST-INIT');
     $this->route();
     $this->action();
   }
 
   ////////////////////////////////////////////////////////////////////
   function load_config() {
-    $this->hook('PRE-CONFIG');
     if( !is_readable_php_file($this->config) ) { return; }
     include_once($this->config);
-    if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
-    $this->hook('POST-CONFIG');
+    if( isset($admins) && is_array($admins) && $admins ) {
+      $this->admins = $admins;
+    }
   }
 
   ////////////////////////////////////////////////////////////////////
