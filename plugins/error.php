@@ -13,7 +13,7 @@ class plugin_error {
 
   function hook($hook) {
     if( !preg_match('/^ERROR/', $hook) ) { return; } // only do ERROR hooks
-    print '<pre>' . $hook . ': ' . @$this->attogram->error . '</pre>';
+    print '<pre>' . $hook . ': ' . print_r($this->attogram->error,1) . '</pre>';
     if( is_object($this->attogram->sqlite_database->db) ) {
       $ei = @$this->attogram->sqlite_database->db->errorInfo();
       if( isset($ei[0]) && $ei[0] != '0000') {

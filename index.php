@@ -114,12 +114,12 @@ class attogram {
     $this->hook('PRE-ACTION');
     $f = $this->actions_dir . '/' . $this->action . '.php';
     if( !is_file($f) ) {
-    $this->error = 'Missing action.  Please create ' . htmlspecialchars($f);
+    $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
     $this->hook('ERROR-ACTION');
     exit;
     }
     if( !is_readable($f) ) {
-      $this->error = 'Unreadable action. Please make readable ' . htmlspecialchars($f);
+      $this->error[] = 'ACTION:  Unreadable action. Please make readable ' . htmlspecialchars($f);
       $this->hook('ERROR-ACTION');
       exit;
     }
@@ -206,11 +206,8 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function login() {
 
-    $this->hook('PRE-LOGIN');
-
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
-      $this->error = 'Please enter username and password';
-      $this->hook('ERROR-LOGIN');
+      $this->error[] = 'LOGIN: Please enter username and password';
       return FALSE;
     }
 
@@ -219,19 +216,16 @@ class attogram {
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
     if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
-      $this->error = 'Login system offline';
-      $this->hook('ERROR-LOGIN');
+      $this->error[] = 'LOGIN: Login system offline';
       return FALSE;
     }
 
     if( !$user ) { // no user, or wrong password
-      $this->error = 'Invalid login'; 
-      $this->hook('ERROR-LOGIN'); 
+      $this->error[] = 'LOGIN: Invalid login'; 
       return FALSE; 
     }
     if( !sizeof($user) == 1 ) { // corrupt data
-      $this->error = 'Invalid login'; 
-      $this->hook('ERROR-LOGIN'); 
+      $this->error[] = 'LOGIN: Invalid login'; 
       return FALSE; 
     }
 
@@ -241,18 +235,24 @@ class attogram {
     $_SESSION['attogram_level'] = $user['level'];
     $_SESSION['attogram_email'] = $user['email'];
 
-    $s = $this->sqlite_database->queryb(
+    if( !$this->sqlite_database->queryb(
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
-    );
+      ) ) {
+        $this->error[] = 'LOGIN: can not updated last login info';
+    }
 
-    $this->hook('POST-LOGIN');
     return TRUE;
   }
 
   ////////////////////////////////////////////////////////////////////
   function is_logged_in() {
-    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) { return TRUE; }
+    if( isset($_SESSION['attogram_id']) 
+     && $_SESSION['attogram_id'] 
+     && isset($_SESSION['attogram_username']) 
+     && $_SESSION['attogram_username'] ) {
+      return TRUE;
+    }
     return FALSE;
   }
 
