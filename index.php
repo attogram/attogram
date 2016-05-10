@@ -45,13 +45,13 @@ class attogram {
   function load_config( $config_file='' ) {
 
     if( !is_readable_php_file($config_file) ) {
-      $this->error[] = 'LOAD_CONFIG: config file unreadable';
+      $this->error[] = 'LOAD_CONFIG: config file not found';
     } else {
       include_once($config_file);
     }
 
     if( !isset($config) || !is_array($config) ) {
-      $this->error[] = 'LOAD_CONFIG: config array not found';
+      $this->error[] = 'LOAD_CONFIG: $config array not found';
     }
 
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );

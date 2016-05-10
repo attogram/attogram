@@ -21,7 +21,7 @@ Setup: Install
 * edit .htaccess, set FallbackResource to the full web path
   to the index.php file in the install directory
 * copy config.sample.php to config.php
-* edit config.php, edit $admins to add your administrator IPs
+* edit config.php  to change default configuration settings
 
 Setup: Database
 ==============
