@@ -66,7 +66,7 @@ class attogram {
     if( isset($config['admins']) && is_array($config['admins'])  ) {
       $this->admins = $config['admins'];
     } else {
-      $this->admins = array( '127.0.0.1', '::1' );
+      $this->admins = array( '127.0.0.1', '::1' );  // Default value: IP4 localhost, IP6 localhost
     }
  
     if( isset($config['default_action']) && is_string($config['default_action']) ) {
@@ -109,14 +109,12 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function route() {
-    $this->hook('PRE-ROUTE');
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
 
     if( $this->path == '' ) { // top level install
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
         $this->uri[0] = $this->action = $this->default_action;
-        $this->hook('POST-ROUTE');
         return;
       } else {
         $trash = array_shift($this->uri);
@@ -137,7 +135,6 @@ class attogram {
     {
       $this->uri[0] = $this->action = $this->default_action;
       $this->uri[1] = '';
-      $this->hook('POST-ROUTE');
       return;
     }
  
@@ -156,38 +153,31 @@ class attogram {
 //    } 
     
     $this->action = $this->uri[0];
-    
-    $this->hook('POST-ROUTE');
-  }
+
+}
 
   ////////////////////////////////////////////////////////////////////
   function action() {
-    $this->hook('PRE-ACTION');
     $f = $this->actions_dir . '/' . $this->action . '.php';
     if( !is_file($f) ) {
     $this->error[] = 'ACTION: Missing action.  Please create ' . htmlspecialchars($f);
-    $this->hook('ERROR-ACTION');
     exit;
     }
     if( !is_readable($f) ) {
       $this->error[] = 'ACTION:  Unreadable action. Please make readable ' . htmlspecialchars($f);
-      $this->hook('ERROR-ACTION');
       exit;
     }
     include($f);
-    $this->hook('POST-ACTION');
   }
 
   ////////////////////////////////////////////////////////////////////
   function error404() { 
-    $this->hook('PRE-404');
     if( is_readable_php_file($this->fof) ) {
       include($this->fof);
     } else {
       header('HTTP/1.0 404 Not Found');
       print '404 Not Found';
     }
-    $this->hook('POST-404');
     exit;
   }
 
@@ -209,7 +199,7 @@ class attogram {
       include_once($this->plugins_dir . "/$f");
       $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
       if( !class_exists($p) ) { 
-        //print "<pre>ERROR: no class $p in file $f</pre>";
+        $this->error[] = "GET_PLUGINS: no class $p in file $f";
         continue; 
       }
       $po = new $p( $this );
@@ -379,7 +369,8 @@ class sqlite_database {
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) {
-      $this->error[] = 'QUERYB: prepare failed';
+      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+      $this->error[] = "QUERYB: prepare failed: $sqlstate:$error_code:$error_string";;
       return FALSE;
     }
     while( $x = each($bind) ) {
@@ -394,9 +385,13 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function query_prepare( $sql ) {
+
     $statement = $this->db->prepare($sql);
+
     if( $statement ) { return $statement; }
+
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+
     $this->error[] = "QUERY_PREPARE: Can not prepare sql: $sqlstate:$error_code:$error_string";
 
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
@@ -445,7 +440,7 @@ class sqlite_database {
       return FALSE;
     }
     if( !$this->queryb( $this->tables[$table] ) ) {
-      $this->error[] = "CREATE_TABLE: Can not create table: $table";
+      $this->error[] = "CREATE_TABLE: failed to create: $table";
       return FALSE;
     }
     return TRUE;
