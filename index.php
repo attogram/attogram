@@ -385,6 +385,9 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
+    
+    $this->get_tables();
+    
     if( !isset($this->tables[$table]) ) {
       $this->error[] = "CREATE_TABLE: Unknown table: $table";
       return FALSE;
