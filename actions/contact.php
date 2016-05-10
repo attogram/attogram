@@ -1,4 +1,4 @@
-<?php 
+<?php
 // Attogram - action - contact
 $title = 'Attogram - Contact';
 include($this->templates_dir . '/header.php');
@@ -19,7 +19,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
   if( $this->sqlite_database->queryb($sql,$bind) ) {
     print $ok_msg;
     include($this->templates_dir . '/footer.php');
-    $this->hook('POST-ACTION'); 
+    $this->hook('POST-ACTION');
     exit;
   }
 
@@ -27,7 +27,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
     $this->error = 'Message system offline';
     $this->hook('ERROR-CONTACT');
     include($this->templates_dir . '/footer.php');
-    $this->hook('POST-ACTION'); 
+    $this->hook('POST-ACTION');
     exit;
   }
 
@@ -41,7 +41,7 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 <form action="." method="POST">
 Contact us:
 <br />
-<br />Your Email: <input type="text" name="email" size="55" value="<?php 
+<br />Your Email: <input type="text" name="email" size="55" value="<?php
   if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); }
 ?>" />
 <br />

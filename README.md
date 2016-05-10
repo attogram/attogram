@@ -1,7 +1,7 @@
 Attogram PHP Framework
 ======================
 
-Attogram helps you quickly create web prototypes. 
+Attogram helps you quickly create web prototypes.
 
 Attogram is small, simple, and extendable.
 
@@ -18,7 +18,7 @@ Requirements
 Setup: Install
 ==============
 * Install into a web accessable directory
-* edit .htaccess, set FallbackResource to the full web path 
+* edit .htaccess, set FallbackResource to the full web path
   to the index.php file in the install directory
 * copy config.sample.php to config.php
 * edit config.php, edit $admins to add your administrator IPs

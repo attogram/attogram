@@ -16,7 +16,7 @@ foreach( $this->actions as $action ){
 <li><a href="README.md">README.md</a></li>
 </ul></p>
 
-<?php if( $this->is_admin() ) { 
+<?php if( $this->is_admin() ) {
   $this->get_admin_actions();
 
 ?>

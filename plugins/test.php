@@ -9,7 +9,7 @@ class plugin_test {
 
   function __construct($attogram='') { }
 
-  function hook($hook) { 
+  function hook($hook) {
     print '<pre>plugin_test:hook(' . $hook . ')</pre>';
   }
 

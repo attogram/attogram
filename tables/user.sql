@@ -5,5 +5,5 @@ CREATE TABLE 'user' (
 'email' TEXT NOT NULL,
 'level' INTEGER NOT NULL DEFAULT '0',
 'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-'last_host' TEXT NOT NULL 
+'last_host' TEXT NOT NULL
 )

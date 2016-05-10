@@ -5,8 +5,8 @@ include($this->templates_dir . '/header.php');
 ?>
 <div class="body">
 <p>Attogram is an open source project.</p>
-<p>It is dual licensed under 
-<a href="http://opensource.org/licenses/MIT">The MIT License</a> and the 
+<p>It is dual licensed under
+<a href="http://opensource.org/licenses/MIT">The MIT License</a> and the
 <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.</p>
 <hr />
 
@@ -131,7 +131,7 @@ modification follow.</p>
 
 <p>&ldquo;Copyright&rdquo; also means copyright-like laws that apply to other kinds of
 works, such as semiconductor masks.</p>
- 
+
 <p>&ldquo;The Program&rdquo; refers to any copyrightable work licensed under this
 License.  Each licensee is addressed as &ldquo;you&rdquo;.  &ldquo;Licensees&rdquo; and
 &ldquo;recipients&rdquo; may be individuals or organizations.</p>
@@ -570,7 +570,7 @@ actual knowledge that, but for the patent license, your conveying the
 covered work in a country, or your recipient's use of the covered work
 in a country, would infringe one or more identifiable patents in that
 country that you have reason to believe are valid.</p>
-  
+
 <p>If, pursuant to or in connection with a single transaction or
 arrangement, you convey, or propagate by procuring conveyance of, a
 covered work, and grant a patent license to some of the parties

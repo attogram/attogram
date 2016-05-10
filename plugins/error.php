@@ -9,7 +9,7 @@ class plugin_error {
 
   function is_active() { return true; }
 
-  function __construct($attogram='') { $this->attogram = $attogram; } 
+  function __construct($attogram='') { $this->attogram = $attogram; }
 
   function hook($hook) {
     if( !preg_match('/^ERROR/', $hook) ) { return; } // only do ERROR hooks

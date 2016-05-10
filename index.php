@@ -17,7 +17,7 @@ $attogram = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  public $version, $path, $uri, $fof, $error,  
+  public $version, $path, $uri, $fof, $error,
          $sqlite_database, $db_name, $tables_dir,
          $templates_dir, $functions_dir,
          $plugins_dir, $plugins,
@@ -75,7 +75,7 @@ class attogram {
       $this->{$var_name} = $default_val;
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////
   function route() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
@@ -83,7 +83,7 @@ class attogram {
 
     if( $this->path == '' ) { // top level install
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
-        $this->action = $this->actions_dir . '/' . $this->default_action . '.php';  
+        $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
         return;
       } else {
         $trash = array_shift($this->uri);
@@ -107,11 +107,11 @@ class attogram {
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
 
-      $this->action = $this->actions_dir . '/' . $this->default_action . '.php';  
+      $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
       $this->uri[1] = '';
       return;
     }
- 
+
     if( !in_array($this->uri[0],$this->get_actions()) // is action not available?
       //|| !$this->uri[1]=='' // is not correct slash format?
       || isset($this->uri[2]) // if has subpath
@@ -121,20 +121,20 @@ class attogram {
       if( $this->is_admin() ) { // check admin actions
         if( in_array($this->uri[0],$this->get_admin_actions()) ) {
           $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
-          return;          
+          return;
         }
       }
       $this->error[] = 'ROUTE: action not found';
       $this->error404();
   }
 
-// buggy with ?vars at end of url    
+// buggy with ?vars at end of url
 //    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
-//      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); 
-//      exit; 
-//    } 
+//      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301);
+//      exit;
+//    }
 
-    $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';  
+    $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';
 }
 
   ////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ class attogram {
       if( !is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
       include_once($this->plugins_dir . "/$f");
       $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
-      if( !class_exists($p) ) { 
+      if( !class_exists($p) ) {
         $this->error[] = "GET_PLUGINS: no class $p in file $f";
         continue;
       }
@@ -204,11 +204,11 @@ class attogram {
     }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
       if( !is_readable_php_file($this->actions_dir . "/$f") ) {
-        continue; // php files only 
+        continue; // php files only
       }
     //  if( preg_match('/^admin/',$f) && !$this->is_admin() ) {
     //    continue; // admin only
-    //  } 
+    //  }
       $this->actions[] = str_replace('.php','',$f);
     }
     return $this->actions;
@@ -229,7 +229,7 @@ class attogram {
     foreach( array_diff(scandir($this->admin_dir), array('.','..','.htaccess')) as $f ) {
       if( !is_readable_php_file($this->admin_dir . "/$f") ) {
         continue; // php files only
-      } 
+      }
       $this->admin_actions[] = str_replace('.php','',$f);
     }
     return $this->admin_actions;
@@ -273,12 +273,12 @@ class attogram {
     }
 
     if( !$user ) { // no user, or wrong password
-      $this->error[] = 'LOGIN: Invalid login'; 
-      return FALSE; 
+      $this->error[] = 'LOGIN: Invalid login';
+      return FALSE;
     }
     if( !sizeof($user) == 1 ) { // corrupt data
-      $this->error[] = 'LOGIN: Invalid login'; 
-      return FALSE; 
+      $this->error[] = 'LOGIN: Invalid login';
+      return FALSE;
     }
 
     $user = $user[0];
@@ -326,9 +326,9 @@ class sqlite_database {
   //////////////////////////////////////////////////////////////////////
   function get_db() {
 
-    if( is_object($this->db) && get_class($this->db) == 'PDO' ) { 
+    if( is_object($this->db) && get_class($this->db) == 'PDO' ) {
       return $this->db; // if PDO database object already set
-    } 
+    }
 
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->error[] = 'GET_DB: sqlite PDO driver not found';
@@ -351,7 +351,7 @@ class sqlite_database {
       return array();
     }
     $statement = $this->query_prepare($sql);
-    if( !$statement ) { 
+    if( !$statement ) {
       $this->error[] = 'QUERY: Can not prepare sql';
       return array();
     }
@@ -453,7 +453,7 @@ class sqlite_database {
     }
     return TRUE;
   }
-  
+
 } // END of class sqlite_database
 
 

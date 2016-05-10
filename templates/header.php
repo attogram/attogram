@@ -26,7 +26,6 @@ foreach( $this->get_actions() as $a ) {
 }
 
 if( $this->is_logged_in() ) {
-  
  print $spacer . '<a href="?logoff">logoff</a>';
 }
 ?></div>

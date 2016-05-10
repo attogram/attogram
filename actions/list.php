@@ -13,16 +13,16 @@ $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
 $items = $this->sqlite_database->query($sql);
 
 
-foreach( $lists as $list ) { 
+foreach( $lists as $list ) {
   print '<b>' . $list['list'] . '</b>:<ol>';
-  foreach( $items as $item ) { 
+  foreach( $items as $item ) {
     if( $item['list'] != $list['list'] ) { continue; }
     print '<li><b>' .  $item['item'] . '</b>';
-  } 
+  }
   print '</ol>';
 }
 
 print '</div>';
 
-if( $this->is_admin() ) { print ' (<a href="../admin-lists/">List Admin</a>)'; }
+if( $this->is_admin() ) { print ' (<a href="../lists/">List Admin</a>)'; }
 include($this->templates_dir . '/footer.php');

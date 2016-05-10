@@ -16,9 +16,9 @@ $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
 $items = $this->sqlite_database->query($sql);
 
 print '<ul>';
-foreach( $lists as $list ) { 
+foreach( $lists as $list ) {
   print '<hr><li><b>' . $list['list'] . '</b> &nbsp; - &nbsp; <b>' . $list['count'] . '</b> items <ol>';
-  foreach( $items as $item ) { 
+  foreach( $items as $item ) {
     if( $item['list'] != $list['list'] ) { continue; }
     print '<li><b>' .  $item['item'] . '</b>'
     . ' &nbsp; - &nbsp; ('
@@ -27,7 +27,7 @@ foreach( $lists as $list ) {
     . ' ID:' . $item['id']
     . ' order:' . $item['ordering']
     . ')';
-  } 
+  }
   print '</ol>';
 }
 print '</ul>';

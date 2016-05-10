@@ -1,14 +1,14 @@
 body {margin:0px;padding:0px;color:#000;background-color:#fff;font-family:sans-serif,helvetica,arial;font-size:12pt;}
-hr {border:0; height:6px; background:#ddd; color:#ddd;} 
+hr {border:0; height:6px; background:#ddd; color:#ddd;}
 pre {font-size:12pt;margin:0px;background:#ff9;}
-a:hover {background-color:#ff9;} 
-.debug {background-color:#ff9;} 
-.error {background-color:#f69;} 
-.header {background-color:#333;color:#fff;padding:5px 0px 5px 10px;font-size:14pt;} 
-.header a {color:#ff9; text-decoration:none;} 
-.header a:hover {color:#000;background-color:#ff9;} 
-.footer {background-color:#ddd;color:#000;padding:10px;font-size:10pt;} 
+a:hover {background-color:#ff9;}
+.debug {background-color:#ff9;}
+.error {background-color:#f69;}
+.header {background-color:#333;color:#fff;padding:5px 0px 5px 10px;font-size:14pt;}
+.header a {color:#ff9; text-decoration:none;}
+.header a:hover {color:#000;background-color:#ff9;}
+.footer {background-color:#ddd;color:#000;padding:10px;font-size:10pt;}
 .body {margin:0px;padding:10px;}
-.body a {text-decoration:none;} 
-table { border-collapse:collapse; }
-table, th, td { border:1px solid #999;padding:4px;}
+.body a {text-decoration:none;}
+table {border-collapse:collapse;}
+table, th, td {border:1px solid #999;padding:4px;}

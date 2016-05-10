@@ -22,7 +22,7 @@ if( isset($_GET['create']) ) {
       print 'OK';
     } else {
       print 'ERROR';
-    }    
+    }
   }
   skip:
 }
