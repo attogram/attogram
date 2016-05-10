@@ -35,9 +35,9 @@ class attogram {
     $this->templates_dir = 'templates';
 
     $this->default_action = 'home';
-    
+
     $this->sqlite_database = new sqlite_database();
-    
+
     $this->fof = '404.php';
     $this->config = 'config.php';
     $this->load_config();
@@ -244,7 +244,7 @@ class attogram {
       $file = $this->functions_dir . "/$f";
       if( !is_file($file) || !is_readable($file) || !preg_match('/\.php$/',$file) ) { continue; } // php files only
       include_once($file);
-    }    
+    }
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -260,18 +260,18 @@ class attogram {
 
 //////////////////////////////////////////////////////////////////////
 class sqlite_database {
-  
+
   var $db_name, $db,
       $tables_directory, $tables, 
       $error;
-  
+
   //////////////////////////////////////////////////////////////////////
   function __construct( $db_name='' ) {
     $this->db_name = $db_name ? $db_name : 'db/global'; // default name
     $this->tables_directory = 'tables';
     $this->error = false;
   }
-  
+
   //////////////////////////////////////////////////////////////////////
   function query( $sql, $bind=array() ) {
     $db = $this->get_db();
@@ -285,14 +285,14 @@ class sqlite_database {
       return array();
     }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
-    if( !$statement->execute() ) { 
+    if( !$statement->execute() ) {
       $this->error = 'Can not execute query';
-      return array(); 
+      return array();
     }
     $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if( !$r && $this->db->errorCode() != '00000') { // query failed
       $this->error = 'Query failed';
-      $r = array(); 
+      $r = array();
     }
     return $r;
   }
@@ -359,20 +359,20 @@ class sqlite_database {
       $file = $this->tables_directory . "/$f";
       if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
         continue; // .sql files only
-      }      
+      }
       $table_name = str_replace('.sql','',$f);
       $this->tables[$table_name] = file_get_contents($file);
     }
     return TRUE;
   }
-  
+
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
     if( !isset($this->tables[$table]) ) {
       $this->error = 'Unknown table';
       return FALSE;
     }
-    if( !$this->queryb( $this->tables[$table] ) ) { 
+    if( !$this->queryb( $this->tables[$table] ) ) {
       $this->error .= ' - Cannot create table';
       return FALSE;
     }
