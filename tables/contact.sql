@@ -1,0 +1,8 @@
+CREATE TABLE 'contact' (
+'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+'time' DATETIME,
+'email' TEXT,
+'msg' TEXT,
+'ip' TEXT,
+'agent' TEXT
+)

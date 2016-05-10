@@ -24,6 +24,8 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
+    $this->functions_dir = 'functions';    
+    $this->get_functions(); // Get all global utility functions
     $this->plugins_dir = 'plugins';
     $this->hook('PRE-INIT');
     session_start();
@@ -31,7 +33,7 @@ class attogram {
     $this->version = '0.1.9';
     $this->actions_dir = 'actions';
     $this->templates_dir = 'templates';
-    $this->functions_dir = 'functions';
+
     $this->default_action = 'home';
     
     $this->sqlite_database = new sqlite_database();
@@ -39,7 +41,7 @@ class attogram {
     $this->fof = '404.php';
     $this->config = 'config.php';
     $this->load_config();
-    $this->get_functions();
+
     $this->hook('POST-INIT');
     $this->route();
     $this->action();
@@ -101,7 +103,7 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
-    if( !$this->is_readable_php_file($this->config) ) { return; }
+    if( !is_readable_php_file($this->config) ) { return; }
     include_once($this->config);
     if( isset($admins) && is_array($admins) && $admins ) { $this->admins = $admins; }
     $this->hook('POST-CONFIG');
@@ -180,7 +182,7 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function error404() { 
     $this->hook('PRE-404');
-    if( $this->is_readable_php_file($this->fof) ) {
+    if( is_readable_php_file($this->fof) ) {
       include($this->fof);
     } else {
       header('HTTP/1.0 404 Not Found');
@@ -198,25 +200,13 @@ class attogram {
     if( $return ) { return $r; }
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function is_readable_dir( $dir ) {
-    if( is_dir($dir) && is_readable($dir) ) { return TRUE; }
-    return FALSE;
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function is_readable_php_file( $file ) {
-    if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) { return TRUE; }
-    return FALSE;
-  }
-
   //////////////////////////////////////////////////////////////////////
   function get_plugins() {
     if( is_array($this->plugins) ) { return $this->plugins; }
     $this->plugins = array();
-    if( !$this->is_readable_dir($this->plugins_dir) ) { return $this->plugins; }
+    if( !is_readable_dir($this->plugins_dir) ) { return $this->plugins; }
     foreach( array_diff(scandir($this->plugins_dir), array('.','..','.htaccess')) as $f ) {
-      if( !$this->is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
+      if( !is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
       include_once($this->plugins_dir . "/$f");
       $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
       if( !class_exists($p) ) { 
@@ -236,9 +226,9 @@ class attogram {
   function get_actions() {
     if( is_array($this->actions) ) { return $this->actions; }
     $this->actions = array();
-    if( !$this->is_readable_dir($this->actions_dir) ) { return $this->actions; }
+    if( !is_readable_dir($this->actions_dir) ) { return $this->actions; }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( !$this->is_readable_php_file($this->actions_dir . "/$f") ) { continue; } // php files only
+      if( !is_readable_php_file($this->actions_dir . "/$f") ) { continue; } // php files only
       if( preg_match('/^admin/',$f) && !$this->is_admin() ) { continue; } // admin only
       $this->actions[] = str_replace('.php','',$f);
     }
@@ -247,13 +237,16 @@ class attogram {
 
   //////////////////////////////////////////////////////////////////////
   function get_functions() {
-    if( !$this->is_readable_dir($this->functions_dir) ) { return FALSE; }
+    if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
+      return FALSE;
+    }
     foreach( array_diff(scandir($this->functions_dir), array('.','..','.htaccess')) as $f ) {
       $file = $this->functions_dir . "/$f";
-      if( !$this->is_readable_php_file($file) ) { continue; } // php files only
+      if( !is_file($file) || !is_readable($file) || !preg_match('/\.php$/',$file) ) { continue; } // php files only
       include_once($file);
     }    
   }
+
   //////////////////////////////////////////////////////////////////////
   function is_admin() {
     if( isset($_GET['noadmin']) ) { return false; }
@@ -268,36 +261,15 @@ class attogram {
 //////////////////////////////////////////////////////////////////////
 class sqlite_database {
   
-  var $db, $db_name, $tables, $error;
+  var $db_name, $db,
+      $tables_directory, $tables, 
+      $error;
   
   //////////////////////////////////////////////////////////////////////
-  function __construct() {
-    $this->db_name = 'db/global';
+  function __construct( $db_name='' ) {
+    $this->db_name = $db_name ? $db_name : 'db/global'; // default name
+    $this->tables_directory = 'tables';
     $this->error = false;
-    $this->tables = array(
-      'user' => "CREATE TABLE 'user' (
-        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        'username' TEXT UNIQUE NOT NULL,
-        'password' TEXT NOT NULL,
-        'email' TEXT NOT NULL,
-        'level' INTEGER NOT NULL DEFAULT '0',
-        'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        'last_host' TEXT NOT NULL )",
-
-      'contact' => "CREATE TABLE 'contact' (
-        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        'time' DATETIME,
-        'email' TEXT,
-        'msg' TEXT,
-        'ip' TEXT,
-        'agent' TEXT )",
-
-      'list' => "CREATE TABLE 'list' (
-        'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-        'list' TEXT NOT NULL, 
-        'item' TEXT NOT NULL, 
-        'ordering' INTEGER NOT NULL DEFAULT 0 )",  
-    );
   }
   
   //////////////////////////////////////////////////////////////////////
@@ -378,6 +350,22 @@ class sqlite_database {
     return $this->db;
   }
 
+  //////////////////////////////////////////////////////////////////////
+  function get_tables() {
+    if( isset($this->tables) && is_array($this->tables) ) { return TRUE;}
+    if( !is_readable_dir($this->tables_directory) ) { return FALSE; }
+    $this->tables = array();
+    foreach( array_diff(scandir($this->tables_directory), array('.','..','.htaccess')) as $f ) {
+      $file = $this->tables_directory . "/$f";
+      if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
+        continue; // .sql files only
+      }      
+      $table_name = str_replace('.sql','',$f);
+      $this->tables[$table_name] = file_get_contents($file);
+    }
+    return TRUE;
+  }
+  
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
     if( !isset($this->tables[$table]) ) {
