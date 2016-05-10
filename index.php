@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram PHP Framework
-version 0.2.1
+version 0.2.2
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -18,7 +18,7 @@ $attogram = new attogram();
 class attogram {
 
   public $version, $admins, $fof, $error,
-         $path, $uri, $sqlite_database, 
+         $path, $uri, $sqlite_database,
          $templates_dir, $functions_dir,
          $plugins_dir, $plugins,
          $actions_dir, $default_action, $actions, $action,
@@ -27,12 +27,12 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function __construct() {
 
-    $this->version = '0.2.1';
+    $this->version = '0.2.2';
 
     $this->load_config('config.php');
 
     $this->hook('INIT');
-    
+
     session_start();
 
     if( isset($_GET['logoff']) ) {
@@ -42,7 +42,7 @@ class attogram {
     }
 
     $this->get_functions();
-            
+
     $this->sqlite_database = new sqlite_database();
 
     $this->route();
@@ -141,7 +141,6 @@ class attogram {
       $this->error404();
     }
 
-    
     if( // The Homepage
         ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
@@ -157,7 +156,7 @@ class attogram {
       || isset($this->uri[2]) // if has subpath
       || (preg_match('/^admin/',$this->uri[0]) && !$this->is_admin() ) // admin only actions
     ) {
-      
+
       if( $this->is_admin() ) { // check admin actions
         if( in_array($this->uri[0],$this->get_admin_actions()) ) {
           $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
@@ -166,16 +165,16 @@ class attogram {
       }
       $this->error[] = 'ROUTE: action not found';
       $this->error404();
-    }
-    
+  }
+
 // buggy with ?vars at end of url    
 //    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
 //      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); 
 //      exit; 
 //    } 
-    
+
     $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';  
-    
+
     $this->error[] = 'ROUTE: action: ' . $this->action;
 
 }
@@ -196,7 +195,7 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function error404() { 
+  function error404() {
     if( is_readable_php_file($this->fof) ) {
       include($this->fof);
     } else {
@@ -225,7 +224,7 @@ class attogram {
       $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
       if( !class_exists($p) ) { 
         $this->error[] = "GET_PLUGINS: no class $p in file $f";
-        continue; 
+        continue;
       }
       $po = new $p( $this );
       if( !method_exists($po,'is_active') ) { continue; }
@@ -248,7 +247,7 @@ class attogram {
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
       if( !is_readable_php_file($this->actions_dir . "/$f") ) {
         continue; // php files only 
-      } 
+      }
     //  if( preg_match('/^admin/',$f) && !$this->is_admin() ) {
     //    continue; // admin only
     //  } 
@@ -277,7 +276,7 @@ class attogram {
     }
     return $this->admin_actions;
   }
-  
+
   //////////////////////////////////////////////////////////////////////
   function get_functions() {
     if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
@@ -342,9 +341,9 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function is_logged_in() {
-    if( isset($_SESSION['attogram_id']) 
-     && $_SESSION['attogram_id'] 
-     && isset($_SESSION['attogram_username']) 
+    if( isset($_SESSION['attogram_id'])
+     && $_SESSION['attogram_id']
+     && isset($_SESSION['attogram_username'])
      && $_SESSION['attogram_username'] ) {
       return TRUE;
     }
@@ -372,7 +371,7 @@ class sqlite_database {
     if( is_object($this->db) && get_class($this->db) == 'PDO' ) { 
       return $this->db; // if PDO database object already set
     } 
-    
+
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->error[] = 'GET_DB: sqlite PDO driver not found';
       return $this->db = FALSE;
@@ -483,9 +482,9 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
-    
+
     $this->get_tables();
-    
+
     if( !isset($this->tables[$table]) ) {
       $this->error[] = "CREATE_TABLE: Unknown table: $table";
       return FALSE;
