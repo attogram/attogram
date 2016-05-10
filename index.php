@@ -48,59 +48,6 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function login() {
-
-    $this->hook('PRE-LOGIN');
-
-    if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
-      $this->error = 'Please enter username and password';
-      $this->hook('ERROR-LOGIN');
-      return FALSE;
-    }
-
-    $user = $this->sqlite_database->query(
-      'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
-      $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
-
-    if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
-      $this->error = 'Login system offline';
-      $this->hook('ERROR-LOGIN');
-      return FALSE;
-    }
-
-    if( !$user ) { // no user, or wrong password
-      $this->error = 'Invalid login'; 
-      $this->hook('ERROR-LOGIN'); 
-      return FALSE; 
-    }
-    if( !sizeof($user) == 1 ) { // corrupt data
-      $this->error = 'Invalid login'; 
-      $this->hook('ERROR-LOGIN'); 
-      return FALSE; 
-    }
-
-    $user = $user[0];
-    $_SESSION['attogram_id'] = $user['id'];
-    $_SESSION['attogram_username'] = $user['username'];
-    $_SESSION['attogram_level'] = $user['level'];
-    $_SESSION['attogram_email'] = $user['email'];
-
-    $s = $this->sqlite_database->queryb(
-      "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
-      $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
-    );
-
-    $this->hook('POST-LOGIN');
-    return TRUE;
-  }
-
-  ////////////////////////////////////////////////////////////////////
-  function is_logged_in() {
-    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) { return TRUE; }
-    return FALSE;
-  }
-
-  ////////////////////////////////////////////////////////////////////
   function load_config() {
     $this->hook('PRE-CONFIG');
     if( !is_readable_php_file($this->config) ) { return; }
@@ -144,17 +91,18 @@ class attogram {
     }
  
     if( !in_array($this->uri[0],$this->get_actions()) // is action not available?
-      || !$this->uri[1]=='' // is not correct slash format?
+      //|| !$this->uri[1]=='' // is not correct slash format?
       || isset($this->uri[2]) // if has subpath
       || (preg_match('/^admin/',$this->uri[0]) && !$this->is_admin() ) // admin only actions
     ) { 
       $this->error404(); 
     }
-      
-    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
-      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); 
-      exit; 
-    } 
+    
+// buggy with ?vars at end of url    
+//    if( $this->uri[sizeof($this->uri)-1]!='' ) { // add trailing slash
+//      header('Location: ' . $_SERVER['REQUEST_URI'] . '/',TRUE,301); 
+//      exit; 
+//    } 
     
     $this->action = $this->uri[0];
     
@@ -255,6 +203,59 @@ class attogram {
     return false;
   }
 
+  ////////////////////////////////////////////////////////////////////
+  function login() {
+
+    $this->hook('PRE-LOGIN');
+
+    if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
+      $this->error = 'Please enter username and password';
+      $this->hook('ERROR-LOGIN');
+      return FALSE;
+    }
+
+    $user = $this->sqlite_database->query(
+      'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
+      $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
+
+    if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
+      $this->error = 'Login system offline';
+      $this->hook('ERROR-LOGIN');
+      return FALSE;
+    }
+
+    if( !$user ) { // no user, or wrong password
+      $this->error = 'Invalid login'; 
+      $this->hook('ERROR-LOGIN'); 
+      return FALSE; 
+    }
+    if( !sizeof($user) == 1 ) { // corrupt data
+      $this->error = 'Invalid login'; 
+      $this->hook('ERROR-LOGIN'); 
+      return FALSE; 
+    }
+
+    $user = $user[0];
+    $_SESSION['attogram_id'] = $user['id'];
+    $_SESSION['attogram_username'] = $user['username'];
+    $_SESSION['attogram_level'] = $user['level'];
+    $_SESSION['attogram_email'] = $user['email'];
+
+    $s = $this->sqlite_database->queryb(
+      "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
+      $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
+    );
+
+    $this->hook('POST-LOGIN');
+    return TRUE;
+  }
+
+  ////////////////////////////////////////////////////////////////////
+  function is_logged_in() {
+    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) { return TRUE; }
+    return FALSE;
+  }
+
 } // END of class attogram
 
 
@@ -289,7 +290,6 @@ class sqlite_database {
       $this->error = 'error connnecting to PDO sqlite database';
       return $this->db = FALSE;
     }
-    print "<PRE>GOT DB: get_class: '" . get_class($this->db) . "'</PRE>";
     return $this->db;
   }
 
