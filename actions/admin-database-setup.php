@@ -21,7 +21,7 @@ if( isset($_GET['create']) ) {
     if( $this->sqlite_database->create_table($table) ) {
       print 'OK';
     } else {
-      print 'ERROR: ' . @$this->sqlite_database->error;
+      print 'ERROR';
     }    
   }
   skip:

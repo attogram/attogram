@@ -281,13 +281,13 @@ class sqlite_database {
     } 
     
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
-      $this->error = 'sqlite PDO driver not found';
+      $this->error[] = 'GET_DB: sqlite PDO driver not found';
       return $this->db = FALSE;
     }
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
-      $this->error = 'error connnecting to PDO sqlite database';
+      $this->error[] = 'GET_DB: error connnecting to PDO sqlite database';
       return $this->db = FALSE;
     }
     return $this->db;
@@ -297,22 +297,22 @@ class sqlite_database {
   function query( $sql, $bind=array() ) {
     $db = $this->get_db();
     if( !$this->db ) {
-      $this->error = 'Can not get database';
+      $this->error[] = 'QUERY: Can not get database';
       return array();
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) { 
-      $this->error .= 'Can not prepare sql';
+      $this->error[] = 'QUERY: Can not prepare sql';
       return array();
     }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) {
-      $this->error = 'Can not execute query';
+      $this->error[] = 'QUERY: Can not execute query';
       return array();
     }
     $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if( !$r && $this->db->errorCode() != '00000') { // query failed
-      $this->error = 'Query failed';
+      $this->error[] = 'QUERY: Query failed';
       $r = array();
     }
     return $r;
@@ -321,14 +321,23 @@ class sqlite_database {
   //////////////////////////////////////////////////////////////////////
   function queryb( $sql, $bind=array() ) {
     $db = $this->get_db();
-    if( !$this->db ) { return false; }
+    if( !$this->db ) {
+      $this->error[] = 'QUERYB: Unable to get Database';
+      return FALSE;
+    }
     $statement = $this->query_prepare($sql);
-    if( !$statement ) { return false; }
+    if( !$statement ) {
+      $this->error[] = 'QUERYB: prepare failed';
+      return FALSE;
+    }
     while( $x = each($bind) ) {
       $statement->bindParam($x[0], $x[1]);
     }
-    if( !$statement->execute() ) { return false; }
-    return true;
+    if( !$statement->execute() ) {
+      $this->error[] = 'QUERYB: execute failed';
+      return FALSE;
+    }
+    return TRUE;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -336,18 +345,18 @@ class sqlite_database {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-    $this->error = "Can not prepare sql: $sqlstate $error_code $error_string";
+    $this->error[] = "QUERY_PREPARE: Can not prepare sql: $sqlstate:$error_code:$error_string";
 
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table
-        $this->error .= ' - Created table: ' . $table;
+        $this->error[] = "QUERY_PREPARE: Created table: $table";
         $statement = $this->db->prepare($sql);
         if( $statement ) { return $statement; } // try again
-        $this->error .= ' - Still can not prepare sql';
+        $this->error[] = 'QUERY_PREPARE: Still can not prepare sql';
         return FALSE;
       } else {
-        $this->error .= ' - Can not create table';
+        $this->error[] = "QUERY_PREPARE: Can not create table: $table";
         return FALSE;
       }
     }
@@ -355,8 +364,13 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function get_tables() {
-    if( isset($this->tables) && is_array($this->tables) ) { return TRUE;}
-    if( !is_readable_dir($this->tables_directory) ) { return FALSE; }
+    if( isset($this->tables) && is_array($this->tables) ) {
+      return TRUE;
+    }
+    if( !is_readable_dir($this->tables_directory) ) {
+      $this->error[] = 'GET_TABLES: Tables directory not readable';
+      return FALSE;
+    }
     $this->tables = array();
     foreach( array_diff(scandir($this->tables_directory), array('.','..','.htaccess')) as $f ) {
       $file = $this->tables_directory . "/$f";
@@ -372,11 +386,11 @@ class sqlite_database {
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
     if( !isset($this->tables[$table]) ) {
-      $this->error = 'Unknown table';
+      $this->error[] = "CREATE_TABLE: Unknown table: $table";
       return FALSE;
     }
     if( !$this->queryb( $this->tables[$table] ) ) {
-      $this->error .= ' - Cannot create table';
+      $this->error[] = "CREATE_TABLE: Can not create table: $table";
       return FALSE;
     }
     return TRUE;
