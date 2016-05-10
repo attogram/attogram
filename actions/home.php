@@ -7,25 +7,25 @@ $this->hook('PRE-HOME');
 
 <p>Welcome to the <b>Attogram PHP Framework</b> version <?php print $this->version; ?></p>
 
-<p>Pages:<ul><?php
+<?php
+print '<p>Pages:<ul>';
 foreach( $this->actions as $action ){
-  if( preg_match('/^admin/',$action) ) { continue; }
   print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
 }
 ?>
 <li><a href="README.md">README.md</a></li>
 </ul></p>
 
-<?php if( $this->is_admin() ) {
+<?php 
+if( $this->is_admin() ) {
   $this->get_admin_actions();
-
-?>
-<p>Admin Pages:<ul><?php
-foreach( $this->admin_actions as $action ){
-  print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
+  print '<p>Admin Pages:<ul>';
+  foreach( $this->admin_actions as $action ){
+    print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
+  }
+  print '</ul></p>';
 }
-?></ul></p>
-<?php } ?>
+?>
 </div>
 <?php
 $this->hook('POST-HOME');
