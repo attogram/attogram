@@ -13,7 +13,7 @@ class plugin_timer {
 
   function hook($hook) { 
     switch($hook) { 
-      case 'PRE-INIT': $this->start_timer(); break;
+      case 'INIT': $this->start_timer(); break;
       case 'POST-FOOTER': $this->end_timer(); break;
     } 
   } 

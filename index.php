@@ -17,7 +17,7 @@ $attogram = new attogram();
 //////////////////////////////////////////////////////////////////////
 class attogram {
 
-  var $version, $config, $admins, $fof, $error,
+  var $version, $admins, $fof, $error,
       $path, $uri, $sqlite_database, $templates_dir, $functions_dir,
       $plugins_dir, $plugins,
       $actions_dir, $default_action, $actions, $action;
@@ -27,27 +27,20 @@ class attogram {
 
     $this->version = '0.2.1';
 
-    $this->plugins_dir = 'plugins';
-    $this->hook('PRE-INIT');
+    $this->load_config('config.php');
 
-    $this->functions_dir = 'functions';
-    $this->get_functions();
-
-    $this->actions_dir = 'actions';
-    $this->templates_dir = 'templates';
-    $this->default_action = 'home';
-    $this->fof = '404.php';
-
+    $this->hook('INIT');
+    
     session_start();
+
     if( isset($_GET['logoff']) ) {
       $_SESSION = array();
       session_destroy();
       session_start();
     }
 
-    $this->config = 'config.php';
-    $this->load_config();
-
+    $this->get_functions();
+        
     $this->sqlite_database = new sqlite_database();
 
     $this->route();
@@ -56,12 +49,62 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function load_config() {
-    if( !is_readable_php_file($this->config) ) { return; }
-    include_once($this->config);
-    if( isset($admins) && is_array($admins) && $admins ) {
-      $this->admins = $admins;
+  function load_config( $config_file='' ) {
+
+    if( !is_readable_php_file($config_file) ) {
+      $this->error[] = 'LOAD_CONFIG: config file unreadable';
+      return;
     }
+
+    include_once($config_file);
+
+    if( !isset($config) || !is_array($config) ) {
+      $this->error[] = 'LOAD_CONFIG: config array not found';
+      return;
+    }
+
+    if( isset($config['admins']) && is_array($config['admins'])  ) {
+      $this->admins = $config['admins'];
+    } else {
+      $this->admins = array( '127.0.0.1', '::1' );
+    }
+ 
+    if( isset($config['default_action']) && is_string($config['default_action']) ) {
+      $this->default_action = $config['default_action'];
+    } else {
+      $this->default_action = 'home';
+    }
+
+    if( isset($config['actions_dir']) && is_string($config['actions_dir']) ) {
+      $this->actions_dir = $config['actions_dir'];
+    } else {
+      $this->actions_dir = 'actions';
+    }
+
+    if( isset($config['plugins_dir']) && is_string($config['plugins_dir']) ) {
+      $this->plugins_dir = $config['plugins_dir'];
+    } else {
+      $this->plugins_dir = 'plugins';
+    }
+
+    if( isset($config['templates_dir']) && is_string($config['templates_dir']) ) {
+      $this->templates_dir = $config['templates_dir'];
+    } else {
+      $this->templates_dir = 'templates';
+    }
+
+    if( isset($config['functions_dir']) && is_string($config['functions_dir']) ) {
+      $this->functions_dir = $config['functions_dir'];
+    } else {
+      $this->functions_dir = 'functions';
+    }
+
+    if( isset($config['fof']) && is_string($config['fof']) ) {
+      $this->fof = $config['fof'];
+    } else {
+      $this->fof = '404.php';
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////
