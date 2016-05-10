@@ -118,7 +118,7 @@ class attogram {
       return;
     }
 
-    if( isset($this->uri[2]) ) { // if has subpath
+    if( isset($this->uri[2]) || (isset($this->uri[1]) && !isset($this->uri[2])) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
