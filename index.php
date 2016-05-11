@@ -26,16 +26,17 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
+
     $this->version = '0.2.4';
+
     $this->load_config('config.php');
+
     $this->hook('INIT');
-    session_start();
-    if( isset($_GET['logoff']) ) {
-      $_SESSION = array();
-      session_destroy();
-      session_start();
-    }
+
+    $this->sessioning();
+
     $this->get_functions();
+
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
 
     $this->route();
@@ -44,6 +45,16 @@ class attogram {
       $this->error404();
     }
 
+  }
+
+  ////////////////////////////////////////////////////////////////////
+  function sessioning() {
+    session_start();
+    if( isset($_GET['logoff']) ) {
+      $_SESSION = array();
+      session_destroy();
+      session_start();
+    }
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -85,7 +96,7 @@ class attogram {
   function route() {
 
     // todo: force trailing slash
-    
+
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
 
