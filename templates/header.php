@@ -14,7 +14,6 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
 foreach( $this->get_actions() as $a ) {
-  if( preg_match('/^admin/',$a) ) { continue; }
   if( $a == 'login' && $this->is_logged_in() ) { continue; }
   if( $a == 'user' && !$this->is_logged_in() ) { continue; }
   if( $a == 'user' && $this->is_logged_in() ) {
