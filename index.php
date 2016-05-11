@@ -218,9 +218,6 @@ class attogram {
       if( !is_readable_php_file($this->actions_dir . "/$f") ) {
         continue; // php files only
       }
-    //  if( preg_match('/^admin/',$f) && !$this->is_admin() ) {
-    //    continue; // admin only
-    //  }
       $this->actions[] = str_replace('.php','',$f);
     }
     return $this->actions;
@@ -261,10 +258,10 @@ class attogram {
 
   //////////////////////////////////////////////////////////////////////
   function is_admin() {
-    if( isset($_GET['noadmin']) ) { return false; }
-    if( !isset($this->admins) || !is_array($this->admins) ) { return false; }
-    if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) { return true; }
-    return false;
+    if( isset($_GET['noadmin']) ) { return FALSE; }
+    if( !isset($this->admins) || !is_array($this->admins) ) { return FALSE; }
+    if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) { return TRUE; }
+    return FALSE;
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -364,7 +361,8 @@ class sqlite_database {
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) {
-      $this->error[] = 'QUERY: Can not prepare sql';
+      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+      $this->error[] = "QUERY: prepare failed: $sqlstate:$error_code:$error_string";;
       return array();
     }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
@@ -405,15 +403,10 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function query_prepare( $sql ) {
-
     $statement = $this->db->prepare($sql);
-
     if( $statement ) { return $statement; }
-
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-
     $this->error[] = "QUERY_PREPARE: Can not prepare sql: $sqlstate:$error_code:$error_string";
-
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table
@@ -452,9 +445,7 @@ class sqlite_database {
 
   //////////////////////////////////////////////////////////////////////
   function create_table( $table='' ) {
-
     $this->get_tables();
-
     if( !isset($this->tables[$table]) ) {
       $this->error[] = "CREATE_TABLE: Unknown table: $table";
       return FALSE;
