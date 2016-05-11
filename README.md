@@ -1,14 +1,12 @@
 Attogram PHP Framework
 ======================
 
-* Attogram helps you quickly create websites.
-
-* Attogram is highly extendable.  It provides a jumpstart for the intermediate to advanced PHP developer.
+* Attogram helps you quickly create websites.  It is highly extendable, 
+  providing a jumpstart for the intermediate to advanced PHP developer.
   
-* Attogram is an opinionated framework.  
-  It includes URL routing, an integrated SQLite database with web administration,
+* Attogram is an opinionated framework.  It includes URL routing, 
+  an integrated SQLite database with web administration, 
   a simple user system, and an IP protected backend.
-
 
 Quick specs
 ===========
