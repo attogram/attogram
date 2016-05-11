@@ -496,13 +496,14 @@ function to_list($x) {
       if( !is_object($v) && !is_array($v) ) {
         $r .= $v . ', ';
       } else {
-        $r .= to_list($v);
+        $r .= to_list($v) . ', ';
       }
     }
     return trim($r,', ');
   }
   if( is_object($x) ) {
-    return print_r($x,1) . '<br />';
+    //return print_r($x,1) . '<br />';
+    return get_class($x);
   }
   return $x;
 }
