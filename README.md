@@ -1,13 +1,18 @@
 Attogram PHP Framework
 ======================
 
-Attogram helps you quickly create web prototypes.
+* Attogram helps you quickly create websites.
 
-Attogram is small, simple, and extendable.
+* Attogram is highly extendable.  It provides a jumpstart for the intermediate to advanced PHP developer.
+  
+* Attogram is an opinionated framework.  
+  It includes URL routing, an integrated SQLite database with web administration,
+  a simple user system, and an IP protected backend.
 
-Attogram quick specs:
-* PHP5, Apache2, SQLite, Plugin architecture
-* IP protected backend, web-based database management, simple user system
+
+Quick specs
+===========
+* PHP5, Apache2, SQLite
 * Open source, MIT/GPL dual license, On GitHub: https://github.com/attogram/attogram
 
 Requirements
@@ -46,14 +51,6 @@ Remove a page
 =============
 * delete the pages corresponding php file from the ./actions/ directory
 
-Make a new plugin
-=================
-* ... TBD ...
-
-Programming with Attogram
-=========================
-* Attogram functions ... TBD ...
-* Database functions ... TBD ...
 
 More Info
 =========
