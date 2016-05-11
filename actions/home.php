@@ -12,11 +12,8 @@ print '<p>Pages:<ul>';
 foreach( $this->actions as $action ){
   print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
 }
-?>
-<li><a href="README.md">README.md</a></li>
-</ul></p>
+print '</ul></p>';
 
-<?php 
 if( $this->is_admin() ) {
   $this->get_admin_actions();
   print '<p>Admin Pages:<ul>';
