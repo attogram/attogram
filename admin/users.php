@@ -8,7 +8,8 @@ $users = $this->sqlite_database->query('SELECT * FROM user ORDER BY id');
 
 print '<div class="body"><p><b>' . count($users) . '</b> <a href="">Users</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../database-phpLiteAdmin/?table=user&action=row_create">Create New User<a></p>';
-print '<table><tr>
+print '<table class="table table-bordered">
+<tr>
 <td>ID</td>
 <td>edit</td>
 <td>delete</td>
