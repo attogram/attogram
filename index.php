@@ -1,7 +1,7 @@
 <?php
 /* *******************************************************************
 
-Attogram PHP Framework
+Attogram Framework
 Version 0.2.6
 
 Copyright (c) 2016 Attogram Developers

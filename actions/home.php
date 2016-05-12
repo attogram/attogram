@@ -9,7 +9,7 @@ $this->hook('PRE-HOME');
 <div class="container">
 
   <div class="jumbotron">
-    <h1>Attogram PHP Framework</h1>
+    <h1>Attogram Framework</h1>
     <p>Version <?php print $this->version; ?></p> 
   </div>
   

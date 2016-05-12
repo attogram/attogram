@@ -1,5 +1,5 @@
-Attogram PHP Framework
-======================
+Attogram Framework
+==================
 
 * Attogram helps you quickly create websites.  It is highly extendable, 
   providing a jumpstart for the intermediate to advanced PHP developer.

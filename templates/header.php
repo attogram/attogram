@@ -2,7 +2,7 @@
 // Attogram - templates - header
 
 $this->hook('PRE-HEADER');
-if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
+if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
 
 ?>
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 
 
 <div class="header">
-<a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
+<a href="<?php print $this->path; ?>/">Attogram Framework</a>
 <?php
 
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
