@@ -5,7 +5,7 @@ $title = 'Attogram - Readme';
 include($this->templates_dir . '/header.php');
 print '<div class="body">';
 
-$file = 'readme.md';
+$file = 'README.md';
 if( is_file($file) && is_readable($file) ) {
   if( class_exists('Parsedown') ) {
     print Parsedown::instance()->text( file_get_contents($file) );
