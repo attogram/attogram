@@ -7,7 +7,7 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 ?><!doctype html><html><head>
 <title><?php print $title; ?></title>
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css" href="<?php print $this->path; ?>/css.css">
+<link rel="stylesheet" type="text/css" href="<?php print $this->path; ?>/web/css.css">
 </head><body>
 <div class="header"><a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
 <?php
