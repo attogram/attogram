@@ -46,18 +46,17 @@ body {
     Powered by <a target="github" href="https://github.com/attogram/attogram">Attogram PHP Framework</a>
     &nbsp; - &nbsp; <?php $this->hook('POST-FOOTER'); ?>
   </p>
-
+ </div>
+</footer>
 <?php
 if( isset($this->error) && $this->error ) {
-  print '<pre>System Errors:<br />- ' . to_list($this->error, '<br />- ') . '</pre>';
+  print '<div class="alert alert-danger">System Errors:<br />- ' . to_list($this->error, '<br />- ') . '</div>';
 }
 
 if( isset($this->sqlite_database->error) && $this->sqlite_database->error ) {
   //print '<pre>DB Errors: ' . print_r($this->sqlite_database->error,1) . '</pre>';
-  print '<pre>DB Errors:<br />- ' . to_list($this->sqlite_database->error, '<br />- ') . '</pre>';
+  print '<div class="alert alert-danger">DB Errors:<br />- ' . to_list($this->sqlite_database->error, '<br />- ') . '</div>';
 }
-
 ?>
- </div>
-</footer>
+
 </body></html>
