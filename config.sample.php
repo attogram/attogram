@@ -16,7 +16,7 @@ $config = array();
 //$config['templates_dir']  = 'templates';
 //$config['functions_dir']  = 'functions';
 
-//$config['fof']            = '404.php';
+//$config['fof']            = 'templates/404.php';
 
 //$config['db_name']        = 'db/global';
 //$config['tables_dir']     = 'tables';

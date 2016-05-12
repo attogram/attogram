@@ -77,7 +77,7 @@ class attogram {
     $this->set_config( 'plugins_dir',    @$config['plugins_dir'],    'plugins' );
     $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
     $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
-    $this->set_config( 'fof',            @$config['fof'],            '404.php' );
+    $this->set_config( 'fof',            @$config['fof'],            'templates/404.php' );
     $this->set_config( 'db_name',        @$config['db_name'],        'db/global' );
     $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
 
@@ -169,8 +169,12 @@ class attogram {
     if( is_readable_php_file($this->fof) ) {
       include($this->fof);
     } else {
+      $this->error[] = '404 file not found';
       header('HTTP/1.0 404 Not Found');
       print '404 Not Found';
+      if( isset($this->error) && $this->error ) {
+        print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
+      }
     }
     exit;
   }
