@@ -550,23 +550,23 @@ function is_readable_php_file( $file=FALSE ) {
  * to_list() - make a comma seperated list of items within an array or object
  *
  * @param mixed $x The input to be listed
+ * @param string $sep The seperator between items
  *
  * @return string
  */
-function to_list($x) {
+function to_list( $x, $sep=', ') {
   if( is_array($x) ) {
     $r = '';
     foreach($x as $v) {
       if( !is_object($v) && !is_array($v) ) {
-        $r .= $v . ', ';
+        $r .= $v . $sep;
       } else {
-        $r .= to_list($v) . ', ';
+        $r .= to_list($v) . $sep;
       }
     }
-    return trim($r,', ');
+    return trim($r,$sep);
   }
   if( is_object($x) ) {
-    //return print_r($x,1) . '<br />';
     return get_class($x);
   }
   return $x;
