@@ -8,6 +8,9 @@ if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 <title><?php print $title; ?></title>
 <meta charset="utf-8" />
 <link rel="stylesheet" type="text/css" href="<?php print $this->path; ?>/web/css.css">
+<link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap.min.css">
+<link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap-theme.min.css">
+<script src="<?php print $this->path; ?>/web/bootstrap.min.js"></script>
 </head><body>
 <div class="header"><a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
 <?php
