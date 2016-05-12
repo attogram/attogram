@@ -4,15 +4,24 @@
 $this->hook('PRE-HEADER');
 if( !isset($title) || !$title ) { $title = 'Attogram PHP Framework'; }
 
-?><!doctype html><html><head>
-<title><?php print $title; ?></title>
-<meta charset="utf-8" />
-<link rel="stylesheet" type="text/css" href="<?php print $this->path; ?>/web/css.css">
-<link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap.min.css">
-<link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap-theme.min.css">
-<script src="<?php print $this->path; ?>/web/bootstrap.min.js"></script>
-</head><body>
-<div class="header"><a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><?php print $title; ?></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="<?php print $this->path; ?>/web/css.css">
+  <link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap.min.css">
+  <script src="<?php print $this->path; ?>/web/jquery.min.js"></script>
+  <script src="<?php print $this->path; ?>/web/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+
+<div class="header">
+<a href="<?php print $this->path; ?>/">Attogram PHP Framework</a>
 <?php
 
 $spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';

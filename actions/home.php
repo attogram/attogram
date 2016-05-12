@@ -3,26 +3,57 @@
 include($this->templates_dir . '/header.php');
 $this->hook('PRE-HOME');
 ?>
-<div class="body">
 
-<p>Welcome to the <b>Attogram PHP Framework</b> version <?php print $this->version; ?></p>
 
+
+<div class="container">
+
+  <div class="jumbotron">
+    <h1>Attogram PHP Framework</h1>
+    <p>Version <?php print $this->version; ?></p> 
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Pages</h3>
+      <p><ul>
 <?php
-print '<p>Pages:<ul>';
 foreach( $this->actions as $action ){
   print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
 }
-print '</ul></p>';
-
-if( $this->is_admin() ) {
+?>
+    </ul></p>
+    </div>
+    
+    <div class="col-sm-4">
+<?php
+    if( $this->is_admin() ) {
   $this->get_admin_actions();
-  print '<p>Admin Pages:<ul>';
+  print '<h3>Admin Pages:</h3><ul>';
   foreach( $this->admin_actions as $action ){
     print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
   }
-  print '</ul></p>';
+  print '</ul>';
 }
 ?>
+    </div>
+    
+    <div class="col-sm-4">
+      <h3>More</h3>        
+      <ul><li><a href="https://github.com/attogram/attogram">Attogram @ GitHub</a></li></ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 </div>
 <?php
 $this->hook('POST-HOME');
