@@ -3,7 +3,7 @@
 
 $title = 'Attogram - Readme';
 include($this->templates_dir . '/header.php');
-print '<div class="body">';
+print '<div class="container">';
 
 $file = 'README.md';
 if( is_file($file) && is_readable($file) ) {

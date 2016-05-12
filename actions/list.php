@@ -4,7 +4,7 @@
 $title = 'Attogram - List';
 include($this->templates_dir . '/header.php');
 
-print '<div class="body">';
+print '<div class="container">';
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
 $lists = $this->sqlite_database->query($sql);

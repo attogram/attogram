@@ -1,7 +1,6 @@
 <?php
 // Attogram - templates - header
 
-$this->hook('PRE-HEADER');
 if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
 
 ?>
@@ -18,27 +17,60 @@ if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
 </head>
 <body>
 
-
-
-<div class="header">
-<a href="<?php print $this->path; ?>/">Attogram Framework</a>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="<?php print $this->path; ?>/">Attogram Framework</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
+              <ul class="dropdown-menu">
 <?php
-
-$spacer = ' &nbsp;&nbsp;&nbsp;&nbsp; ';
+                
 foreach( $this->get_actions() as $a ) {
   if( $a == 'login' && $this->is_logged_in() ) { continue; }
   if( $a == 'user' && !$this->is_logged_in() ) { continue; }
   if( $a == 'user' && $this->is_logged_in() ) {
-  print $spacer . '<a href="' . $this->path . '/user/">User: <b>'
-  . $_SESSION['attogram_username'] . '</b></a>';
-  continue;
+    print '<li><a href="' . $this->path . '/user/">User: <b>' . $_SESSION['attogram_username'] . '</b></a></li>';
+    continue;
   }
-  print $spacer . '<a href="' . $this->path . '/' . $a . '/">' . $a . '</a>';
-}
-
+  print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
+}                
 if( $this->is_logged_in() ) {
- print $spacer . '<a href="?logoff">logoff</a>';
-}
-?></div>
+ print '<li><a href="?logoff">logoff</a></li>';
+}          
+?>                
+              </ul>
+            </li>
+          </ul>
 <?php
-$this->hook('POST-HEADER');
+if( $this->is_admin() ) { 
+?>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+<?php
+foreach( $this->get_admin_actions() as $a ) {
+  print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
+}      
+?>  
+              </ul>
+            </li>
+          </ul>
+<?php
+}
+?>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+
+
+<?php
+
+
+
+

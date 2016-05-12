@@ -37,7 +37,7 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 
 
 ?>
-<div class="body">
+<div class="container">
 <form action="." method="POST">
 Contact us:
 <br />

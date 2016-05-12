@@ -43,7 +43,7 @@ body {
 <footer class="footer">
  <div class="container">
   <p>
-    Powered by <a target="github" href="https://github.com/attogram/attogram">Attogram PHP Framework</a>
+    Powered by <a target="github" href="https://github.com/attogram/attogram">Attogram Framework</a>
     &nbsp; - &nbsp; <?php $this->hook('POST-FOOTER'); ?>
   </p>
  </div>

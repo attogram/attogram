@@ -11,7 +11,7 @@ if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
 
 include($this->templates_dir . '/header.php');
 ?>
-<div class="body">
+<div class="container">
 <?php if( $message ) { print "<pre>$message</pre>"; } ?>
 <form action="" method="POST">
 <input type="hidden" name="login" value="login">

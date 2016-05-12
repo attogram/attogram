@@ -3,7 +3,7 @@
 $title = 'Attogram - License';
 include($this->templates_dir . '/header.php');
 ?>
-<div class="body">
+<div class="container">
 <p>Attogram is an open source project.</p>
 <p>It is dual licensed under
 <a href="http://opensource.org/licenses/MIT">The MIT License</a> and the
