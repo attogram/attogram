@@ -256,7 +256,11 @@ class attogram {
     }
   }
 
-  //////////////////////////////////////////////////////////////////////
+  /**
+   * is_admin() - is access from an admin IP?
+   *
+   * @return boolean
+   */  
   function is_admin() {
     if( isset($_GET['noadmin']) ) { return FALSE; }
     if( !isset($this->admins) || !is_array($this->admins) ) { return FALSE; }
@@ -264,7 +268,11 @@ class attogram {
     return FALSE;
   }
 
-  ////////////////////////////////////////////////////////////////////
+  /**
+   * login() - login a user into the system
+   *
+   * @return boolean
+   */
   function login() {
 
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
@@ -306,8 +314,12 @@ class attogram {
     return TRUE;
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function is_logged_in() {
+  /**
+   * is_logged_in() - is a user logged into the system?
+   *
+   * @return boolean
+   */
+   function is_logged_in() {
     if( isset($_SESSION['attogram_id'])
      && $_SESSION['attogram_id']
      && isset($_SESSION['attogram_username'])
