@@ -326,36 +326,53 @@ class sqlite_database {
 
   public $db_name, $db, $tables_directory, $tables, $error;
 
-  //////////////////////////////////////////////////////////////////////
+  /**
+   * __construct() - initialize database settings
+   *
+   * @param string $db_name relative path to the SQLite database file
+   * @param string $tables_dir relative path to the table definitions directory
+   *
+   * @return void
+   */
   function __construct( $db_name, $tables_dir ) {
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
   }
 
-  //////////////////////////////////////////////////////////////////////
+  /**
+   * get_db() - Get the SQLite database object
+   *
+   * @return boolean
+   */
   function get_db() {
 
     if( is_object($this->db) && get_class($this->db) == 'PDO' ) {
-      return $this->db; // if PDO database object already set
+      return TRUE; // if PDO database object already set
     }
 
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->error[] = 'GET_DB: sqlite PDO driver not found';
-      return $this->db = FALSE;
+      return FALSE;
     }
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
-      $this->error[] = 'GET_DB: error connnecting to PDO sqlite database';
-      return $this->db = FALSE;
+      $this->error[] = 'GET_DB: error opening database';
+      return FALSE;
     }
-    return $this->db;
+    return TRUE; // got database, into $this->db
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function query( $sql, $bind=array() ) {
-    $db = $this->get_db();
-    if( !$this->db ) {
+  /**
+   * query() - Query the database, return an array of results
+   *
+   * @param string $sql The SQL query
+   * @param array $bind Optional, Array of values to bind into the SQL query
+   *
+   * @return array
+   */
+   function query( $sql, $bind=array() ) {
+    if( !$this->get_db() ) {
       $this->error[] = 'QUERY: Can not get database';
       return array();
     }
@@ -378,11 +395,17 @@ class sqlite_database {
     return $r;
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function queryb( $sql, $bind=array() ) {
-    $db = $this->get_db();
-    if( !$this->db ) {
-      $this->error[] = 'QUERYB: Unable to get Database';
+  /**
+   * queryb() - Query the database, return only TRUE or FALSE
+   *
+   * @param string $sql The SQL query
+   * @param array $bind Optional, Array of values to bind into the SQL query
+   *
+   * @return boolean
+   */
+   function queryb( $sql, $bind=array() ) {
+    if( !$this->get_db() ) {
+      $this->error[] = 'QUERYB: Can not get database';
       return FALSE;
     }
     $statement = $this->query_prepare($sql);
@@ -401,8 +424,14 @@ class sqlite_database {
     return TRUE;
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function query_prepare( $sql ) {
+  /**
+   * query_prepare()
+   *
+   * @param string $sql The SQL query to prepare
+   *
+   * @return object|boolean
+   */
+   function query_prepare( $sql ) {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
@@ -422,8 +451,12 @@ class sqlite_database {
     }
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function get_tables() {
+  /**
+   * get_tables()
+   *
+   * @return boolean
+   */
+   function get_tables() {
     if( isset($this->tables) && is_array($this->tables) ) {
       return TRUE;
     }
@@ -443,8 +476,14 @@ class sqlite_database {
     return TRUE;
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function create_table( $table='' ) {
+  /**
+   * create_table() - Create a table in the active SQLite database
+   *
+   * @param string $table The name of the table to create
+   *
+   * @return boolean
+   */
+   function create_table( $table='' ) {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
       $this->error[] = "CREATE_TABLE: Unknown table: $table";
@@ -463,7 +502,13 @@ class sqlite_database {
 
 // Global Utility Functions
 
-////////////////////////////////////////////////////////////////////
+/**
+ * is_readable_dir() - Tests if is a directory and is readable
+ *
+ * @param string $dir The name of the directory to test
+ *
+ * @return boolean
+ */
 function is_readable_dir( $dir=FALSE ) {
   if( is_dir($dir) && is_readable($dir) ) {
     return TRUE;
@@ -471,7 +516,13 @@ function is_readable_dir( $dir=FALSE ) {
   return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
+/**
+ * is_readable_php_file() - Tests if is a file exist, is readable, and is PHP
+ *
+ * @param string $file The name of the file to test
+ *
+ * @return boolean
+ */
 function is_readable_php_file( $file=FALSE ) {
   if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) {
     return TRUE;
@@ -479,7 +530,13 @@ function is_readable_php_file( $file=FALSE ) {
   return FALSE;
 }
 
-//////////////////////////////////////////////
+/**
+ * to_list() - make a comma seperated list of items within an array or object
+ *
+ * @param mixed $x The input to be listed
+ *
+ * @return string
+ */
 function to_list($x) {
   if( is_array($x) ) {
     $r = '';
