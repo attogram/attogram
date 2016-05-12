@@ -4,14 +4,15 @@ include($this->templates_dir . '/header.php');
 $this->hook('PRE-HOME');
 ?>
 
+<div class="jumbotron">
+ <div class="container text-center">
+  <h1>Attogram Framework</h1>
+  <p>Version <?php print $this->version; ?></p> 
+ </div>
+</div>
 
 
 <div class="container">
-
-  <div class="jumbotron">
-    <h1>Attogram Framework</h1>
-    <p>Version <?php print $this->version; ?></p> 
-  </div>
   
   <div class="row">
     <div class="col-sm-4">
