@@ -39,8 +39,13 @@ foreach( $this->actions as $action ){
     </div>
     
     <div class="col-sm-4">
-      <h3>More</h3>        
-      <ul><li><a href="https://github.com/attogram/attogram">Attogram @ GitHub</a></li></ul>
+      <h3>About:</h3>
+      <ul>
+      <li>PHP + Apache2
+      <li>SQLite + phpLiteAdmin 1.9.6
+      <li>jQuery 1.12.2 + Bootstrap 3.3.6
+      <li>More info: <a href="https://github.com/attogram/attogram">Attogram @ GitHub</a></li>
+      </ul>
     </div>
   </div>
 </div>
