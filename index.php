@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram Framework
-Version 0.2.7
+Version 0.2.8
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -26,7 +26,7 @@ class attogram {
   ////////////////////////////////////////////////////////////////////
   function __construct() {
 
-    $this->version = '0.2.7';
+    $this->version = '0.2.8';
 
     $this->load_config('config.php');
 
