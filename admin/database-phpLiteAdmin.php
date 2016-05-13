@@ -1,6 +1,5 @@
 <?php
 // Attogram - phpLiteAdmin mod
-$this->hook('PRE-PHPLITEADMIN');
 
 //	
 //	Project: phpLiteAdmin (https://bitbucket.org/phpliteadmin/public)
@@ -4141,7 +4140,6 @@ echo "</td></tr></table>";
 $db->close(); //close the database
 
 //Attogram
-$this->hook('POST-PHPLITEADMIN');
 include($this->templates_dir . '/footer.php');
 echo "</body>";
 echo "</html>";

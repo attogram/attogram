@@ -20,7 +20,6 @@ class attogram {
   public $version, $path, $uri, $fof, $error,
          $sqlite_database, $db_name, $tables_dir,
          $templates_dir, $functions_dir,
-         $plugins_dir, $plugins,
          $actions_dir, $default_action, $actions, $action,
          $admins, $admin_dir, $admin_actions;
 
@@ -30,8 +29,6 @@ class attogram {
     $this->version = '0.2.7';
 
     $this->load_config('config.php');
-
-    $this->hook('INIT');
 
     $this->sessioning();
 
@@ -74,7 +71,6 @@ class attogram {
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
     $this->set_config( 'default_action', @$config['default_action'], 'home' );
     $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions' );
-    $this->set_config( 'plugins_dir',    @$config['plugins_dir'],    'plugins' );
     $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
     $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
     $this->set_config( 'fof',            @$config['fof'],            'templates/404.php' );
@@ -180,36 +176,6 @@ class attogram {
       }
     }
     exit;
-  }
-
-  ////////////////////////////////////////////////////////////////////
-  function hook( $hook, $return=false ) {
-    $p = $this->get_plugins();
-    $r = '';
-    foreach( $p as $plugin ) { $r .= $plugin->hook($hook); }
-    if( $return ) { return $r; }
-  }
-
-  //////////////////////////////////////////////////////////////////////
-  function get_plugins() {
-    if( is_array($this->plugins) ) { return $this->plugins; }
-    $this->plugins = array();
-    if( !is_readable_dir($this->plugins_dir) ) { return $this->plugins; }
-    foreach( array_diff(scandir($this->plugins_dir), array('.','..','.htaccess')) as $f ) {
-      if( !is_readable_php_file($this->plugins_dir . "/$f") ) { continue; } // php files only
-      include_once($this->plugins_dir . "/$f");
-      $p = '\\Attogram\\plugin_' . str_replace('.php','',$f);
-      if( !class_exists($p) ) {
-        $this->error[] = "GET_PLUGINS: no class $p in file $f";
-        continue;
-      }
-      $po = new $p( $this );
-      if( !method_exists($po,'is_active') ) { continue; }
-      if( !$po->is_active() ) { continue; }
-      if( !method_exists($po,'hook') ) { continue; }
-      $this->plugins[] = $po;
-    }
-    return $this->plugins;
   }
 
   //////////////////////////////////////////////////////////////////////

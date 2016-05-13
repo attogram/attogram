@@ -19,15 +19,12 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
   if( $this->sqlite_database->queryb($sql,$bind) ) {
     print $ok_msg;
     include($this->templates_dir . '/footer.php');
-    $this->hook('POST-ACTION');
     exit;
   }
 
   if( $this->sqlite_database->get_db()->errorCode() == 'HY000' ) {
-    $this->error = 'Message system offline';
-    $this->hook('ERROR-CONTACT');
+    $this->error[] = 'Message system offline';
     include($this->templates_dir . '/footer.php');
-    $this->hook('POST-ACTION');
     exit;
   }
 

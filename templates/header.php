@@ -11,7 +11,6 @@ if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="<?php print $this->path; ?>/web/css.css">
 <link rel="stylesheet" href="<?php print $this->path; ?>/web/bootstrap/css/bootstrap.min.css">
 <title><?php print $title; ?></title>
 <script src="<?php print $this->path; ?>/web/jquery.min.js"></script>
