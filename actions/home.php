@@ -7,23 +7,21 @@ $this->hook('PRE-HOME');
 <div class="jumbotron">
  <div class="container text-center">
   <h1>Attogram Framework</h1>
-  <p>Version <?php print $this->version; ?></p> 
+  <p>Version <?php print $this->version; ?></p>
  </div>
 </div>
 
-
-<div class="container">
-  
+<div class="container">  
   <div class="row">
     <div class="col-sm-4">
       <h3>Pages</h3>
-      <p><ul>
+      <ul>
 <?php
 foreach( $this->actions as $action ){
   print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
 }
 ?>
-    </ul></p>
+    </ul>
     </div>
     
     <div class="col-sm-4">
@@ -40,14 +38,13 @@ foreach( $this->actions as $action ){
     </div>
     
     <div class="col-sm-4">
-      <h3>About:</h3>
-      <ul>
-      <li>PHP + Apache2
-      <li>SQLite + phpLiteAdmin 1.9.6
-      <li>jQuery 1.12.2 + Bootstrap 3.3.6
-      <li>More info: <a href="https://github.com/attogram/attogram">Attogram @ GitHub</a></li>
-      </ul>
+      <p>The Attogram Framework gives developers a jumpstart for creating new web sites.</p>
+      <p>Attogram uses PHP with Apache2.  It includes URL routing, an IP-protected backend, a user system,
+      an integrated SQLite database with web administration, jQuery and Bootstrap.  
+      After that, Attogram tries to stay out of your way while you build what you want!</p>
+      <p><a href="https://github.com/attogram/attogram">Download Attogram @ GitHub</a>
     </div>
+
   </div>
 </div>
 

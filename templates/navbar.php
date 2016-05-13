@@ -14,7 +14,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php print $this->path; ?>/">Attogram</a>
+      <a class="navbar-brand" href="<?php print $this->path; ?>/">Attogram <small>v<?php print $this->version; ?></small></a>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
@@ -24,7 +24,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
-          <?php foreach( $this->get_admin_actions() as $a ) {
+          <?php 
+          foreach( $this->get_admin_actions() as $a ) {
             print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
           } ?>
           </ul>
@@ -35,6 +36,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
           <ul class="dropdown-menu">
           <?php
+          print '<li><a href="' . $this->path . '/">home</a></li>';
           foreach( $this->get_actions() as $a ) {
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
             if( $a == 'user' && !$this->is_logged_in() ) { continue; }
