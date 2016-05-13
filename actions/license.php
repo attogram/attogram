@@ -4,16 +4,19 @@ $title = 'Attogram - License';
 include($this->templates_dir . '/header.php');
 ?>
 <div class="container">
-<p>Attogram is an open source project.</p>
+<p>The Attogram Framework is an open source project.</p>
 <p>It is dual licensed under
-<a href="http://opensource.org/licenses/MIT">The MIT License</a> and the
-<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.</p>
-<hr />
+<a href="http://opensource.org/licenses/MIT">The MIT License</a> or the 
+<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>, at your choosing.</p>
+<p>The Attogram distribution includes <a href="#other">other open source projects</a>.</p>
+</div>
 
+<div class="container">
+<hr />
 <p>
-Attogram Framework
-<br />
-Copyright (c) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+<b>Attogram Framework - MIT License</b>
+</p><p>
+Copyright (c) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
 </p><p>
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,12 +36,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 </p>
+</div>
 
+<div class="container">
 <hr />
 <p>
-    Attogram Framework
-<br />
-    Copyright (C) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
+<b>Attogram Framework - GNU General Public License</b>
+</p><p>
+    Copyright (C) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
 </p><p>
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,8 +55,10 @@ THE SOFTWARE.
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 </p>
-<hr />	
-<div dir="ltr">
+</div>
+
+<div class="container" dir="ltr">
+<hr />
 <h3 style="text-align: center;">GNU GENERAL PUBLIC LICENSE</h3>
 <p style="text-align: center;">Version 3, 29 June 2007</p>
 
@@ -738,6 +745,17 @@ Public License instead of this License.  But first, please read
 
 </div>
 
+<div class="container">
+<a name="other"></a>
+<hr />
+<p>Other Open Source Software included with Attogram:</p>
+<ul>
+<li>phpLiteAdmin - GPL License - <a href="https://www.phpliteadmin.org/">https://www.phpliteadmin.org/</a></li>
+<li>jQuery - MIT License - <a href="http://jquery.org/license/">http://jquery.org/license/</a></li>
+<li>Bootstrap - MIT License - <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
+<li>Parsedown - MIT License - <a href="http://parsedown.org/">http://parsedown.org/</a></li>
+
+</ul>
 </div>
 <?php
 include($this->templates_dir . '/footer.php');
