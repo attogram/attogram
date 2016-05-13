@@ -11,7 +11,7 @@ include($this->templates_dir . '/header.php');
 <hr />
 
 <p>
-Attogram PHP Framework
+Attogram Framework
 <br />
 Copyright (c) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 </p><p>
@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 <hr />
 <p>
-    Attogram PHP Framework
+    Attogram Framework
 <br />
     Copyright (C) 2016 <a href="https://github.com/attogram/attogram/">Attogram Developers</a>
 </p><p>
