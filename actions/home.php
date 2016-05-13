@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - home
 
+namespace Attogram;
+
 include($this->templates_dir . '/header.php');
 
 ?>
@@ -13,7 +15,10 @@ ul, ol {
 <div class="jumbotron">
  <div class="container text-center">
   <h1>Attogram Framework</h1>
-  <p>Version <?php print $this->version; ?></p>
+  <p>
+    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+    giving developers a jumpstart to quickly create web sites
+  </p>
  </div>
 </div>
 
@@ -46,7 +51,6 @@ ul, ol {
     </div>
 
     <div class="col-sm-6">
-      <p>The Attogram Framework gives developers a jumpstart for creating new web sites.</p>
       <p>Attogram uses PHP with Apache2.  It includes URL routing, an IP-protected backend, a user system,
       an integrated SQLite database with web administration, jQuery and Bootstrap.
       After that, Attogram tries to stay out of your way while you build what you want.</p>
