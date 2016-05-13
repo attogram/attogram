@@ -41,13 +41,13 @@
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
             if( $a == 'user' && !$this->is_logged_in() ) { continue; }
             if( $a == 'user' && $this->is_logged_in() ) {
-              print '<li><a href="' . $this->path . '/user/">User: <b>' . $_SESSION['attogram_username'] . '</b></a></li>';
+              print '<li><a href="' . $this->path . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> User: <b>' . $_SESSION['attogram_username'] . '</b></a></li>';
               continue;
             }
             print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
           }
           if( $this->is_logged_in() ) {
-            print '<li><a href="?logoff">logoff</a></li>';
+            print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
           } ?>
           </ul>
         </li>

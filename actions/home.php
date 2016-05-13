@@ -49,8 +49,13 @@ ul, ol {
       <p>The Attogram Framework gives developers a jumpstart for creating new web sites.</p>
       <p>Attogram uses PHP with Apache2.  It includes URL routing, an IP-protected backend, a user system,
       an integrated SQLite database with web administration, jQuery and Bootstrap.
-      After that, Attogram tries to stay out of your way while you build what you want!</p>
-      <p><a href="https://github.com/attogram/attogram">Download Attogram @ GitHub</a>
+      After that, Attogram tries to stay out of your way while you build what you want.</p>
+
+      <p><a href="https://github.com/attogram/attogram"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub</a></p>
+      
+      <p><a href="https://github.com/attogram/attogram/archive/master.zip"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!</a></p>
+
+
     </div>
   </div>
 

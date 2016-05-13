@@ -96,7 +96,10 @@ class attogram {
   function route() {
 
     // todo: force trailing slash
-
+    // todo: RESERVED WORDS: exceptions for existing attogram directories
+    // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
+    
+    
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
 
