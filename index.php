@@ -367,16 +367,28 @@ class sqlite_database {
     }
 
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
-      $this->error[] = 'GET_DB: sqlite PDO driver not found';
+      $this->error[] = 'GET_DB: SQLite PDO driver not found';
       return FALSE;
     }
+
+    if( is_file( $this->db_name ) && !is_writeable( $this->db_name ) ) {
+      $this->error[] = 'GET_DB: NOTICE: database file not writeable: ' . $this->db_name;
+      // SELECT will work, UPDATE will not work
+    }
+    
+    if( !is_file( $this->db_name ) ) {
+      $this->error[] = 'GET_DB: NOTICE: creating database file: ' . $this->db_name;
+    }
+
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->error[] = 'GET_DB: error opening database';
       return FALSE;
     }
+
     return TRUE; // got database, into $this->db
+
   }
 
   /**
