@@ -264,7 +264,7 @@ class attogram {
    * is_admin() - is access from an admin IP?
    *
    * @return boolean
-   */  
+   */
   function is_admin() {
     if( isset($_GET['noadmin']) ) { return FALSE; }
     if( !isset($this->admins) || !is_array($this->admins) ) { return FALSE; }
@@ -375,7 +375,7 @@ class sqlite_database {
       $this->error[] = 'GET_DB: NOTICE: database file not writeable: ' . $this->db_name;
       // SELECT will work, UPDATE will not work
     }
-    
+
     if( !is_file( $this->db_name ) ) {
       $this->error[] = 'GET_DB: NOTICE: creating database file: ' . $this->db_name;
     }
