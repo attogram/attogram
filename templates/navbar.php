@@ -36,7 +36,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages <span class="caret"></span></a>
           <ul class="dropdown-menu">
           <?php
-          print '<li><a href="' . $this->path . '/">home</a></li>';
+          print '<li><a href="' . $this->path . '/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> home</a></li>';
           foreach( $this->get_actions() as $a ) {
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
             if( $a == 'user' && !$this->is_logged_in() ) { continue; }
