@@ -3,10 +3,11 @@
 
 namespace Attogram;
 
-if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
+if( !isset($title) || !$title || !is_string($title) ) {
+  $title = 'Attogram Framework';
+}
 
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
