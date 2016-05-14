@@ -2,11 +2,10 @@
 // Attogram - 404
 header("HTTP/1.0 404 Not Found");
 
-$title = '404 Page Not Found';
-include($this->templates_dir . '/header.php');
+$this->page_header('404 Page Not Found');
 ?>
-
-<h1 xstyle="text-align:center; font-size:60px;">Error 404 Page Not Found</h1>
-
+<div class="container">
+  <h1>Error 404 Page Not Found</h1>
+</div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();
