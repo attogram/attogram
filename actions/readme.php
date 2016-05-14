@@ -10,7 +10,7 @@ print '<div class="container">';
 
 $file = 'README.md';
 
-if( is_readable_file($file, $ext=array('.md') ) ) {
+if( is_readable_file($file, '.md' ) ) {
   $page = @file_get_contents($file);
   if( $page === FALSE ) {
       print 'Error: can not get file: ' . $file;
