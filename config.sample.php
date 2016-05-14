@@ -9,9 +9,11 @@ $config = array();
 //$config['admins']         = array( '127.0.0.1', '::1', );
 //$config['admin_dir']      = 'admin';
 
-//$config['default_action'] = 'home';
+//$config['default_action'] = 'home.php';
 //$config['actions_dir']    = 'actions';
+
 //$config['templates_dir']  = 'templates';
+
 //$config['functions_dir']  = 'functions';
 
 //$config['fof']            = 'templates/404.php';
