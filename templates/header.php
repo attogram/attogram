@@ -19,7 +19,7 @@ if( !isset($title) || !$title ) { $title = 'Attogram Framework'; }
 <body>
 <?php
 $navbar = $this->templates_dir . '/navbar.php';
-if( is_readable_php_file( $navbar ) ) {
+if( is_readable_file( $navbar ) ) {
   include( $navbar );
 } else {
   $this->error[] = "Missing navbar template: $navbar";
