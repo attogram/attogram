@@ -437,7 +437,7 @@ class attogram {
  */
  class sqlite_database {
 
-  public $db_name, $db, $tables_directory, $tables, $error;
+  public $db_name, $db, $tables_directory, $tables, $error, $skip_files;
 
   /**
    * __construct() - initialize database settings
@@ -450,6 +450,7 @@ class attogram {
   function __construct( $db_name, $tables_dir ) {
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
+    $this->skip_files = array('.','..','.htaccess');
   }
 
   /**
