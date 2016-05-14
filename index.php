@@ -48,7 +48,7 @@ class attogram {
    *
    * @return void
    */
-   function sessioning() {
+  function sessioning() {
     session_start();
     if( isset($_GET['logoff']) ) {
       $_SESSION = array();
@@ -106,7 +106,7 @@ class attogram {
    *
    * @return void
    */
-   function trim_uri() {
+  function trim_uri() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     //$this->error[] = 'TRIM_URI: URI:' . print_r($this->uri,1);
     
@@ -185,7 +185,7 @@ class attogram {
    *
    * @return boolean
    */
-   function action() {
+  function action() {
     if( !isset($this->action) || !$this->action ) {
       $this->error[] = 'ACTION: action undefined';
       return FALSE;
@@ -207,7 +207,7 @@ class attogram {
    *
    * @return void
    */
-   function error404() {
+  function error404() {
     if( is_readable_file($this->fof) ) {
       include($this->fof);
     } else {
@@ -226,7 +226,7 @@ class attogram {
    *
    * @return void
    */
-   function get_actions() {
+  function get_actions() {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
@@ -346,7 +346,7 @@ class attogram {
    *
    * @return boolean
    */
-   function is_logged_in() {
+  function is_logged_in() {
     if( isset($_SESSION['attogram_id'])
      && $_SESSION['attogram_id']
      && isset($_SESSION['attogram_username'])
