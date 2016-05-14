@@ -21,7 +21,7 @@ class attogram {
 
   public $version, $path, $uri, $fof, $error,
          $sqlite_database, $db_name, $tables_dir,
-         $templates_dir, $functions_dir,
+         $templates_dir, $functions_dir, $skip_files,
          $actions_dir, $default_action, $actions, $action,
          $admins, $admin_dir, $admin_actions;
 
@@ -34,6 +34,7 @@ class attogram {
     $this->version = '0.2.9';
     $this->load_config('config.php');
     $this->sessioning();
+    $this->skip_files = array('.','..','.htaccess');
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
@@ -231,9 +232,10 @@ class attogram {
     }
     $this->actions = array();
     if( !is_readable_dir($this->actions_dir) ) {
+      $this->error[] = 'GET_ACTIONS: actions directory is not readable';
       return $this->actions;
     }
-    foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
+    foreach( array_diff(scandir($this->actions_dir), $this->skip_files) as $f ) {
       if( is_readable_file($this->actions_dir . "/$f") ) { // php files only
         $this->actions[] = str_replace('.php','',$f); 
       }
@@ -257,7 +259,7 @@ class attogram {
     if( !is_readable_dir($this->admin_dir) ) {
       return $this->admin_actions;
     }
-    foreach( array_diff(scandir($this->admin_dir), array('.','..','.htaccess')) as $f ) {
+    foreach( array_diff(scandir($this->admin_dir), $this->skip_files) as $f ) {
       if( is_readable_file($this->admin_dir . "/$f") ) { // php files only
         $this->admin_actions[] = str_replace('.php','',$f); 
       }
@@ -274,7 +276,7 @@ class attogram {
     if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
       return FALSE;
     }
-    foreach( array_diff(scandir($this->functions_dir), array('.','..','.htaccess')) as $f ) {
+    foreach( array_diff(scandir($this->functions_dir), $this->skip_files) as $f ) {
       $file = $this->functions_dir . "/$f";
       if( !is_readable_file($file) ) { continue; } // php files only
       include_once($file);
@@ -516,7 +518,7 @@ class attogram {
       return FALSE;
     }
     $this->tables = array();
-    foreach( array_diff(scandir($this->tables_directory), array('.','..','.htaccess')) as $f ) {
+    foreach( array_diff(scandir($this->tables_directory), $this->skip_files) as $f ) {
       $file = $this->tables_directory . "/$f";
       if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
         continue; // .sql files only
