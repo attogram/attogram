@@ -18,7 +18,7 @@ if( is_readable_file($file, '.md' ) ) {
       print \Parsedown::instance()->text( $page );
     } else {
       print 'Error: can not find parser';
-    }    
+    }
   }
 } else {
   print 'Error: can not read file: ' . $file;

@@ -24,7 +24,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
-          <?php 
+          <?php
           foreach( array_keys($this->get_admin_actions()) as $a ) {
             print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
           } ?>
