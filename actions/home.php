@@ -60,8 +60,6 @@ ul, ol {
     </div>
   </div>
 
-  </div>
-
 </div>
 
 <?php
