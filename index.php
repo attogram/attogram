@@ -109,31 +109,24 @@ class attogram {
    */
   function trim_uri() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    //$this->error[] = 'TRIM_URI: URI:' . print_r($this->uri,1);
 
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
-    //$this->error[] = 'TRIM_URI: path: ' . $this->path;
 
     if( $this->path == '' ) { // top level install
-      $this->error[] = 'TRIM_URI: top level install';
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
         $this->action = $this->actions_dir . '/' . $this->default_action;
-        //$this->error[] = 'TRIM_URI: default action: ' . $this->action;
         return;
       } else {
         $trash = array_shift($this->uri);
       }
     } else { // sub level install
-      //$this->error[] = 'TRIM_URI: sub level install';
       for( $i = 0; $i < sizeof($this->uri); $i++ ) {
-        //$this->error[] = 'TRIM_URI: loop uri[' . $i . '] = ' . $this->uri[$i] . ' -- uri: ' . print_r($this->uri,1);
         if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) {
           break; // found our level
         }
         $trash = array_shift($this->uri);
       }
     }
-    //$this->error[] = 'TRIM_URI: trimmed URI:' . print_r($this->uri,1);
   }
 
   /**
