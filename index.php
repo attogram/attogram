@@ -516,14 +516,34 @@ function is_readable_dir( $dir=FALSE ) {
  * is_readable_php_file() - Tests if is a file exist, is readable, and is PHP
  *
  * @param string $file The name of the file to test
+ * @param array $types Optional.  Array of file extensions to allow. Defaults to '.php'
+ *
+ * @return boolean
+ */
+function is_readable_file( $file=FALSE, $types=FALSE ) {
+  if( !$file || !is_file($file) || !is_readable($file) ) {
+    return FALSE;
+  }
+  if( !is_array($types) ) {
+    $types = array('.php'); // default to PHP files only
+  }
+  foreach( $types as $type) {
+    if( preg_match('/' . $type . '$/',$file) ) {
+    return TRUE;
+   }
+  }
+  return FALSE;
+}
+
+/**
+ * is_readable_php_file() - Tests if is a file exist, is readable, and is PHP
+ *
+ * @param string $file The name of the file to test
  *
  * @return boolean
  */
 function is_readable_php_file( $file=FALSE ) {
-  if( is_file($file) && is_readable($file) && preg_match('/\.php$/',$file) ) {
-    return TRUE;
-  }
-  return FALSE;
+  return is_readable_file($file);
 }
 
 /**
