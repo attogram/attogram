@@ -32,8 +32,8 @@ ul, ol {
       <h3>Pages:</h3>
       <ul>
       <?php
-        foreach( $this->actions as $action ){
-          print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
+        foreach( array_keys($this->get_actions()) as $action ){
+          print '<li><a href="' . $action . '/">' . $action . '</a></li>';
         }
       ?>
       </ul>
@@ -44,8 +44,8 @@ ul, ol {
         if( $this->is_admin() ) {
           $this->get_admin_actions();
           print '<h3>Admin:</h3><ul>';
-          foreach( $this->admin_actions as $action ){
-            print '<li><a href="./' . $action . '/">' . $action . '</a></li>';
+          foreach( array_keys($this->get_admin_actions()) as $action ){
+            print '<li><a href="' . $action . '/">' . $action . '</a></li>';
           }
           print '</ul>';
         }

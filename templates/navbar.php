@@ -25,7 +25,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
           <?php 
-          foreach( $this->get_admin_actions() as $a ) {
+          foreach( array_keys($this->get_admin_actions()) as $a ) {
             print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
           } ?>
           </ul>
@@ -37,7 +37,7 @@
           <ul class="dropdown-menu">
           <?php
           print '<li><a href="' . $this->path . '/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> home</a></li>';
-          foreach( $this->get_actions() as $a ) {
+          foreach( array_keys($this->get_actions()) as $a ) {
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
             if( $a == 'user' && !$this->is_logged_in() ) { continue; }
             if( $a == 'user' && $this->is_logged_in() ) {

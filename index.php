@@ -167,18 +167,57 @@ class attogram {
       $this->error404();
     }
 
-    if( !in_array($this->uri[0],$this->get_actions()) ) { // is action not available?
-      if( $this->is_admin() && in_array($this->uri[0],$this->get_admin_actions()) ) { // check admin actions
-        $this->action = $this->admin_dir . '/' . $this->uri[0] . '.php';
-        return;
-      }
-      $this->error[] = 'ROUTE: action not found';
-      $this->error404();
+    $actions = $this->get_actions();
+    if( $this->is_admin() ) {
+        $actions = array_merge($actions, $this->get_admin_actions());
     }
 
-    $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';
-    //$this->error[] = 'ROUTE: OK: action: ' . $this->action;
-}
+    if( isset($actions[$this->uri[0]]) ) {
+      switch( $actions[$this->uri[0]]['parser'] ) {
+        case 'php':
+          $this->action = $actions[$this->uri[0]]['file'];
+          return;
+        case 'md':
+          $this->do_markdown( $actions[$this->uri[0]]['file'] );
+          exit;
+        default:
+          $this->error[] = 'No Parser Found';
+          $this->error404();
+          break;
+      } // end switch on parser
+    } //end if action set
+
+  } // end function route()
+
+  /**
+   * do_markdown() - parse and display a Markdown document
+   *
+   * @param string $file The markdown file to load
+   *
+   * @return void
+   */
+  function do_markdown( $file ) {
+    $title = 'Attogram - Markdown';
+    include($this->templates_dir . '/header.php');
+    print '<div class="container">';
+    if( is_readable_file($file, '.md' ) ) {
+      $page = @file_get_contents($file);
+      if( $page === FALSE ) {
+          print 'Error: can not get file: ' . $file;
+      } else {
+        if( class_exists('Parsedown') ) {
+          print \Parsedown::instance()->text( $page );
+        } else {
+          print 'Error: can not find parser';
+        }    
+      }
+    } else {
+      print 'Error: can not read file: ' . $file;
+    }
+    print '</div>';
+    include($this->templates_dir . '/footer.php');
+    exit;
+  }
 
   /**
    * action() - include the file specified by the current action
@@ -236,9 +275,25 @@ class attogram {
       return $this->actions;
     }
     foreach( array_diff(scandir($this->actions_dir), $this->skip_files) as $f ) {
-      if( is_readable_file($this->actions_dir . "/$f") ) { // php files only
-        $this->actions[] = str_replace('.php','',$f); 
+
+      $file = $this->actions_dir . "/$f";
+
+      if( is_readable_file($file, '.php') ) { // php files only
+        $this->actions[ str_replace('.php','',$f) ] = array(
+          'file'=>$file, 
+          'url'=>$this->path . "/$f",
+          'parser'=>'php' 
+        );
       }
+
+      if( is_readable_file($file, '.md') ) { // Markdown files only
+        $this->actions[ str_replace('.md','',$f) ] = array(
+          'file'=>$file,
+          'url'=>$this->path . "/$f",
+          'parser'=>'md' 
+        );
+      }
+
     }
     return $this->actions;
   }
@@ -260,10 +315,27 @@ class attogram {
       return $this->admin_actions;
     }
     foreach( array_diff(scandir($this->admin_dir), $this->skip_files) as $f ) {
-      if( is_readable_file($this->admin_dir . "/$f") ) { // php files only
-        $this->admin_actions[] = str_replace('.php','',$f); 
+
+      $file = $this->admin_dir . "/$f";
+
+      if( is_readable_file($file, '.php') ) { // php files only
+        $this->admin_actions[ str_replace('.php','',$f) ] = array(
+          'file'=>$file,
+          'url'=>$this->path . "/$f",
+          'parser'=>'php' 
+        );
       }
+      
+      if( is_readable_file($file, '.md') ) { // Markdown files only
+        $this->admin_actions[ str_replace('.md','',$f) ] = array(
+          'file'=>$file,
+          'url'=>$this->path . "/$f",
+          'parser'=>'md' 
+        );
+      }        
+
     }
+
     return $this->admin_actions;
   }
 
