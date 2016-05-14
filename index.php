@@ -249,9 +249,8 @@ class attogram {
       $this->error[] = '404 file not found';
       header('HTTP/1.0 404 Not Found');
       print '404 Not Found';
-      if( isset($this->error) && $this->error ) {
-        print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
-      }
+      print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
+      
     }
     exit;
   }
@@ -285,7 +284,7 @@ class attogram {
       include($file);
       return;
     }
-    print '</html></body>'; // simple default footer
+    print '</body></html>'; // simple default footer
   }
 
   /**
