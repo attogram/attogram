@@ -14,7 +14,7 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
    'agent'=>@$_SERVER['HTTP_USER_AGENT'],
   );
 
-  $ok_msg = '<p>Thank You.  Message received.</p>';
+  $ok_msg = '<div class="container">Thank You.  Message received.</div>';
 
   if( $this->sqlite_database->queryb($sql,$bind) ) {
     print $ok_msg;

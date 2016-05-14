@@ -22,7 +22,7 @@ foreach( $lists as $list ) {
   print '</ol>';
 }
 
-if( $this->is_admin() ) { print ' (<a href="../lists/">List Admin</a>)'; }
+if( $this->is_admin() ) { print '<p>(<a href="../lists/">List Admin</a>)</p>'; }
 
 print '</div>';
 
