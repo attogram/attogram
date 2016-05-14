@@ -43,7 +43,7 @@ Contact us:
 ?>" />
 <br />
 <br />Your Message:
-<br /><textarea name="msg" rows="10" cols="70" /></textarea>
+<br /><textarea name="msg" rows="10" cols="70"></textarea>
 <br />
 <br /><input type="submit" value="          Send your message now          " />
 <br />

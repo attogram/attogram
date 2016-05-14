@@ -6,11 +6,6 @@ namespace Attogram;
 include($this->templates_dir . '/header.php');
 
 ?>
-<style>
-ul, ol {
-  padding: 0px 16px;
-}
-</style>
 
 <div class="jumbotron text-center">
 
