@@ -48,7 +48,7 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function load_config( $config_file='' ) {
-    if( !is_readable_php_file($config_file) ) {
+    if( !is_readable_file($config_file) ) {
       $this->error[] = 'LOAD_CONFIG: config file not found';
     } else {
       include_once($config_file);
@@ -166,7 +166,7 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function error404() {
-    if( is_readable_php_file($this->fof) ) {
+    if( is_readable_file($this->fof) ) {
       include($this->fof);
     } else {
       $this->error[] = '404 file not found';
@@ -189,7 +189,7 @@ class attogram {
       return $this->actions;
     }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( is_readable_php_file($this->actions_dir . "/$f") ) { // php files only
+      if( is_readable_file($this->actions_dir . "/$f") ) { // php files only
         $this->actions[] = str_replace('.php','',$f); 
       }
     }
@@ -209,7 +209,7 @@ class attogram {
       return $this->admin_actions;
     }
     foreach( array_diff(scandir($this->admin_dir), array('.','..','.htaccess')) as $f ) {
-      if( is_readable_php_file($this->admin_dir . "/$f") ) { // php files only
+      if( is_readable_file($this->admin_dir . "/$f") ) { // php files only
         $this->admin_actions[] = str_replace('.php','',$f); 
       }
     }
@@ -223,7 +223,7 @@ class attogram {
     }
     foreach( array_diff(scandir($this->functions_dir), array('.','..','.htaccess')) as $f ) {
       $file = $this->functions_dir . "/$f";
-      if( !is_readable_php_file($file) ) { continue; } // php files only
+      if( !is_readable_file($file) ) { continue; } // php files only
       include_once($file);
     }
   }
@@ -513,7 +513,7 @@ function is_readable_dir( $dir=FALSE ) {
 }
 
 /**
- * is_readable_php_file() - Tests if is a file exist, is readable, and is PHP
+ * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type or types
  *
  * @param string $file The name of the file to test
  * @param array $types Optional.  Array of file extensions to allow. Defaults to '.php'
@@ -533,17 +533,6 @@ function is_readable_file( $file=FALSE, $types=FALSE ) {
    }
   }
   return FALSE;
-}
-
-/**
- * is_readable_php_file() - Tests if is a file exist, is readable, and is PHP
- *
- * @param string $file The name of the file to test
- *
- * @return boolean
- */
-function is_readable_php_file( $file=FALSE ) {
-  return is_readable_file($file);
 }
 
 /**

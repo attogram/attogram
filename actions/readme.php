@@ -1,19 +1,28 @@
 <?php
 // Attogram - action - readme
 
+namespace Attogram;
+
 $title = 'Attogram - Readme';
 include($this->templates_dir . '/header.php');
+
 print '<div class="container">';
 
 $file = 'README.md';
-if( is_file($file) && is_readable($file) ) {
-  if( class_exists('Parsedown') ) {
-    print Parsedown::instance()->text( file_get_contents($file) );
+
+if( is_readable_file($file, $ext=array('.md') ) ) {
+  $page = @file_get_contents($file);
+  if( $page === FALSE ) {
+      print 'Error: can not get file: ' . $file;
   } else {
-    print 'Error: can not find parser';
+    if( class_exists('Parsedown') ) {
+      print \Parsedown::instance()->text( $page );
+    } else {
+      print 'Error: can not find parser';
+    }    
   }
 } else {
-  print 'Error: can not read ' . $file;
+  print 'Error: can not read file: ' . $file;
 }
 
 print '</div>';
