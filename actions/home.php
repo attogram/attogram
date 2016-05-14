@@ -12,14 +12,16 @@ ul, ol {
 }
 </style>
 
-<div class="jumbotron">
- <div class="container text-center">
+<div class="jumbotron text-center">
+
   <h1>Attogram Framework</h1>
-  <p>
-    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-    giving developers a jumpstart to quickly create web sites
-  </p>
- </div>
+
+  <p>giving developers a jumpstart to quickly create web sites</p>
+  
+  <p><a href="https://github.com/attogram/attogram"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub</a></p>
+
+  <p><a href="https://github.com/attogram/attogram/archive/master.zip"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!</a></p>
+
 </div>
 
 <div class="container">
@@ -51,15 +53,10 @@ ul, ol {
     </div>
 
     <div class="col-sm-6">
-      <p>Attogram runs on PHP with Apache.  It includes URL routing, an IP-protected backend, a user system,
-      a SQLite database with web admin, a Markdown parser, jQuery and Bootstrap.
-      After that, Attogram tries to stay out of your way while you do your thing!</p>
-
-      <p><a href="https://github.com/attogram/attogram"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub</a></p>
-      
-      <p><a href="https://github.com/attogram/attogram/archive/master.zip"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!</a></p>
-
-
+      <p>Attogram runs on <b>PHP</b> with <b>Apache</b>.</p> 
+      <p>It provides <b>URL routing</b>, an IP-protected <b>backend</b>, a <b>user system</b>,
+      a <b>SQLite</b> database with web admin, a <b>Markdown</b> parser, <b>jQuery</b> and <b>Bootstrap</b>.</p>
+      <p>After that, Attogram tries to stay out of your way while you <b>do your thing</b>!</p>
     </div>
   </div>
 
