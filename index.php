@@ -12,8 +12,8 @@ Dual licensed: MIT License or GNU General Public License V3
 
 namespace Attogram;
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
 
 $attogram = new attogram();
 
@@ -53,7 +53,7 @@ class attogram {
    */
   function load_config( $config_file='' ) {
     if( !is_readable_file($config_file) ) {
-      $this->error[] = 'LOAD_CONFIG: config file not found';
+      //$this->error[] = 'LOAD_CONFIG: config file not found';
     } else {
       include_once($config_file);
     }
@@ -75,8 +75,8 @@ class attogram {
    * set_config() - set a system configuration variable
    *
    * @param string $var_name
-   * @param string $config_val 
-   * @param string $default_val 
+   * @param string $config_val
+   * @param string $default_val
    *
    * @return void
    */
@@ -110,7 +110,7 @@ class attogram {
   function trim_uri() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     //$this->error[] = 'TRIM_URI: URI:' . print_r($this->uri,1);
-    
+
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
     //$this->error[] = 'TRIM_URI: path: ' . $this->path;
 
@@ -147,9 +147,9 @@ class attogram {
     // todo: force trailing slash
     // todo: RESERVED WORDS: exceptions for existing attogram directories
     // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
-    
+
     $this->trim_uri();
-  
+
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->error[] = 'ROUTE: Invalid URI';
       $this->error404();
@@ -165,14 +165,10 @@ class attogram {
         $actions = array_merge($actions, $this->get_admin_actions());
     }
 
-    if( // The Homepage
-     $this->uri[0] == ''
-    //    ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
-    // || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='')  // sublevel: host/dir/
-    ) {
+    if( $this->uri[0] == '' ) { // The Homepage
       $this->uri[0] = 'home';
     }
-    
+
     if( isset($actions[$this->uri[0]]) ) {
 
       switch( $actions[$this->uri[0]]['parser'] ) {
@@ -204,7 +200,7 @@ class attogram {
 
     $this->error[] = 'ACTION: Action not found';
     $this->error404();
-          
+
   } // end function route()
 
   /**
@@ -227,7 +223,7 @@ class attogram {
           print \Parsedown::instance()->text( $page );
         } else {
           print 'Error: can not find parser';
-        }    
+        }
       }
     } else {
       print 'Error: can not read file: ' . $file;
@@ -250,7 +246,7 @@ class attogram {
       header('HTTP/1.0 404 Not Found');
       print '404 Not Found';
       print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
-      
+
     }
     exit;
   }
@@ -307,9 +303,9 @@ class attogram {
 
       if( is_readable_file($file, '.php') ) { // php files only
         $this->actions[ str_replace('.php','',$f) ] = array(
-          'file'=>$file, 
+          'file'=>$file,
           'url'=>$this->path . "/$f",
-          'parser'=>'php' 
+          'parser'=>'php'
         );
       }
 
@@ -317,7 +313,7 @@ class attogram {
         $this->actions[ str_replace('.md','',$f) ] = array(
           'file'=>$file,
           'url'=>$this->path . "/$f",
-          'parser'=>'md' 
+          'parser'=>'md'
         );
       }
 
@@ -349,17 +345,17 @@ class attogram {
         $this->admin_actions[ str_replace('.php','',$f) ] = array(
           'file'=>$file,
           'url'=>$this->path . "/$f",
-          'parser'=>'php' 
+          'parser'=>'php'
         );
       }
-      
+
       if( is_readable_file($file, '.md') ) { // Markdown files only
         $this->admin_actions[ str_replace('.md','',$f) ] = array(
           'file'=>$file,
           'url'=>$this->path . "/$f",
-          'parser'=>'md' 
+          'parser'=>'md'
         );
-      }        
+      }
 
     }
 
@@ -670,7 +666,7 @@ function is_readable_dir( $dir=FALSE ) {
 }
 
 /**
- * is_readable_file() - Tests if is a file exist, is readable, 
+ * is_readable_file() - Tests if is a file exist, is readable,
                         and is of a certain type.
  *
  * @param string $file The name of the file to test
