@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram Framework
-Version 0.2.8
+Version 0.2.9
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -31,7 +31,7 @@ class attogram {
    * @return void
    */
   function __construct() {
-    $this->version = '0.2.8';
+    $this->version = '0.2.9';
     $this->load_config('config.php');
     $this->sessioning();
     $this->get_functions();
@@ -74,7 +74,7 @@ class attogram {
     }
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
-    $this->set_config( 'default_action', @$config['default_action'], 'home' );
+    $this->set_config( 'default_action', @$config['default_action'], 'home.php' );
     $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions' );
     $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
     $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
@@ -115,7 +115,7 @@ class attogram {
     if( $this->path == '' ) { // top level install
       $this->error[] = 'TRIM_URI: top level install';
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
-        $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
+        $this->action = $this->actions_dir . '/' . $this->default_action;
         //$this->error[] = 'TRIM_URI: default action: ' . $this->action;
         return;
       } else {
@@ -156,7 +156,7 @@ class attogram {
         ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
-      $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
+      $this->action = $this->actions_dir . '/' . $this->default_action;
       //$this->error[] = 'ROUTE: OK: default action: ' . $this->action;
       return;
     }
