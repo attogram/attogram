@@ -58,7 +58,7 @@ class attogram {
       include_once($config_file);
     }
     if( !isset($config) || !is_array($config) ) {
-      $this->error[] = 'LOAD_CONFIG: $config array not found';
+      //$this->error[] = 'LOAD_CONFIG: $config array not found';
     }
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
@@ -220,7 +220,7 @@ class attogram {
           $this->error[] = 'DO_MARKDOWN: can not get file';
       } else {
         if( class_exists('Parsedown') ) {
-          $title = trim( strtok($page, "\n") );
+          $title = trim( strtok($page, "\n") ); // get first line of file, use as page title
           $content = \Parsedown::instance()->text( $page );
         } else {
           $this->error[] = 'DO_MARKDOWN: can not find parser';
