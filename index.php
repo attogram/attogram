@@ -6,7 +6,7 @@ Version 0.2.8
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
-Dual licensed: MIT License and/or GNU General Public License V3
+Dual licensed: MIT License or GNU General Public License V3
 
 ******************************************************************* */
 
@@ -14,7 +14,9 @@ namespace Attogram;
 
 $attogram = new attogram();
 
-//////////////////////////////////////////////////////////////////////
+/**
+ * Attogram class
+ */
 class attogram {
 
   public $version, $path, $uri, $fof, $error,
@@ -23,7 +25,11 @@ class attogram {
          $actions_dir, $default_action, $actions, $action,
          $admins, $admin_dir, $admin_actions;
 
-  ////////////////////////////////////////////////////////////////////
+  /**
+   * __construct() - startup Attogram!
+   *
+   * @return void
+   */
   function __construct() {
     $this->version = '0.2.8';
     $this->load_config('config.php');
@@ -36,8 +42,12 @@ class attogram {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function sessioning() {
+  /**
+   * sessioning() - start the session, logoff if requested
+   *
+   * @return void
+   */
+   function sessioning() {
     session_start();
     if( isset($_GET['logoff']) ) {
       $_SESSION = array();
@@ -46,7 +56,13 @@ class attogram {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////
+  /**
+   * load_config() - load the system configuration file
+   *
+   * @param string $config_file
+   *
+   * @return void
+   */
   function load_config( $config_file='' ) {
     if( !is_readable_file($config_file) ) {
       $this->error[] = 'LOAD_CONFIG: config file not found';
@@ -67,8 +83,16 @@ class attogram {
     $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function set_config( $var_name, $config_val='', $default_val ) {
+  /**
+   * set_config() - set a system configuration variable
+   *
+   * @param string $var_name
+   * @param string $config_val 
+   * @param string $default_val 
+   *
+   * @return void
+   */
+   function set_config( $var_name, $config_val='', $default_val ) {
     if( $config_val ) {
       $this->{$var_name} = $config_val;
     } else {
@@ -76,8 +100,12 @@ class attogram {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function trim_uri() {
+  /**
+   * trim_uri() - set $this->uri array with attogram install directory as top
+   *
+   * @return void
+   */
+   function trim_uri() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     //$this->error[] = 'TRIM_URI: URI:' . print_r($this->uri,1);
     
@@ -105,7 +133,12 @@ class attogram {
     }
     //$this->error[] = 'TRIM_URI: trimmed URI:' . print_r($this->uri,1);
   }
-  ////////////////////////////////////////////////////////////////////
+
+  /**
+   * route() - decide what action to take based on URI request
+   *
+   * @return void
+   */
   function route() {
 
     // todo: force trailing slash
@@ -146,8 +179,12 @@ class attogram {
     //$this->error[] = 'ROUTE: OK: action: ' . $this->action;
 }
 
-  ////////////////////////////////////////////////////////////////////
-  function action() {
+  /**
+   * action() - include the file specified by the current action
+   *
+   * @return boolean
+   */
+   function action() {
     if( !isset($this->action) || !$this->action ) {
       $this->error[] = 'ACTION: action undefined';
       return FALSE;
@@ -164,8 +201,12 @@ class attogram {
     return TRUE;
   }
 
-  ////////////////////////////////////////////////////////////////////
-  function error404() {
+  /**
+   * error404() - display a 404 error page to user and exit
+   *
+   * @return void
+   */
+   function error404() {
     if( is_readable_file($this->fof) ) {
       include($this->fof);
     } else {
@@ -179,8 +220,12 @@ class attogram {
     exit;
   }
 
-  //////////////////////////////////////////////////////////////////////
-  function get_actions() {
+  /**
+   * get_actions() - create list of all pages from the actions directory
+   *
+   * @return void
+   */
+   function get_actions() {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
@@ -196,7 +241,11 @@ class attogram {
     return $this->actions;
   }
 
-  //////////////////////////////////////////////////////////////////////
+  /**
+   * get_admin_actions() - create list of all admin pages from the admin directory
+   *
+   * @return void
+   */
   function get_admin_actions() {
     if( !$this->is_admin() ) {
       return FALSE;
@@ -216,7 +265,11 @@ class attogram {
     return $this->admin_actions;
   }
 
-  //////////////////////////////////////////////////////////////////////
+  /**
+   * get_functions() - include all PHP files in from the functions directory
+   *
+   * @return void
+   */
   function get_functions() {
     if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
       return FALSE;
@@ -305,8 +358,10 @@ class attogram {
 
 
 
-//////////////////////////////////////////////////////////////////////
-class sqlite_database {
+/**
+ * sqlite_database class
+ */
+ class sqlite_database {
 
   public $db_name, $db, $tables_directory, $tables, $error;
 
@@ -513,24 +568,23 @@ function is_readable_dir( $dir=FALSE ) {
 }
 
 /**
- * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type or types
+ * is_readable_file() - Tests if is a file exist, is readable, 
+                        and is of a certain type.
  *
  * @param string $file The name of the file to test
- * @param array $types Optional.  Array of file extensions to allow. Defaults to '.php'
+ * @param string $type Optional. The file extension to allow. Defaults to '.php'
  *
  * @return boolean
  */
-function is_readable_file( $file=FALSE, $types=FALSE ) {
+function is_readable_file( $file=FALSE, $type='.php' ) {
   if( !$file || !is_file($file) || !is_readable($file) ) {
     return FALSE;
   }
-  if( !is_array($types) ) {
-    $types = array('.php'); // default to PHP files only
+  if( !$type || $type == '' || !is_string($type) ) { // error
+    return FALSE;
   }
-  foreach( $types as $type) {
-    if( preg_match('/' . $type . '$/',$file) ) {
+  if( preg_match('/' . $type . '$/',$file) ) {
     return TRUE;
-   }
   }
   return FALSE;
 }
