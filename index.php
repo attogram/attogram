@@ -12,6 +12,9 @@ Dual licensed: MIT License or GNU General Public License V3
 
 namespace Attogram;
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 $attogram = new attogram();
 
 /**
@@ -38,23 +41,7 @@ class attogram {
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
-    if( !$this->action() ) {
-      $this->error404();
-    }
-  }
-
-  /**
-   * sessioning() - start the session, logoff if requested
-   *
-   * @return void
-   */
-  function sessioning() {
-    session_start();
-    if( isset($_GET['logoff']) ) {
-      $_SESSION = array();
-      session_destroy();
-      session_start();
-    }
+    exit;
   }
 
   /**
@@ -102,6 +89,20 @@ class attogram {
   }
 
   /**
+   * sessioning() - start the session, logoff if requested
+   *
+   * @return void
+   */
+  function sessioning() {
+    session_start();
+    if( isset($_GET['logoff']) ) {
+      $_SESSION = array();
+      session_destroy();
+      session_start();
+    }
+  }
+
+  /**
    * trim_uri() - set $this->uri array with attogram install directory as top
    *
    * @return void
@@ -142,6 +143,7 @@ class attogram {
    */
   function route() {
 
+    // todo: fix subpath checks
     // todo: force trailing slash
     // todo: RESERVED WORDS: exceptions for existing attogram directories
     // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
@@ -153,16 +155,7 @@ class attogram {
       $this->error404();
     }
 
-    if( // The Homepage
-        ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
-     || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
-    {
-      $this->action = $this->actions_dir . '/' . $this->default_action;
-      //$this->error[] = 'ROUTE: OK: default action: ' . $this->action;
-      return;
-    }
-
-    if( isset($this->uri[2]) /*|| (isset($this->uri[1]) && !isset($this->uri[2])) */ ) { // if has subpath
+    if( isset($this->uri[2]) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
@@ -172,21 +165,46 @@ class attogram {
         $actions = array_merge($actions, $this->get_admin_actions());
     }
 
+    if( // The Homepage
+     $this->uri[0] == ''
+    //    ($this->uri[0] == '' && !isset($this->uri[1])) //  top level: host/
+    // || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='')  // sublevel: host/dir/
+    ) {
+      $this->uri[0] = 'home';
+    }
+    
     if( isset($actions[$this->uri[0]]) ) {
+
       switch( $actions[$this->uri[0]]['parser'] ) {
+
         case 'php':
           $this->action = $actions[$this->uri[0]]['file'];
+          if( !is_file($this->action) ) {
+            $this->error[] = 'ROUTE: Missing action';
+            $this->error404();
+          }
+          if( !is_readable($this->action) ) {
+            $this->error[] = 'ROUTE: Unreadable action';
+            $this->error404();
+          }
+          include($this->action);
           return;
+
         case 'md':
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
-          exit;
+          return;
+
         default:
-          $this->error[] = 'No Parser Found';
+          $this->error[] = 'ACTION: No Parser Found';
           $this->error404();
           break;
+
       } // end switch on parser
     } //end if action set
 
+    $this->error[] = 'ACTION: Action not found';
+    $this->error404();
+          
   } // end function route()
 
   /**
@@ -217,28 +235,6 @@ class attogram {
     print '</div>';
     include($this->templates_dir . '/footer.php');
     exit;
-  }
-
-  /**
-   * action() - include the file specified by the current action
-   *
-   * @return boolean
-   */
-  function action() {
-    if( !isset($this->action) || !$this->action ) {
-      $this->error[] = 'ACTION: action undefined';
-      return FALSE;
-    }
-    if( !is_file($this->action) ) {
-      $this->error[] = 'ACTION: Missing action: ' . htmlspecialchars($this->action);
-      return FALSE;
-    }
-    if( !is_readable($this->action) ) {
-      $this->error[] = 'ACTION:  Unreadable action: ' . htmlspecialchars($this->action);
-      return FALSE;
-    }
-    include($this->action);
-    return TRUE;
   }
 
   /**
