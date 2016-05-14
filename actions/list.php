@@ -22,7 +22,8 @@ foreach( $lists as $list ) {
   print '</ol>';
 }
 
+if( $this->is_admin() ) { print ' (<a href="../lists/">List Admin</a>)'; }
+
 print '</div>';
 
-if( $this->is_admin() ) { print ' (<a href="../lists/">List Admin</a>)'; }
 include($this->templates_dir . '/footer.php');

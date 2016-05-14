@@ -4,7 +4,7 @@
 $title = 'Attogram - Admin - DB setup';
 include($this->templates_dir . '/header.php');
 ?>
-<div class="body">
+<div class="container">
 Config: <a href="./">Database Tables</a>
 <ul>
 <li><a href="./?create">Create Attogram Tables</a>

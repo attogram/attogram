@@ -25,23 +25,15 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function __construct() {
-
     $this->version = '0.2.8';
-
     $this->load_config('config.php');
-
     $this->sessioning();
-
     $this->get_functions();
-
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
-
     $this->route();
-
     if( !$this->action() ) {
       $this->error404();
     }
-
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -56,17 +48,14 @@ class attogram {
 
   ////////////////////////////////////////////////////////////////////
   function load_config( $config_file='' ) {
-
     if( !is_readable_php_file($config_file) ) {
       $this->error[] = 'LOAD_CONFIG: config file not found';
     } else {
       include_once($config_file);
     }
-
     if( !isset($config) || !is_array($config) ) {
       $this->error[] = 'LOAD_CONFIG: $config array not found';
     }
-
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
     $this->set_config( 'default_action', @$config['default_action'], 'home' );
@@ -76,7 +65,6 @@ class attogram {
     $this->set_config( 'fof',            @$config['fof'],            'templates/404.php' );
     $this->set_config( 'db_name',        @$config['db_name'],        'db/global' );
     $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
-
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -89,33 +77,44 @@ class attogram {
   }
 
   ////////////////////////////////////////////////////////////////////
-  function route() {
-
-    // todo: force trailing slash
-    // todo: RESERVED WORDS: exceptions for existing attogram directories
-    // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
-    
-    
+  function trim_uri() {
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    //$this->error[] = 'TRIM_URI: URI:' . print_r($this->uri,1);
+    
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
+    //$this->error[] = 'TRIM_URI: path: ' . $this->path;
 
     if( $this->path == '' ) { // top level install
+      $this->error[] = 'TRIM_URI: top level install';
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
         $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
+        //$this->error[] = 'TRIM_URI: default action: ' . $this->action;
         return;
       } else {
         $trash = array_shift($this->uri);
       }
     } else { // sub level install
+      //$this->error[] = 'TRIM_URI: sub level install';
       for( $i = 0; $i < sizeof($this->uri); $i++ ) {
+        //$this->error[] = 'TRIM_URI: loop uri[' . $i . '] = ' . $this->uri[$i] . ' -- uri: ' . print_r($this->uri,1);
         if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) {
           break; // found our level
         }
         $trash = array_shift($this->uri);
       }
     }
+    //$this->error[] = 'TRIM_URI: trimmed URI:' . print_r($this->uri,1);
+  }
+  ////////////////////////////////////////////////////////////////////
+  function route() {
 
-    if( !$this->uri || !is_array($this->uri) ) {
+    // todo: force trailing slash
+    // todo: RESERVED WORDS: exceptions for existing attogram directories
+    // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
+    
+    $this->trim_uri();
+  
+    if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->error[] = 'ROUTE: Invalid URI';
       $this->error404();
     }
@@ -125,6 +124,7 @@ class attogram {
      || ($this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1]=='') ) // sublevel: host/dir/
     {
       $this->action = $this->actions_dir . '/' . $this->default_action . '.php';
+      //$this->error[] = 'ROUTE: OK: default action: ' . $this->action;
       return;
     }
 
@@ -143,6 +143,7 @@ class attogram {
     }
 
     $this->action = $this->actions_dir . '/' . $this->uri[0] . '.php';
+    //$this->error[] = 'ROUTE: OK: action: ' . $this->action;
 }
 
   ////////////////////////////////////////////////////////////////////
@@ -188,10 +189,9 @@ class attogram {
       return $this->actions;
     }
     foreach( array_diff(scandir($this->actions_dir), array('.','..','.htaccess','home.php')) as $f ) {
-      if( !is_readable_php_file($this->actions_dir . "/$f") ) {
-        continue; // php files only
+      if( is_readable_php_file($this->actions_dir . "/$f") ) { // php files only
+        $this->actions[] = str_replace('.php','',$f); 
       }
-      $this->actions[] = str_replace('.php','',$f);
     }
     return $this->actions;
   }
@@ -209,10 +209,9 @@ class attogram {
       return $this->admin_actions;
     }
     foreach( array_diff(scandir($this->admin_dir), array('.','..','.htaccess')) as $f ) {
-      if( !is_readable_php_file($this->admin_dir . "/$f") ) {
-        continue; // php files only
+      if( is_readable_php_file($this->admin_dir . "/$f") ) { // php files only
+        $this->admin_actions[] = str_replace('.php','',$f); 
       }
-      $this->admin_actions[] = str_replace('.php','',$f);
     }
     return $this->admin_actions;
   }

@@ -4,7 +4,7 @@
 $title = 'Attogram - Admin - lists';
 include($this->templates_dir . '/header.php');
 ?>
-<div class="body">
+<div class="container">
 <?php
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';

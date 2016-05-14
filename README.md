@@ -28,6 +28,7 @@ Setup: Install
 
 Setup: Database
 ==============
+* Make sure ./db/ directory is writeable by the web server (especially on unix systems)
 * load the homepage, goto admin action 'database-setup', click 'Create Attogram Tables'
 * load the homepage, goto admin action 'database-phpLiteAdmin', login as 'attogram'
 

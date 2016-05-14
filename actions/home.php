@@ -51,9 +51,9 @@ ul, ol {
     </div>
 
     <div class="col-sm-6">
-      <p>Attogram uses PHP with Apache2.  It includes URL routing, an IP-protected backend, a user system,
-      an integrated SQLite database with web administration, a Markdown parser, jQuery and Bootstrap.
-      After that, Attogram tries to stay out of your way while you build what you want.</p>
+      <p>Attogram runs on PHP with Apache.  It includes URL routing, an IP-protected backend, a user system,
+      a SQLite database with web admin, a Markdown parser, jQuery and Bootstrap.
+      After that, Attogram tries to stay out of your way while you do your thing!</p>
 
       <p><a href="https://github.com/attogram/attogram"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub</a></p>
       

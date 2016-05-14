@@ -4,7 +4,7 @@
 $title = 'Attogram - Admin - Messages';
 include($this->templates_dir . '/header.php');
 ?>
-<div class="body">
+<div class="container">
 <?php
 
 $sql = 'SELECT * FROM contact ORDER BY id DESC';

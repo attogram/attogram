@@ -6,7 +6,7 @@ namespace Attogram;
 $title = 'Attogram - Admin - Info';
 include($this->templates_dir . '/header.php');
 
-print '<div class="body"><div class="center">
+print '<div class=""><div class="center">
 <table><tr class="h"><td><h1 class="p">Attogram Framework Version '
 . $this->version . '</h1></td></tr></table><table>';
 
