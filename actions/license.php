@@ -1,7 +1,7 @@
 <?php
 // Attogram - action - license
-$title = 'Attogram - License';
-include($this->templates_dir . '/header.php');
+
+$this->page_header('Attogram - License');
 ?>
 <div class="container">
 <p>The Attogram Framework is an open source project.</p>
@@ -758,5 +758,4 @@ Public License instead of this License.  But first, please read
 </ul>
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
-
+$this->page_footer();

@@ -1,8 +1,7 @@
 <?php
 // Attogram - action - admin - messages
 
-$title = 'Attogram - Admin - Messages';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Admin - Messages');
 ?>
 <div class="container">
 <?php
@@ -26,4 +25,4 @@ foreach( $m as $message ) {
 ?>
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

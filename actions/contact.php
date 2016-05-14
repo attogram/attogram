@@ -1,7 +1,7 @@
 <?php
 // Attogram - action - contact
-$title = 'Attogram - Contact';
-include($this->templates_dir . '/header.php');
+
+$this->page_header('Attogram - Contact');
 
 if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
@@ -51,4 +51,4 @@ Contact us:
 </form>
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

@@ -3,8 +3,7 @@
 
 namespace Attogram;
 
-$title = 'Attogram - Readme';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - README');
 
 print '<div class="container">';
 
@@ -26,4 +25,4 @@ if( is_readable_file($file, '.md' ) ) {
 }
 
 print '</div>';
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

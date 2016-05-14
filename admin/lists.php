@@ -1,8 +1,7 @@
 <?php
 // Attogram - action - admin - lists
 
-$title = 'Attogram - Admin - lists';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Admin - Lists');
 ?>
 <div class="container">
 <?php
@@ -35,4 +34,4 @@ print '</ul>';
 ?>
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

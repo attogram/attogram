@@ -215,8 +215,8 @@ class attogram {
    * @return void
    */
   function do_markdown( $file ) {
-    $title = 'Attogram - Markdown';
-    include($this->templates_dir . '/header.php');
+    // todo - get title from first line of file
+    $this->page_header('Attogram - Markdown');
     print '<div class="container">';
     if( is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
@@ -233,7 +233,7 @@ class attogram {
       print 'Error: can not read file: ' . $file;
     }
     print '</div>';
-    include($this->templates_dir . '/footer.php');
+    $this->page_footer();
     exit;
   }
 
@@ -254,6 +254,38 @@ class attogram {
       }
     }
     exit;
+  }
+
+  /**
+   * page_header() - the web page header
+   *
+   * @param string $title The web page title
+   *
+   * @return void
+   */
+  function page_header( $title='' ) {
+    $file = $this->templates_dir . '/header.php';
+    if( is_readable_file($file,'php') ) {
+      include($file);
+      return;
+    }
+    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>' . $title . '</title></head><body>';  // simple default header
+  }
+
+  /**
+   * page_header() - the web page footer
+   *
+   * @return void
+   */
+  function page_footer() {
+    $file = $this->templates_dir . '/footer.php';
+    if( is_readable_file($file,'php') ) {
+      include($file);
+      return;
+    }
+    print '</html></body>'; // simple default footer
   }
 
   /**

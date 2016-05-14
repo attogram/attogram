@@ -3,7 +3,7 @@
 
 namespace Attogram;
 
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram Framework');
 
 ?>
 
@@ -58,4 +58,4 @@ include($this->templates_dir . '/header.php');
 </div>
 
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

@@ -9,7 +9,7 @@ if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
   $message = 'Login failed';
 }
 
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Login');
 ?>
 <div class="container">
 <?php if( $message ) { print "<pre>$message</pre>"; } ?>
@@ -22,4 +22,4 @@ include($this->templates_dir . '/header.php');
 
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

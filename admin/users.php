@@ -1,8 +1,7 @@
 <?php
 // Attogram - action - admin - users
 
-$title = 'Attogram - Admin - Users';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Admin - Users');
 
 $users = $this->sqlite_database->query('SELECT * FROM user ORDER BY id');
 
@@ -33,4 +32,4 @@ foreach($users as $u) {
 }
 print '</table></div>';
 
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

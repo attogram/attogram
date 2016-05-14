@@ -2,7 +2,7 @@
 // Attogram - action - admin
 
 $title = 'Attogram - Admin - DB setup';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Admin - DB setup');
 ?>
 <div class="container">
 Config: <a href="./">Database Tables</a>
@@ -28,4 +28,4 @@ if( isset($_GET['create']) ) {
 ?>
 </div>
 <?php
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

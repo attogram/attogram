@@ -922,7 +922,7 @@ if ($auth->isAuthorized())
 //- HTML: output starts here
 header('Content-Type: text/html; charset=utf-8');
 
-include($this->templates_dir . '/header.php'); /* Attogram */ 
+$this->page_header('Attogram - User'); /* Attogram */ 
 
 //<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 //<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -4140,9 +4140,9 @@ echo "</td></tr></table>";
 $db->close(); //close the database
 
 //Attogram
-include($this->templates_dir . '/footer.php');
-echo "</body>";
-echo "</html>";
+$this->page_footer();
+//echo "</body>";
+//echo "</html>";
 
 //- End of main code
 

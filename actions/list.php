@@ -1,8 +1,7 @@
 <?php
 // Attogram - action - list
 
-$title = 'Attogram - List';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - List');
 
 print '<div class="container">';
 
@@ -26,4 +25,4 @@ if( $this->is_admin() ) { print '<p>(<a href="../lists/">List Admin</a>)</p>'; }
 
 print '</div>';
 
-include($this->templates_dir . '/footer.php');
+$this->page_footer();

@@ -3,8 +3,7 @@
 
 namespace Attogram;
 
-$title = 'Attogram - Admin - Info';
-include($this->templates_dir . '/header.php');
+$this->page_header('Attogram - Admin - Info');
 
 print '<div class=""><div class="center">
 <table><tr class="h"><td><h1 class="p">Attogram Framework Version '
@@ -29,4 +28,4 @@ print '</table>';
 
 phpinfo();
 
-include($this->templates_dir . '/footer.php');
+$this->page_footer();
