@@ -12,8 +12,8 @@ Dual licensed: MIT License or GNU General Public License V3
 
 namespace Attogram;
 
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 $attogram = new attogram();
 
@@ -211,24 +211,27 @@ class attogram {
    * @return void
    */
   function do_markdown( $file ) {
-    // todo - get title from first line of file
-    $this->page_header('Attogram - Markdown');
-    print '<div class="container">';
+
+    $title = $content = '';
+
     if( is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
       if( $page === FALSE ) {
-          print 'Error: can not get file: ' . $file;
+          $this->error[] = 'DO_MARKDOWN: can not get file';
       } else {
         if( class_exists('Parsedown') ) {
-          print \Parsedown::instance()->text( $page );
+          $title = trim( strtok($page, "\n") );
+          $content = \Parsedown::instance()->text( $page );
         } else {
-          print 'Error: can not find parser';
+          $this->error[] = 'DO_MARKDOWN: can not find parser';
         }
       }
     } else {
-      print 'Error: can not read file: ' . $file;
+      $this->error[] = 'DO_MARKDOWN: can not read file';
     }
-    print '</div>';
+
+    $this->page_header($title);
+    print '<div class="container">' . $content . '</div>';
     $this->page_footer();
     exit;
   }
