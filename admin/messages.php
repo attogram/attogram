@@ -13,8 +13,8 @@ print '<b>' . count($m) . '</b> <a href="">Messages</a><hr />';
 
 foreach( $m as $message ) {
   print 'ID: ' . $message['id']
-  . ' <a target="_db" href="../database-phpLiteAdmin/?table=contact&action=row_editordelete&pk=[' . $message['id'] . ']&type=edit">edit</a>'
-  . ' <a target="_db" href="../database-phpLiteAdmin/?table=contact&action=row_editordelete&pk=[' . $message['id'] . ']&type=delete">delete</a>'
+  . ' <a target="_db" href="../db-admin/?table=contact&action=row_editordelete&pk=[' . $message['id'] . ']&type=edit">edit</a>'
+  . ' <a target="_db" href="../db-admin/?table=contact&action=row_editordelete&pk=[' . $message['id'] . ']&type=delete">delete</a>'
   . '<br />IP: ' . $message['ip']
   . '<br />Time: ' . $message['time']
   . '<br />Agent: ' . htmlentities($message['agent'])

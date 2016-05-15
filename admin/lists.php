@@ -9,7 +9,7 @@ $this->page_header('Attogram - Admin - Lists');
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
 $lists = $this->sqlite_database->query($sql);
 print '<b>' . count($lists) . '</b> <a href="">Lists</a>';
-print ' &nbsp; - &nbsp; <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_create">Create New Item</a></p>';
+print ' &nbsp; - &nbsp; <a target="_db" href="../db-admin/?table=list&action=row_create">Create New Item</a></p>';
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
 $items = $this->sqlite_database->query($sql);
@@ -21,8 +21,8 @@ foreach( $lists as $list ) {
     if( $item['list'] != $list['list'] ) { continue; }
     print '<li><b>' .  $item['item'] . '</b>'
     . ' &nbsp; - &nbsp; ('
-    . ' <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=edit">edit</a>'
-    . ' <a target="_db" href="../database-phpLiteAdmin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=delete">delete</a>'
+    . ' <a target="_db" href="../db-admin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=edit">edit</a>'
+    . ' <a target="_db" href="../db-admin/?table=list&action=row_editordelete&pk=[' . $item['id'] . ']&type=delete">delete</a>'
     . ' ID:' . $item['id']
     . ' order:' . $item['ordering']
     . ')';
