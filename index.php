@@ -153,6 +153,11 @@ class attogram {
       exit;
     }
 
+    if( $this->uri[0] == 'robots.txt' && !isset($this->uri[1]) ) {
+      $this->do_robots_txt();
+      exit;
+    }
+    
     if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
@@ -240,11 +245,7 @@ class attogram {
    * @return void
    */
   function do_sitemap() {
-    $scheme = 'http';
-    if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ) {
-      $scheme .= 's'; // is secure
-    }
-    $site = $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path . '/';
+    $site = $this->get_site_url() . '/';
     $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
     $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
@@ -253,11 +254,36 @@ class attogram {
       $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
     }
     $sitemap .= '</urlset>';
-    header ("Content-Type:text/xml");
+    header ('Content-Type:text/xml');
     print $sitemap;
     exit;
   }
 
+  /**
+   * do_robots_txt() - generate and print a robots.txt file
+   *
+   * @return void
+   */
+  function do_robots_txt() {
+
+    header('Content-Type: text/plain');
+    print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
+    exit;
+  }
+    
+   /**
+   * get_site_url() 
+   *
+   * @return string
+   */   
+  function get_site_url() {
+    $scheme = 'http';
+    if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ) {
+      $scheme .= 's'; // is secure
+    }
+    return $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path; 
+  }
+  
   /**
    * error404() - display a 404 error page to user and exit
    *
