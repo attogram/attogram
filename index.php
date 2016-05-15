@@ -148,12 +148,12 @@ class attogram {
       $this->error404();
     }
 
-    if( $this->uri[0] == 'sitemap.xml' ) {
+    if( $this->uri[0] == 'sitemap.xml' && !isset($this->uri[1]) ) {
       $this->do_sitemap();
       exit;
     }
 
-    if( isset($this->uri[2]) ) { // if has subpath
+    if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
