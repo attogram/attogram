@@ -361,16 +361,16 @@ class attogram {
 
       if( is_readable_file($file, '.php') ) { // php files only
         $this->actions[ str_replace('.php','',$f) ] = array(
+          'action'=>str_replace('.php','',$f),
           'file'=>$file,
-          'url'=>$this->path . "/$f",
           'parser'=>'php'
         );
       }
 
       if( is_readable_file($file, '.md') ) { // Markdown files only
         $this->actions[ str_replace('.md','',$f) ] = array(
+          'action'=>str_replace('.md','',$f),
           'file'=>$file,
-          'url'=>$this->path . "/$f",
           'parser'=>'md'
         );
       }
@@ -401,16 +401,16 @@ class attogram {
 
       if( is_readable_file($file, '.php') ) { // php files only
         $this->admin_actions[ str_replace('.php','',$f) ] = array(
+          'action'=>str_replace('.php','',$f),
           'file'=>$file,
-          'url'=>$this->path . "/$f",
           'parser'=>'php'
         );
       }
 
       if( is_readable_file($file, '.md') ) { // Markdown files only
         $this->admin_actions[ str_replace('.md','',$f) ] = array(
+          'action'=>str_replace('.md','',$f),
           'file'=>$file,
-          'url'=>$this->path . "/$f",
           'parser'=>'md'
         );
       }
@@ -755,9 +755,10 @@ function is_readable_file( $file=FALSE, $type='.php' ) {
 function to_list( $x, $sep=', ') {
   if( is_array($x) ) {
     $r = '';
-    foreach($x as $v) {
+    foreach($x as $n => $v) {
       if( !is_object($v) && !is_array($v) ) {
-        $r .= $v . $sep;
+        if( $v == '' ) { $v = '<code>empty</code>'; }
+        $r .= $n . ': ' . $v . $sep;
       } else {
         $r .= to_list($v) . $sep;
       }

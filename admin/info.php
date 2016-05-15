@@ -5,27 +5,50 @@ namespace Attogram;
 
 $this->page_header('Attogram - Admin - Info');
 
-print '<div class=""><div class="center">
-<table><tr class="h"><td><h1 class="p">Attogram Framework Version '
-. $this->version . '</h1></td></tr></table><table>';
+$info = array();
+$info['version'] = $this->version;
+$info['path'] = $this->path;
+$info['uri'] = '<li>' . to_list($this->uri,'<li>'); 
+$info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
+$info['action'] = $this->action;
 
-$info = get_object_vars($this);
+$info['actions_dir'] = $this->actions_dir;
+$info['default_action'] = $this->default_action;
+$info['actions'] = '<li>' . to_list($this->actions, '<li>');
 
-foreach($info as $key => $var) {
-  print '<tr><td class="e">' . $key . ' </td><td class="v">' . to_list($var) . '</td></tr>';
+$info['admin_dir'] = $this->admin_dir;
+$info['admin_actions'] = '<li>' . to_list($this->admin_actions, '<li>');
+$info['admins'] = '<li>' . to_list($this->admins, '<li>');
+
+$info['fof'] = $this->fof;
+$info['templates_dir '] = $this->templates_dir ;
+$info['functions_dir'] = $this->functions_dir;
+$info['skip_files'] = '<li>' . to_list($this->skip_files, '<li>');
+
+$info['db_name'] = $this->db_name;
+$info['tables_dir'] = $this->tables_dir;
+$info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : 'NULL') . ' bytes';
+$info['sqlite_database'] = get_class($this->sqlite_database);
+
+$info['attogram_id'] = htmlentities(@$_SESSION['attogram_id']);
+$info['attogram_username'] = htmlentities(@$_SESSION['attogram_username']);
+$info['attogram_level'] = htmlentities(@$_SESSION['attogram_level']);
+$info['attogram_email'] = htmlentities(@$_SESSION['attogram_email']);
+
+
+print '
+<div class="container">
+  <h1>Attogram Framework Info</h1>
+  <table class="table">
+';
+
+foreach( $info as $name => $value ) {
+  print '<tr><td>' . $name . '</td><td>' . $value . '</td></tr>';
+  
 }
 
-print '<tr><td class="e">Database size </td><td class="v">'
-. (file_exists($this->sqlite_database->db_name) ? filesize($this->sqlite_database->db_name) : 'NULL') . ' bytes</td></tr>';
+print '</table></div>';
 
-
-print '<tr><td class="e">attogram_id </td><td class="v">' . htmlentities(@$_SESSION['attogram_id']) . '</td></tr>';
-print '<tr><td class="e">attogram_username </td><td class="v">' . htmlentities(@$_SESSION['attogram_username']) . '</td></tr>';
-print '<tr><td class="e">attogram_level </td><td class="v">' . htmlentities(@$_SESSION['attogram_level']) . '</td></tr>';
-print '<tr><td class="e">attogram_email </td><td class="v">' . htmlentities(@$_SESSION['attogram_email']) . '</td></tr>';
-
-print '</table>';
-
-phpinfo();
+//phpinfo();
 
 $this->page_footer();
