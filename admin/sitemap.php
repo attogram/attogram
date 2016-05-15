@@ -8,6 +8,7 @@ $sitemap = '<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 $site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $this->path . '/';
+$sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
 
 foreach( array_keys($this->get_actions()) as $action ){
   $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
