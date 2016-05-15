@@ -361,7 +361,6 @@ class attogram {
 
       if( is_readable_file($file, '.php') ) { // php files only
         $this->actions[ str_replace('.php','',$f) ] = array(
-          'action'=>str_replace('.php','',$f),
           'file'=>$file,
           'parser'=>'php'
         );
@@ -369,7 +368,6 @@ class attogram {
 
       if( is_readable_file($file, '.md') ) { // Markdown files only
         $this->actions[ str_replace('.md','',$f) ] = array(
-          'action'=>str_replace('.md','',$f),
           'file'=>$file,
           'parser'=>'md'
         );
@@ -401,7 +399,6 @@ class attogram {
 
       if( is_readable_file($file, '.php') ) { // php files only
         $this->admin_actions[ str_replace('.php','',$f) ] = array(
-          'action'=>str_replace('.php','',$f),
           'file'=>$file,
           'parser'=>'php'
         );
@@ -409,7 +406,6 @@ class attogram {
 
       if( is_readable_file($file, '.md') ) { // Markdown files only
         $this->admin_actions[ str_replace('.md','',$f) ] = array(
-          'action'=>str_replace('.md','',$f),
           'file'=>$file,
           'parser'=>'md'
         );
