@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram Framework
-Version 0.3.4
+Version 0.3.5
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -34,7 +34,7 @@ class attogram {
    * @return void
    */
   function __construct() {
-    $this->version = '0.3.4';
+    $this->version = '0.3.5';
     $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
