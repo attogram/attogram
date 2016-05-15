@@ -39,8 +39,7 @@
       </ul>
 
       <?php if( $this->is_admin() ) {  ?>
-            <ul class="nav navbar-nav navbar-right">
-
+      <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -50,8 +49,7 @@
           } ?>
           </ul>
         </li>
-              </ul>
-
+      </ul>
       <?php } ?>
 
     </div><!--/.nav-collapse -->
