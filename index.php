@@ -240,7 +240,11 @@ class attogram {
    * @return void
    */
   function do_sitemap() {
-    $site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $this->path . '/';
+    $scheme = 'http';
+    if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ) {
+      $scheme .= 's'; // is secure
+    }
+    $site = $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path . '/';
     $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
     $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
