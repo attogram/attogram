@@ -7,8 +7,9 @@ Attogram Framework
 
 Documentation
 =============
-* [Attogram README](actions/README.md)
+* [About Attogram](actions/about.md)
 
 More Info
 =========
-* https://github.com/attogram/attogram
+* Demo: http://getitdaily.com/attogram/
+* Open Source: https://github.com/attogram/attogram
