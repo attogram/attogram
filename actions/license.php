@@ -5,7 +5,7 @@ $this->page_header('Attogram - License');
 ?>
 <div class="container">
 <p>The Attogram Framework is an open source project.</p>
-<p>It is dual licensed under
+<p>Attogram is dual licensed under
 <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the
 <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>, at your choosing.</p>
 <p>The Attogram distribution includes <a href="#other">other open source projects</a>.</p>

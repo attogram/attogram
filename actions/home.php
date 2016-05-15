@@ -24,9 +24,21 @@ $this->page_header('Attogram Framework');
 </div>
 
 <div class="container">
-  <p>Attogram runs on <strong>PHP</strong> with <strong>Apache</strong>.</p>
-  <p>It provides <strong>URL routing</strong>, an IP-protected <strong>backend</strong>, a <strong>user system</strong>, a <strong>SQLite</strong> database with web admin, a <strong>Markdown</strong> parser, <strong>jQuery</strong> and <strong>Bootstrap</strong>.</p>
+  <p>Attogram runs on <strong><a href="http://php.net/">PHP</a></strong> with <strong><a href="https://httpd.apache.org/">Apache</a></strong>.  
+  It provides developers a starting point with:</p>
+  <ul>
+  <li>auto file-based <strong>URL routing</strong></li>
+  <li>IP-protected <strong>backend</strong></li>
+  <li>simple <strong>user system</strong></li>
+  <li>integrated <strong><a href="http://sqlite.org/">SQLite</a></strong> database with <a href="https://www.phpliteadmin.org/"><strong>phpLiteAdmin</strong></a></li>
+  <li><strong><a href="http://parsedown.org/">Markdown parser</a></strong>
+  <li><strong><a href="http://jquery.com/">jQuery</a></strong> and <strong><a href="http://getbootstrap.com/">Bootstrap</a></strong></li>
+  </ul>
   <p>After that, Attogram tries to stay out of your way while you <strong>do your thing</strong>!</p>
+  <p>Attogram is <a href="license/">Dual Licensed</a> under the <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the
+<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.
+
+  </p>
 </div>
 
 <?php
