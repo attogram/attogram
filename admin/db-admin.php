@@ -1055,7 +1055,7 @@ else // the database array is empty, offer to create a new database
 			echo '<br />'.$lang['add_allowed_extension'];
 			echo "</div><br/>";
 		}			
-		echo "<fieldset style='margin:15px;'><legend><b>".$lang['db_create']."</b></legend>";
+		echo "<fieldset style='margin:15px;'><legend><strong>".$lang['db_create']."</strong></legend>";
 		echo "<form name='create_database' method='post' action='".PAGE."'>";
 		echo "<input type='text' name='new_dbname' style='width:150px;'/> <input type='submit' value='".$lang['create']."' class='btn'/>";
 		echo "</form>";
@@ -1616,7 +1616,7 @@ echo "<a href='".PROJECT_URL."' target='_blank'>".$lang['proj_site']."</a>";
 echo "</div>";
 
 //- HTML: database list
-echo "<fieldset style='margin:15px;'><legend><b>".$lang['db_ch']."</b></legend>";
+echo "<fieldset style='margin:15px;'><legend><strong>".$lang['db_ch']."</strong></legend>";
 if(sizeof($databases)<10) //if there aren't a lot of databases, just show them as a list of links instead of drop down menu
 {
 	$i=0;
@@ -1679,7 +1679,7 @@ echo "</fieldset>";
 //- HTML: form to create a new database
 if($directory!==false && is_writable($directory))
 {
-	echo "<fieldset style='margin:15px;'><legend><b>".$lang['db_create']."</b> ".helpLink($lang['help2'])."</legend>"; 
+	echo "<fieldset style='margin:15px;'><legend><strong>".$lang['db_create']."</strong> ".helpLink($lang['help2'])."</legend>"; 
 	echo "<form name='create_database' method='post' action='".PAGE."'>";
 	echo "<input type='text' name='new_dbname' style='width:150px;'/> <input type='submit' value='".$lang['create']."' class='btn'/>";
 	echo "</form>";
@@ -1935,7 +1935,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 						$queryTimer->stop();
 
 						echo "<div class='confirm'>";
-						echo "<b>";
+						echo "<strong>";
 						
 						if($result !== NULL)
 						{
@@ -1949,11 +1949,11 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 								echo $db->getAffectedRows()." ".$lang['rows_aff']." ";
 							}
 							printf($lang['query_time'], $queryTimer);
-							echo "</b><br/>";
+							echo "</strong><br/>";
 						}
 						else
 						{
-							echo $lang['err'].": ".$db->getError()."</b><br/>";
+							echo $lang['err'].": ".$db->getError()."</strong><br/>";
 						}
 						
 						echo "<span style='font-size:11px;'>".htmlencode($query[$i])."</span>";
@@ -2000,11 +2000,11 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			}
 
 			echo "<fieldset>";
-			echo "<legend><b>".sprintf($lang['run_sql'],htmlencode($db->getName()))."</b></legend>";
+			echo "<legend><strong>".sprintf($lang['run_sql'],htmlencode($db->getName()))."</strong></legend>";
 			echo "<form action='?table=".urlencode($target_table)."&amp;action=table_sql' method='post'>";
 			if(isset($_SESSION['query_history']) && sizeof($_SESSION['query_history'])>0)
 			{
-				echo "<b>".$lang['recent_queries']."</b><ul>";
+				echo "<strong>".$lang['recent_queries']."</strong><ul>";
 				foreach($_SESSION['query_history'] as $key => $value)
 					echo "<li><a onclick='document.getElementById(\"queryval\").value = this.textContent' href='#'>".htmlencode($value)."</a></li>";
 				echo "</ul><br/><br/>";
@@ -2067,13 +2067,13 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 		//- Export table (=table_export)
 		case "table_export":
 			echo "<form method='post' action='".PAGE."'>";
-			echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><b>".$lang['export']."</b></legend>";
+			echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><strong>".$lang['export']."</strong></legend>";
 			echo "<input type='hidden' value='".htmlencode($target_table)."' name='single_table'/>";
 			echo "<label><input type='radio' name='export_type' checked='checked' value='sql' onclick='toggleExports(\"sql\");'/> ".$lang['sql']."</label>";
 			echo "<br/><label><input type='radio' name='export_type' value='csv' onclick='toggleExports(\"csv\");'/> ".$lang['csv']."</label>";
 			echo "</fieldset>";
 			
-			echo "<fieldset style='float:left; max-width:350px;' id='exportoptions_sql'><legend><b>".$lang['options']."</b></legend>";
+			echo "<fieldset style='float:left; max-width:350px;' id='exportoptions_sql'><legend><strong>".$lang['options']."</strong></legend>";
 			echo "<label><input type='checkbox' checked='checked' name='structure'/> ".$lang['export_struct']."</label> ".helpLink($lang['help5'])."<br/>";
 			echo "<label><input type='checkbox' checked='checked' name='data'/> ".$lang['export_data']."</label> ".helpLink($lang['help6'])."<br/>"; 
 			echo "<label><input type='checkbox' name='drop'/> ".$lang['add_drop']."</label> ".helpLink($lang['help7'])."<br/>"; 
@@ -2081,7 +2081,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			echo "<label><input type='checkbox' checked='checked' name='comments'/> ".$lang['comments']."</label> ".helpLink($lang['help9'])."<br/>"; 
 			echo "</fieldset>";
 			
-			echo "<fieldset style='float:left; max-width:350px; display:none;' id='exportoptions_csv'><legend><b>".$lang['options']."</b></legend>";
+			echo "<fieldset style='float:left; max-width:350px; display:none;' id='exportoptions_csv'><legend><strong>".$lang['options']."</strong></legend>";
 			echo "<div style='float:left;'>".$lang['fld_terminated']."</div>";
 			echo "<input type='text' value=';' name='export_csv_fieldsterminated' style='float:right;'/>";
 			echo "<div style='clear:both;'></div>";
@@ -2100,7 +2100,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			
 			echo "<div style='clear:both;'></div>";
 			echo "<br/><br/>";
-			echo "<fieldset><legend><b>".$lang['save_as']."</b></legend>";
+			echo "<fieldset><legend><strong>".$lang['save_as']."</strong></legend>";
 			$file = pathinfo($db->getPath());
 			$name = $file['filename'];
 			echo "<input type='text' name='filename' value='".htmlencode($name)."_".htmlencode($target_table)."_".date("Y-m-d").".dump' style='width:400px;'/> <input type='submit' name='export' value='".$lang['export']."' class='btn'/>";
@@ -2121,16 +2121,16 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 				echo "</div><br/>";
 			}
 			echo "<form method='post' action='?table=".urlencode($target_table)."&amp;action=table_import' enctype='multipart/form-data'>";
-			echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><b>".$lang['import_into']." ".htmlencode($target_table)."</b></legend>";
+			echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><strong>".$lang['import_into']." ".htmlencode($target_table)."</strong></legend>";
 			echo "<label><input type='radio' name='import_type' checked='checked' value='sql' onclick='toggleImports(\"sql\");'/> ".$lang['sql']."</label>";
 			echo "<br/><label><input type='radio' name='import_type' value='csv' onclick='toggleImports(\"csv\");'/> ".$lang['csv']."</label>";
 			echo "</fieldset>";
 			
-			echo "<fieldset style='float:left; max-width:350px;' id='importoptions_sql'><legend><b>".$lang['options']."</b></legend>";
+			echo "<fieldset style='float:left; max-width:350px;' id='importoptions_sql'><legend><strong>".$lang['options']."</strong></legend>";
 			echo $lang['no_opt'];
 			echo "</fieldset>";
 			
-			echo "<fieldset style='float:left; max-width:350px; display:none;' id='importoptions_csv'><legend><b>".$lang['options']."</b></legend>";
+			echo "<fieldset style='float:left; max-width:350px; display:none;' id='importoptions_csv'><legend><strong>".$lang['options']."</strong></legend>";
 			echo "<input type='hidden' value='".htmlencode($target_table)."' name='single_table'/>";
 			echo "<div style='float:left;'>".$lang['fld_terminated']."</div>";
 			echo "<input type='text' value=';' name='import_csv_fieldsterminated' style='float:right;'/>";
@@ -2150,7 +2150,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			echo "<div style='clear:both;'></div>";
 			echo "<br/><br/>";
 			
-			echo "<fieldset><legend><b>".$lang['import_f']."</b></legend>";
+			echo "<fieldset><legend><strong>".$lang['import_f']."</strong></legend>";
 			echo "<input type='file' value='".$lang['choose_f']."' name='file' style='background-color:transparent; border-style:none;'/> <input type='submit' value='".$lang['import']."' name='import' class='btn'/>";
 			echo "</fieldset>";
 			break;
@@ -2222,17 +2222,17 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 				$queryTimer->stop();
 
 				echo "<div class='confirm'>";
-				echo "<b>";
+				echo "<strong>";
 				if($arr!==false)
 				{
 					$affected = sizeof($arr);
 					echo $lang['showing']." ".$affected." ".$lang['rows'].". ";
 					printf($lang['query_time'], $queryTimer);
-					echo "</b><br/>";
+					echo "</strong><br/>";
 				}
 				else
 				{
-					echo $lang['err'].": ".$db->getError().".</b><br/>".$lang['bug_report'].' '.PROJECT_BUGTRACKER_LINK.'<br/>';
+					echo $lang['err'].": ".$db->getError().".</strong><br/>".$lang['bug_report'].' '.PROJECT_BUGTRACKER_LINK.'<br/>';
 				}
 				echo "<span style='font-size:11px;'>".htmlencode($query_disp)."</span>";
 				echo "</div><br/>";
@@ -2252,7 +2252,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 						echo "<td colspan='2' class='tdheader' style='text-align:center'>";
 						#todo: make sure the search keywords are kept
 						#echo "<a href='?action=table_search&amp;done=1&amp;table=".$target_table."&amp;fulltexts=".($_SESSION[COOKIENAME.'fulltexts']?0:1)."' title='".$lang[($_SESSION[COOKIENAME.'fulltexts']?'no_full_texts':'full_texts')]."'>";
-						#echo "<b>&".($_SESSION[COOKIENAME.'fulltexts']?'r':'l')."arr;</b> T <b>&".($_SESSION[COOKIENAME.'fulltexts']?'l':'r')."arr;</b></a>";
+						#echo "<strong>&".($_SESSION[COOKIENAME.'fulltexts']?'r':'l')."arr;</strong> T <strong>&".($_SESSION[COOKIENAME.'fulltexts']?'l':'r')."arr;</strong></a>";
 						echo "</td>";
 					}
 					
@@ -2531,9 +2531,9 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			if(sizeof($arr)>0)
 			{
 				echo "<br/><div class='confirm'>";
-				echo "<b>".$lang['showing_rows']." ".$startRow." - ".($startRow + sizeof($arr)-1).", ".$lang['total'].": ".$rowCount." ";
+				echo "<strong>".$lang['showing_rows']." ".$startRow." - ".($startRow + sizeof($arr)-1).", ".$lang['total'].": ".$rowCount." ";
 				printf($lang['query_time'], $queryTimer);
-				echo "</b><br/>";
+				echo "</strong><br/>";
 				echo "<span style='font-size:11px;'>".htmlencode($queryDisp)."</span>";
 				echo "</div><br/>";
 				
@@ -2556,7 +2556,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 					{
 						echo "<td colspan='3' class='tdheader' style='text-align:center'>";
 						echo "<a href='?action=row_view&amp;table=".$target_table."&amp;fulltexts=".($_SESSION[COOKIENAME.'fulltexts']?0:1)."' title='".$lang[($_SESSION[COOKIENAME.'fulltexts']?'no_full_texts':'full_texts')]."'>";
-						echo "<b>&".($_SESSION[COOKIENAME.'fulltexts']?'r':'l')."arr;</b> T <b>&".($_SESSION[COOKIENAME.'fulltexts']?'l':'r')."arr;</b></a>";
+						echo "<strong>&".($_SESSION[COOKIENAME.'fulltexts']?'r':'l')."arr;</strong> T <strong>&".($_SESSION[COOKIENAME.'fulltexts']?'l':'r')."arr;</strong></a>";
 						echo "</td>";
 					}
 
@@ -2571,7 +2571,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 						echo "&amp;order=".$orderTag;
 						echo "'>".htmlencode($result[$i]['name'])."</a>";
 						if(isset($_SESSION[COOKIENAME.'sortRows']) && $_SESSION[COOKIENAME.'sortRows']==$result[$i]['name'])
-							echo (($_SESSION[COOKIENAME.'orderRows']=="ASC") ? " <b>&uarr;</b>" : " <b>&darr;</b>");
+							echo (($_SESSION[COOKIENAME.'orderRows']=="ASC") ? " <strong>&uarr;</strong>" : " <strong>&darr;</strong>");
 						echo "</td>";
 					}
 					echo "</tr>";
@@ -2753,7 +2753,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 					</script>
 					<div id="chart_div" style="float:left;"><?php echo $lang['no_chart']; ?></div>
 					<?php
-					echo "<fieldset style='float:right; text-align:center;' id='chartsettingsbox'><legend><b>Chart Settings</b></legend>";
+					echo "<fieldset style='float:right; text-align:center;' id='chartsettingsbox'><legend><strong>Chart Settings</strong></legend>";
 					echo "<form action='?action=row_view&amp;table=".urlencode($target_table)."' method='post'>";
 					echo $lang['chart_type'].": <select name='charttype'>";
 					echo "<option value='bar'";
@@ -3135,7 +3135,7 @@ if(isset($_GET['action']) && !isset($_GET['confirm']))
 			echo "<br/>";
 			echo "<br/>";
 			echo "<div class='confirm'>";
-			echo "<b>".$lang['query_used_'.$target_table_type]."</b><br/>";
+			echo "<strong>".$lang['query_used_'.$target_table_type]."</strong><br/>";
 			echo "<span style='font-size:11px;'>".htmlencode($master[0]['sql'])."</span>";
 			echo "</div>";
 			echo "<br/>";
@@ -3650,14 +3650,14 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 			echo "</div>";
 		}
 		
-		echo "<b>".$lang['db_name']."</b>: ".htmlencode($db->getName())."<br/>";
-		echo "<b>".$lang['db_path']."</b>: ".htmlencode($db->getPath())."<br/>";
-		echo "<b>".$lang['db_size']."</b>: ".$db->getSize()." KB<br/>";
-		echo "<b>".$lang['db_mod']."</b>: ".$db->getDate()."<br/>";
-		echo "<b>".$lang['sqlite_v']."</b>: ".$realVersion."<br/>";
-		echo "<b>".$lang['sqlite_ext']."</b> ".helpLink($lang['help1']).": ".$db->getType()."<br/>"; 
-		echo "<b>".$lang['php_v']."</b>: ".phpversion()."<br/>";
-		echo "<b>".PROJECT." ".$lang["ver"]."</b>: ".VERSION;
+		echo "<strong>".$lang['db_name']."</strong>: ".htmlencode($db->getName())."<br/>";
+		echo "<strong>".$lang['db_path']."</strong>: ".htmlencode($db->getPath())."<br/>";
+		echo "<strong>".$lang['db_size']."</strong>: ".$db->getSize()." KB<br/>";
+		echo "<strong>".$lang['db_mod']."</strong>: ".$db->getDate()."<br/>";
+		echo "<strong>".$lang['sqlite_v']."</strong>: ".$realVersion."<br/>";
+		echo "<strong>".$lang['sqlite_ext']."</strong> ".helpLink($lang['help1']).": ".$db->getType()."<br/>"; 
+		echo "<strong>".$lang['php_v']."</strong>: ".phpversion()."<br/>";
+		echo "<strong>".PROJECT." ".$lang["ver"]."</strong>: ".VERSION;
 		echo " <a href='".PROJECT_URL."' target='_blank' id='oldVersion' style='display: none;' class='warning'>".$lang['new_version']."</a><br/><br/>";
 		echo "<script type='text/javascript'>checkVersion('".VERSION."','".VERSION_CHECK_URL."');</script>";
 		
@@ -3693,7 +3693,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 			echo "&amp;order=".$orderTag;
 			echo "'>".$lang['type']."</a> ".helpLink($lang['help3']); 
 			if(isset($_SESSION[COOKIENAME.'sortTables']) && $_SESSION[COOKIENAME.'sortTables']=="type")
-				echo (($_SESSION[COOKIENAME.'orderTables']=="ASC") ? " <b>&uarr;</b>" : " <b>&darr;</b>");
+				echo (($_SESSION[COOKIENAME.'orderTables']=="ASC") ? " <strong>&uarr;</strong>" : " <strong>&darr;</strong>");
 			echo "</td>";
 			
 			echo "<td class='tdheader'>";
@@ -3705,7 +3705,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 			echo "&amp;order=".$orderTag;
 			echo "'>".$lang['name']."</a>";
 			if(isset($_SESSION[COOKIENAME.'sortTables']) && $_SESSION[COOKIENAME.'sortTables']=="name")
-				echo (($_SESSION[COOKIENAME.'orderTables']=="ASC") ? " <b>&uarr;</b>" : " <b>&darr;</b>");
+				echo (($_SESSION[COOKIENAME.'orderTables']=="ASC") ? " <strong>&uarr;</strong>" : " <strong>&darr;</strong>");
 			echo "</td>";
 			
 			echo "<td class='tdheader' colspan='10'>".$lang['act']."</td>";
@@ -3826,7 +3826,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 				echo "<div class='confirm' style='margin-bottom:20px;'>".sprintf($lang["counting_skipped"],"<a href='?forceCount=1'>","</a>")."</div>";
 		}
 		echo "<fieldset>";
-		echo "<legend><b>".$lang['create_tbl_db']." '".htmlencode($db->getName())."'</b></legend>";
+		echo "<legend><strong>".$lang['create_tbl_db']." '".htmlencode($db->getName())."'</strong></legend>";
 		echo "<form action='?action=table_create' method='post'>";
 		echo $lang['name'].": <input type='text' name='tablename' style='width:200px;'/> ";
 		echo $lang['fld_num'].": <input type='text' name='tablefields' style='width:90px;'/> ";
@@ -3835,7 +3835,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		echo "</fieldset>";
 		echo "<br/>";
 		echo "<fieldset>";
-		echo "<legend><b>".$lang['create_view']." '".htmlencode($db->getName())."'</b></legend>";
+		echo "<legend><strong>".$lang['create_view']." '".htmlencode($db->getName())."'</strong></legend>";
 		echo "<form action='?action=view_create&amp;confirm=1' method='post'>";
 		echo $lang['name'].": <input type='text' name='viewname' style='width:200px;'/> ";
 		echo $lang['sel_state']." ".helpLink($lang['help4']).": <input type='text' name='select' style='width:400px;'/> "; 
@@ -3871,7 +3871,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 					$queryTimer->stop();
 
 					echo "<div class='confirm'>";
-					echo "<b>";
+					echo "<strong>";
 					
 					if($result !== NULL)
 					{
@@ -3885,11 +3885,11 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 							echo $db->getAffectedRows()." ".$lang['rows_aff']." ";
 						}
 						printf($lang['query_time'], $queryTimer);
-						echo "</b><br/>";
+						echo "</strong><br/>";
 					}
 					else
 					{
-						echo $lang['err'].": ".$db->getError()."</b><br/>";
+						echo $lang['err'].": ".$db->getError()."</strong><br/>";
 					}
 					echo "<span style='font-size:11px;'>".htmlencode($query[$i])."</span>";
 					echo "</div><br/>";
@@ -3935,11 +3935,11 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		}
 
 		echo "<fieldset>";
-		echo "<legend><b>".sprintf($lang['run_sql'],htmlencode($db->getName()))."</b></legend>";
+		echo "<legend><strong>".sprintf($lang['run_sql'],htmlencode($db->getName()))."</strong></legend>";
 		echo "<form action='?view=sql' method='post'>";
 		if(isset($_SESSION['query_history']) && sizeof($_SESSION['query_history'])>0)
 		{
-			echo "<b>".$lang['recent_queries']."</b><ul>";
+			echo "<strong>".$lang['recent_queries']."</strong><ul>";
 			foreach($_SESSION['query_history'] as $key => $value)
 			{
 				echo "<li><a onclick='document.getElementById(\"queryval\").value = this.textContent;' href='#'>".htmlencode($value)."</a></li>";
@@ -3973,7 +3973,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 	{
 		//- Export view (=export)
 		echo "<form method='post' action='?view=export'>";
-		echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><b>".$lang['export']."</b></legend>";
+		echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><strong>".$lang['export']."</strong></legend>";
 		echo "<select multiple='multiple' size='10' style='width:240px;' name='tables[]'>";
 		$query = "SELECT name FROM sqlite_master WHERE type='table' OR type='view' ORDER BY name";
 		$result = $db->selectArray($query);
@@ -3988,7 +3988,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		echo "<br/><label><input type='radio' name='export_type' value='csv' onclick='toggleExports(\"csv\");'/> ".$lang['csv']."</label>";
 		echo "</fieldset>";
 		
-		echo "<fieldset style='float:left; max-width:350px;' id='exportoptions_sql'><legend><b>".$lang['options']."</b></legend>";
+		echo "<fieldset style='float:left; max-width:350px;' id='exportoptions_sql'><legend><strong>".$lang['options']."</strong></legend>";
 		echo "<label><input type='checkbox' checked='checked' name='structure'/> ".$lang['export_struct']."</label> ".helpLink($lang['help5'])."<br/>"; 
 		echo "<label><input type='checkbox' checked='checked' name='data'/> ".$lang['export_data']."</label> ".helpLink($lang['help6'])."<br/>";
 		echo "<label><input type='checkbox' name='drop'/> ".$lang['add_drop']."</label> ".helpLink($lang['help7'])."<br/>"; 
@@ -3996,7 +3996,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		echo "<label><input type='checkbox' checked='checked' name='comments'/> ".$lang['comments']."</label> ".helpLink($lang['help9'])."<br/>"; 
 		echo "</fieldset>";
 		
-		echo "<fieldset style='float:left; max-width:350px; display:none;' id='exportoptions_csv'><legend><b>".$lang['options']."</b></legend>";
+		echo "<fieldset style='float:left; max-width:350px; display:none;' id='exportoptions_csv'><legend><strong>".$lang['options']."</strong></legend>";
 		echo "<div style='float:left;'>".$lang['fld_terminated']."</div>";
 		echo "<input type='text' value=';' name='export_csv_fieldsterminated' style='float:right;'/>";
 		echo "<div style='clear:both;'>";
@@ -4015,7 +4015,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		
 		echo "<div style='clear:both;'></div>";
 		echo "<br/><br/>";
-		echo "<fieldset><legend><b>".$lang['save_as']."</b></legend>";
+		echo "<fieldset><legend><strong>".$lang['save_as']."</strong></legend>";
 		$file = pathinfo($db->getPath());
 		$name = $file['filename'];
 		echo "<input type='text' name='filename' value='".htmlencode($name)."_".date("Y-m-d").".dump' style='width:400px;'/> <input type='submit' name='export' value='".$lang['export']."' class='btn'/>";
@@ -4037,16 +4037,16 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		}
 		
 		echo "<form method='post' action='?view=import' enctype='multipart/form-data'>";
-		echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><b>".$lang['import']."</b></legend>";
+		echo "<fieldset style='float:left; width:260px; margin-right:20px;'><legend><strong>".$lang['import']."</strong></legend>";
 		echo "<label><input type='radio' name='import_type' checked='checked' value='sql' onclick='toggleImports(\"sql\");'/> ".$lang['sql']."</label>";
 		echo "<br/><label><input type='radio' name='import_type' value='csv' onclick='toggleImports(\"csv\");'/> ".$lang['csv']."</label>";
 		echo "</fieldset>";
 		
-		echo "<fieldset style='float:left; max-width:350px;' id='importoptions_sql'><legend><b>".$lang['options']."</b></legend>";
+		echo "<fieldset style='float:left; max-width:350px;' id='importoptions_sql'><legend><strong>".$lang['options']."</strong></legend>";
 		echo $lang['no_opt'];
 		echo "</fieldset>";
 		
-		echo "<fieldset style='float:left; max-width:350px; display:none;' id='importoptions_csv'><legend><b>".$lang['options']."</b></legend>";
+		echo "<fieldset style='float:left; max-width:350px; display:none;' id='importoptions_csv'><legend><strong>".$lang['options']."</strong></legend>";
 		echo "<div style='float:left;'>".$lang['csv_tbl']."</div>";
 		echo "<select name='single_table' style='float:right;'>";
 		$query = "SELECT name FROM sqlite_master WHERE type='table' OR type='view' ORDER BY name";
@@ -4076,7 +4076,7 @@ if(!$target_table && !isset($_GET['confirm']) && (!isset($_GET['action']) || (is
 		echo "<div style='clear:both;'></div>";
 		echo "<br/><br/>";
 		
-		echo "<fieldset><legend><b>".$lang['import_f']."</b></legend>";
+		echo "<fieldset><legend><strong>".$lang['import_f']."</strong></legend>";
 		echo "<input type='file' value='".$lang['choose_f']."' name='file' style='background-color:transparent; border-style:none;'/> <input type='submit' value='".$lang['import']."' name='import' class='btn'/>";
 		echo "</fieldset>";
 	}
@@ -4364,10 +4364,10 @@ class Database
 		echo "<div class='confirm' style='margin:20px;'>";
 		printf($lang['db_setup'], $this->getPath());
 		echo ".<br/><br/><i>".$lang['chk_ext']."...<br/><br/>";
-		echo "<b>PDO</b>: ".($classPDO ? $lang['installed'] : $lang['not_installed'])."<br/>";
-		echo "<b>PDO SQLite Driver</b>: ".($PDOSqliteDriver ? $lang['installed'] : $lang['not_installed'])."<br/>";
-		echo "<b>SQLite3</b>: ".($classSQLite3 ? $lang['installed'] : $lang['not_installed'])."<br/>";
-		echo "<b>SQLiteDatabase</b>: ".($classSQLiteDatabase ? $lang['installed'] : $lang['not_installed'])."<br/>";
+		echo "<strong>PDO</strong>: ".($classPDO ? $lang['installed'] : $lang['not_installed'])."<br/>";
+		echo "<strong>PDO SQLite Driver</strong>: ".($PDOSqliteDriver ? $lang['installed'] : $lang['not_installed'])."<br/>";
+		echo "<strong>SQLite3</strong>: ".($classSQLite3 ? $lang['installed'] : $lang['not_installed'])."<br/>";
+		echo "<strong>SQLiteDatabase</strong>: ".($classSQLiteDatabase ? $lang['installed'] : $lang['not_installed'])."<br/>";
 		echo "<br/>...".$lang['done'].".</i><br/><br/>";
 		if(!$classPDO && !$classSQLite3 && !$classSQLiteDatabase)
 			printf($lang['sqlite_ext_support'], PROJECT);

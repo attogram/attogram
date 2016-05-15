@@ -16,7 +16,7 @@ if( isset($_GET['create']) ) {
     print '<pre>ERROR: no table definitions found</pre>';
   } else {
     foreach(array_keys( $this->sqlite_database->tables ) as $table) {
-      print "<br />Creating table <b>$table</b>: ";
+      print "<br />Creating table <strong>$table</strong>: ";
       if( $this->sqlite_database->create_table($table) ) {
         print 'OK';
       } else {

@@ -5,7 +5,7 @@ $this->page_header('Attogram - Admin - Users');
 
 $users = $this->sqlite_database->query('SELECT * FROM user ORDER BY id');
 
-print '<div class="container"><p><b>' . count($users) . '</b> <a href="">Users</a>';
+print '<div class="container"><p><strong>' . count($users) . '</strong> <a href="">Users</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../db-admin/?table=user&action=row_create">Create New User</a></p>';
 print '<table class="table table-bordered">
 <tr>

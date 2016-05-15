@@ -15,9 +15,9 @@ $this->page_header('Attogram Framework');
 </div>
 
 <div class="container">
-  <p>Attogram runs on <b>PHP</b> with <b>Apache</b>.</p>
-  <p>It provides <b>URL routing</b>, an IP-protected <b>backend</b>, a <b>user system</b>, a <b>SQLite</b> database with web admin, a <b>Markdown</b> parser, <b>jQuery</b> and <b>Bootstrap</b>.</p>
-  <p>After that, Attogram tries to stay out of your way while you <b>do your thing</b>!</p>
+  <p>Attogram runs on <strong>PHP</strong> with <strong>Apache</strong>.</p>
+  <p>It provides <strong>URL routing</strong>, an IP-protected <strong>backend</strong>, a <strong>user system</strong>, a <strong>SQLite</strong> database with web admin, a <strong>Markdown</strong> parser, <strong>jQuery</strong> and <strong>Bootstrap</strong>.</p>
+  <p>After that, Attogram tries to stay out of your way while you <strong>do your thing</strong>!</p>
 </div>
 
 <?php

@@ -14,7 +14,7 @@ $this->page_header('Attogram - License');
 <div class="container">
 <hr />
 <p>
-<b>Attogram Framework - MIT License</b>
+<strong>Attogram Framework - MIT License</strong>
 </p><p>
 Copyright (c) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
 </p><p>
@@ -41,7 +41,7 @@ THE SOFTWARE.
 <div class="container">
 <hr />
 <p>
-<b>Attogram Framework - GNU General Public License</b>
+<strong>Attogram Framework - GNU General Public License</strong>
 </p><p>
     Copyright (C) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
 </p><p>
