@@ -7,7 +7,7 @@ $this->page_header('Attogram - Admin - Info');
 
 $info = array();
 $info['version'] = $this->version;
-$info['path'] = $this->path;
+$info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = '<li>' . to_list($this->uri,'<li>'); 
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['action'] = $this->action;
