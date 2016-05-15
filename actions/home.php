@@ -8,10 +8,19 @@ $this->page_header('Attogram Framework');
 ?>
 
 <div class="jumbotron text-center">
+
   <h1>Attogram Framework</h1>
+
   <p>giving developers a jumpstart to quickly create web sites</p>
-  <p><a href="https://github.com/attogram/attogram"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub</a></p>
-  <p><a href="https://github.com/attogram/attogram/archive/master.zip"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!</a></p>
+
+  <a href="https://github.com/attogram/attogram"><button type="submit" class="btn btn-info">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub
+  </button></a>
+
+  <a href="https://github.com/attogram/attogram/archive/master.zip"><button type="submit" class="btn btn-info">
+    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!
+  </button></a>
+
 </div>
 
 <div class="container">
