@@ -139,13 +139,18 @@ class attogram {
     // todo: fix subpath checks
     // todo: force trailing slash
     // todo: RESERVED WORDS: exceptions for existing attogram directories
-    // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
+    //       $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
 
     $this->trim_uri();
 
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->error[] = 'ROUTE: Invalid URI';
       $this->error404();
+    }
+
+    if( $this->uri[0] == 'sitemap.xml' ) {
+      $this->do_sitemap();
+      exit;
     }
 
     if( isset($this->uri[2]) ) { // if has subpath
@@ -226,6 +231,26 @@ class attogram {
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
+    exit;
+  }
+
+  /**
+   * do_sitemap() - generate and print an XML sitemap
+   *
+   * @return void
+   */
+  function do_sitemap() {
+    $site = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $this->path . '/';
+    $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
+
+    foreach( array_keys($this->get_actions()) as $action ){
+      $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
+    }
+    $sitemap .= '</urlset>';
+    header ("Content-Type:text/xml");
+    print $sitemap;
     exit;
   }
 
