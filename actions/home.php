@@ -13,11 +13,11 @@ $this->page_header('Attogram Framework');
 
   <p>giving developers a jumpstart to quickly create web sites</p>
 
-  <a href="https://github.com/attogram/attogram" class="btn btn-primary btn-lg active" role="button">
+  <a href="https://github.com/attogram/attogram" class="btn btn-primary btn-lg active" role="button" style="margin-bottom:15px;">
     <span class="glyphicon glyphicon-search" aria-hidden="true"></span> View Attogram on GitHub
   </a>
   &nbsp;
-  <a href="https://github.com/attogram/attogram/archive/master.zip" class="btn btn-primary btn-lg active" role="button">
+  <a href="https://github.com/attogram/attogram/archive/master.zip" class="btn btn-primary btn-lg active" role="button" style="margin-bottom:15px;">
     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download Attogram Now!
   </a>
 

@@ -32,22 +32,26 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
 if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 
-
 ?>
 <div class="container">
-<form action="." method="POST">
-Contact us:
-<br />
-<br />Your Email: <input type="text" name="email" size="55" value="<?php
-  if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); }
-?>" />
-<br />
-<br />Your Message:
-<br /><textarea name="msg" rows="10" cols="70"></textarea>
-<br />
-<br /><input type="submit" value="          Send your message now          " />
-<br />
-<br />
+
+  <h3>Contact us</h3>
+
+  <form action="." method="POST">
+
+  <div class="form-group">
+    <label for="email">Your Email:</label>
+    <input class="form-control" type="text" name="email" size="55" value="<?php
+      if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); } ?>" />
+  </div>
+
+  <div class="form-group">
+    <label for="msg">Your Message:</label>
+    <textarea class="form-control" name="msg" rows="10" cols="70"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary"> Send your message now </button>
+
 </form>
 </div>
 <?php
