@@ -14,10 +14,10 @@ $info['action'] = $this->action;
 
 $info['actions_dir'] = $this->actions_dir;
 $info['default_action'] = $this->default_action;
-$info['actions'] = '<li>' . to_list($this->actions, '<li>');
+$info['actions'] = list_actions($this->actions);
 
 $info['admin_dir'] = $this->admin_dir;
-$info['admin_actions'] = '<li>' . to_list($this->admin_actions, '<li>');
+$info['admin_actions'] = list_actions($this->admin_actions);
 $info['admins'] = '<li>' . to_list($this->admins, '<li>');
 
 $info['fof'] = $this->fof;
@@ -52,3 +52,16 @@ print '</table></div>';
 //phpinfo();
 
 $this->page_footer();
+
+
+function list_actions( $actions ) {
+  $r = '';
+  foreach( array_keys($actions) as $a ) {
+    $r .= '<li><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
+      . ' - file:<strong>' . $actions[$a]['file'] . '</strong>'
+      . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
+  }
+  return $r;
+  return '<pre>' . print_r($actions,1) . '</pre>';
+
+}
