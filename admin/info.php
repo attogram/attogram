@@ -27,7 +27,7 @@ $info['skip_files'] = '<li>' . to_list($this->skip_files, '<li>');
 
 $info['db_name'] = $this->db_name;
 $info['tables_dir'] = $this->tables_dir;
-$info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : 'NULL') . ' bytes';
+$info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 $info['sqlite_database'] = get_class($this->sqlite_database);
 
 $info['attogram_id'] = htmlentities(@$_SESSION['attogram_id']);
