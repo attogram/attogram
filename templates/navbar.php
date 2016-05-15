@@ -38,6 +38,7 @@
           <?php
           print '<li><a href="' . $this->path . '/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> home</a></li>';
           foreach( array_keys($this->get_actions()) as $a ) {
+            if( $a == 'home' ) { continue; }
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
             if( $a == 'user' && !$this->is_logged_in() ) { continue; }
             if( $a == 'user' && $this->is_logged_in() ) {

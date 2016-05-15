@@ -28,6 +28,7 @@ $this->page_header('Attogram Framework');
       <ul>
       <?php
         foreach( array_keys($this->get_actions()) as $action ){
+          if( $action == 'home' ) { continue; }
           print '<li><a href="' . $action . '/">' . $action . '</a></li>';
         }
       ?>
