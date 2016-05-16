@@ -8,6 +8,10 @@
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram/
  */
 
+  // todo: force trailing slash
+  // todo: RESERVED WORDS: exceptions for existing attogram directories
+  // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
+
 namespace Attogram;
 
 error_reporting(E_ALL);
@@ -20,11 +24,11 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $version, $path, $uri, $fof, $error, $site_name,
-         $sqlite_database, $db_name, $tables_dir,
-         $templates_dir, $functions_dir, $skip_files,
-         $actions_dir, $default_action, $actions, $action,
-         $admins, $admin_dir, $admin_actions;
+  public $version, $path, $uri, $fof, $error, $site_name, $skip_files;
+  public $sqlite_database, $db_name, $tables_dir;
+  public $templates_dir, $functions_dir;
+  public $actions_dir, $default_action, $actions, $action;
+  public $admins, $admin_dir, $admin_actions;
 
   /**
    * __construct() - startup Attogram!
@@ -107,14 +111,10 @@ class attogram {
    * @return void
    */
   function trim_uri() {
-    //todo - fix  site//  site//// errors
-
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
-
     if( $this->path == '' ) { // top level install
-      if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
+      if( $this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1] == '' && !isset($this->uri[2]) ) { // homepage
         $this->action = $this->default_action;
         return;
       } else {
@@ -136,38 +136,25 @@ class attogram {
    * @return void
    */
   function route() {
-
-    // todo: force trailing slash
-    // todo: RESERVED WORDS: exceptions for existing attogram directories
-    //       $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
-
     $this->trim_uri();
-
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->error[] = 'ROUTE: Invalid URI';
       $this->error404();
     }
-
     $this->exception_files();
-
     if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
-
     $actions = $this->get_actions();
     if( $this->is_admin() ) {
         $actions = array_merge($actions, $this->get_admin_actions());
     }
-
     if( $this->uri[0] == '' ) { // The Homepage
       $this->uri[0] = 'home';
     }
-
     if( isset($actions[$this->uri[0]]) ) {
-
       switch( $actions[$this->uri[0]]['parser'] ) {
-
         case 'php':
           $this->action = $actions[$this->uri[0]]['file'];
           if( !is_file($this->action) ) {
@@ -180,22 +167,17 @@ class attogram {
           }
           include($this->action);
           return;
-
         case 'md':
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
           return;
-
         default:
           $this->error[] = 'ACTION: No Parser Found';
           $this->error404();
           break;
-
       } // end switch on parser
     } //end if action set
-
     $this->error[] = 'ACTION: Action not found';
     $this->error404();
-
   } // end function route()
 
   /**
@@ -252,15 +234,6 @@ class attogram {
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
     exit;
-  }
-
-  /**
-   * do_robots_txt() - generate and print a robots.txt file
-   *
-   * @return void
-   */
-  function do_robots_txt() {
-
   }
 
    /**
@@ -340,23 +313,18 @@ class attogram {
       return $this->actions;
     }
     foreach( array_diff(scandir($this->actions_dir), $this->skip_files) as $f ) {
-
       $file = $this->actions_dir . "/$f";
-
       if( is_readable_file($file, '.php') ) { // php files only
         $this->actions[ str_replace('.php','',$f) ] = array(
           'file'=>$file,
           'parser'=>'php'
         );
-      }
-
-      if( is_readable_file($file, '.md') ) { // Markdown files only
+      } elseif( is_readable_file($file, '.md') ) { // Markdown files only
         $this->actions[ str_replace('.md','',$f) ] = array(
           'file'=>$file,
           'parser'=>'md'
         );
       }
-
     }
     return $this->actions;
   }
@@ -378,25 +346,19 @@ class attogram {
       return $this->admin_actions;
     }
     foreach( array_diff(scandir($this->admin_dir), $this->skip_files) as $f ) {
-
       $file = $this->admin_dir . "/$f";
-
       if( is_readable_file($file, '.php') ) { // php files only
         $this->admin_actions[ str_replace('.php','',$f) ] = array(
           'file'=>$file,
           'parser'=>'php'
         );
-      }
-
-      if( is_readable_file($file, '.md') ) { // Markdown files only
+      } elseif( is_readable_file($file, '.md') ) { // Markdown files only
         $this->admin_actions[ str_replace('.md','',$f) ] = array(
           'file'=>$file,
           'parser'=>'md'
         );
       }
-
     }
-
     return $this->admin_actions;
   }
 
@@ -434,12 +396,10 @@ class attogram {
    * @return boolean
    */
   function login() {
-
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
       $this->error[] = 'LOGIN: Please enter username and password';
       return FALSE;
     }
-
     $user = $this->sqlite_database->query(
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
@@ -448,7 +408,6 @@ class attogram {
       $this->error[] = 'LOGIN: Login system offline';
       return FALSE;
     }
-
     if( !$user ) { // no user, or wrong password
       $this->error[] = 'LOGIN: Invalid login';
       return FALSE;
@@ -457,20 +416,17 @@ class attogram {
       $this->error[] = 'LOGIN: Invalid login';
       return FALSE;
     }
-
     $user = $user[0];
     $_SESSION['attogram_id'] = $user['id'];
     $_SESSION['attogram_username'] = $user['username'];
     $_SESSION['attogram_level'] = $user['level'];
     $_SESSION['attogram_email'] = $user['email'];
-
     if( !$this->sqlite_database->queryb(
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
       ) ) {
         $this->error[] = 'LOGIN: can not updated last login info';
     }
-
     return TRUE;
   }
 
@@ -480,10 +436,8 @@ class attogram {
    * @return boolean
    */
   function is_logged_in() {
-    if( isset($_SESSION['attogram_id'])
-     && $_SESSION['attogram_id']
-     && isset($_SESSION['attogram_username'])
-     && $_SESSION['attogram_username'] ) {
+    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id']
+     && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'] ) {
       return TRUE;
     }
     return FALSE;
@@ -520,34 +474,27 @@ class attogram {
    * @return boolean
    */
   function get_db() {
-
     if( is_object($this->db) && get_class($this->db) == 'PDO' ) {
       return TRUE; // if PDO database object already set
     }
-
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->error[] = 'GET_DB: SQLite PDO driver not found';
       return FALSE;
     }
-
     if( is_file( $this->db_name ) && !is_writeable( $this->db_name ) ) {
       $this->error[] = 'GET_DB: NOTICE: database file not writeable: ' . $this->db_name;
       // SELECT will work, UPDATE will not work
     }
-
     if( !is_file( $this->db_name ) ) {
       $this->error[] = 'GET_DB: NOTICE: creating database file: ' . $this->db_name;
     }
-
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
       $this->error[] = 'GET_DB: error opening database';
       return FALSE;
     }
-
     return TRUE; // got database, into $this->db
-
   }
 
   /**
