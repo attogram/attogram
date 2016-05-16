@@ -20,7 +20,7 @@
   ],  
   "support": {
     "docs": "http://getitdaily.com/attogram/"
-   }
+  },
   "keywords": [
     "framework",
     "php",
@@ -29,5 +29,5 @@
     "markdown",
     "jquery",
     "bootstrap"
-  ],
+  ]
 }
