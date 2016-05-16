@@ -22,7 +22,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $version, $path, $uri, $fof, $error,
+  public $version, $path, $uri, $fof, $error, $site_name,
          $sqlite_database, $db_name, $tables_dir,
          $templates_dir, $functions_dir, $skip_files,
          $actions_dir, $default_action, $actions, $action,
@@ -60,6 +60,7 @@ class attogram {
     if( !isset($config) || !is_array($config) ) {
       //$this->error[] = 'LOAD_CONFIG: $config array not found';
     }
+    $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . $this->version . '</small>' );
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
     $this->set_config( 'default_action', @$config['default_action'], 'home.php' );

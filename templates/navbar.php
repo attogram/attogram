@@ -14,7 +14,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php print $this->path; ?>/">Attogram <small>v<?php print $this->version; ?></small></a>
+      <a class="navbar-brand" href="<?php print $this->path; ?>/"><?php print $this->site_name; ?></a>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
