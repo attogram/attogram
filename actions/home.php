@@ -6,6 +6,7 @@ namespace Attogram;
 $this->page_header('Attogram Framework');
 
 ?>
+<div class="container">
 
 <div class="jumbotron text-center">
 
@@ -23,7 +24,7 @@ $this->page_header('Attogram Framework');
 
 </div>
 
-<div class="container">
+
   <p>Attogram runs on <strong><a href="http://php.net/">PHP</a></strong> with <strong><a href="https://httpd.apache.org/">Apache</a></strong>.  
   It provides developers a starting point with:</p>
   <ul>
