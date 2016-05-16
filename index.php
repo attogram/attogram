@@ -61,7 +61,7 @@ class attogram {
     $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . $this->version . '</small>' );
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
-    $this->set_config( 'default_action', @$config['default_action'], 'home.php' );
+    $this->set_config( 'default_action', @$config['default_action'], 'actions/home.php' );
     $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions' );
     $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
     $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
@@ -115,7 +115,7 @@ class attogram {
 
     if( $this->path == '' ) { // top level install
       if( $this->uri[0] == '' && $this->uri[1] == '' ) { // homepage
-        $this->action = $this->actions_dir . '/' . $this->default_action;
+        $this->action = $this->default_action;
         return;
       } else {
         $trash = array_shift($this->uri);
