@@ -10,11 +10,6 @@
   "keywords": [ 
     "framework", "php", "apache", "sqlite", "markdown", "jquery", "bootstrap"
   ],
-  "authors": {
-    "name": "Attogram Developers",
-    "homepage": "https://github.com/attogram/attogram",
-    "role": "Developer"
-  },
   "support": {
     "docs": "http://getitdaily.com/attogram/"
   }
