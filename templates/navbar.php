@@ -21,7 +21,6 @@
 
       <ul class="nav navbar-nav">
         <?php
-        
         foreach( array_keys($this->get_actions()) as $a ) {
             if( $a == 'home' ) { continue; }
             if( $a == 'login' && $this->is_logged_in() ) { continue; }
@@ -34,7 +33,7 @@
           }
           if( $this->is_logged_in() ) {
             print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
-          } 
+          }
        ?>
       </ul>
 

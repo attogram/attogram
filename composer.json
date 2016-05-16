@@ -4,7 +4,7 @@
   "type": "project",
   "homepage": "https://github.com/attogram/attogram",
   "license": [
-    "MIT", 
+    "MIT",
     "GPL-3.0+"
   ],
   "require": {
@@ -16,8 +16,8 @@
     {
       "name": "Attogram Developers",
       "homepage": "https://github.com/attogram/attogram"
-    } 
-  ],  
+    }
+  ],
   "support": {
     "docs": "http://getitdaily.com/attogram/"
   },

@@ -34,7 +34,7 @@ Setup: Install
 
 Setup: Database
 ==============
-* Make sure ./db/ directory is writeable by the web server 
+* Make sure ./db/ directory is writeable by the web server
 * load the homepage, goto admin action 'db-setup', click 'Create Attogram Tables'
 * load the homepage, goto admin action 'db-admin', login as 'attogram'
 
