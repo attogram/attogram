@@ -2,7 +2,7 @@
 /* *******************************************************************
 
 Attogram Framework
-Version 0.3.5
+Version 0.3.6
 
 Copyright (c) 2016 Attogram Developers
 https://github.com/attogram/attogram/
@@ -34,7 +34,7 @@ class attogram {
    * @return void
    */
   function __construct() {
-    $this->version = '0.3.5';
+    $this->version = '0.3.6';
     $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
@@ -109,6 +109,8 @@ class attogram {
    * @return void
    */
   function trim_uri() {
+    //todo - fix  site//  site//// errors
+    
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
