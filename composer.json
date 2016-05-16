@@ -3,16 +3,31 @@
   "description": "The Attogram Framework",
   "type": "project",
   "homepage": "https://github.com/attogram/attogram",
-  "license": [ "MIT", "GPL-3.0+" ],
-  "require": { "php": "^5.3.3 || ^7.0" },
-  "keywords": [ 
-    "framework", "php", "apache", "sqlite", "markdown", "jquery", "bootstrap"
+  "license": [
+    "MIT", 
+    "GPL-3.0+"
   ],
-  "authors": [ {
-            "name": "Attogram Developers",
-            "homepage": "https://github.com/attogram/attogram"
-  } ],  
+  "require": {
+    "php": "^5.3.3 || ^7.0",
+    "ext-pdo": "*",
+    "ext-pdo_sqlite": "*"
+  },
+  "authors": [
+    {
+      "name": "Attogram Developers",
+      "homepage": "https://github.com/attogram/attogram"
+    } 
+  ],  
   "support": {
     "docs": "http://getitdaily.com/attogram/"
-  }
+   }
+  "keywords": [
+    "framework",
+    "php",
+    "apache",
+    "sqlite",
+    "markdown",
+    "jquery",
+    "bootstrap"
+  ],
 }
