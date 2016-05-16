@@ -1,12 +1,20 @@
 Attogram Framework
 ==================
 
-* Attogram helps you quickly create websites.  It is highly extendable, 
-  providing a jumpstart for the intermediate to advanced PHP developer.
-  
-* Attogram is an opinionated framework.  It includes URL routing, 
-  an integrated SQLite database with web administration, 
-  a simple user system, and an IP protected backend.
+Attogram gives developers a jumpstart to quickly create web sites.
+
+Attogram runs on PHP with Apache. It provides developers a starting point with:
+
+* auto file-based URL routing
+* IP-protected backend
+* simple user system
+* integrated SQLite database with phpLiteAdmin
+* Markdown parser
+* jQuery and Bootstrap
+
+After that, Attogram tries to stay out of your way while you do your thing!
+
+Attogram is Dual Licensed under the The MIT License *or* the GNU General Public License, at your choosing.
 
 Quick specs
 ===========
@@ -21,16 +29,14 @@ Requirements
 Setup: Install
 ==============
 * Install into a web accessable directory
-* edit .htaccess, set FallbackResource to the full web path
-  to the index.php file in the install directory
-* copy config.sample.php to config.php
-* edit config.php  to change default configuration settings
+* edit .htaccess, set FallbackResource to the full web path to the index.php file in the install directory
+* (Optional) copy config.sample.php to config.php and edit to change default settings
 
 Setup: Database
 ==============
-* Make sure ./db/ directory is writeable by the web server (especially on unix systems)
-* load the homepage, goto admin action 'database-setup', click 'Create Attogram Tables'
-* load the homepage, goto admin action 'database-phpLiteAdmin', login as 'attogram'
+* Make sure ./db/ directory is writeable by the web server 
+* load the homepage, goto admin action 'db-setup', click 'Create Attogram Tables'
+* load the homepage, goto admin action 'db-admin', login as 'attogram'
 
 Setup: Users
 ============
@@ -40,16 +46,18 @@ Setup: Users
 
 Create a page
 =============
-* create a new php file in the ./actions/ directory, add anything you want!
+* create a new PHP or Markdown file in the ./actions/ directory, add anything you want!
 * reload the homepage to see a link to the new page
-* filenames must end in '.php'
-* for admin pages, filenames must start with 'admin-'
+* PHP files must end in '.php', Markdown files must end in '.md'
 * Attogram object is available via the $this variable
 
 Remove a page
 =============
-* delete the pages corresponding php file from the ./actions/ directory
+* delete the pages corresponding file from the ./actions/ directory
 
+Admin pages
+===========
+* create/delete the same as normal pages, but in the ./admin/ directory
 
 More Info
 =========
