@@ -1,14 +1,12 @@
 <?php
-/* *******************************************************************
-
-Attogram Framework
-Version 0.3.7
-
-Copyright (c) 2016 Attogram Developers
-https://github.com/attogram/attogram/
-Dual licensed: MIT License or GNU General Public License V3
-
-******************************************************************* */
+/**
+ * Attogram Framework
+ *
+ * @version 0.3.7
+ * @license MIT
+ * @license GPL
+ * @copyright 2016 Attogram Developers https://github.com/attogram/attogram/
+ */
 
 namespace Attogram;
 
@@ -110,7 +108,7 @@ class attogram {
    */
   function trim_uri() {
     //todo - fix  site//  site//// errors
-    
+
     $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
     $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
@@ -151,7 +149,7 @@ class attogram {
     }
 
     $this->exception_files();
-    
+
     if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
@@ -202,18 +200,28 @@ class attogram {
 
   /**
    * exception_files() - checks URI for exception files sitemap.xml, robots.txt
-   * 
+   *
    * @return void
    */
   function exception_files() {
     if( $this->uri[0] == 'sitemap.xml' && !isset($this->uri[1]) ) {
-      $this->do_sitemap();
+      $site = $this->get_site_url() . '/';
+      $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+      $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+      $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
+      foreach( array_keys($this->get_actions()) as $action ){
+        $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
+      }
+      $sitemap .= '</urlset>';
+      header ('Content-Type:text/xml');
+      print $sitemap;
       exit;
     }
     if( $this->uri[0] == 'robots.txt' && !isset($this->uri[1]) ) {
-      $this->do_robots_txt();
+      header('Content-Type: text/plain');
+      print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
       exit;
-    }  
+    }
   }
 
   /**
@@ -224,9 +232,7 @@ class attogram {
    * @return void
    */
   function do_markdown( $file ) {
-
     $title = $content = '';
-
     if( is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
       if( $page === FALSE ) {
@@ -242,30 +248,9 @@ class attogram {
     } else {
       $this->error[] = 'DO_MARKDOWN: can not read file';
     }
-
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
-    exit;
-  }
-
-  /**
-   * do_sitemap() - generate and print an XML sitemap
-   *
-   * @return void
-   */
-  function do_sitemap() {
-    $site = $this->get_site_url() . '/';
-    $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-    $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-    $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
-
-    foreach( array_keys($this->get_actions()) as $action ){
-      $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
-    }
-    $sitemap .= '</urlset>';
-    header ('Content-Type:text/xml');
-    print $sitemap;
     exit;
   }
 
@@ -276,24 +261,21 @@ class attogram {
    */
   function do_robots_txt() {
 
-    header('Content-Type: text/plain');
-    print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
-    exit;
   }
-    
+
    /**
-   * get_site_url() 
+   * get_site_url()
    *
    * @return string
-   */   
+   */
   function get_site_url() {
     $scheme = 'http';
     if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ) {
       $scheme .= 's'; // is secure
     }
-    return $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path; 
+    return $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path;
   }
-  
+
   /**
    * error404() - display a 404 error page to user and exit
    *
@@ -307,7 +289,6 @@ class attogram {
       header('HTTP/1.0 404 Not Found');
       print '404 Not Found';
       print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
-
     }
     exit;
   }
