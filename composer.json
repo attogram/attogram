@@ -1,0 +1,21 @@
+{
+  "name": "attogram/attogram-framework",
+  "description": "The Attogram Framework",
+  "type": "project",
+  "homepage": "https://github.com/attogram/attogram",
+  "license": "(MIT or GPL-3.0+)",
+  "require": {
+    "php": "^5.3.3 || ^7.0"
+  },
+  "keywords": [ 
+    "framework", "php", "apache", "sqlite", "markdown", "jquery", "bootstrap"
+  ],
+  "authors": {
+    "name": "Attogram Developers",
+    "homepage": "https://github.com/attogram/attogram",
+    "role": "Developer"
+  },
+  "support": {
+    "docs": "http://getitdaily.com/attogram/"
+  }
+}
