@@ -24,11 +24,11 @@ ini_set('display_errors', '1');
 $attogram = new attogram();
 
 /**
- * Attogram class
+ * Attogram Framework
  */
 class attogram {
 
-  public $path, $uri, $fof, $error, $site_name, $skip_files;
+  public $path, $uri, $fof, $error, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -40,6 +40,7 @@ class attogram {
    * @return void
    */
   function __construct() {
+    $this->log = new logger();
     $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
@@ -453,10 +454,15 @@ class attogram {
 
 } // END of class attogram
 
-
+/**
+ * Attogram Logger
+ */
+class logger {
+  
+}
 
 /**
- * sqlite_database class
+ * Attogram sqlite_database
  */
  class sqlite_database {
 
