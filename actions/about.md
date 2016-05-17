@@ -58,6 +58,10 @@ Remove a page
 Admin pages
 ===========
 * create/delete the same as normal pages, but in the `./admin/` directory
+* admin pages are IP protected
+* default admin IPs are ip4 and ip6 localhosts: `array( '127.0.0.1', '::1' )`
+* change the admin IPs by setting `$config['admins']` in `./config.php`
+* admin page requests from non-admin IPs will result in a 404 Not Found error
 
 Web discovery
 =============
