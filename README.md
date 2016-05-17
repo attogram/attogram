@@ -61,7 +61,7 @@ Admin pages
 * admin pages are IP protected
 * default admin IPs are ip4 and ip6 localhosts: `array( '127.0.0.1', '::1' )`
 * change the admin IPs by setting `$config['admins']` in `./config.php`
-* admin page requests from non-admin IPs will result in a 404 Not Found error
+* admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
 Web discovery
 =============
