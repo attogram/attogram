@@ -10,7 +10,8 @@
   "require": {
     "php": "^5.3.3 || ^7.0",
     "ext-pdo": "*",
-    "ext-pdo_sqlite": "*"
+    "ext-pdo_sqlite": "*",
+    "psr/log": "~1.0"
   },
   "authors": [
     {
