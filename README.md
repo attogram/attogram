@@ -59,6 +59,12 @@ Admin pages
 ===========
 * create/delete the same as normal pages, but in the `./admin/` directory
 
+Web discovery
+=============
+* Attogram dynamically generates a [`robots.txt`](../robots.txt) file, with a link to the Sitemap
+* Attogram dynamically generates a [`sitemap.xml`](../sitemap.xml) file
+
+
 More Info
 =========
 * Attogram @ GitHub: https://github.com/attogram/attogram
