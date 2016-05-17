@@ -6,7 +6,7 @@ namespace Attogram;
 $this->page_header('Attogram - Admin - Info');
 
 $info = array();
-$info['version'] = $this->version;
+$info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = '<li>' . to_list($this->uri,'<li>');

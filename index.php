@@ -14,6 +14,8 @@
 
 namespace Attogram;
 
+define('ATTOGRAM_VERSION', '0.3.7');
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -24,7 +26,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $version, $path, $uri, $fof, $error, $site_name, $skip_files;
+  public $path, $uri, $fof, $error, $site_name, $skip_files;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -36,7 +38,6 @@ class attogram {
    * @return void
    */
   function __construct() {
-    $this->version = '0.3.7';
     $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
@@ -62,7 +63,7 @@ class attogram {
     if( !isset($config) || !is_array($config) ) {
       //$this->error[] = 'LOAD_CONFIG: $config array not found';
     }
-    $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . $this->version . '</small>' );
+    $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>' );
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
     $this->set_config( 'default_action', @$config['default_action'], 'actions/home.php' );

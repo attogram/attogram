@@ -6,7 +6,7 @@ $config = array();
 
 // Uncomment to change default values...
 
-//$config['site_name']      = 'Attogram Framework <small>v' . $this->version . '</small>';
+//$config['site_name']      = 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>';
 
 //$config['admins']         = array( '127.0.0.1', '::1', );
 //$config['admin_dir']      = 'admin';
