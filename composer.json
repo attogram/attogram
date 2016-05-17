@@ -22,7 +22,9 @@
     "docs": "http://getitdaily.com/attogram/"
   },
   "keywords": [
+    "attogram",
     "framework",
+    "skeleton",
     "php",
     "apache",
     "sqlite",
