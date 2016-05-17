@@ -66,9 +66,8 @@ Admin pages
 
 Web discovery
 =============
-* Attogram dynamically generates a [`robots.txt`](../robots.txt) file, with a link to the Sitemap
-* Attogram dynamically generates a [`sitemap.xml`](../sitemap.xml) file
-
+* If `./robots.txt` does not exist, Attogram dynamically serves it, with a link to the Sitemap
+* If `./sitemap.xml` does not exist, Attogram dynamically serves it, with a listing of all public pages
 
 More Info
 =========

@@ -35,14 +35,14 @@ Setup: Install
 Setup: Database
 ===============
 * Make sure the database file `./db/global` is writeable by the web server
-* load the homepage, goto admin action **db-setup**, click **Create Attogram Tables**
-* load the homepage, goto admin action **db-admin**, login as **attogram**
+* load the homepage, goto admin action [**db-setup**](../db-setup/), click **Create Attogram Tables**
+* load the homepage, goto admin action [**db-admin**](../db-admin/), login as **attogram**
 
 Setup: Users
 ============
-* load the homepage, goto admin action **users**, click **Create New User**
+* load the homepage, goto admin action [**users**](../users/), click **Create New User**
 * enter username, password, etc. and click **Insert**
-* load the homepage, click **login**, login as the new user
+* load the homepage, click [**login**](../login), login as the new user
 
 Create a page
 =============
@@ -65,8 +65,8 @@ Admin pages
 
 Web discovery
 =============
-* Attogram dynamically generates a [`robots.txt`](../robots.txt) file, with a link to the Sitemap
-* Attogram dynamically generates a [`sitemap.xml`](../sitemap.xml) file
+* If [`./robots.txt`](../robots.txt) does not exist, Attogram dynamically serves it, with a link to the Sitemap
+* If [`./sitemap.xml`](../sitemap.xml) does not exist, Attogram dynamically serves it, with a listing of all public pages
 
 More Info
 =========
