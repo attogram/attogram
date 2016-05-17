@@ -2,6 +2,11 @@
 /**
  * Attogram Framework
  *
+ * The Attogram Framework provides developers a skeleton starter site
+ * with auto file-based URL routing, IP-protected backend, simple user system,
+ * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
+ * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
+ *
  * @version 0.3.8
  * @license MIT
  * @license GPL
@@ -9,6 +14,7 @@
  */
 
   // todo: force trailing slash
+  // todo: route around directory/directory listings
   // todo: RESERVED WORDS: exceptions for existing attogram directories
   // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
 
@@ -147,6 +153,13 @@ class attogram {
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
+
+    if( is_dir($this->uri[0]) ) {  // requesting a directory?
+      //$this->error[] = 'ROUTE: action not listed';
+      //$this->error404();
+      exit; // tmp DEBUG
+    }
+
     $actions = $this->get_actions();
     if( $this->is_admin() ) {
         $actions = array_merge($actions, $this->get_admin_actions());
