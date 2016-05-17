@@ -15,7 +15,6 @@
 
   // todo: force trailing slash
   // todo: RESERVED WORDS: exceptions for existing attogram directories $this->action_exceptions = array('actions','admin','db','functions','tables','templates','web',);
-  // todo: 
 
 namespace Attogram;
 define('ATTOGRAM_VERSION', '0.3.8');
@@ -40,7 +39,14 @@ class attogram {
    * @return void
    */
   function __construct() {
-    $this->log = new logger();
+
+    $autoload = 'vendor/autoload.php';
+    if( is_readable_file($autoload,'.php') ) { include_once($autoload); }
+
+    if( class_exists('\Monolog\Logger') ) {
+      $this->log = new \Monolog\Logger('attogram');
+    }
+
     $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
@@ -454,12 +460,7 @@ class attogram {
 
 } // END of class attogram
 
-/**
- * Attogram Logger
- */
-class logger {
-  
-}
+
 
 /**
  * Attogram sqlite_database
