@@ -2,7 +2,7 @@
 /**
  * Attogram Framework
  *
- * @version 0.3.7
+ * @version 0.3.8
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram/
@@ -14,7 +14,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.3.7');
+define('ATTOGRAM_VERSION', '0.3.8');
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
