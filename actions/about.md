@@ -16,11 +16,6 @@ After that, Attogram tries to stay out of your way while you do your thing!
 
 Attogram is Dual Licensed under the The MIT License *or* the GNU General Public License, at your choosing.
 
-Quick specs
-===========
-* PHP5, Apache2, SQLite
-* Open source, MIT/GPL dual license, On GitHub: https://github.com/attogram/attogram
-
 Requirements
 ============
 * PHP5, with SQLite PDO driver
@@ -28,13 +23,18 @@ Requirements
 
 Setup: Install
 ==============
-* Install into a web accessable directory
+* Get Attogram:
+ * Download latest master.zip from GitHub:  
+   https://github.com/attogram/attogram/archive/master.zip
+ * or use Composer:  
+   composer create-project attogram/attogram-framework your-install-directory
+* Install into a web accessible directory
 * edit .htaccess, set FallbackResource to the full web path to the index.php file in the install directory
 * (Optional) copy config.sample.php to config.php and edit to change default settings
 
 Setup: Database
-==============
-* Make sure ./db/ directory is writeable by the web server
+===============
+* Make sure the database file ./db/global is writeable by the web server
 * load the homepage, goto admin action 'db-setup', click 'Create Attogram Tables'
 * load the homepage, goto admin action 'db-admin', login as 'attogram'
 
@@ -61,4 +61,5 @@ Admin pages
 
 More Info
 =========
-https://github.com/attogram/attogram
+* Attogram @ GitHub: https://github.com/attogram/attogram
+* Demo: http://getitdaily.com/attogram/
