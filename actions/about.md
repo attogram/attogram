@@ -29,7 +29,7 @@ Setup: Install
  * or use Composer:  
    `composer create-project attogram/attogram-framework your-install-directory`
 * Install into a web accessible directory
-* edit `.htaccess`, set **FallbackResource** to the full web path to the index.php file in the install directory
+* edit `.htaccess`, set **FallbackResource** and **ErrorDocument 403** to the full web path to the index.php file in the install directory.
 * (Optional) copy `config.sample.php` to `config.php` and edit to change default settings
 
 Setup: Database
@@ -67,7 +67,6 @@ Web discovery
 =============
 * Attogram dynamically generates a [`robots.txt`](../robots.txt) file, with a link to the Sitemap
 * Attogram dynamically generates a [`sitemap.xml`](../sitemap.xml) file
-
 
 More Info
 =========
