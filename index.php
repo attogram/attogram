@@ -150,9 +150,8 @@ class attogram {
       $this->error404();
     }
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
-      $this->error[] = 'ROUTE: action not listed';
+      $this->error[] = 'ROUTE: 403 Action Forbidden';
       $this->error404();
-      exit; // tmp DEBUG
     }
 
     $actions = $this->get_actions();

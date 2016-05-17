@@ -1,3 +1,4 @@
 FallbackResource /index.php
+ErrorDocument 403 /index.php
 DirectoryIndex index.php
 Options -Indexes
