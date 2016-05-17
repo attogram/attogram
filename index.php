@@ -10,21 +10,17 @@
  * @version 0.3.8
  * @license MIT
  * @license GPL
- * @copyright 2016 Attogram Developers https://github.com/attogram/attogram/
+ * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
  */
 
   // todo: force trailing slash
-  // todo: route around directory/directory listings
-  // todo: RESERVED WORDS: exceptions for existing attogram directories
-  // $this->action_exceptions = array('actions','admin','db','functions','plugins','tables','templates','web',);
+  // todo: RESERVED WORDS: exceptions for existing attogram directories $this->action_exceptions = array('actions','admin','db','functions','tables','templates','web',);
+  // todo: 
 
 namespace Attogram;
-
 define('ATTOGRAM_VERSION', '0.3.8');
-
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-
 $attogram = new attogram();
 
 /**
@@ -153,10 +149,9 @@ class attogram {
       $this->error[] = 'ROUTE: subpath not supported';
       $this->error404();
     }
-
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
-      //$this->error[] = 'ROUTE: action not listed';
-      //$this->error404();
+      $this->error[] = 'ROUTE: action not listed';
+      $this->error404();
       exit; // tmp DEBUG
     }
 
