@@ -8,9 +8,9 @@ $this->page_header('Attogram - Admin - Info');
 $info = array();
 $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
+$info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = '<li>' . to_list($this->uri,'<li>');
-$info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['action'] = $this->action;
 
 $info['actions_dir'] = $this->actions_dir;
@@ -31,11 +31,10 @@ $info['tables_dir'] = $this->tables_dir;
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 $info['sqlite_database'] = get_class($this->sqlite_database);
 
-$info['attogram_id'] = htmlentities(@$_SESSION['attogram_id']);
-$info['attogram_username'] = htmlentities(@$_SESSION['attogram_username']);
-$info['attogram_level'] = htmlentities(@$_SESSION['attogram_level']);
-$info['attogram_email'] = htmlentities(@$_SESSION['attogram_email']);
-
+$info['attogram_id'] = isset($_SESSION['attogram_id']) ? htmlentities($_SESSION['attogram_id']) : '<code>null</code>';
+$info['attogram_username'] = isset($_SESSION['attogram_username']) ? htmlentities($_SESSION['attogram_username']) : '<code>null</code>';
+$info['attogram_level'] = isset($_SESSION['attogram_level']) ? htmlentities($_SESSION['attogram_level']) : '<code>null</code>';
+$info['attogram_email'] = isset($_SESSION['attogram_email']) ? htmlentities($_SESSION['attogram_email']) : '<code>null</code>';
 
 print '
 <div class="container">
