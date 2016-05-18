@@ -16,11 +16,11 @@ namespace Attogram;
 
 <?php
 if( isset($this->error) && $this->error ) {
-  print '<div class="alert alert-danger">System Errors:<br />- ' . to_list($this->error, '<br />- ') . '</div>';
+  print '<pre class="alert alert-danger">System Errors:<br />' . rtrim(ltrim(print_r($this->error,1),"Array\n("),"\n)") . '</pre>';
 }
 
 if( isset($this->sqlite_database->error) && $this->sqlite_database->error ) {
-  print '<div class="alert alert-danger">DB Errors:<br />- ' . to_list($this->sqlite_database->error, '<br />- ') . '</div>';
+  print '<pre class="alert alert-danger">DB Errors:<br />' . rtrim(ltrim(print_r($this->sqlite_database->error,1),"Array\n("),"\n)") . '</pre>';
 }
 ?>
 
