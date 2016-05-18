@@ -8,7 +8,7 @@ namespace Attogram;
 <footer class="footer">
  <div class="container">
   <p><small>
-    Powered by <a target="github" href="https://github.com/attogram/attogram">Attogram Framework <small>v<?php print ATTOGRAM_VERSION; ?></a>
+    Powered by <a target="github" href="https://github.com/attogram/attogram">Attogram Framework <small>v<?php print ATTOGRAM_VERSION; ?></small></a>
     &nbsp; @ &nbsp; <?php print gmdate('Y-m-d H:i:s'); ?> UTC
   </small></p>
  </div>
