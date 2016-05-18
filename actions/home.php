@@ -36,7 +36,7 @@ $this->page_header('Attogram Framework');
   </ul>
   <p>After that, Attogram tries to stay out of your way while you <strong>do your thing</strong>!</p>
   <p>Attogram is <a href="license/">Dual Licensed</a> under the <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.
-  <p>Read more <strong><a href="about/">about Attogram</a><strong>.</p>
+  <p>Read more <strong><a href="about/">about Attogram</a></strong>.</p>
   </p>
 </div>
 
