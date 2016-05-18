@@ -13,8 +13,8 @@ $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = '<li>' . to_list($this->uri,'<li>');
 $info['action'] = $this->action;
 
-$autloader = 'vendor/autoload.php';
-$info['autoloader'] = ( is_readable_file($autloader, '.php') ? $autloader : '<code>null</code>' );
+$autoloader = 'vendor/autoload.php';
+$info['autoloader'] = ( is_readable_file($autoloader, '.php') ? $autoloader : '<code>null</code>' );
 $info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>' );
 
 $info['actions_dir'] = $this->actions_dir;
