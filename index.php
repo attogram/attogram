@@ -270,14 +270,17 @@ class attogram {
    * @return void
    */
   function error404() {
+    $err = '404 Not Found';
+    header('HTTP/1.0 ' . $err);
     if( is_readable_file($this->fof) ) {
       include($this->fof);
-    } else {
-      $this->error[] = '404 file not found';
-      header('HTTP/1.0 404 Not Found');
-      print '404 Not Found';
-      print '<pre>ERRORS: ' . print_r($this->error,1) . '</pre>';
+      exit;
     }
+    // Default 404 page
+    $this->error[] = 'ERROR404: 404 template not found';
+    $this->page_header($err);
+    print '<div class="container"><h1>' . $err . '</h1></div>';
+    $this->page_footer();
     exit;
   }
 
@@ -294,9 +297,10 @@ class attogram {
       include($file);
       return;
     }
+    // Default page header
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>' . $title . '</title></head><body>';  // simple default header
+<title>' . $title . '</title></head><body>';
   }
 
   /**
@@ -310,7 +314,9 @@ class attogram {
       include($file);
       return;
     }
-    print '</body></html>'; // simple default footer
+    // Default page footer
+    print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
+    print '</body></html>';
   }
 
   /**
@@ -699,7 +705,7 @@ function to_list( $x, $sep=', ') {
     $r = '';
     foreach($x as $n => $v) {
       if( !is_object($v) && !is_array($v) ) {
-        if( $v == '' ) { $v = 'empty'; }
+        if( $v == '' ) { $v = '<code>empty</code>'; }
         $r .= $v . $sep;
       } else {
         $r .= to_list($v) . $sep;
