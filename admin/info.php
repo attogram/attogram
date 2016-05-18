@@ -9,10 +9,45 @@ function info_file($file) {
   if( is_file($file) && is_readable($file) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $file;  
 }
-
 function info_dir($dir) {
   if( is_readable_dir($dir) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $dir;
+}
+function info_actions( $actions ) {
+  $r = '';
+  foreach( array_keys($actions) as $a ) {
+    $r .= '<li><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
+      . ' - file:<strong>' . $actions[$a]['file'] . '</strong>'
+      . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
+  }
+  return $r;
+}
+
+/**
+ * to_list() - make a comma seperated list of items within an array or object
+ *
+ * @param mixed $x The input to be listed
+ * @param string $sep The seperator between items
+ *
+ * @return string
+ */
+function to_list( $x, $sep=', ') {
+  if( is_array($x) ) {
+    $r = '';
+    foreach($x as $n => $v) {
+      if( !is_object($v) && !is_array($v) ) {
+        if( $v == '' ) { $v = '<code>empty</code>'; }
+        $r .= $v . $sep;
+      } else {
+        $r .= to_list($v) . $sep;
+      }
+    }
+    return rtrim($r,$sep);
+  }
+  if( is_object($x) ) {
+    return get_class($x);
+  }
+  return $x;
 }
 
 $info = array();
@@ -29,13 +64,13 @@ $info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>
 
 $info['actions_dir'] = info_dir($this->actions_dir);
 $info['default_action'] = info_file($this->default_action);
-$info['actions'] = list_actions($this->actions);
+$info['actions'] = info_actions($this->actions);
 
 $info['admin_dir'] = info_dir($this->admin_dir);
-$info['admin_actions'] = list_actions($this->admin_actions);
+$info['admin_actions'] = info_actions($this->admin_actions);
 $info['admins'] = '<li>' . to_list($this->admins, '<li>');
 
-$info['fof'] = $this->fof;
+$info['fof'] = info_file($this->fof);
 $info['templates_dir '] = info_dir($this->templates_dir);
 $info['functions_dir'] = info_dir($this->functions_dir);
 
@@ -50,31 +85,9 @@ $info['attogram_username'] = isset($_SESSION['attogram_username']) ? htmlentitie
 $info['attogram_level'] = isset($_SESSION['attogram_level']) ? htmlentities($_SESSION['attogram_level']) : '<code>null</code>';
 $info['attogram_email'] = isset($_SESSION['attogram_email']) ? htmlentities($_SESSION['attogram_email']) : '<code>null</code>';
 
-print '
-<div class="container">
-  <h1>Attogram Framework Info</h1>
-  <table class="table">
-';
-
+print '<div class="container"><h1>Attogram Framework Info</h1><table class="table">';
 foreach( $info as $name => $value ) {
   print '<tr><td>' . $name . '</td><td>' . $value . '</td></tr>';
 }
-
 print '</table></div>';
-
-//phpinfo();
-
 $this->page_footer();
-
-
-function list_actions( $actions ) {
-  $r = '';
-  foreach( array_keys($actions) as $a ) {
-    $r .= '<li><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
-      . ' - file:<strong>' . $actions[$a]['file'] . '</strong>'
-      . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
-  }
-  return $r;
-  return '<pre>' . print_r($actions,1) . '</pre>';
-
-}

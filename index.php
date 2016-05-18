@@ -678,29 +678,4 @@ function is_readable_file( $file=FALSE, $type='.php' ) {
   return FALSE;
 }
 
-/**
- * to_list() - make a comma seperated list of items within an array or object
- *
- * @param mixed $x The input to be listed
- * @param string $sep The seperator between items
- *
- * @return string
- */
-function to_list( $x, $sep=', ') {
-  if( is_array($x) ) {
-    $r = '';
-    foreach($x as $n => $v) {
-      if( !is_object($v) && !is_array($v) ) {
-        if( $v == '' ) { $v = '<code>empty</code>'; }
-        $r .= $v . $sep;
-      } else {
-        $r .= to_list($v) . $sep;
-      }
-    }
-    return rtrim($r,$sep);
-  }
-  if( is_object($x) ) {
-    return get_class($x);
-  }
-  return $x;
-}
+
