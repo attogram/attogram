@@ -700,7 +700,7 @@ function to_list( $x, $sep=', ') {
     foreach($x as $n => $v) {
       if( !is_object($v) && !is_array($v) ) {
         if( $v == '' ) { $v = '<code>empty</code>'; }
-        $r .= $n . ': ' . $v . $sep;
+        $r .= /*$n . ': ' .*/ $v . $sep;
       } else {
         $r .= to_list($v) . $sep;
       }

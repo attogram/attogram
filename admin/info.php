@@ -13,6 +13,8 @@ $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = '<li>' . to_list($this->uri,'<li>');
 $info['action'] = $this->action;
 
+$info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>' );
+
 $info['actions_dir'] = $this->actions_dir;
 $info['default_action'] = $this->default_action;
 $info['actions'] = list_actions($this->actions);
@@ -21,7 +23,6 @@ $info['admin_dir'] = $this->admin_dir;
 $info['admin_actions'] = list_actions($this->admin_actions);
 $info['admins'] = '<li>' . to_list($this->admins, '<li>');
 
-$info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>' );
 $info['fof'] = $this->fof;
 $info['templates_dir '] = $this->templates_dir ;
 $info['functions_dir'] = $this->functions_dir;
