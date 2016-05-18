@@ -322,65 +322,51 @@ class attogram {
   /**
    * get_actions() - create list of all pages from the actions directory
    *
-   * @return void
+   * @return array
    */
   function get_actions() {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
-    $this->actions = array();
-    if( !is_readable_dir($this->actions_dir) ) {
-      $this->error[] = 'GET_ACTIONS: actions directory is not readable';
-      return $this->actions;
-    }
-    foreach( array_diff(scandir($this->actions_dir), $this->skip_files) as $f ) {
-      $file = $this->actions_dir . "/$f";
-      if( is_readable_file($file, '.php') ) { // php files only
-        $this->actions[ str_replace('.php','',$f) ] = array(
-          'file'=>$file,
-          'parser'=>'php'
-        );
-      } elseif( is_readable_file($file, '.md') ) { // Markdown files only
-        $this->actions[ str_replace('.md','',$f) ] = array(
-          'file'=>$file,
-          'parser'=>'md'
-        );
-      }
-    }
-    return $this->actions;
+    return $this->actions = $this->get_actionables($this->actions_dir); 
   }
 
   /**
    * get_admin_actions() - create list of all admin pages from the admin directory
    *
-   * @return void
+   * @return array
    */
   function get_admin_actions() {
     if( !$this->is_admin() ) {
-      return FALSE;
+      return array();
     }
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
-    $this->admin_actions = array();
-    if( !is_readable_dir($this->admin_dir) ) {
-      return $this->admin_actions;
+    return $this->admin_actions = $this->get_actionables($this->admin_dir); 
+  }
+
+  /**
+   * get_actionables - create list of all useable action files from a directory
+   *
+   * @return array
+   */
+  function get_actionables( $dir ) {
+    $r = array();
+    if( !is_readable_dir($dir) ) {
+      $this->error[] = 'GET_ACTIONABLES: directory not readable: ' . $dir;
+      return $r;
     }
-    foreach( array_diff(scandir($this->admin_dir), $this->skip_files) as $f ) {
-      $file = $this->admin_dir . "/$f";
-      if( is_readable_file($file, '.php') ) { // php files only
-        $this->admin_actions[ str_replace('.php','',$f) ] = array(
-          'file'=>$file,
-          'parser'=>'php'
-        );
-      } elseif( is_readable_file($file, '.md') ) { // Markdown files only
-        $this->admin_actions[ str_replace('.md','',$f) ] = array(
-          'file'=>$file,
-          'parser'=>'md'
+    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
+      $file = $dir . "/$f";
+      if( is_readable_file($file, '.php') ) { // PHP files 
+        $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
+      } elseif( is_readable_file($file, '.md') ) { // Markdown files 
+        $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md'
         );
       }
     }
-    return $this->admin_actions;
+    return $r; 
   }
 
   /**
