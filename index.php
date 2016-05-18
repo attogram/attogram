@@ -699,13 +699,13 @@ function to_list( $x, $sep=', ') {
     $r = '';
     foreach($x as $n => $v) {
       if( !is_object($v) && !is_array($v) ) {
-        if( $v == '' ) { $v = '<code>empty</code>'; }
-        $r .= /*$n . ': ' .*/ $v . $sep;
+        if( $v == '' ) { $v = 'empty'; }
+        $r .= $v . $sep;
       } else {
         $r .= to_list($v) . $sep;
       }
     }
-    return trim($r,$sep);
+    return rtrim($r,$sep);
   }
   if( is_object($x) ) {
     return get_class($x);
