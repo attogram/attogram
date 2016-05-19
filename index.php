@@ -168,7 +168,7 @@ class attogram {
     }
     $this->exception_files();
     if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
-      $$this->log->error('ROUTE: subpath not supported');
+      $this->log->error('ROUTE: subpath not supported');
       $this->error404();
     }
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
