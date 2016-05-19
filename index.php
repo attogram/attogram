@@ -44,8 +44,10 @@ class attogram {
     $autoload = 'vendor/autoload.php';
     if( is_readable_file($autoload,'.php') ) { include_once($autoload); }
 
-    if( class_exists('\Monolog\Logger-DEBUG---------------------------') ) {
-      $this->log = new \Monolog\Logger('attogram');
+    if( class_exists('\Monolog\Logger') ) {
+      //$this->log = new \Monolog\Logger('attogram'); // IN DEV
+      $this->log = new logger(); // IN DEV
+
     } else {
       $this->log = new logger();
     }
