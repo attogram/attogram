@@ -45,8 +45,15 @@ class attogram {
     if( is_readable_file($autoload,'.php') ) { include_once($autoload); }
 
     if( class_exists('\Monolog\Logger') ) {
-      //$this->log = new \Monolog\Logger('attogram'); // IN DEV
-      $this->log = new logger(); // IN DEV
+      $this->log = new \Monolog\Logger('attogram'); 
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::DEBUG) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::INFO) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::NOTICE) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::WARNING) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ERROR) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::CRITICAL) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ALERT) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::EMERGENCY) );
     } else {
       $this->log = new logger();
     }
@@ -490,12 +497,18 @@ class sqlite_database {
     $this->tables_directory = $tables_dir;
     $this->skip_files = array('.','..','.htaccess');
     if( class_exists('\Monolog\Logger') ) {
-      //$this->log = new \Monolog\Logger('attogram'); // IN DEV
-      $this->log = new logger(); // IN DEV
+      $this->log = new \Monolog\Logger('database'); 
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::DEBUG) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::INFO) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::NOTICE) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::WARNING) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ERROR) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::CRITICAL) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ALERT) );
+      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::EMERGENCY) );
     } else {
       $this->log = new logger();
     }
-    //$this->log->debug('sqlite_database __construct');
   }
 
   /**
