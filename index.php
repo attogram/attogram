@@ -45,22 +45,22 @@ class attogram {
     if( is_readable_file($this->autoloader,'.php') ) {
       include_once($this->autoloader); 
     }
+    $this->load_config('config.php');
+    
+    if( $this->debug && class_exists('\Monolog\Logger') ) {
 
-    if( class_exists('\Monolog\Logger') ) {
-      $this->log = new \Monolog\Logger('attogram'); 
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::DEBUG) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::INFO) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::NOTICE) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::WARNING) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ERROR) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::CRITICAL) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ALERT) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::EMERGENCY) );
-      $this->log->debug('START monolog @ ' . date('r') );    
+      $this->log = new \Monolog\Logger('attogram');
 
+      $sh = new \Monolog\Handler\StreamHandler('php://output');
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
+      $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
+              
+      //$bch = new \Monolog\Handler\BrowserConsoleHandler;
+      //$this->log->pushHandler( $bch );
+        
     } else {
       $this->log = new logger();
-      $this->log->debug('START log @ ' . date('r') );    
     }
 
     if( !class_exists('\Symfony\Component\HttpFoundation\Request') ) {
@@ -68,7 +68,6 @@ class attogram {
     }
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     
-    $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
     $this->get_functions();
@@ -476,19 +475,22 @@ class sqlite_database {
    * @return void
    */
   function __construct( $db_name, $tables_dir ) {
+    global $debug;
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
     $this->skip_files = array('.','..','.htaccess');
-    if( class_exists('\Monolog\Logger') ) {
-      $this->log = new \Monolog\Logger('database'); 
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::DEBUG) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::INFO) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::NOTICE) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::WARNING) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ERROR) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::CRITICAL) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ALERT) );
-      $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::EMERGENCY) );
+    if( $debug && class_exists('\Monolog\Logger') ) {
+
+      $this->log = new \Monolog\Logger('attogram');
+
+      $sh = new \Monolog\Handler\StreamHandler('php://output');
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
+      $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
+              
+      //$bch = new \Monolog\Handler\BrowserConsoleHandler;
+      //$this->log->pushHandler( $bch );
+        
     } else {
       $this->log = new logger();
     }
