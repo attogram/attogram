@@ -12,7 +12,8 @@
     "ext-pdo": "*",
     "ext-pdo_sqlite": "*",
     "monolog/monolog": "~1.0",
-    "symfony/http-foundation": "~3.0"
+    "symfony/http-foundation": "~3.0",
+    "erusev/parsedown": "^1.6"
   },
   "authors": [
     {
