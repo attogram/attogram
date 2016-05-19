@@ -265,11 +265,7 @@ class attogram {
    * @return string
    */
   function get_site_url() {
-    $scheme = 'http';
-    if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ) {
-      $scheme .= 's'; // is secure
-    }
-    return $scheme . '://' . $_SERVER['HTTP_HOST'] . $this->path;
+    return $this->request->getSchemeAndHttpHost(); //. $this->path;
   }
 
   /**
