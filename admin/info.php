@@ -7,6 +7,7 @@ global $debug;
 
 $this->page_header('Attogram - Admin - Info');
 
+// Helper functions
 function info_file($file) {
   if( is_file($file) && is_readable($file) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $file;  
@@ -24,15 +25,6 @@ function info_actions( $actions ) {
   }
   return $r;
 }
-
-/**
- * to_list() - make a comma seperated list of items within an array or object
- *
- * @param mixed $x The input to be listed
- * @param string $sep The seperator between items
- *
- * @return string
- */
 function to_list( $x, $sep=', ') {
   if( is_array($x) ) {
     $r = '';
@@ -60,8 +52,7 @@ $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = implode($this->uri,',');
 $info['action'] = info_file($this->action);
 
-$autoloader = 'vendor/autoload.php';
-$info['autoloader'] = info_file($autoloader);
+$info['autoloader'] = info_file($this->autoloader);
 $info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>' );
 
 $info['actions_dir'] = info_dir($this->actions_dir);

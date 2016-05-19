@@ -28,7 +28,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $path, $uri, $fof, $site_name, $skip_files, $log;
+  public $autoload, $path, $uri, $fof, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -41,8 +41,10 @@ class attogram {
    */
   function __construct() {
 
-    $autoload = 'vendor/autoload.php';
-    if( is_readable_file($autoload,'.php') ) { include_once($autoload); }
+    $this->autoload = 'vendor/autoload.php';
+    if( is_readable_file($this->autoload,'.php') ) {
+      include_once($this->autoload); 
+    }
 
     if( class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram'); 
