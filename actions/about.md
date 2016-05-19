@@ -24,13 +24,23 @@ Requirements
 Setup: Install
 ==============
 * Get Attogram:
- * Download latest master.zip from GitHub:  
-   [`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
- * or use Composer:  
+ * use Composer:  
    `composer create-project attogram/attogram-framework your-install-directory`
+ * or manually install.  Download latest master.zip from GitHub:  
+   [`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
+   If composer is not available, also download the vendor distribution from 
+   [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip)
+   and move the `./vendor` directory to the top level of your install directory.
 * Install into a web accessible directory
 * edit `.htaccess`, set **FallbackResource** and **ErrorDocument 403** to the full web path to the index.php file in the install directory.
 * (Optional) copy `config.sample.php` to `config.php` and edit to change default settings
+
+Setup: Admin
+============
+* admin pages are IP protected
+* change the allowed admin IPs by setting `$config['admins']` in `./config.php`
+* default admin IPs is localhost in ip4 and ip6: `array( '127.0.0.1', '::1' )`
+* admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
 Setup: Database
 ===============
@@ -58,10 +68,6 @@ Remove a page
 Admin pages
 ===========
 * create/delete the same as normal pages, but in the `./admin/` directory
-* admin pages are IP protected
-* default admin IPs are ip4 and ip6 localhosts: `array( '127.0.0.1', '::1' )`
-* change the admin IPs by setting `$config['admins']` in `./config.php`
-* admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
 Web discovery
 =============
