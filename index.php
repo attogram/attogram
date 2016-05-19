@@ -150,7 +150,7 @@ class attogram {
   function route() {
 
     $this->uri = explode('/', $this->request->getPathInfo());
-    $notop = array_shift($this->uri); 
+    $trash = array_shift($this->uri); 
     $this->path = $this->request->getBasePath();
 
     $this->log->debug('ROUTE: uri: ' . implode($this->uri,', ') );
