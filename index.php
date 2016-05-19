@@ -28,7 +28,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $autoload, $path, $uri, $fof, $site_name, $skip_files, $log;
+  public $autoloader, $request, $path, $uri, $fof, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -41,9 +41,9 @@ class attogram {
    */
   function __construct() {
 
-    $this->autoload = 'vendor/autoload.php';
-    if( is_readable_file($this->autoload,'.php') ) {
-      include_once($this->autoload); 
+    $this->autoloader = 'vendor/autoload.php';
+    if( is_readable_file($this->autoloader,'.php') ) {
+      include_once($this->autoloader); 
     }
 
     if( class_exists('\Monolog\Logger') ) {
@@ -56,13 +56,19 @@ class attogram {
       $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::CRITICAL) );
       $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::ALERT) );
       $this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler(\Monolog\Logger::EMERGENCY) );
+      $this->log->debug('START monolog @ ' . date('r') );    
+
     } else {
       $this->log = new logger();
+      $this->log->debug('START log @ ' . date('r') );    
     }
 
-    $this->load_config('config.php');
-    $this->log->debug('START log @ ' . date('r') );    
+    if( !class_exists('\Symfony\Component\HttpFoundation\Request') ) {
+      $this->log->error('Missing \Symfony\Component\HttpFoundation\Request');
+    }
+    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     
+    $this->load_config('config.php');
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
     $this->get_functions();
@@ -138,37 +144,15 @@ class attogram {
   }
 
   /**
-   * trim_uri() - set $this->uri array with attogram install directory as top
-   *
-   * @return void
-   */
-  function trim_uri() {
-    $this->uri = explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $this->path = str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\', '/', getcwd()));
-    if( $this->path == '' ) { // top level install
-      if( $this->uri[0] == '' && isset($this->uri[1]) && $this->uri[1] == '' && !isset($this->uri[2]) ) { // homepage
-        $this->action = $this->default_action;
-        return;
-      } else {
-        $trash = array_shift($this->uri);
-      }
-    } else { // sub level install
-      for( $i = 0; $i < sizeof($this->uri); $i++ ) {
-        if( $this->uri[$i] == basename($this->path) && $this->uri[$i] != '' ) {
-          break; // found our level
-        }
-        $trash = array_shift($this->uri);
-      }
-    }
-  }
-
-  /**
    * route() - decide what action to take based on URI request
    *
    * @return void
    */
   function route() {
-    $this->trim_uri();
+
+    $this->uri = explode('/', $this->request->getPathInfo());
+    $notop = array_shift($this->uri); 
+
     $this->log->debug('ROUTE: uri: ' . implode($this->uri,', ') );
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->log->error('ROUTE: Invalid URI');

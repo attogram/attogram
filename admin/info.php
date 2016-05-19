@@ -8,6 +8,15 @@ global $debug;
 $this->page_header('Attogram - Admin - Info');
 
 // Helper functions
+function info_object($obj) {
+  if( is_object($obj) ) {
+    $gn = 'ok'; $gt = 'success'; $n = get_class($obj);
+  } else { 
+    $gn = 'remove'; $gt = 'danger'; $n = '<code>?</code>'; 
+  }
+  return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $n;
+}
+
 function info_file($file) {
   if( is_file($file) && is_readable($file) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $file;  
@@ -46,14 +55,18 @@ function to_list( $x, $sep=', ') {
 
 $info = array();
 $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
+$info['__DIR__'] = __DIR__;
 $info['site_name'] = $this->site_name;
+
+$info['request'] = info_object($this->request);
+$info['log'] = info_object($this->log);
+
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 $info['uri'] = implode($this->uri,',');
 $info['action'] = info_file($this->action);
 
 $info['autoloader'] = info_file($this->autoloader);
-$info['log'] = ( is_object($this->log) ? get_class($this->log) : '<code>?</code>' );
 
 $info['actions_dir'] = info_dir($this->actions_dir);
 $info['default_action'] = info_file($this->default_action);
