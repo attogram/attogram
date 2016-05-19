@@ -14,7 +14,6 @@
  */
 
   // todo: force trailing slash
-  // todo: RESERVED WORDS: exceptions for existing attogram directories $this->action_exceptions = array('actions','admin','db','functions','tables','templates','web',);
 
 namespace Attogram;
 define('ATTOGRAM_VERSION', '0.4.1');
@@ -41,12 +40,45 @@ class attogram {
    */
   function __construct() {
 
-    $this->autoloader = 'vendor/autoload.php';
-    if( is_readable_file($this->autoloader,'.php') ) {
-      include_once($this->autoloader); 
-    }
     $this->load_config('config.php');
+
+    $this->autoloader();
+
+    $this->init_logger();
+
+    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     
+    $this->sessioning();
+    $this->get_functions();
+    $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
+    $this->route();
+    $this->log->debug('END log @ ' . date('r') );
+    exit;
+  }
+
+  /**
+   * autoloader() - auto load, or display fatal error
+   */
+  function autoloader() {
+    $this->autoloader = 'vendor/autoload.php';
+    if( !is_readable_file($this->autoloader,'.php') ) {
+      $this->page_header();
+      print '<h1>Attogram Fatal Error</h1><h2>vendor autoloader not found</h2>'
+      . '<p>Please run composer, or download and install the '
+      . '<a href="https://github.com/attogram/attogram-vendor/archive/master.zip">attogram-vendor</a> package</p>';
+      $this->page_footer();
+      exit;
+    }
+    include_once($this->autoloader); 
+    if( !class_exists('\Symfony\Component\HttpFoundation\Request') ) {
+      // fatal error
+    }
+  }
+
+  /**
+   * init_logger() - initialize the logger object, based on debug setting
+   */
+  function init_logger() {
     if( $this->debug && class_exists('\Monolog\Logger') ) {
 
       $this->log = new \Monolog\Logger('attogram');
@@ -55,26 +87,12 @@ class attogram {
       $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-              
-      //$bch = new \Monolog\Handler\BrowserConsoleHandler;
-      //$this->log->pushHandler( $bch );
+
+      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler );
         
     } else {
       $this->log = new logger();
-    }
-
-    if( !class_exists('\Symfony\Component\HttpFoundation\Request') ) {
-      $this->log->error('Missing \Symfony\Component\HttpFoundation\Request');
-    }
-    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    
-    $this->sessioning();
-    $this->skip_files = array('.','..','.htaccess');
-    $this->get_functions();
-    $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
-    $this->route();
-    $this->log->debug('END log @ ' . date('r') );
-    exit;
+    }  
   }
 
   /**
@@ -108,6 +126,9 @@ class attogram {
     $this->set_config( 'fof',            @$config['fof'],            'templates/404.php' );
     $this->set_config( 'db_name',        @$config['db_name'],        'db/global' );
     $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
+    
+    $this->skip_files = array('.','..','.htaccess');
+
   }
 
   /**
@@ -663,7 +684,7 @@ class sqlite_database {
 } // END of class sqlite_database
 
 /**
- * Attogram default logger / Null PSR3 logger
+ * Null PSR3 logger
  *
  */
 class logger {
