@@ -3,6 +3,8 @@
 
 namespace Attogram;
 
+global $debug;
+
 $this->page_header('Attogram - Admin - Info');
 
 function info_file($file) {
@@ -74,11 +76,13 @@ $info['fof'] = info_file($this->fof);
 $info['templates_dir '] = info_dir($this->templates_dir);
 $info['functions_dir'] = info_dir($this->functions_dir);
 
-$info['db_name'] = info_file($this->db_name);
 $info['tables_dir'] = info_dir($this->tables_dir);
+$info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 $info['sqlite_database'] = get_class($this->sqlite_database);
+
 $info['skip_files'] = '<li>' . to_list($this->skip_files, '<li>');
+$info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
 
 $info['attogram_id'] = isset($_SESSION['attogram_id']) ? htmlentities($_SESSION['attogram_id']) : '<code>null</code>';
 $info['attogram_username'] = isset($_SESSION['attogram_username']) ? htmlentities($_SESSION['attogram_username']) : '<code>null</code>';
