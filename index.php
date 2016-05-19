@@ -18,6 +18,7 @@
 
 namespace Attogram;
 define('ATTOGRAM_VERSION', '0.3.9');
+$debug = FALSE;
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 $attogram = new attogram();
@@ -43,16 +44,21 @@ class attogram {
     $autoload = 'vendor/autoload.php';
     if( is_readable_file($autoload,'.php') ) { include_once($autoload); }
 
-    if( class_exists('\Monolog\Logger') ) {
+    if( class_exists('\Monolog\Logger-DEBUG---------------------------') ) {
       $this->log = new \Monolog\Logger('attogram');
+    } else {
+      $this->log = new logger();
     }
 
     $this->load_config('config.php');
+    $this->log->debug('START log @ ' . date('r') );    
+    
     $this->sessioning();
     $this->skip_files = array('.','..','.htaccess');
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
+    $this->log->debug('END log @ ' . date('r') );
     exit;
   }
 
@@ -64,14 +70,19 @@ class attogram {
    * @return void
    */
   function load_config( $config_file='' ) {
+    global $debug;
     if( !is_readable_file($config_file) ) {
-      //$this->error[] = 'LOAD_CONFIG: config file not found';
+      $this->log->warning('LOAD_CONFIG: config file not found');
     } else {
       include_once($config_file);
+      if( !isset($config) || !is_array($config) ) {
+        $this->log->warning('LOAD_CONFIG: $config array not found');
+      }
     }
-    if( !isset($config) || !is_array($config) ) {
-      //$this->error[] = 'LOAD_CONFIG: $config array not found';
-    }
+
+    $this->set_config( 'debug',          @$config['debug'],          FALSE );
+    $debug = $this->debug;
+    
     $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>' );
     $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
     $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
@@ -112,6 +123,7 @@ class attogram {
       $_SESSION = array();
       session_destroy();
       session_start();
+      $this->log->info('User loggged off');
     }
   }
 
@@ -147,17 +159,18 @@ class attogram {
    */
   function route() {
     $this->trim_uri();
+    $this->log->debug('ROUTE: uri: ' . print_r($this->uri,1) );
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
-      $this->error[] = 'ROUTE: Invalid URI';
+      $this->log->error('ROUTE: Invalid URI');
       $this->error404();
     }
     $this->exception_files();
     if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
-      $this->error[] = 'ROUTE: subpath not supported';
+      $$this->log->error('ROUTE: subpath not supported');
       $this->error404();
     }
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
-      $this->error[] = 'ROUTE: 403 Action Forbidden';
+      $this->log->error('ROUTE: 403 Action Forbidden');
       $this->error404();
     }
 
@@ -173,11 +186,11 @@ class attogram {
         case 'php':
           $this->action = $actions[$this->uri[0]]['file'];
           if( !is_file($this->action) ) {
-            $this->error[] = 'ROUTE: Missing action';
+            $this->log->error('ROUTE: Missing action');
             $this->error404();
           }
           if( !is_readable($this->action) ) {
-            $this->error[] = 'ROUTE: Unreadable action';
+            $this->log->error('ROUTE: Unreadable action');
             $this->error404();
           }
           include($this->action);
@@ -186,7 +199,7 @@ class attogram {
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
           return;
         default:
-          $this->error[] = 'ACTION: No Parser Found';
+          $this->log->error('ACTION: No Parser Found');
           $this->error404();
           break;
       } // end switch on parser
@@ -233,17 +246,17 @@ class attogram {
     if( is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
       if( $page === FALSE ) {
-          $this->error[] = 'DO_MARKDOWN: can not get file';
+          $this->log->error('DO_MARKDOWN: can not get file');
       } else {
         if( class_exists('Parsedown') ) {
           $title = trim( strtok($page, "\n") ); // get first line of file, use as page title
           $content = \Parsedown::instance()->text( $page );
         } else {
-          $this->error[] = 'DO_MARKDOWN: can not find parser';
+          $this->log->error('DO_MARKDOWN: can not find parser');
         }
       }
     } else {
-      $this->error[] = 'DO_MARKDOWN: can not read file';
+      $this->log->error('DO_MARKDOWN: can not read file');
     }
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
@@ -277,7 +290,7 @@ class attogram {
       exit;
     }
     // Default 404 page
-    $this->error[] = 'ERROR404: 404 template not found';
+    $this->log->error('ERROR404: 404 template not found');
     $this->page_header($err);
     print '<div class="container"><h1>' . $err . '</h1></div>';
     $this->page_footer();
@@ -404,7 +417,7 @@ class attogram {
    */
   function login() {
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
-      $this->error[] = 'LOGIN: Please enter username and password';
+      $this->log->error('LOGIN: Please enter username and password');
       return FALSE;
     }
     $user = $this->sqlite_database->query(
@@ -412,15 +425,15 @@ class attogram {
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
     if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
-      $this->error[] = 'LOGIN: Login system offline';
+      $this->log->error('LOGIN: Login system offline');
       return FALSE;
     }
     if( !$user ) { // no user, or wrong password
-      $this->error[] = 'LOGIN: Invalid login';
+      $this->log->error('LOGIN: Invalid login');
       return FALSE;
     }
     if( !sizeof($user) == 1 ) { // corrupt data
-      $this->error[] = 'LOGIN: Invalid login';
+      $this->log->error('LOGIN: Invalid login');
       return FALSE;
     }
     $user = $user[0];
@@ -432,7 +445,7 @@ class attogram {
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
       ) ) {
-        $this->error[] = 'LOGIN: can not updated last login info';
+        $this->log->error('LOGIN: can not updated last login info');
     }
     return TRUE;
   }
@@ -457,7 +470,7 @@ class attogram {
 /**
  * Attogram sqlite_database
  */
- class sqlite_database {
+class sqlite_database {
 
   public $db_name, $db, $tables_directory, $tables, $error, $skip_files;
 
@@ -639,7 +652,26 @@ class attogram {
 
 } // END of class sqlite_database
 
-
+/**
+ * Attogram default logger / Null PSR3 logger
+ *
+ */
+class logger {
+  public $stack;
+  public function log($level, $message, array $context = array()) {
+    global $debug;
+    if( !$debug ) { return; }
+    $this->stack[] = "$level: $message " . ( $context ? print_r($context,1) : '');
+  }
+  public function emergency($message, array $context = array()) { $this->log('emergency',$message,$context); }
+  public function alert($message, array $context = array()) { $this->log('alert',$message,$context); }
+  public function critical($message, array $context = array()) { $this->log('critical',$message,$context); }
+  public function error($message, array $context = array()) { $this->log('error',$message,$context); }
+  public function warning($message, array $context = array()) { $this->log('warning',$message,$context); }
+  public function notice($message, array $context = array()) { $this->log('notice',$message,$context); }
+  public function info($message, array $context = array()) { $this->log('info',$message,$context); }
+  public function debug($message, array $context = array()) { $this->log('debug',$message,$context); }
+} // end class logger
 
 // Global Utility Functions
 

@@ -15,8 +15,10 @@ namespace Attogram;
 </footer>
 
 <?php
-if( isset($this->error) && $this->error ) {
-  print '<pre class="alert alert-danger">System Errors:<br />' . rtrim(ltrim(print_r($this->error,1),"Array\n("),"\n)") . '</pre>';
+if( isset($this->log->stack) && $this->log->stack ) {
+  print '<pre class="alert alert-debug">DEBUG:<br />' 
+  . rtrim(ltrim( print_r($this->log->stack,1),"Array\n("),"\n)")
+  . '</pre>';
 }
 
 if( isset($this->sqlite_database->error) && $this->sqlite_database->error ) {
