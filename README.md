@@ -32,7 +32,7 @@ Setup: Install
    [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip)
    and move the `./vendor` directory to the top level of your install directory.
 * Install into a web accessible directory
-* edit `.htaccess`, set **FallbackResource** and **ErrorDocument 403** to the full web path to the index.php file in the install directory.
+* edit `.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
 * (Optional) copy `config.sample.php` to `config.php` and edit to change default settings
 
 Setup: Admin
