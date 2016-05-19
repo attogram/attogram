@@ -28,7 +28,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $path, $uri, $fof, $error, $site_name, $skip_files, $log;
+  public $path, $uri, $fof, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -47,7 +47,6 @@ class attogram {
     if( class_exists('\Monolog\Logger') ) {
       //$this->log = new \Monolog\Logger('attogram'); // IN DEV
       $this->log = new logger(); // IN DEV
-
     } else {
       $this->log = new logger();
     }
@@ -161,7 +160,7 @@ class attogram {
    */
   function route() {
     $this->trim_uri();
-    $this->log->debug('ROUTE: uri: ' . print_r($this->uri,1) );
+    $this->log->debug('ROUTE: uri: ' . implode($this->uri,', ') );
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->log->error('ROUTE: Invalid URI');
       $this->error404();
@@ -183,6 +182,7 @@ class attogram {
     if( $this->uri[0] == '' ) { // The Homepage
       $this->uri[0] = 'home';
     }
+    $this->log->debug('action: ' . $this->uri[0]);
     if( isset($actions[$this->uri[0]]) ) {
       switch( $actions[$this->uri[0]]['parser'] ) {
         case 'php':
@@ -449,6 +449,7 @@ class attogram {
       ) ) {
         $this->log->error('LOGIN: can not updated last login info');
     }
+    $this->log->debug('User Logged in');
     return TRUE;
   }
 
@@ -474,7 +475,7 @@ class attogram {
  */
 class sqlite_database {
 
-  public $db_name, $db, $tables_directory, $tables, $error, $skip_files;
+  public $db_name, $db, $tables_directory, $tables, $skip_files, $log;
 
   /**
    * __construct() - initialize database settings
@@ -488,6 +489,13 @@ class sqlite_database {
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
     $this->skip_files = array('.','..','.htaccess');
+    if( class_exists('\Monolog\Logger') ) {
+      //$this->log = new \Monolog\Logger('attogram'); // IN DEV
+      $this->log = new logger(); // IN DEV
+    } else {
+      $this->log = new logger();
+    }
+    //$this->log->debug('sqlite_database __construct');
   }
 
   /**
@@ -500,22 +508,23 @@ class sqlite_database {
       return TRUE; // if PDO database object already set
     }
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
-      $this->error[] = 'GET_DB: SQLite PDO driver not found';
+      $this->log->error('GET_DB: SQLite PDO driver not found');
       return FALSE;
     }
     if( is_file( $this->db_name ) && !is_writeable( $this->db_name ) ) {
-      $this->error[] = 'GET_DB: NOTICE: database file not writeable: ' . $this->db_name;
+      $this->log->error('GET_DB: NOTICE: database file not writeable: ' . $this->db_name);
       // SELECT will work, UPDATE will not work
     }
     if( !is_file( $this->db_name ) ) {
-      $this->error[] = 'GET_DB: NOTICE: creating database file: ' . $this->db_name;
+      $this->log->error('GET_DB: NOTICE: creating database file: ' . $this->db_name);
     }
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(PDOException $e) {
-      $this->error[] = 'GET_DB: error opening database';
+      $this->log->error('GET_DB: error opening database');
       return FALSE;
     }
+    $this->log->debug("Got SQLite database: $this->db_name");
     return TRUE; // got database, into $this->db
   }
 
@@ -529,23 +538,23 @@ class sqlite_database {
    */
    function query( $sql, $bind=array() ) {
     if( !$this->get_db() ) {
-      $this->error[] = 'QUERY: Can not get database';
+      $this->log->error('QUERY: Can not get database');
       return array();
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) {
       list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-      $this->error[] = "QUERY: prepare failed: $sqlstate:$error_code:$error_string";;
+      $this->log->error("QUERY: prepare failed: $sqlstate:$error_code:$error_string");
       return array();
     }
     while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
     if( !$statement->execute() ) {
-      $this->error[] = 'QUERY: Can not execute query';
+      $this->log->error('QUERY: Can not execute query');
       return array();
     }
     $r = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if( !$r && $this->db->errorCode() != '00000') { // query failed
-      $this->error[] = 'QUERY: Query failed';
+      $this->log->error('QUERY: Query failed');
       $r = array();
     }
     return $r;
@@ -561,20 +570,20 @@ class sqlite_database {
    */
    function queryb( $sql, $bind=array() ) {
     if( !$this->get_db() ) {
-      $this->error[] = 'QUERYB: Can not get database';
+      $this->log->error('QUERYB: Can not get database');
       return FALSE;
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) {
       list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-      $this->error[] = "QUERYB: prepare failed: $sqlstate:$error_code:$error_string";;
+      $this->log->error("QUERYB: prepare failed: $sqlstate:$error_code:$error_string");
       return FALSE;
     }
     while( $x = each($bind) ) {
       $statement->bindParam($x[0], $x[1]);
     }
     if( !$statement->execute() ) {
-      $this->error[] = 'QUERYB: execute failed';
+      $this->log->error('QUERYB: execute failed');
       return FALSE;
     }
     return TRUE;
@@ -587,21 +596,22 @@ class sqlite_database {
    *
    * @return object|boolean
    */
-   function query_prepare( $sql ) {
+  function query_prepare( $sql ) {
+    $this->log->debug("prepare: $sql");
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
-    $this->error[] = "QUERY_PREPARE: Can not prepare sql: $sqlstate:$error_code:$error_string";
+    $this->log->error("QUERY_PREPARE: Can not prepare sql: $sqlstate:$error_code:$error_string");
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table
-        $this->error[] = "QUERY_PREPARE: Created table: $table";
+        $this->log->error("QUERY_PREPARE: Created table: $table");
         $statement = $this->db->prepare($sql);
         if( $statement ) { return $statement; } // try again
-        $this->error[] = 'QUERY_PREPARE: Still can not prepare sql';
+        $this->log->error('QUERY_PREPARE: Still can not prepare sql');
         return FALSE;
       } else {
-        $this->error[] = "QUERY_PREPARE: Can not create table: $table";
+        $this->log->error("QUERY_PREPARE: Can not create table: $table");
         return FALSE;
       }
     }
@@ -617,7 +627,7 @@ class sqlite_database {
       return TRUE;
     }
     if( !is_readable_dir($this->tables_directory) ) {
-      $this->error[] = 'GET_TABLES: Tables directory not readable';
+      $this->log->error('GET_TABLES: Tables directory not readable');
       return FALSE;
     }
     $this->tables = array();
@@ -642,11 +652,11 @@ class sqlite_database {
    function create_table( $table='' ) {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
-      $this->error[] = "CREATE_TABLE: Unknown table: $table";
+      $this->log->error("CREATE_TABLE: Unknown table: $table");
       return FALSE;
     }
     if( !$this->queryb( $this->tables[$table] ) ) {
-      $this->error[] = "CREATE_TABLE: failed to create: $table";
+      $this->log->error("CREATE_TABLE: failed to create: $table");
       return FALSE;
     }
     return TRUE;
@@ -663,7 +673,7 @@ class logger {
   public function log($level, $message, array $context = array()) {
     global $debug;
     if( !$debug ) { return; }
-    $this->stack[] = "$level: $message " . ( $context ? print_r($context,1) : '');
+    $this->stack[] = "$level: $message" . ( $context ? ': ' . print_r($context,1) : '');
   }
   public function emergency($message, array $context = array()) { $this->log('emergency',$message,$context); }
   public function alert($message, array $context = array()) { $this->log('alert',$message,$context); }
