@@ -152,6 +152,7 @@ class attogram {
 
     $this->uri = explode('/', $this->request->getPathInfo());
     $notop = array_shift($this->uri); 
+    $this->path = $this->request->getBasePath();
 
     $this->log->debug('ROUTE: uri: ' . implode($this->uri,', ') );
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
@@ -265,7 +266,7 @@ class attogram {
    * @return string
    */
   function get_site_url() {
-    return $this->request->getSchemeAndHttpHost(); //. $this->path;
+    return $this->request->getSchemeAndHttpHost() . $this->path;
   }
 
   /**
