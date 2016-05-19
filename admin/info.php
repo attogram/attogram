@@ -12,7 +12,7 @@ function info_file($file) {
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $file;  
 }
 function info_dir($dir) {
-  if( is_readable_dir($dir) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
+  if( is_dir($dir) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $dir;
 }
 function info_actions( $actions ) {
@@ -57,7 +57,7 @@ $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
-$info['uri'] = '<li>' . to_list($this->uri,'<li>');
+$info['uri'] = implode($this->uri,',');
 $info['action'] = info_file($this->action);
 
 $autoloader = 'vendor/autoload.php';

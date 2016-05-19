@@ -375,7 +375,7 @@ class attogram {
    */
   function get_actionables( $dir ) {
     $r = array();
-    if( !is_readable_dir($dir) ) {
+    if( !is_readable($dir) ) {
       $this->error[] = 'GET_ACTIONABLES: directory not readable: ' . $dir;
       return $r;
     }
@@ -529,7 +529,7 @@ class sqlite_database {
       // SELECT will work, UPDATE will not work
     }
     if( !is_file( $this->db_name ) ) {
-      $this->log->error('GET_DB: NOTICE: creating database file: ' . $this->db_name);
+      $this->log->debug('GET_DB: NOTICE: creating database file: ' . $this->db_name);
     }
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
@@ -639,7 +639,7 @@ class sqlite_database {
     if( isset($this->tables) && is_array($this->tables) ) {
       return TRUE;
     }
-    if( !is_readable_dir($this->tables_directory) ) {
+    if( !is_readable($this->tables_directory) ) {
       $this->log->error('GET_TABLES: Tables directory not readable');
       return FALSE;
     }
@@ -699,20 +699,6 @@ class logger {
 } // end class logger
 
 // Global Utility Functions
-
-/**
- * is_readable_dir() - Tests if is a directory and is readable
- *
- * @param string $dir The name of the directory to test
- *
- * @return boolean
- */
-function is_readable_dir( $dir=FALSE ) {
-  if( is_dir($dir) && is_readable($dir) ) {
-    return TRUE;
-  }
-  return FALSE;
-}
 
 /**
  * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
