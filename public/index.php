@@ -67,10 +67,10 @@ class attogram {
         //$this->guru_meditation_error('LOAD_CONFIG: $config array not found');
       }
     }
-    $this->set_config( 'attogram_directory', @$config['attogram_directory'], '../' );
-    $this->set_config( 'debug', @$config['debug'], FALSE ); $debug = $this->debug;
-    $this->set_config( 'site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>' );
-    $this->set_config( 'admins', @$config['admins'], array('127.0.0.1','::1') );
+    $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
+    $this->set_config('debug', @$config['debug'], FALSE); $debug = $this->debug;
+    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
+    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
