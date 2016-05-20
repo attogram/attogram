@@ -7,16 +7,15 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.4.2
+ * @version 0.4.3-dev
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
  */
 
-  // todo: force trailing slash
-
 namespace Attogram;
-define('ATTOGRAM_VERSION', '0.4.2');
+
+define('ATTOGRAM_VERSION', '0.4.3-dev');
 $debug = FALSE;
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -39,15 +38,10 @@ class attogram {
    * @return void
    */
   function __construct() {
-
     $this->load_config('config.php');
-
     $this->autoloader();
-
     $this->init_logger();
-
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    
     $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
@@ -57,24 +51,107 @@ class attogram {
   }
 
   /**
-   * autoloader() - auto load, or display fatal error
+   * load_config() - load the system configuration file
+   *
+   * @param string $config_file
+   *
+   * @return void
    */
-  function autoloader() {
-    $this->autoloader = 'vendor/autoload.php';
-    if( !is_readable_file($this->autoloader,'.php') ) {
-      $this->page_header();
-      print '<h1>Attogram Fatal Error</h1><h2>vendor autoloader not found</h2>'
-      . '<p>Please run composer, or download and install the '
-      . '<a href="https://github.com/attogram/attogram-vendor/archive/master.zip">attogram-vendor</a> package</p>';
-      $this->page_footer();
-      exit;
+  function load_config( $config_file='' ) {
+    global $debug;
+    if( !is_readable_file($config_file) ) {
+      $this->error404();
+      //$this->log->warning('LOAD_CONFIG: config file not found');
+    } else {
+      include_once($config_file);
+      if( !isset($config) || !is_array($config) ) {
+        $this->error404();
+        //$this->log->warning('LOAD_CONFIG: $config array not found');
+      }
     }
-    include_once($this->autoloader); 
-    if( !class_exists('\Symfony\Component\HttpFoundation\Request') ) {
-      // fatal error
+    $this->set_config( 'attogram_directory', @$config['attogram_directory'], '../' );
+    $this->set_config( 'debug', @$config['debug'], FALSE ); $debug = $this->debug;
+    $this->set_config( 'site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>' );
+    $this->set_config( 'admins', @$config['admins'], array('127.0.0.1','::1') );
+    $this->actions_dir = $this->attogram_directory . 'actions';
+    $this->admin_dir = $this->attogram_directory . 'admin';
+    $this->templates_dir = $this->attogram_directory . 'templates';
+    $this->functions_dir = $this->attogram_directory . 'functions';
+    $this->tables_dir = $this->attogram_directory . 'tables';
+    $this->autoloader = $this->attogram_directory . 'vendor/autoload.php';
+    $this->default_action = $this->attogram_directory . 'actions/home.php';
+    $this->fof = $this->attogram_directory . 'templates/404.php';
+    $this->db_name = $this->attogram_directory . 'db/global';
+    $this->skip_files = array('.','..','.htaccess');
+  }
+
+  /**
+   * set_config() - set a system configuration variable
+   *
+   * @param string $var_name
+   * @param string $config_val
+   * @param string $default_val
+   *
+   * @return void
+   */
+   function set_config( $var_name, $config_val='', $default_val ) {
+    if( $config_val ) {
+      $this->{$var_name} = $config_val;
+    } else {
+      $this->{$var_name} = $default_val;
     }
   }
 
+  /**
+   * autoloader() - auto load, or display fatal error
+   */
+  function autoloader() {
+    $error = $missing = '';
+    if( isset($this->autoloader) && is_readable_file($this->autoloader,'.php') ) {
+      include_once($this->autoloader);
+      $check = array(
+        '\Symfony\Component\HttpFoundation\Request', // REQUIRED
+        //'\Monolog\Logger',  // Optional
+        //'\Monolog\Handler\StreamHandler',  // Optional
+        //'\Monolog\Formatter\LineFormatter',  // Optional
+        //'\Monolog\Handler\BufferHandler',  // Optional
+        //'Parsedown',  // Optional
+      );
+      foreach( $check as $c ) {
+        if( !class_exists($c) ) {
+          $error = 'Required class not found:';
+          $missing[] = $c;
+        }
+      }
+    } else {
+      $error = 'vendor autoloader not found:';
+      $missing[] = $this->autoloader;
+    }
+    if( !$error ){
+      return;
+    }
+
+    $fix = 'Maybe run composer?  Or download and install the '
+    . '<a href="https://github.com/attogram/attogram-vendor/archive/master.zip">attogram-vendor</a> package.';
+    $this->guru_meditation_error( $error, $missing, $fix );
+    
+
+  }
+
+  /**
+   * guru_meditation_error()
+   */
+  function guru_meditation_error( $message='', $context=array(), $fix='' ) {
+    $this->page_header();
+    print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
+    if( $message ) { print '<h2>' . $message . '</h2>'; }
+    if( $context ) { print '<p class="bg-warning">' . implode($context,'<br />') . '</p>'; }
+    if( $fix ) { print '<p>Fix: ' . $fix . '</p>'; }
+    print '</div>';
+    $this->page_footer();
+    exit;
+  }
+  
   /**
    * init_logger() - initialize the logger object, based on debug setting
    */
@@ -93,59 +170,6 @@ class attogram {
     } else {
       $this->log = new logger();
     }  
-  }
-
-  /**
-   * load_config() - load the system configuration file
-   *
-   * @param string $config_file
-   *
-   * @return void
-   */
-  function load_config( $config_file='' ) {
-    global $debug;
-    if( !is_readable_file($config_file) ) {
-      $this->log->warning('LOAD_CONFIG: config file not found');
-    } else {
-      include_once($config_file);
-      if( !isset($config) || !is_array($config) ) {
-        $this->log->warning('LOAD_CONFIG: $config array not found');
-      }
-    }
-
-    $this->set_config( 'debug',          @$config['debug'],          FALSE );
-    $debug = $this->debug;
-    
-    $this->set_config( 'site_name',      @$config['site_name'],      'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>' );
-    $this->set_config( 'admins',         @$config['admins'],         array('127.0.0.1','::1') );
-    $this->set_config( 'admin_dir',      @$config['admin_dir'],      'admin' );
-    $this->set_config( 'default_action', @$config['default_action'], 'actions/home.php' );
-    $this->set_config( 'actions_dir',    @$config['actions_dir'],    'actions' );
-    $this->set_config( 'templates_dir',  @$config['templates_dir'],  'templates' );
-    $this->set_config( 'functions_dir',  @$config['functions_dir'],  'functions' );
-    $this->set_config( 'fof',            @$config['fof'],            'templates/404.php' );
-    $this->set_config( 'db_name',        @$config['db_name'],        'db/global' );
-    $this->set_config( 'tables_dir',     @$config['tables_dir'],     'tables' );
-    
-    $this->skip_files = array('.','..','.htaccess');
-
-  }
-
-  /**
-   * set_config() - set a system configuration variable
-   *
-   * @param string $var_name
-   * @param string $config_val
-   * @param string $default_val
-   *
-   * @return void
-   */
-   function set_config( $var_name, $config_val='', $default_val ) {
-    if( $config_val ) {
-      $this->{$var_name} = $config_val;
-    } else {
-      $this->{$var_name} = $default_val;
-    }
   }
 
   /**
