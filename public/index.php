@@ -40,13 +40,14 @@ class attogram {
   function __construct() {
     $this->load_config('config.php');
     $this->autoloader();
-    $this->init_logger();
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    $this->init_logger();
+    $this->log->debug('START: ' . $this->request->getHost() . ' ' . $this->request->getClientIp());
     $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
-    $this->log->debug('END log @ ' . date('r') );
+    $this->log->debug('END');
     exit;
   }
 
@@ -128,23 +129,20 @@ class attogram {
     if( !$error ){
       return;
     }
-
     $fix = 'Maybe run composer?  Or download and install the '
     . '<a href="https://github.com/attogram/attogram-vendor/archive/master.zip">attogram-vendor</a> package.';
     $this->guru_meditation_error( $error, $missing, $fix );
-    
-
   }
 
   /**
    * guru_meditation_error()
    */
-  function guru_meditation_error( $message='', $context=array(), $fix='' ) {
+  function guru_meditation_error( $error='', $context=array(), $message='' ) {
     $this->page_header();
     print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
-    if( $message ) { print '<h2>' . $message . '</h2>'; }
-    if( $context ) { print '<p class="bg-warning">' . implode($context,'<br />') . '</p>'; }
-    if( $fix ) { print '<p>Fix: ' . $fix . '</p>'; }
+    if( $error ) { print '<h2>' . $error . '</h2>'; }
+    if( $context && is_array($context) ) { print '<p class="bg-warning">' . implode($context,'<br />') . '</p>'; }
+    if( $message ) { print '<p>' . $message . '</p>'; }
     print '</div>';
     $this->page_footer();
     exit;
@@ -155,19 +153,15 @@ class attogram {
    */
   function init_logger() {
     if( $this->debug && class_exists('\Monolog\Logger') ) {
-
       $this->log = new \Monolog\Logger('attogram');
-
       $sh = new \Monolog\Handler\StreamHandler('php://output');
       $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-
-      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler );
-        
+      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev 
     } else {
       $this->log = new logger();
-    }  
+    }
   }
 
   /**
@@ -183,6 +177,7 @@ class attogram {
       session_start();
       $this->log->info('User loggged off');
     }
+    $this->log->debug('Session started.', $_SESSION);
   }
 
   /**
@@ -196,7 +191,6 @@ class attogram {
     $trash = array_shift($this->uri); 
     $this->path = $this->request->getBasePath();
 
-    $this->log->debug('ROUTE: uri: ' . implode($this->uri,', ') );
     if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
       $this->log->error('ROUTE: Invalid URI');
       $this->error404();
@@ -232,6 +226,7 @@ class attogram {
             $this->error404();
           }
           include($this->action);
+          $this->log->debug('include ' . $this->action);
           return;
         case 'md':
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
@@ -242,7 +237,7 @@ class attogram {
           break;
       } // end switch on parser
     } //end if action set
-    $this->error[] = 'ACTION: Action not found';
+    $this->log->error('ACTION: Action not found');
     $this->error404();
   } // end function route()
 
@@ -299,6 +294,7 @@ class attogram {
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
+    $this->log->debug('do_markdown ' . $file);
     exit;
   }
 
@@ -348,6 +344,7 @@ class attogram {
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>' . $title . '</title></head><body>';
+    $this->log->error('missing page_header ' . $file);
   }
 
   /**
@@ -364,6 +361,7 @@ class attogram {
     // Default page footer
     print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
     print '</body></html>';
+    $this->log->error('missing page_footer ' . $file);    
   }
 
   /**
@@ -375,7 +373,9 @@ class attogram {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
-    return $this->actions = $this->get_actionables($this->actions_dir); 
+    $this->actions = $this->get_actionables($this->actions_dir);
+    $this->log->debug('get_actions', array_keys($this->actions));
+    return $this->actions;
   }
 
   /**
@@ -390,7 +390,9 @@ class attogram {
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
-    return $this->admin_actions = $this->get_actionables($this->admin_dir); 
+    $this->admin_actions = $this->get_actionables($this->admin_dir);
+    $this->log->debug('get_admin_actions', array_keys($this->admin_actions));
+    return $this->admin_actions;
   }
 
   /**
@@ -438,9 +440,19 @@ class attogram {
    * @return boolean
    */
   function is_admin() {
-    if( isset($_GET['noadmin']) ) { return FALSE; }
-    if( !isset($this->admins) || !is_array($this->admins) ) { return FALSE; }
-    if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) { return TRUE; }
+    if( isset($_GET['noadmin']) ) {
+      $this->log->debug('is_admin FALSE - noadmin override');
+      return FALSE;
+    }
+    if( !isset($this->admins) || !is_array($this->admins) ) {
+      $this->log->error('is_admin FALSE - missing $this->admins  array');
+      return FALSE;
+    }
+    if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) {
+      $this->log->debug('is_admin TRUE ' . debug_backtrace()[1]['function']);
+      return TRUE;
+    }
+    $this->log->debug('is_admin FALSE');
     return FALSE;
   }
 
@@ -527,7 +539,7 @@ class sqlite_database {
       $this->log = new \Monolog\Logger('attogram');
 
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">DB: %datetime% > %level_name% > %message% %context% %extra%</p>";
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
               
@@ -598,6 +610,7 @@ class sqlite_database {
       $this->log->error('QUERY: Query failed');
       $r = array();
     }
+    $this->log->debug('QUERY: result', $r);
     return $r;
   }
 
@@ -627,6 +640,7 @@ class sqlite_database {
       $this->log->error('QUERYB: execute failed');
       return FALSE;
     }
+    $this->log->debug('QUERYB TRUE');
     return TRUE;
   }
 
