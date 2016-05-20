@@ -23,17 +23,19 @@ Requirements
 
 Setup: Install
 ==============
+
 * Get Attogram:
- * use Composer:  
-   `composer create-project attogram/attogram-framework your-install-directory`
- * or manually install.  Download latest master.zip from GitHub:  
-   [`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
-   If composer is not available, also download the vendor distribution from 
-   [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip)
-   and move the `./vendor` directory to the top level of your install directory.
-* Install into a web accessible directory
-* edit `.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
-* (Optional) copy `config.sample.php` to `config.php` and edit to change default settings
+  * use Composer:  
+    `composer create-project attogram/attogram-framework your-install-directory`
+  * or manually install:
+    * Download latest code from GitHub:[`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
+    * If composer is not available, also download the vendor distribution from [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip) and move the `./vendor/` directory to the top level of your install directory.
+
+* Setup apache to use `./public/` directory as the web site root.
+
+* edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
+
+* copy `./config.sample.php` to `./public/config.php` and edit to change default settings. 
 
 Setup: Admin
 ============
