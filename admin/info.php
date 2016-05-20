@@ -11,7 +11,7 @@ $info = array();
 $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
 
-
+$info['attogram_directory'] = info_dir($this->attogram_directory);
 
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
