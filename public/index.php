@@ -60,13 +60,11 @@ class attogram {
   function load_config( $config_file='' ) {
     global $debug;
     if( !is_readable_file($config_file) ) {
-      $this->error404();
-      //$this->log->warning('LOAD_CONFIG: config file not found');
+      //$this->guru_meditation_error('LOAD_CONFIG: config file not found');
     } else {
       include_once($config_file);
       if( !isset($config) || !is_array($config) ) {
-        $this->error404();
-        //$this->log->warning('LOAD_CONFIG: $config array not found');
+        //$this->guru_meditation_error('LOAD_CONFIG: $config array not found');
       }
     }
     $this->set_config( 'attogram_directory', @$config['attogram_directory'], '../' );
