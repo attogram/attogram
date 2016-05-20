@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.4.1
+ * @version 0.4.2
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -16,7 +16,7 @@
   // todo: force trailing slash
 
 namespace Attogram;
-define('ATTOGRAM_VERSION', '0.4.1');
+define('ATTOGRAM_VERSION', '0.4.2');
 $debug = FALSE;
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
