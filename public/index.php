@@ -30,7 +30,7 @@ class attogram {
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
-  public $admins, $admin_dir, $admin_actions;
+  public $admins, $is_admin, $admin_dir, $admin_actions;
 
   /**
    * __construct() - startup Attogram!
@@ -155,8 +155,9 @@ class attogram {
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS: %datetime% > %level_name% > %message% %context% %extra%</p>";
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS:%datetime%:%level_name%: %message% %context% %extra%</p>";
+      $dateformat = 'Y-m-d H:i:s:u';
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
       //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev 
     } else {
@@ -440,18 +441,25 @@ class attogram {
    * @return boolean
    */
   function is_admin() {
+    if( isset($this->is_admin) ) {
+      return $this->is_admin;
+    }
     if( isset($_GET['noadmin']) ) {
+      $this->is_admin = FALSE;
       $this->log->debug('is_admin FALSE - noadmin override');
       return FALSE;
     }
     if( !isset($this->admins) || !is_array($this->admins) ) {
+      $this->is_admin = FALSE;
       $this->log->error('is_admin FALSE - missing $this->admins  array');
       return FALSE;
     }
-    if( @in_array($_SERVER['REMOTE_ADDR'],$this->admins) ) {
-      $this->log->debug('is_admin TRUE ' . debug_backtrace()[1]['function']);
+    if( @in_array($this->request->getClientIp(),$this->admins) ) {
+      $this->is_admin = TRUE;
+      $this->log->debug('is_admin TRUE');
       return TRUE;
     }
+    $this->is_admin = FALSE;
     $this->log->debug('is_admin FALSE');
     return FALSE;
   }
@@ -539,8 +547,9 @@ class sqlite_database {
       $this->log = new \Monolog\Logger('attogram');
 
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">DB: %datetime% > %level_name% > %message% %context% %extra%</p>";
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format) );     
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">DB:::%datetime%:%level_name%: %message% %context% %extra%</p>";
+      $dateformat = 'Y-m-d H:i:s:u';
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
               
       //$bch = new \Monolog\Handler\BrowserConsoleHandler;
