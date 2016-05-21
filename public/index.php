@@ -109,8 +109,7 @@ class attogram {
     if( isset($this->autoloader) && is_readable_file($this->autoloader,'.php') ) {
       include_once($this->autoloader);
       $check = array(
-        '\Symfony\Component\HttpFoundation\Request',  // REQUIRED
-        '\Symfony\Component\Finder\Finder',           // REQUIRED
+        '\Symfony\Component\HttpFoundation\Requestx',  // REQUIRED
         //'\Monolog\Logger',  // Optional
         //'\Monolog\Handler\StreamHandler',  // Optional
         //'\Monolog\Formatter\LineFormatter',  // Optional
