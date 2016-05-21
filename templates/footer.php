@@ -15,7 +15,7 @@ namespace Attogram;
 </footer>
 
 <?php
-if( isset($this->log->stack) && $this->log->stack ) {
+if( isset($debug) && $debug && isset($this->log->stack) && $this->log->stack ) {
   print '<div class="container"><pre class="alert alert-debug">System Debug:<br />' 
   . rtrim(ltrim( print_r($this->log->stack,1),"Array\n("),"\n)")
   . '</pre></div>';

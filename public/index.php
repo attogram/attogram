@@ -16,7 +16,7 @@
 namespace Attogram;
 
 define('ATTOGRAM_VERSION', '0.4.3');
-$debug = FALSE;
+$debug = TRUE; // startup debug setting, overriden by config settings
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 $attogram = new attogram();
@@ -38,10 +38,11 @@ class attogram {
    * @return void
    */
   function __construct() {
+    $this->log = new Logger; // logger for startup tasks
     $this->load_config('config.php');
     $this->autoloader();
-    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->init_logger();
+    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->log->debug('START: ' . $this->request->getHost() . ' ' . $this->request->getClientIp());
     $this->sessioning();
     $this->get_functions();
@@ -61,11 +62,11 @@ class attogram {
   function load_config( $config_file='' ) {
     global $debug;
     if( !is_readable_file($config_file) ) {
-      //$this->guru_meditation_error('LOAD_CONFIG: config file not found');
+      $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
     } else {
       include_once($config_file);
       if( !isset($config) || !is_array($config) ) {
-        //$this->guru_meditation_error('LOAD_CONFIG: $config array not found');
+        $this->log->notice('LOAD_CONFIG: $config array not found, using defaults');
       }
     }
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
@@ -99,6 +100,7 @@ class attogram {
     } else {
       $this->{$var_name} = $default_val;
     }
+    $this->log->debug('SET ' . $var_name . ' = ' . print_r($this->{$var_name},1));
   }
 
   /**
@@ -127,6 +129,7 @@ class attogram {
       $missing[] = $this->autoloader;
     }
     if( !$error ){
+      $this->log->debug('autoloader success');
       return;
     }
     $fix = 'Maybe run composer?  Or download and install the '
@@ -138,7 +141,6 @@ class attogram {
    * guru_meditation_error()
    */
   function guru_meditation_error( $error='', $context=array(), $message='' ) {
-    if( !is_object($this->log) ) { $this->init_logger(); }
     $this->log->error('Guru Meditation Error: ' . $error, $context);
     $this->page_header();
     print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
@@ -154,6 +156,10 @@ class attogram {
    * init_logger() - initialize the logger object, based on debug setting
    */
   function init_logger() {
+    if( isset($this->log->stack) ) {
+      $saved_stack = $this->log->stack; // save any startup logs
+    }
+    
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
@@ -162,8 +168,19 @@ class attogram {
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
       //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev 
+      $load_saved_stack = TRUE;
     } else {
-      $this->log = new logger();
+      if( !isset($this->log) ) {
+        $this->log = new logger();
+        $load_saved_stack = TRUE;
+      } else {
+        $load_saved_stack = FALSE;
+      }
+    }
+    if( isset($saved_stack) && $load_saved_stack) {
+      foreach( $saved_stack as $event) {
+        $this->log->debug('STARTUP: ' . $event);
+      }
     }
   }
 
@@ -341,13 +358,17 @@ class attogram {
     $file = $this->templates_dir . '/header.php';
     if( is_readable_file($file,'php') ) {
       include($file);
+      $this->log->debug('page_header, title: ' . $title 
+      //. ' caller: ' . @debug_backtrace()[1]['function']
+      //. ' ' . @debug_backtrace()[2]['function']
+      );
       return;
     }
     // Default page header
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>' . $title . '</title></head><body>';
-    $this->log->error('missing page_header ' . $file);
+    $this->log->error('missing page_header ' . $file . ' - using default header');
   }
 
   /**
@@ -359,12 +380,13 @@ class attogram {
     $file = $this->templates_dir . '/footer.php';
     if( is_readable_file($file,'php') ) {
       include($file);
+      $this->log->debug('page_footer');
       return;
     }
     // Default page footer
     print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
     print '</body></html>';
-    $this->log->error('missing page_footer ' . $file);    
+    $this->log->error('missing page_footer ' . $file . ' - using default footer');    
   }
 
   /**
@@ -428,12 +450,14 @@ class attogram {
    */
   function get_functions() {
     if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
+      $this->log->notice('functions directory not found: ' . $this->functions_dir);
       return FALSE;
     }
     foreach( array_diff(scandir($this->functions_dir), $this->skip_files) as $f ) {
       $file = $this->functions_dir . "/$f";
       if( !is_readable_file($file) ) { continue; } // php files only
       include_once($file);
+      $this->log->debug('included function ' . $file);
     }
   }
 
@@ -526,7 +550,6 @@ class attogram {
   }
 
 } // END of class attogram
-
 
 
 /**
@@ -735,6 +758,7 @@ class sqlite_database {
 
 } // END of class sqlite_database
 
+
 /**
  * Null PSR3 logger
  *
@@ -756,8 +780,8 @@ class logger {
   public function debug($message, array $context = array()) { $this->log('debug',$message,$context); }
 } // end class logger
 
-// Global Utility Functions
 
+// Global Utility Functions
 /**
  * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
  *
