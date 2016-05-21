@@ -14,4 +14,5 @@ $config = array();
 
 //$config['admins'] = array( '127.0.0.1', '::1', );
 
-//$config['depth'] = 2; // How many levels allowed in the URL
+//$config['depth'][''] = 2; // the default depth
+//$config['depth']['whatis'] = 3; // depth for action 'whatis'

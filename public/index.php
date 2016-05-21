@@ -55,8 +55,13 @@ class attogram {
       $this->uri[] = ''; // pretend there is a trailing slash
     }
     $this->log->debug('uri:',$this->uri);
-    if( $this->depth < sizeof($this->uri)) {
-      $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
+
+    $depth = $this->depth['']; // default depth
+    if( isset($this->depth[$this->uri[0]]) ) {
+      $depth = $this->depth[$this->uri[0]];
+    }
+    if( $depth < sizeof($this->uri)) {
+      $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth['']);
       $this->error404();
     }
 
@@ -91,7 +96,7 @@ class attogram {
     $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], 2);
+    $this->set_config('depth', @$config['depth'], array(''=>2,'whatis'=>3));
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
@@ -226,8 +231,6 @@ class attogram {
    */
   function route() {
 
-
-
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
       $this->log->error('ROUTE: 403 Action Forbidden');
       $this->error404();
@@ -254,8 +257,8 @@ class attogram {
             $this->log->error('ROUTE: Unreadable action');
             $this->error404();
           }
-          include($this->action);
           $this->log->debug('include ' . $this->action);
+          include($this->action);
           return;
         case 'md':
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
