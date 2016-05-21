@@ -38,13 +38,29 @@ class attogram {
    * @return void
    */
   function __construct() {
+
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
+
     $this->load_config('config.php');
     $this->autoloader();
     $this->init_logger();
+
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->log->debug('client:' . $this->request->getHost() . ' ' . $this->request->getClientIp());
+    $this->path = $this->request->getBasePath();
+    $this->uri = explode('/', $this->request->getPathInfo());
+    $trash = array_shift($this->uri);
+    if( $this->uri[ sizeof($this->uri)-1 ] != '' ) {
+      $this->uri[] = ''; // pretend there is a trailing slash
+    }
+    $this->log->debug('uri:',$this->uri);
+    if( $this->depth < sizeof($this->uri)) {
+      $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
+      $this->error404();
+    }
+
+    $this->exception_files();
     $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
@@ -71,7 +87,8 @@ class attogram {
       }
     }
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
-    $this->set_config('debug', @$config['debug'], FALSE); $debug = $this->debug;
+    $this->set_config('debug', @$config['debug'], FALSE);
+    $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
     $this->set_config('depth', @$config['depth'], 2);
@@ -209,23 +226,7 @@ class attogram {
    */
   function route() {
 
-    $this->uri = explode('/', $this->request->getPathInfo());
-    $trash = array_shift($this->uri);
-    if( $this->uri[ sizeof($this->uri)-1 ] != '' ) {
-      $this->uri[] = ''; // pretend there is a trailing slash
-    }
-    $this->log->debug('uri:',$this->uri);
 
-    $this->path = $this->request->getBasePath();
-
-    $this->exception_files();
-    
-    if( $this->depth >= sizeof($this->uri)) {
-      $this->log->debug('URI Depth OK. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
-    } else {
-      $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
-      $this->error404();
-    }
 
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
       $this->log->error('ROUTE: 403 Action Forbidden');
@@ -233,6 +234,7 @@ class attogram {
     }
 
     $actions = $this->get_actions();
+
     if( $this->is_admin() ) {
         $actions = array_merge($actions, $this->get_admin_actions());
     }
