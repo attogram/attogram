@@ -26,7 +26,7 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $autoloader, $request, $path, $uri, $fof, $site_name, $skip_files, $log;
+  public $autoloader, $request, $path, $uri, $depth, $fof, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $default_action, $actions, $action;
@@ -73,6 +73,7 @@ class attogram {
     $this->set_config('debug', @$config['debug'], FALSE); $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
+    $this->set_config('depth', @$config['depth'], 2);
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
@@ -208,18 +209,23 @@ class attogram {
   function route() {
 
     $this->uri = explode('/', $this->request->getPathInfo());
-    $trash = array_shift($this->uri); 
+    $trash = array_shift($this->uri);
+    if( $this->uri[ sizeof($this->uri)-1 ] != '' ) {
+      $this->uri[] = ''; // pretend there is a trailing slash
+    }
+    $this->log->debug('uri:',$this->uri);
+
     $this->path = $this->request->getBasePath();
 
-    if( !$this->uri || !is_array($this->uri) || !isset($this->uri[0]) ) {
-      $this->log->error('ROUTE: Invalid URI');
-      $this->error404();
-    }
     $this->exception_files();
-    if( isset($this->uri[2]) || ( isset($this->uri[1]) && $this->uri[1] != '' ) ) { // if has subpath
-      $this->log->error('ROUTE: subpath not supported');
+    
+    if( $this->depth >= sizeof($this->uri)) {
+      $this->log->debug('URI Depth OK. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
+    } else {
+      $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $this->depth);
       $this->error404();
     }
+
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
       $this->log->error('ROUTE: 403 Action Forbidden');
       $this->error404();

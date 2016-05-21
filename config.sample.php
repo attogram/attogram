@@ -13,3 +13,5 @@ $config = array();
 //$config['site_name'] = 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>'; 
 
 //$config['admins'] = array( '127.0.0.1', '::1', );
+
+//$config['depth'] = 2; // How many levels allowed in the URL
