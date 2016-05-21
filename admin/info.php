@@ -17,7 +17,7 @@ $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 
 $info['request'] = info_object($this->request);
-
+$info['depth'] = print_r($this->depth,1);
 $info['uri'] = implode($this->uri,',');
 $info['action'] = info_file($this->action);
 
