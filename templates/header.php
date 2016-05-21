@@ -25,5 +25,5 @@ $navbar = $this->templates_dir . '/navbar.php';
 if( is_readable_file( $navbar, 'php' ) ) {
   include( $navbar );
 } else {
-  $this->error[] = "Missing navbar template: $navbar";
+  $this->log->error("Missing navbar template: $navbar");
 }

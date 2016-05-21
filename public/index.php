@@ -109,7 +109,8 @@ class attogram {
     if( isset($this->autoloader) && is_readable_file($this->autoloader,'.php') ) {
       include_once($this->autoloader);
       $check = array(
-        '\Symfony\Component\HttpFoundation\Request', // REQUIRED
+        '\Symfony\Component\HttpFoundation\Request',  // REQUIRED
+        '\Symfony\Component\Finder\Finder',           // REQUIRED
         //'\Monolog\Logger',  // Optional
         //'\Monolog\Handler\StreamHandler',  // Optional
         //'\Monolog\Formatter\LineFormatter',  // Optional
@@ -138,6 +139,8 @@ class attogram {
    * guru_meditation_error()
    */
   function guru_meditation_error( $error='', $context=array(), $message='' ) {
+    if( !is_object($this->log) ) { $this->init_logger(); }
+    $this->log->error('Guru Meditation Error: ' . $error, $context);
     $this->page_header();
     print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
     if( $error ) { print '<h2>' . $error . '</h2>'; }
@@ -155,8 +158,8 @@ class attogram {
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS:%datetime%:%level_name%: %message% %context% %extra%</p>";
-      $dateformat = 'Y-m-d H:i:s:u';
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS|%datetime%|%level_name%: %message% %context% %extra%</p>";
+      $dateformat = 'Y-m-d|H:i:s:u';
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
       //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev 
@@ -441,7 +444,7 @@ class attogram {
    * @return boolean
    */
   function is_admin() {
-    if( isset($this->is_admin) ) {
+    if( isset($this->is_admin) && is_bool($this->is_admin) ) {
       return $this->is_admin;
     }
     if( isset($_GET['noadmin']) ) {
@@ -454,13 +457,18 @@ class attogram {
       $this->log->error('is_admin FALSE - missing $this->admins  array');
       return FALSE;
     }
-    if( @in_array($this->request->getClientIp(),$this->admins) ) {
+    if( is_object($this->request) ) {
+      $cip = $this->request->getClientIp();
+    } else {
+      $cip = $_SERVER['REMOTE_ADDR'];
+    }
+    if( @in_array($cip,$this->admins) ) {
       $this->is_admin = TRUE;
-      $this->log->debug('is_admin TRUE');
+      $this->log->debug('is_admin TRUE ' . $cip);
       return TRUE;
     }
     $this->is_admin = FALSE;
-    $this->log->debug('is_admin FALSE');
+    $this->log->debug('is_admin FALSE ' . $cip);
     return FALSE;
   }
 
