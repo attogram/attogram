@@ -39,16 +39,17 @@ class attogram {
    */
   function __construct() {
     $this->log = new Logger; // logger for startup tasks
+    $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
     $this->load_config('config.php');
     $this->autoloader();
     $this->init_logger();
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    $this->log->debug('START: ' . $this->request->getHost() . ' ' . $this->request->getClientIp());
+    $this->log->debug('client:' . $this->request->getHost() . ' ' . $this->request->getClientIp());
     $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
-    $this->log->debug('END');
+    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
     exit;
   }
 
@@ -164,7 +165,7 @@ class attogram {
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS|%datetime%|%level_name%: %message% %context% %extra%</p>";
+      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS|%datetime%|%level_name%: %message% %context%</p>"; // %extra%
       $dateformat = 'Y-m-d|H:i:s:u';
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
