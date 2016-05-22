@@ -14,5 +14,6 @@ $config = array();
 
 //$config['admins'] = array( '127.0.0.1', '::1', );
 
-//$config['depth'][''] = 2; // the default depth
+//$config['depth']['*'] = 2; // the default depth
+//$config['depth'][''] = 1; // depth for the home page
 //$config['depth']['whatis'] = 3; // depth for action 'whatis'
