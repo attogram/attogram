@@ -40,7 +40,7 @@ Setup: Install
 Setup: Admin
 ============
 * admin pages are IP protected
-* change the allowed admin IPs by setting `$config['admins']` in `./config.php`
+* change the allowed admin IPs by setting `$config['admins']` in `./public/config.php`
 * default admin IPs is localhost in ip4 and ip6: `array( '127.0.0.1', '::1' )`
 * admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
