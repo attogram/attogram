@@ -17,13 +17,13 @@ namespace Attogram;
 <?php
 if( isset($debug) && $debug && isset($this->log->stack) && $this->log->stack ) {
   print '<div class="container"><pre class="alert alert-debug">System Debug:<br />' 
-  . rtrim(ltrim( print_r($this->log->stack,1),"Array\n("),"\n)")
+  . implode($this->log->stack, '<br />')
   . '</pre></div>';
 }
 
 if( isset($this->sqlite_database->log->stack) && $this->sqlite_database->log->stack ) {
   print '<div class="container"><pre class="alert alert-debug">Database Debug:<br />' 
-  . rtrim(ltrim( print_r($this->sqlite_database->log->stack,1),"Array\n("),"\n)")
+  . implode($this->sqlite_database->log->stack, '<br />')
   . '</pre></div> ';}
 ?>
 
