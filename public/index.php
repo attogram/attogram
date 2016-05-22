@@ -278,12 +278,13 @@ class attogram {
    * @return void
    */
   function exception_files() {
-    if( $this->uri[0] == 'sitemap.xml' && !isset($this->uri[1]) ) {
+    if( $this->uri[0] == 'sitemap.xml' && $this->uri[1] == '' && !isset($this->uri[2]) ) {
       $site = $this->get_site_url() . '/';
       $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
       $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
       foreach( array_keys($this->get_actions()) as $action ){
+        if( $action == 'home' ) { continue; }
         $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
       }
       $sitemap .= '</urlset>';
@@ -291,7 +292,7 @@ class attogram {
       print $sitemap;
       exit;
     }
-    if( $this->uri[0] == 'robots.txt' && !isset($this->uri[1]) ) {
+    if( $this->uri[0] == 'robots.txt' && $this->uri[1] == '' && !isset($this->uri[2]) ) {
       header('Content-Type: text/plain');
       print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
       exit;
