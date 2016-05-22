@@ -24,14 +24,12 @@ $info['action'] = info_file($this->action);
 $info['autoloader'] = info_file($this->autoloader);
 $info['log'] = info_object($this->log);
 
-
 $info['actions_dir'] = info_dir($this->actions_dir);
-$info['default_action'] = info_file($this->default_action);
 $info['actions'] = info_actions($this->actions);
 
 $info['admin_dir'] = info_dir($this->admin_dir);
 $info['admin_actions'] = info_actions($this->admin_actions);
-$info['admins'] = '<li>' . to_list($this->admins, '<li>');
+$info['admins'] = implode($this->admins, ', ');
 
 $info['fof'] = info_file($this->fof);
 $info['templates_dir '] = info_dir($this->templates_dir);
