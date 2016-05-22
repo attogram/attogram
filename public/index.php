@@ -96,7 +96,7 @@ class attogram {
     $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], array('*'=>2,'home'=>1,'whatis'=>3));
+    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1,'whatis'=>3));
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
