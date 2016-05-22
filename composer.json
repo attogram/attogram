@@ -3,10 +3,7 @@
   "description": "The Attogram Framework",
   "type": "project",
   "homepage": "https://github.com/attogram/attogram",
-  "license": [
-    "MIT",
-    "GPL-3.0+"
-  ],
+  "license": "(MIT or GPL-3.0+)",
   "require": {
     "php": ">=5.5.9 || ^7.0",
     "ext-pdo": "*",
