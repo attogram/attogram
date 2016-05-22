@@ -17,8 +17,8 @@ namespace Attogram;
 
 define('ATTOGRAM_VERSION', '0.4.4');
 $debug = TRUE; // startup debug setting, overriden by config settings
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+error_reporting(E_ALL); // dev
+ini_set('display_errors', '1'); // dev
 $attogram = new attogram();
 
 /**
@@ -29,7 +29,7 @@ class attogram {
   public $autoloader, $request, $path, $uri, $depth, $fof, $site_name, $skip_files, $log;
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
-  public $actions_dir, $default_action, $actions, $action;
+  public $actions_dir, $actions, $action;
   public $admins, $is_admin, $admin_dir, $admin_actions;
 
   /**
@@ -103,7 +103,6 @@ class attogram {
     $this->functions_dir = $this->attogram_directory . 'functions';
     $this->tables_dir = $this->attogram_directory . 'tables';
     $this->autoloader = $this->attogram_directory . 'vendor/autoload.php';
-    $this->default_action = $this->attogram_directory . 'actions/home.php';
     $this->fof = $this->attogram_directory . 'templates/404.php';
     $this->db_name = $this->attogram_directory . 'db/global';
     $this->skip_files = array('.','..','.htaccess');
