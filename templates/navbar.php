@@ -31,10 +31,10 @@
 
 <?php
       if( $this->is_logged_in() ) {
-        print '<li><a href="' . $this->path . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> User: <b>' . $_SESSION['attogram_username'] . '</b></a></li>';
+        print '<li><a href="' . $this->path . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>' . $_SESSION['attogram_username'] . '</b></a></li>';
         print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
       } else {
-        print '<li><a href="' . $this->path . '/login/"><span class="glyphicon glyphicon-remove-login" aria-hidden="true"></span> login</a></li>';
+        print '<li><a href="' . $this->path . '/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
       }
 ?>       
 <?php if( $this->is_admin() ) { ?>
