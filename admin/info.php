@@ -10,38 +10,37 @@ $this->page_header('Attogram - Admin - Info');
 $info = array();
 $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
-
-$info['attogram_directory'] = info_dir($this->attogram_directory);
-
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
+
+$info['actions'] = info_actions($this->actions);
+$info['admin_actions'] = info_actions($this->admin_actions);
+
 $info['path'] = ( $this->path ? $this->path : '<code>empty</code>' );
 
-$info['request'] = info_object($this->request);
-$info['depth'] = print_r($this->depth,1);
-$info['uri'] = implode($this->uri,',');
-$info['action'] = info_file($this->action);
-
-$info['autoloader'] = info_file($this->autoloader);
-$info['log'] = info_object($this->log);
-
+$info['attogram_directory'] = info_dir($this->attogram_directory);
 $info['actions_dir'] = info_dir($this->actions_dir);
-$info['actions'] = info_actions($this->actions);
-
 $info['admin_dir'] = info_dir($this->admin_dir);
-$info['admin_actions'] = info_actions($this->admin_actions);
+$info['templates_dir '] = info_dir($this->templates_dir);
+$info['configs_dir'] = info_dir($this->configs_dir);
+$info['tables_dir'] = info_dir($this->tables_dir);
+$info['functions_dir'] = info_dir($this->functions_dir);
+$info['skip_files'] = implode( $this->skip_files, ', ' );
+
+$info['request'] = info_object($this->request);
+$info['log'] = info_object($this->log);
+$info['sqlite_database'] = info_object($this->sqlite_database);
+
+$info['depth'] = print_r($this->depth,1);
+//$info['uri'] = implode($this->uri,',');
 $info['admins'] = implode($this->admins, ', ');
 
+$info['action'] = info_file($this->action);
+$info['autoloader'] = info_file($this->autoloader);
 $info['fof'] = info_file($this->fof);
-$info['templates_dir '] = info_dir($this->templates_dir);
-$info['functions_dir'] = info_dir($this->functions_dir);
-$info['configs_dir'] = info_dir($this->configs_dir);
 
-$info['tables_dir'] = info_dir($this->tables_dir);
 $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
-$info['sqlite_database'] = get_class($this->sqlite_database);
 
-$info['skip_files'] = implode( $this->skip_files, ', ' );
 $info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
 
 $info['attogram_id'] = isset($_SESSION['attogram_id']) ? htmlentities($_SESSION['attogram_id']) : '<code>null</code>';
