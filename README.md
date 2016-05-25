@@ -71,6 +71,13 @@ Admin pages
 ===========
 * create/delete the same as normal pages, but in the `./admin/` directory
 
+Database tables
+===============
+* to add a table, add a file into `./tables/` directory
+* file name is the name of the table
+* file contents is the sql CREATE TABLE ... 
+* tables are automatically created upon first use
+
 Web discovery
 =============
 * If `./robots.txt` does not exist, Attogram dynamically serves it, with a link to the Sitemap
