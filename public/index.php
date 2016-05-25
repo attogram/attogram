@@ -124,7 +124,8 @@ class attogram {
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
     $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
-
+    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset default depth
+    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset homepage depth
   }
 
   /**
