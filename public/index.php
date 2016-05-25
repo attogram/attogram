@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.4.5
+ * @version 0.4.6
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,7 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.4.5');
+define('ATTOGRAM_VERSION', '0.4.6');
 $debug = TRUE; // startup debug setting, overriden by config settings
 error_reporting(E_ALL); // dev
 ini_set('display_errors', '1'); // dev
@@ -96,7 +96,7 @@ class attogram {
     $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1,'whatis'=>3));
+    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
