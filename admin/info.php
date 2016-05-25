@@ -34,6 +34,7 @@ $info['admins'] = implode($this->admins, ', ');
 $info['fof'] = info_file($this->fof);
 $info['templates_dir '] = info_dir($this->templates_dir);
 $info['functions_dir'] = info_dir($this->functions_dir);
+$info['configs_dir'] = info_dir($this->configs_dir);
 
 $info['tables_dir'] = info_dir($this->tables_dir);
 $info['db_name'] = info_file($this->db_name);
