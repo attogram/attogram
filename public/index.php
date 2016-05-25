@@ -30,6 +30,7 @@ class attogram {
   public $sqlite_database, $db_name, $tables_dir;
   public $templates_dir, $functions_dir;
   public $actions_dir, $actions, $action;
+  public $configs_dir;
   public $admins, $is_admin, $admin_dir, $admin_actions;
 
   /**
@@ -42,8 +43,8 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->load_config('config.php');
-    $this->autoloader();
+    $this->load_config('config.php'); 
+    $this->autoloader(); 
     $this->init_logger();
 
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
@@ -82,7 +83,10 @@ class attogram {
    * @return void
    */
   function load_config( $config_file='' ) {
+
     global $debug;
+
+    // Load the main configuration file, if available
     if( !is_readable_file($config_file) ) {
       $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
     } else {
@@ -91,12 +95,9 @@ class attogram {
         $this->log->notice('LOAD_CONFIG: $config array not found, using defaults');
       }
     }
+    
+    // Set installation, directory and file locations
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
-    $this->set_config('debug', @$config['debug'], FALSE);
-    $debug = $this->debug;
-    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
-    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
@@ -105,7 +106,25 @@ class attogram {
     $this->autoloader = $this->attogram_directory . 'vendor/autoload.php';
     $this->fof = $this->attogram_directory . 'templates/404.php';
     $this->db_name = $this->attogram_directory . 'db/global';
+    $this->configs_dir = $this->attogram_directory . 'configs';
     $this->skip_files = array('.','..','.htaccess');
+    
+    // Load any extra configuration files, if available
+    if( is_dir($this->configs_dir) && is_readable($this->configs_dir) ) {
+      foreach( array_diff(scandir($this->configs_dir), $this->skip_files) as $f ) {
+        $file = $this->configs_dir . "/$f";
+        if( !is_readable_file($file, '.php') ) { continue; } // php files only
+        include_once($file);
+      }
+    }
+
+    // Set configuration variables
+    $this->set_config('debug', @$config['debug'], FALSE);
+    $debug = $this->debug;
+    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
+    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
+    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
+
   }
 
   /**
