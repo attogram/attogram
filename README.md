@@ -35,7 +35,7 @@ Setup: Install
 
 * edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
 
-* copy `./config.sample.php` to `./public/config.php` and edit to change default settings. 
+* copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings. 
 
 Setup: Admin
 ============

@@ -35,7 +35,7 @@ Setup: Install
 
 * edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
 
-* copy `./config.sample.php` to `./public/config.php` and edit to change default settings. 
+* copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings. 
 
 Setup: Admin
 ============
@@ -70,6 +70,13 @@ Remove a page
 Admin pages
 ===========
 * create/delete the same as normal pages, but in the `./admin/` directory
+
+Database tables
+===============
+* to add a table, add a file into `./tables/` directory
+* file name is the name of the table
+* file contents is the sql CREATE TABLE ... 
+* tables are automatically created upon first use
 
 Web discovery
 =============
