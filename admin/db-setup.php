@@ -1,5 +1,7 @@
 <?php
-// Attogram - action - admin
+// Attogram Framework - Database Setup v0.0.1
+
+namespace Attogram;
 
 $title = 'Attogram - Admin - DB setup';
 $this->page_header('Attogram - Admin - DB setup');

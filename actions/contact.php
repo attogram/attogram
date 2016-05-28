@@ -1,5 +1,7 @@
 <?php
-// Attogram - action - contact
+// Attogram Framework - Contact Page v0.0.1
+
+namespace Attogram;
 
 $this->page_header('Attogram - Contact');
 

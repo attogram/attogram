@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Main Configuration File
+// Attogram Framework - Main Configuration File Example v0.0.1
 
 namespace Attogram;
 

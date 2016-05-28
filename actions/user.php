@@ -1,5 +1,7 @@
 <?php
-// Attogram - action - user
+// Attogram Framekwork - User Page v0.0.1
+
+namespace Attogram;
 
 if( !$this->is_logged_in() ) {
   header('Location: ' . $this->path . '/login/');

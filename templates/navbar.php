@@ -1,5 +1,5 @@
 <?php
-// Attogram - templates - navbar
+// Attogram Framework - Navbar v0.0.1
 
 ?>
 <nav class="navbar navbar-default">

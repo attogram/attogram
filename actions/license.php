@@ -1,5 +1,7 @@
 <?php
-// Attogram - action - license
+// Attogram Framework - License Page v0.0.1
+
+namespace Attogram;
 
 $this->page_header('Attogram - License');
 ?>

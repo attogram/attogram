@@ -1,5 +1,5 @@
 <?php
-// Attogram - templates - header
+// Attogram Framework - Header v0.0.1
 
 namespace Attogram;
 

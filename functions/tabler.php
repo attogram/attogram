@@ -1,4 +1,6 @@
 <?php
+// Attogram Framework - Tabler helper v0.0.1
+
 namespace Attogram;
 
 /**
@@ -25,7 +27,7 @@ function tabler(
   } else {
     $admin_create = $admin_edit = $admin_delete = '';
   }
-  
+
   print '<div class="container"><p>'
   . '<strong>' . count($result) . '</strong> <a href="">' . $name_plural . '</a>';
 

@@ -1,5 +1,8 @@
 <?php
-// Attogram - action - login
+// // Attogram Framework - Login Page v0.0.1
+
+namespace Attogram;
+
 $message = '';
 if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
   if( $this->login() ) {
@@ -24,7 +27,7 @@ $this->page_header('Attogram - Login');
     <div class="form-group">
       Password: <input class="form-control" type="password" name="p">
     </div>
-    <button type="submit" class="btn btn-info" style="width:50%;"> 
+    <button type="submit" class="btn btn-info" style="width:50%;">
     &nbsp; &nbsp; &nbsp; &nbsp; Login &nbsp; &nbsp; &nbsp; &nbsp; </button>
   </form>
  </div>
