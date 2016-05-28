@@ -35,7 +35,7 @@ Setup: Install
 
 * edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
 
-* copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings. 
+* copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings.
 
 Setup: Admin
 ============
@@ -75,13 +75,18 @@ Database tables
 ===============
 * to add a table, add a file into `./tables/` directory
 * file name is the name of the table
-* file contents is the sql CREATE TABLE ... 
+* file contents is the sql CREATE TABLE ...
 * tables are automatically created upon first use
 
 Web discovery
 =============
 * If [`./robots.txt`](../robots.txt) does not exist, Attogram dynamically serves it, with a link to the Sitemap
 * If [`./sitemap.xml`](../sitemap.xml) does not exist, Attogram dynamically serves it, with a listing of all public pages
+
+Admin URL overrides
+===================
+* admins may use URL/`?noadmin` on any page to turn off admin access
+* admins may use URL/`?debug` on any page to turn on debugging
 
 More Info
 =========
