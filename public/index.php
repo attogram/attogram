@@ -27,7 +27,7 @@ $attogram = new attogram();
 class attogram {
 
   public $autoloader, $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri;
-  public $depth, $fof, $site_name, $skip_files, $log;
+  public $depth, $fof, $site_name, $skip_files, $log, $force_slash_exceptions;
   public $sqlite_database, $db_name;
   public $templates_dir, $functions_dir, $actions_dir, $configs_dir, $admin_dir, $tables_dir;
   public $actions, $action;
@@ -56,17 +56,33 @@ class attogram {
     $this->path = $this->request->getBasePath();
     $this->uri = explode('/', $this->pathInfo);
     $trash = array_shift($this->uri); // take off first entry
-    $this->log->debug('uri:',$this->uri);
+    $this->log->debug('1 uri:',$this->uri);
 
     $this->exception_files(); // do robots.txt, sitemap.xml
 
-    if( !preg_match('/\/$/', $this->pathInfo)) { // Force Trailing Slash
-      $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
-      header('HTTP/1.1 301 Moved Permanently');
-      header('Location: ' . $url ) ;
-      exit;
+    if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
+      if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) { 
+         // This action IS NOT excepted from force slash at end
+        $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $url ); // Force Trailing Slash
+        exit;
+      }
+    } else { // Yes slash at end of url
+      if( is_array($this->force_slash_exceptions) && in_array( $this->uri[0], $this->force_slash_exceptions ) ) { 
+        // This action IS excepted from force slash at end
+        $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $url ); // Remove Trailing Slash
+        exit;
+      }     
     }
 
+    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
+      $this->uri[] = '';  // pretend there is a slash at end
+    }
+    $this->log->debug('2 uri:',$this->uri);
+    
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
       $depth = $this->depth[$this->uri[0]];
@@ -135,6 +151,7 @@ class attogram {
     $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
     if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset default depth
     if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset homepage depth
+    $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
   }
 
   /**
