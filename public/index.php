@@ -53,6 +53,12 @@ class attogram {
     $this->log->debug("client: $this->host : $this->clientIp");
     $this->pathInfo = $this->request->getPathInfo();
     $this->requestUri = $this->request->getRequestUri();
+    $this->path = $this->request->getBasePath();
+    $this->uri = explode('/', $this->pathInfo);
+    $trash = array_shift($this->uri); // take off first entry
+    $this->log->debug('uri:',$this->uri);
+
+    $this->exception_files(); // do robots.txt, sitemap.xml
 
     if( !preg_match('/\/$/', $this->pathInfo)) { // Force Trailing Slash
       $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
@@ -60,14 +66,6 @@ class attogram {
       header('Location: ' . $url ) ;
       exit;
     }
-
-    $this->path = $this->request->getBasePath();
-    $this->uri = explode('/', $this->pathInfo);
-    $trash = array_shift($this->uri);
-    if( $this->uri[ sizeof($this->uri)-1 ] != '' ) {
-      $this->uri[] = ''; // pretend there is a trailing slash
-    }
-    $this->log->debug('uri:',$this->uri);
 
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
@@ -78,7 +76,6 @@ class attogram {
       $this->error404();
     }
 
-    $this->exception_files();
     $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
@@ -310,24 +307,29 @@ class attogram {
    * @return void
    */
   function exception_files() {
-    if( $this->uri[0] == 'sitemap.xml' && $this->uri[1] == '' && !isset($this->uri[2]) ) {
-      $site = $this->get_site_url() . '/';
-      $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-      $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-      $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
-      foreach( array_keys($this->get_actions()) as $action ){
-        if( $action == 'home' ) { continue; }
-        $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
-      }
-      $sitemap .= '</urlset>';
-      header ('Content-Type:text/xml');
-      print $sitemap;
-      exit;
+    if( isset($this->uri[1]) || isset($this->uri[2]) ) { // url too long
+      return;
     }
-    if( $this->uri[0] == 'robots.txt' && $this->uri[1] == '' && !isset($this->uri[2]) ) {
-      header('Content-Type: text/plain');
-      print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
-      exit;
+    switch( $this->uri[0] ) {
+
+      case 'robots.txt':
+        header('Content-Type: text/plain');
+        print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
+        exit;
+
+      case 'sitemap.xml':
+        $site = $this->get_site_url() . '/';
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
+        foreach( array_keys($this->get_actions()) as $action ){
+          if( $action == 'home' ) { continue; }
+          $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
+        }
+        $sitemap .= '</urlset>';
+        header ('Content-Type:text/xml');
+        print $sitemap;
+        exit;
     }
   }
 
