@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Main Configuration File Example v0.0.1
+// Attogram Framework - Main Configuration File Example v0.0.2
 
 namespace Attogram;
 
@@ -28,3 +28,6 @@ $config = array();
 // By default, a slash / is forced onto the end of all URLs, if not already present.
 // To allow slash-less ending URLs, list the action names here:
 // $config['force_slash_exceptions'][] = 'insert_action_name_here';
+
+// autoloader
+// $config['autoloader'] = '../path/to/vendor/autoload.php';

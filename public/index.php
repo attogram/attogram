@@ -50,13 +50,12 @@ class attogram {
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
     $this->init_logger();
-
     if( isset($_GET['debug']) && $this->is_admin() ) {
       $this->debug = $debug = TRUE;
       $this->init_logger();
       $this->log->debug('Admin Debug turned ON');
     }
-
+    $this->sessioning();
     $this->host = $this->request->getHost();
     $this->clientIp = $this->request->getClientIp();
     $this->log->debug("client: $this->host : $this->clientIp");
@@ -101,7 +100,6 @@ class attogram {
       $this->error404();
     }
 
-    $this->sessioning();
     $this->get_functions();
     $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
@@ -164,6 +162,7 @@ class attogram {
     if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset default depth
     if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset homepage depth
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
+    $this->set_config('autoloader', @$config['autoloader'], $this->autoloader );
   }
 
   /**
@@ -617,6 +616,7 @@ class attogram {
    * @return boolean
    */
   function is_logged_in() {
+    if( !is_object($this->session) ) { return FALSE; } // dev
     if( $this->session->get('attogram_id', FALSE) && $this->session->get('attogram_username', FALSE) ) {
       return TRUE;
     }
