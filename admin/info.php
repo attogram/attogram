@@ -46,6 +46,7 @@ $info['footer'] = info_file($this->templates_dir . '/footer.php');
 
 $info['<h3><span class="glyphicon glyphicon-paperclip"></span> <em>Objects:</em></h3>'] = '';
 $info['request'] = info_object($this->request);
+$info['session'] = info_object($this->session);
 $info['log'] = info_object($this->log);
 
 $info['<h3><span class="glyphicon glyphicon-hdd"></span> <em>Database:</em></h3>'] = '';
@@ -54,10 +55,8 @@ $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 
 $info['<h3><span class="glyphicon glyphicon-user"></span> <em>User:</em></h3>'] = '';
-$info['attogram_id'] = isset($_SESSION['attogram_id']) ? htmlentities($_SESSION['attogram_id']) : '<code>null</code>';
-$info['attogram_username'] = isset($_SESSION['attogram_username']) ? htmlentities($_SESSION['attogram_username']) : '<code>null</code>';
-$info['attogram_level'] = isset($_SESSION['attogram_level']) ? htmlentities($_SESSION['attogram_level']) : '<code>null</code>';
-$info['attogram_email'] = isset($_SESSION['attogram_email']) ? htmlentities($_SESSION['attogram_email']) : '<code>null</code>';
+$info['# session attributes'] = $this->session->count();
+$info['session attributes'] = info_array( $this->session->all(), $key=1 );
 
 print '
 <div class="container">
