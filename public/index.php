@@ -40,14 +40,23 @@ class attogram {
    */
   function __construct() {
 
+    global $debug;
+
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
     $this->load_config('config.php');
     $this->autoloader();
+    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
     $this->init_logger();
 
-    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    if( isset($_GET['debug']) && $this->is_admin() ) {
+      $this->debug = $debug = TRUE;
+      $this->init_logger();
+      $this->log->debug('Admin Debug turned ON');
+    }
+
     $this->host = $this->request->getHost();
     $this->clientIp = $this->request->getClientIp();
     $this->log->debug("client: $this->host : $this->clientIp");
@@ -61,7 +70,7 @@ class attogram {
     $this->exception_files(); // do robots.txt, sitemap.xml
 
     if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
-      if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) { 
+      if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
          // This action IS NOT excepted from force slash at end
         $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
@@ -69,20 +78,20 @@ class attogram {
         exit;
       }
     } else { // Yes slash at end of url
-      if( is_array($this->force_slash_exceptions) && in_array( $this->uri[0], $this->force_slash_exceptions ) ) { 
+      if( is_array($this->force_slash_exceptions) && in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
         // This action IS excepted from force slash at end
         $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url ); // Remove Trailing Slash
         exit;
-      }     
+      }
     }
 
     if( $this->uri[sizeof($this->uri) - 1] != '' ) {
       $this->uri[] = '';  // pretend there is a slash at end
     }
     $this->log->debug('2 uri:',$this->uri);
-    
+
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
       $depth = $this->depth[$this->uri[0]];
@@ -110,6 +119,8 @@ class attogram {
   function load_config( $config_file='' ) {
 
     global $debug;
+
+    $this->log->debug('include main config: ' . $config_file);
 
     // Load the main configuration file, if available
     if( !is_readable_file($config_file) ) {
@@ -140,6 +151,7 @@ class attogram {
         $file = $this->configs_dir . "/$f";
         if( !is_readable_file($file, '.php') ) { continue; } // php files only
         include_once($file);
+        $this->log->debug('include extra config: ' . $file);
       }
     }
 
