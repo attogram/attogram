@@ -6,7 +6,7 @@ jQuery and Bootstrap.
 
 After that, Attogram tries to stay out of your way while you do your thing!
 
-[Read more about Attogram](actions/about.md)
+[Read more about how to install, setup and extend Attogram](actions/about.md)
 
 More Info
 =========
