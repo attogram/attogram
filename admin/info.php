@@ -1,5 +1,5 @@
 <?php
-// Attogram - Site Info v0.0.1
+// Attogram Framework - Site Info v0.0.2
 
 namespace Attogram;
 
@@ -59,7 +59,6 @@ $info['attogram_username'] = isset($_SESSION['attogram_username']) ? htmlentitie
 $info['attogram_level'] = isset($_SESSION['attogram_level']) ? htmlentities($_SESSION['attogram_level']) : '<code>null</code>';
 $info['attogram_email'] = isset($_SESSION['attogram_email']) ? htmlentities($_SESSION['attogram_email']) : '<code>null</code>';
 
-
 print '
 <div class="container">
  <h1>Site Info</h1>
@@ -78,6 +77,9 @@ $this->page_footer();
 // Helper functions
 function info_array($array, $keyed=FALSE) {
   if( !is_array($array) )  { return '<code>ERROR</code>'; }
+  if( !$array ) {
+    return '<code>null</code>';
+  }
   if( !$keyed ) {
     return '<li>' . implode($array, '</li><li>') . '</li>';
   }
