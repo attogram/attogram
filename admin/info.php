@@ -1,5 +1,5 @@
 <?php
-// Attogram - Site Info
+// Attogram - Site Info v0.0.1
 
 namespace Attogram;
 
@@ -9,7 +9,7 @@ $this->page_header('Site Info');
 
 $info = array();
 
-$info['<h3><span class="glyphicon glyphicon-info-sign"></span> <em>Attogram Framework:</em></h3>'] = '';
+$info['<h3><span class="glyphicon glyphicon-info-sign"></span> <em>Attogram:</em></h3>'] = '';
 $info['ATTOGRAM_VERSION'] = ATTOGRAM_VERSION;
 $info['site_name'] = $this->site_name;
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
@@ -18,8 +18,9 @@ $info['pathInfo'] = $this->pathInfo;
 $info['requestUri'] = $this->requestUri;
 $info['uri'] = implode($this->uri,',');
 $info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
-$info['depth'] = print_r($this->depth,1);
-$info['admins'] = implode($this->admins, ', ');
+$info['depth'] =  info_array($this->depth,$keyed=1);
+$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
+$info['admins'] = info_array($this->admins);
 
 $info['<h3><span class="glyphicon glyphicon-play"></span> <em>Actions:</em></h3>'] = '';
 $info['actions'] = info_actions($this->actions);
@@ -33,7 +34,7 @@ $info['templates_dir '] = info_dir($this->templates_dir);
 $info['configs_dir'] = info_dir($this->configs_dir);
 $info['tables_dir'] = info_dir($this->tables_dir);
 $info['functions_dir'] = info_dir($this->functions_dir);
-$info['skip_files'] = implode( $this->skip_files, ', ' );
+$info['skip_files'] = info_array( $this->skip_files);
 
 $info['<h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
 $info['action'] = info_file($this->action);
@@ -75,6 +76,18 @@ $this->page_footer();
 
 
 // Helper functions
+function info_array($array, $keyed=FALSE) {
+  if( !is_array($array) )  { return '<code>ERROR</code>'; }
+  if( !$keyed ) {
+    return '<li>' . implode($array, '</li><li>') . '</li>';
+  }
+  $r = '';
+  foreach( $array as $name=>$value ) {
+    $r .= '<li><strong>' . $name .'</strong> = <code>' . $value . '</code></li>';
+  }
+  return $r;
+}
+
 function info_object($obj) {
   if( is_object($obj) ) {
     $gn = 'ok'; $gt = 'success'; $n = get_class($obj);
@@ -88,10 +101,12 @@ function info_file($file) {
   if( is_file($file) && is_readable($file) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $file;
 }
+
 function info_dir($dir) {
   if( is_dir($dir) ) { $gn = 'ok'; $gt = 'success'; } else { $gn = 'remove'; $gt = 'danger'; }
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $dir;
 }
+
 function info_actions( $actions ) {
   $r = '';
   foreach( array_keys($actions) as $a ) {
@@ -100,22 +115,4 @@ function info_actions( $actions ) {
       . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
   }
   return $r;
-}
-function to_list( $x, $sep=', ') {
-  if( is_array($x) ) {
-    $r = '';
-    foreach($x as $n => $v) {
-      if( !is_object($v) && !is_array($v) ) {
-        if( $v == '' ) { $v = '<code>empty</code>'; }
-        $r .= $v . $sep;
-      } else {
-        $r .= to_list($v) . $sep;
-      }
-    }
-    return rtrim($r,$sep);
-  }
-  if( is_object($x) ) {
-    return get_class($x);
-  }
-  return $x;
 }
