@@ -26,12 +26,12 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $autoloader, $request, $path, $uri, $depth, $fof, $site_name, $skip_files, $log;
-  public $sqlite_database, $db_name, $tables_dir;
-  public $templates_dir, $functions_dir;
-  public $actions_dir, $actions, $action;
-  public $configs_dir;
-  public $admins, $is_admin, $admin_dir, $admin_actions;
+  public $autoloader, $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri;
+  public $depth, $fof, $site_name, $skip_files, $log;
+  public $sqlite_database, $db_name;
+  public $templates_dir, $functions_dir, $actions_dir, $configs_dir, $admin_dir, $tables_dir;
+  public $actions, $action;
+  public $admins, $is_admin, $admin_actions;
 
   /**
    * __construct() - startup Attogram!
@@ -43,14 +43,26 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->load_config('config.php'); 
-    $this->autoloader(); 
+    $this->load_config('config.php');
+    $this->autoloader();
     $this->init_logger();
 
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    $this->log->debug('client:' . $this->request->getHost() . ' ' . $this->request->getClientIp());
+    $this->host = $this->request->getHost();
+    $this->clientIp = $this->request->getClientIp();
+    $this->log->debug("client: $this->host : $this->clientIp");
+    $this->pathInfo = $this->request->getPathInfo();
+    $this->requestUri = $this->request->getRequestUri();
+
+    if( !preg_match('/\/$/', $this->pathInfo)) { // Force Trailing Slash
+      $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
+      header('HTTP/1.1 301 Moved Permanently');
+      header('Location: ' . $url ) ;
+      exit;
+    }
+
     $this->path = $this->request->getBasePath();
-    $this->uri = explode('/', $this->request->getPathInfo());
+    $this->uri = explode('/', $this->pathInfo);
     $trash = array_shift($this->uri);
     if( $this->uri[ sizeof($this->uri)-1 ] != '' ) {
       $this->uri[] = ''; // pretend there is a trailing slash
@@ -95,7 +107,7 @@ class attogram {
         $this->log->notice('LOAD_CONFIG: $config array not found, using defaults');
       }
     }
-    
+
     // Set installation, directory and file locations
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
     $this->actions_dir = $this->attogram_directory . 'actions';
@@ -108,7 +120,7 @@ class attogram {
     $this->db_name = $this->attogram_directory . 'db/global';
     $this->configs_dir = $this->attogram_directory . 'configs';
     $this->skip_files = array('.','..','.htaccess');
-    
+
     // Load any extra configuration files, if available
     if( is_dir($this->configs_dir) && is_readable($this->configs_dir) ) {
       foreach( array_diff(scandir($this->configs_dir), $this->skip_files) as $f ) {
@@ -194,7 +206,7 @@ class attogram {
     $this->page_footer();
     exit;
   }
-  
+
   /**
    * init_logger() - initialize the logger object, based on debug setting
    */
@@ -202,15 +214,15 @@ class attogram {
     if( isset($this->log->stack) ) {
       $saved_stack = $this->log->stack; // save any startup logs
     }
-    
+
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
       $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">SYS|%datetime%|%level_name%: %message% %context%</p>"; // %extra%
       $dateformat = 'Y-m-d|H:i:s:u';
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev 
+      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
       $load_saved_stack = TRUE;
     } else {
       if( !isset($this->log) ) {
@@ -390,7 +402,7 @@ class attogram {
     $file = $this->templates_dir . '/header.php';
     if( is_readable_file($file,'php') ) {
       include($file);
-      $this->log->debug('page_header, title: ' . $title 
+      $this->log->debug('page_header, title: ' . $title
       //. ' caller: ' . @debug_backtrace()[1]['function']
       //. ' ' . @debug_backtrace()[2]['function']
       );
@@ -418,7 +430,7 @@ class attogram {
     // Default page footer
     print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
     print '</body></html>';
-    $this->log->error('missing page_footer ' . $file . ' - using default footer');    
+    $this->log->error('missing page_footer ' . $file . ' - using default footer');
   }
 
   /**
@@ -465,14 +477,14 @@ class attogram {
     }
     foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
       $file = $dir . "/$f";
-      if( is_readable_file($file, '.php') ) { // PHP files 
+      if( is_readable_file($file, '.php') ) { // PHP files
         $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
-      } elseif( is_readable_file($file, '.md') ) { // Markdown files 
+      } elseif( is_readable_file($file, '.md') ) { // Markdown files
         $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md'
         );
       }
     }
-    return $r; 
+    return $r;
   }
 
   /**
@@ -611,12 +623,12 @@ class sqlite_database {
       $sh = new \Monolog\Handler\StreamHandler('php://output');
       $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">DB:::%datetime%:%level_name%: %message% %context% %extra%</p>";
       $dateformat = 'Y-m-d H:i:s:u';
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );     
+      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-              
+
       //$bch = new \Monolog\Handler\BrowserConsoleHandler;
       //$this->log->pushHandler( $bch );
-        
+
     } else {
       $this->log = new logger();
     }
@@ -834,5 +846,3 @@ function is_readable_file( $file=FALSE, $type='.php' ) {
   }
   return FALSE;
 }
-
-
