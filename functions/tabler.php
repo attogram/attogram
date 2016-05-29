@@ -18,7 +18,7 @@ function tabler(
   $show_edit
 ) {
 
-  $result = $attogram->sqlite_database->query($sql);
+  $result = $attogram->db->query($sql);
 
   if( $show_edit ) {
     $admin_create = '../db-admin/?table=' . $table .'&amp;action=row_create';
