@@ -1,3 +1,5 @@
+-- Attogram Framework - user table - v0.0.1
+
 CREATE TABLE IF NOT EXISTS 'user' (
 'id' INTEGER PRIMARY KEY,
 'username' TEXT UNIQUE NOT NULL,
