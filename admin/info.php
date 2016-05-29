@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Site Info v0.0.2
+// Attogram Framework - Site Info v0.0.3
 
 namespace Attogram;
 
@@ -61,7 +61,7 @@ $info['session attributes'] = info_array( $this->session->all(), $key=1 );
 print '
 <div class="container">
  <h1>Site Info</h1>
- <table class="table">
+ <table class="table table-condensed">
 ';
 
 foreach( $info as $name => $value ) {
@@ -80,13 +80,13 @@ function info_array($array, $keyed=FALSE) {
     return '<code>null</code>';
   }
   if( !$keyed ) {
-    return '<li>' . implode($array, '</li><li>') . '</li>';
+    return '<ul class="list-group"><li class="list-group-item">' . implode($array, '</li><li class="list-group-item">') . '</li></ul>';
   }
   $r = '';
   foreach( $array as $name=>$value ) {
-    $r .= '<li><strong>' . $name .'</strong> = <code>' . $value . '</code></li>';
+    $r .= '<li class="list-group-item"><strong>' . $name .'</strong> = <code>' . $value . '</code></li>';
   }
-  return $r;
+  return '<ul class="list-group">' . $r . '</ul>';
 }
 
 function info_object($obj) {
@@ -111,9 +111,9 @@ function info_dir($dir) {
 function info_actions( $actions ) {
   $r = '';
   foreach( array_keys($actions) as $a ) {
-    $r .= '<li><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
+    $r .= '<li class="list-group-item"><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
       . ' - file:<strong>' . $actions[$a]['file'] . '</strong>'
       . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
   }
-  return $r;
+  return '<ul class="list-group">' . $r . '</ul>';
 }
