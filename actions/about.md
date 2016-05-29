@@ -1,6 +1,6 @@
 Attogram Framework
 ==================
-[//]: # ( Attogram Framework - About Page (markdown) - v0.0.1 )
+[//]: # ( Attogram Framework - About Page (markdown) - v0.0.2 )
 
 Attogram gives developers a jumpstart to quickly create web sites.
 
@@ -60,9 +60,16 @@ Setup: Users
 Create a page
 =============
 * create a new **PHP** or **Markdown** file in the `./actions/` directory, add anything you want!
-* reload the homepage to see a link to the new page
-* PHP files must end in `.php`, Markdown files must end in `.md`
-* PHP Attogram object is available via the `$this` variable
+* The filename is used as the page URL.  ./actions/**example**.php = example.com/**example**/
+* PHP files must end in `.php`
+* The Attogram object is available via the `$this` variable
+* Markdown files must end in `.md`
+* The first line of the Markdown file is used as the page title
+
+Page settings
+=============
+* Depth: `$config['depth']['action-name']` in `./public/config.php`
+* Force End Slash: `$config['force_slash_exceptions'][]` in `./public/config.php`
 
 Remove a page
 =============
