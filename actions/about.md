@@ -61,15 +61,28 @@ Create a page
 =============
 * create a new **PHP** or **Markdown** file in the `./actions/` directory, add anything you want!
 * The filename is used as the page URL.  ./actions/**example**.php = example.com/**example**/
-* PHP files must end in `.php`
-* The Attogram object is available via the `$this` variable
-* Markdown files must end in `.md`
-* The first line of the Markdown file is used as the page title
 
-Page settings
-=============
-* Depth: `$config['depth']['action-name']` in `./public/config.php`
-* Force End Slash: `$config['force_slash_exceptions'][]` in `./public/config.php`
+PHP pages
+=========
+* PHP filenames must end in `.php`
+* The Attogram object is available via the `$this` variable
+* Helpful functions:
+  * $this->page_header($title)
+  * $this->page_footer()
+  * $this->log->debug() ...
+  * $this->get_site_url()
+  * $this->error404()
+  * $this->is_admin()
+  * $this->is_logged_in()
+* Depth settings in `./public/config.php`
+  * `$config['depth']['insert-action-name-here']`
+* End Slash settings in `./public/config.php`
+  * `$config['force_slash_exceptions'][] = 'insert-action-name-hwere'`
+
+Markdown pages
+==============
+* Markdown filenames must end in `.md`
+* The first line of the Markdown file is used as the page title
 
 Remove a page
 =============
