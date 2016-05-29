@@ -3,7 +3,7 @@
  * Attogram Framework
  *
  * The Attogram Framework provides developers a skeleton starter site
- * with auto file-based URL routing, IP-protected backend, simple user system,
+ * with file-based URL routing, IP-protected backend, simple user system,
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *

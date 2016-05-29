@@ -6,7 +6,7 @@ Attogram gives developers a jumpstart to quickly create web sites.
 
 Attogram runs on PHP with Apache. It provides developers a skeleton site with:
 
-* auto file-based URL routing
+* file-based URL routing
 * IP-protected backend
 * simple user system
 * integrated SQLite database with phpLiteAdmin

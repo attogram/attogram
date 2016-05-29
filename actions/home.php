@@ -27,7 +27,7 @@ $this->page_header('Attogram Framework v' . ATTOGRAM_VERSION);
 
   <p>Attogram runs on <strong><a href="http://php.net/">PHP</a></strong> with <strong><a href="https://httpd.apache.org/">Apache</a></strong>. It provides developers a skeleton site with:</p>
   <ul>
-  <li>auto file-based <strong>URL routing</strong></li>
+  <li>file-based <strong>URL routing</strong></li>
   <li>IP-protected <strong>backend</strong></li>
   <li>simple <strong>user system</strong></li>
   <li>integrated <strong><a href="http://sqlite.org/">SQLite</a></strong> database with <a href="https://www.phpliteadmin.org/"><strong>phpLiteAdmin</strong></a></li>
