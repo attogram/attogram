@@ -1,5 +1,5 @@
 <?php
-// Attogram - 404
+
 header("HTTP/1.0 404 Not Found");
 
 $this->page_header('404 Page Not Found');
