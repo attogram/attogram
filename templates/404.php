@@ -1,4 +1,5 @@
 <?php
+// Attogram Framework - 404 Page v0.0.1
 
 header("HTTP/1.0 404 Not Found");
 
