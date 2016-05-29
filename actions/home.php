@@ -1,9 +1,9 @@
 <?php
-// Attogram Framework - Home Page v0.0.1
+// Attogram Framework - Home Page v0.0.2
 
 namespace Attogram;
 
-$this->page_header('Attogram Framework');
+$this->page_header('Attogram Framework v' . ATTOGRAM_VERSION);
 
 ?>
 
@@ -37,7 +37,7 @@ $this->page_header('Attogram Framework');
   <p>After that, Attogram tries to stay out of your way while you <strong>do your thing</strong>!</p>
   <p>Attogram is <a href="license/">Dual Licensed</a> under the <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.
   <p>Read more <strong><a href="about/">about Attogram</a></strong>.</p>
-  </p>
+
 </div>
 
 <?php
