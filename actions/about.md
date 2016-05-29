@@ -1,6 +1,6 @@
 Attogram Framework
 ==================
-[//]: # ( Attogram Framework - About Page (markdown) - v0.0.2 )
+[//]: # ( Attogram Framework - About Page (markdown) - v0.0.3 )
 
 Attogram gives developers a jumpstart to quickly create web sites.
 
@@ -77,7 +77,7 @@ PHP pages
 * Depth settings in `./public/config.php`
   * `$config['depth']['insert-action-name-here']`
 * End Slash settings in `./public/config.php`
-  * `$config['force_slash_exceptions'][] = 'insert-action-name-hwere'`
+  * `$config['force_slash_exceptions'][] = 'insert-action-name-here'`
 
 Markdown pages
 ==============
@@ -94,9 +94,9 @@ Admin pages
 
 Database tables
 ===============
-* to add a table, add a file into `./tables/` directory
-* file name is the name of the table
-* file contents is the sql CREATE TABLE ...
+* To add a table, add a file into `./tables/` directory
+* The filename must be the name of the table
+* File content is the sql `CREATE TABLE ...` statement
 * tables are automatically created upon first use
 
 Web discovery
@@ -112,5 +112,6 @@ Admin URL overrides
 More Info
 =========
 * Attogram @ GitHub: https://github.com/attogram/attogram
+* Attogram vendor package @ GitHub: https://github.com/attogram/attogram-vendor
 * Attogram @ Packagist: https://packagist.org/packages/attogram/attogram-framework
 * Demo: http://getitdaily.com/attogram/
