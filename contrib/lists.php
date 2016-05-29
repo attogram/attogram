@@ -7,12 +7,12 @@ $this->page_header('Attogram - Admin - Lists');
 <?php
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
-$lists = $this->sqlite_database->query($sql);
+$lists = $this->db->query($sql);
 print '<b>' . count($lists) . '</b> <a href="">Lists</a>';
 print ' &nbsp; - &nbsp; <a target="_db" href="../db-admin/?table=list&action=row_create">Create New Item</a></p>';
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
-$items = $this->sqlite_database->query($sql);
+$items = $this->db->query($sql);
 
 print '<ul>';
 foreach( $lists as $list ) {

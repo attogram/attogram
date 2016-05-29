@@ -9,7 +9,7 @@ $this->page_header('Attogram - Admin - Messages');
 <?php
 
 $sql = 'SELECT * FROM contact ORDER BY id DESC';
-$m = $this->sqlite_database->query($sql);
+$m = $this->db->query($sql);
 
 print '<strong>' . count($m) . '</strong> <a href="">Messages</a><hr />';
 

@@ -54,7 +54,7 @@ $info['session'] = info_object($this->session);
 $info['log'] = info_object($this->log);
 
 $info['<a name="database"></a><h3><span class="glyphicon glyphicon-hdd"></span> <em>Database:</em></h3>'] = '';
-$info['sqlite_database'] = info_object($this->sqlite_database);
+$info['sqlite_database'] = info_object($this->db);
 $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 

@@ -19,9 +19,9 @@ if( isset($debug) && $debug && isset($this->log->stack) && $this->log->stack ) {
   . '</pre></div>';
 }
 
-if( isset($this->sqlite_database->log->stack) && $this->sqlite_database->log->stack ) {
+if( isset($this->db->log->stack) && $this->db->log->stack ) {
   print '<div class="container"><pre class="alert alert-debug">Database Debug:<br />'
-  . implode($this->sqlite_database->log->stack, '<br />')
+  . implode($this->db->log->stack, '<br />')
   . '</pre></div> ';}
 ?>
 </body></html>

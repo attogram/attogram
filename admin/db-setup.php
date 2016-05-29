@@ -14,12 +14,12 @@ Config: <a href="./">Database Tables</a>
 <?php
 if( isset($_GET['create']) ) {
 
-  if( !$this->sqlite_database->get_tables() ) {
+  if( !$this->db->get_tables() ) {
     print '<pre>ERROR: no table definitions found</pre>';
   } else {
-    foreach(array_keys( $this->sqlite_database->tables ) as $table) {
+    foreach(array_keys( $this->db->tables ) as $table) {
       print "<br />Creating table <strong>$table</strong>: ";
-      if( $this->sqlite_database->create_table($table) ) {
+      if( $this->db->create_table($table) ) {
         print 'OK';
       } else {
         print 'ERROR';

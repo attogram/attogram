@@ -101,7 +101,7 @@ class attogram {
     }
 
     $this->get_functions();
-    $this->sqlite_database = new sqlite_database( $this->db_name, $this->tables_dir );
+    $this->db = new sqlite_database( $this->db_name, $this->tables_dir );
     $this->route();
     $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
     exit;
@@ -579,11 +579,11 @@ class attogram {
       $this->log->error('LOGIN: Please enter username and password');
       return FALSE;
     }
-    $user = $this->sqlite_database->query(
+    $user = $this->db->query(
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
       $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
 
-    if( $this->sqlite_database->db->errorCode() != '00000' ) { // query failed
+    if( $this->db->db->errorCode() != '00000' ) { // query failed
       $this->log->error('LOGIN: Login system offline');
       return FALSE;
     }
@@ -600,7 +600,7 @@ class attogram {
     $this->session->set('attogram_username', $user['username']);
     $this->session->set('attogram_level', $user['level']);
     $this->session->set('attogram_email', $user['email']);
-    if( !$this->sqlite_database->queryb(
+    if( !$this->db->queryb(
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
       ) ) {

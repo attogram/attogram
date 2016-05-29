@@ -6,10 +6,10 @@ $this->page_header('Attogram - List');
 print '<div class="container">';
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
-$lists = $this->sqlite_database->query($sql);
+$lists = $this->db->query($sql);
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
-$items = $this->sqlite_database->query($sql);
+$items = $this->db->query($sql);
 
 
 foreach( $lists as $list ) {
