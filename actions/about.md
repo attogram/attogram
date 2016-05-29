@@ -85,8 +85,8 @@ Web discovery
 
 Admin URL overrides
 ===================
-* admins may use URL/`?noadmin` on any page to turn off admin access
-* admins may use URL/`?debug` on any page to turn on debugging
+* admins may use URL/[`?noadmin`](?noadmin) on any page to turn off admin access
+* admins may use URL/[`?debug`](?debug) on any page to turn on debugging
 
 More Info
 =========
