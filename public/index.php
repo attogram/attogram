@@ -48,6 +48,13 @@ class attogram {
 
     $this->load_config(__DIR__ . '/config.php');
     $this->autoloader();
+
+    // dev
+    \Symfony\Component\Debug\Debug::enable();
+    //\Symfony\Component\Debug\ErrorHandler::register();
+    //\Symfony\Component\Debug\ExceptionHandler::register();
+    //\Symfony\Component\Debug\DebugClassLoader::enable();
+
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
     $this->init_logger();
@@ -65,10 +72,26 @@ class attogram {
     $this->path = $this->request->getBasePath();
     $this->uri = explode('/', $this->pathInfo);
     $trash = array_shift($this->uri); // take off first entry
-    $this->log->debug('1 uri:',$this->uri);
+    $this->log->debug('1st uri:',$this->uri);
 
     $this->exception_files(); // do robots.txt, sitemap.xml
 
+    $this->end_slash(); // force slash at end, or no slash at end
+    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
+      $this->uri[] = '';  // pretend there is a slash at end
+    }
+
+    $this->log->debug('2nd uri:',$this->uri);
+
+    $this->check_depth(); // is URI short enough?
+    $this->get_functions();
+    $this->db = new sqlite_database( $this->db_name, $this->tables_dir );
+    $this->route();
+    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
+    exit;
+  }
+
+  function end_slash() {
     if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
       if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
          // This action IS NOT excepted from force slash at end
@@ -86,26 +109,17 @@ class attogram {
         exit;
       }
     }
+  }
 
-    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
-      $this->uri[] = '';  // pretend there is a slash at end
-    }
-    $this->log->debug('2 uri:',$this->uri);
-
+  function check_depth() {
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
       $depth = $this->depth[$this->uri[0]];
     }
     if( $depth < sizeof($this->uri)) {
       $this->log->error('URI Depth ERROR. uri=' . sizeof($this->uri) . ' allowed=' . $depth);
-      $this->error404();
+      $this->error404('No Swimming in the deep end');
     }
-
-    $this->get_functions();
-    $this->db = new sqlite_database( $this->db_name, $this->tables_dir );
-    $this->route();
-    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
-    exit;
   }
 
   /**
@@ -297,7 +311,7 @@ class attogram {
 
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
       $this->log->error('ROUTE: 403 Action Forbidden');
-      $this->error404();
+      $this->error404('No spelunking allowed');
     }
 
     $actions = $this->get_actions();
@@ -315,11 +329,11 @@ class attogram {
           $this->action = $actions[$this->uri[0]]['file'];
           if( !is_file($this->action) ) {
             $this->log->error('ROUTE: Missing action');
-            $this->error404();
+            $this->error404('Attempted actionless');
           }
           if( !is_readable($this->action) ) {
             $this->log->error('ROUTE: Unreadable action');
-            $this->error404();
+            $this->error404('The pages of the book are blank');
           }
           $this->log->debug('include ' . $this->action);
           include($this->action);
@@ -329,12 +343,12 @@ class attogram {
           return;
         default:
           $this->log->error('ACTION: No Parser Found');
-          $this->error404();
+          $this->error404('No Way Out');
           break;
       } // end switch on parser
     } //end if action set
     $this->log->error('ACTION: Action not found');
-    $this->error404();
+    $this->error404('This is not the action you are looking for');
   } // end function route()
 
   /**
@@ -414,17 +428,21 @@ class attogram {
    *
    * @return void
    */
-  function error404() {
-    $err = '404 Not Found';
-    header('HTTP/1.0 ' . $err);
+  function error404( $error='' ) {
+
+    header('HTTP/1.0 404 Not Found');
     if( is_readable_file($this->fof) ) {
       include($this->fof);
       exit;
     }
     // Default 404 page
     $this->log->error('ERROR404: 404 template not found');
-    $this->page_header($err);
-    print '<div class="container"><h1>' . $err . '</h1></div>';
+    $this->page_header('404 Not Found');
+    print '<div class="container"><h1>404 Not Found</h1>';
+    if( $error ) {
+      print '<p>' . htmlentities($error) . '</p>';
+    }
+    print '</div>';
     $this->page_footer();
     exit;
   }
