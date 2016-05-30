@@ -1,6 +1,6 @@
 Attogram Framework
 ==================
-[//]: # ( Attogram Framework - About Page (markdown) - v0.0.3 )
+[//]: # ( Attogram Framework - About Page (markdown) - v0.0.4 )
 
 Attogram gives developers a jumpstart to quickly create web sites.
 
@@ -69,9 +69,9 @@ PHP pages
 * Helpful functions:
   * $this->page_header($title)
   * $this->page_footer()
-  * $this->log->debug() ...
+  * $this->log->debug(), ->error(), etc.
   * $this->get_site_url()
-  * $this->error404()
+  * $this->error404($error_message)
   * $this->is_admin()
   * $this->is_logged_in()
 * Depth settings in `./public/config.php`
