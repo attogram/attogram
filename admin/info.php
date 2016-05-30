@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Site Info v0.0.5
+// Attogram Framework - Site Info v0.0.6
 
 namespace Attogram;
 
@@ -11,7 +11,11 @@ $info = array();
 
 $info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = ATTOGRAM_VERSION;
-$info['Apache Version'] = apache_get_version();
+$info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
+//if( function_exists('apache_get_version') ) {
+//  $info['Apache Version'] = apache_get_version();
+//}
+
 $info['PHP Version'] = phpversion();
 
 $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
