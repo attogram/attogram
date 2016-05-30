@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Site Info v0.0.6
+// Attogram Framework - Site Info v0.0.7
 
 namespace Attogram;
 
@@ -11,12 +11,10 @@ $info = array();
 
 $info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = ATTOGRAM_VERSION;
-$info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
-//if( function_exists('apache_get_version') ) {
-//  $info['Apache Version'] = apache_get_version();
-//}
-
+$info['Attogram Directory'] = info_dir($this->attogram_directory);
 $info['PHP Version'] = phpversion();
+$info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
+$info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
 
 $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
 $info['site_name'] = $this->site_name;
@@ -25,14 +23,13 @@ $info['path'] = ( $this->path ? $this->path : '<code>Top Level</code>' );
 $info['pathInfo'] = $this->pathInfo;
 $info['requestUri'] = $this->requestUri;
 $info['uri'] = implode($this->uri,',');
-$info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
-$info['depth'] =  info_array($this->depth,$keyed=1);
-$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
+//$info['depth'] =  info_array($this->depth,$keyed=1);
+//$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
 $info['admins'] = info_array($this->admins);
 
 $info['<a name="actions"></a><h3><span class="glyphicon glyphicon-play"></span> <em>Actions:</em></h3>'] = '';
-$info['actions'] = info_actions($this->actions);
-$info['admin_actions'] = info_actions($this->admin_actions);
+$info['actions'] = info_actions($this->actions, $this->depth, $this->force_slash_exceptions);
+$info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this->force_slash_exceptions);
 
 $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
 $info['attogram_directory'] = info_dir($this->attogram_directory);
@@ -126,12 +123,36 @@ function info_dir($dir) {
   return '<span class="glyphicon glyphicon-' . $gn . ' text-' . $gt . '" aria-hidden="true"></span> ' . $dir;
 }
 
-function info_actions( $actions ) {
+function info_actions( $actions, $depths=array(), $endslashs=array() ) {
   $r = '';
+  if( !isset($depths['']) ) {
+    $depths[''] = '<code>ERROR</code>';  // homepage
+  }
+  if( !isset($depths['*']) ) {
+    $depths['*'] = '<code>ERROR</code>'; // default
+  }
+
   foreach( array_keys($actions) as $a ) {
+    if( isset($depths[$a]) ) {
+        $depth = $depths[$a] . ' OVERRIDE ';
+    } else {
+      if( $a == 'home') {
+        $depth = $depths[''] . ' <code>home page</code>';
+      } else {
+        $depth = $depths['*'] . ' <code>default depth</code>'; // default
+      }
+    }
+    if( isset($endslashs[$a]) ) {
+      $endslash = '<code>Remove Slash at end</code>';
+    } else {
+      $endslash = '<code>Force Slash at end</code>';
+    }
     $r .= '<li class="list-group-item"><a href="../' . $a . '/"><strong>' . $a . '</strong></a>'
-      . ' - file:<strong>' . $actions[$a]['file'] . '</strong>'
-      . ' - parser:<strong>' . $actions[$a]['parser'] . '</strong></li>';
+      . '<br /> - file: <strong>' . info_file($actions[$a]['file']) . '</strong>'
+      . '<br /> - parser: <strong>' . $actions[$a]['parser'] . '</strong>'
+      . '<br /> - depth: <strong>'. $depth . '</strong>'
+      . '<br /> - slash: <strong>'. $endslash . '</strong>'
+      . '</li>';
   }
   return '<ul class="list-group">' . $r . '</ul>';
 }
