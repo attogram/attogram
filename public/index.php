@@ -47,48 +47,58 @@ class attogram {
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
     $this->load_config(__DIR__ . '/config.php');
+
     $this->autoloader();
 
-    // dev
-    \Symfony\Component\Debug\Debug::enable();
-    //\Symfony\Component\Debug\ErrorHandler::register();
-    //\Symfony\Component\Debug\ExceptionHandler::register();
-    //\Symfony\Component\Debug\DebugClassLoader::enable();
+    \Symfony\Component\Debug\Debug::enable(); // dev
+    \Symfony\Component\Debug\ErrorHandler::register(); // dev
+    \Symfony\Component\Debug\ExceptionHandler::register(); // dev
+    \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
 
-    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    $this->set_request();
+    $this->exception_files(); // do robots.txt, sitemap.xml
+    $this->end_slash(); // force slash at end, or no slash at end
 
-    $this->init_logger();
+    $this ->init_logger();
     if( isset($_GET['debug']) && $this->is_admin() ) {
       $this->debug = $debug = TRUE;
       $this->init_logger();
       $this->log->debug('Admin Debug turned ON');
     }
-    $this->sessioning();
-    $this->host = $this->request->getHost();
-    $this->clientIp = $this->request->getClientIp();
-    $this->log->debug("client: $this->host : $this->clientIp");
-    $this->pathInfo = $this->request->getPathInfo();
-    $this->requestUri = $this->request->getRequestUri();
-    $this->path = $this->request->getBasePath();
-    $this->uri = explode('/', $this->pathInfo);
-    $trash = array_shift($this->uri); // take off first entry
-    $this->log->debug('1st uri:',$this->uri);
 
-    $this->exception_files(); // do robots.txt, sitemap.xml
+    $this->set_uri();
 
-    $this->end_slash(); // force slash at end, or no slash at end
-    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
-      $this->uri[] = '';  // pretend there is a slash at end
-    }
-
-    $this->log->debug('2nd uri:',$this->uri);
 
     $this->check_depth(); // is URI short enough?
-    $this->get_functions();
+
+    $this->get_functions(); // load any files in ./functions/
+
     $this->db = new sqlite_database( $this->db_name, $this->tables_dir );
+
+    $this->sessioning();
+
     $this->route();
     $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
     exit;
+  }
+
+  function set_request() {
+    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    $this->host = $this->request->getHost();
+    $this->clientIp = $this->request->getClientIp();
+    $this->log->debug("host: $this->host  IP: $this->clientIp");
+    $this->pathInfo = $this->request->getPathInfo();
+    $this->requestUri = $this->request->getRequestUri();
+    $this->path = $this->request->getBasePath();
+  }
+
+  function set_uri() {
+    $this->uri = explode('/', $this->pathInfo);
+    $trash = array_shift($this->uri); // take off first entry
+    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
+      $this->uri[] = '';  // pretend there is a slash at end
+    }
+    $this->log->debug('uri:',$this->uri);
   }
 
   function end_slash() {
@@ -357,23 +367,21 @@ class attogram {
    * @return void
    */
   function exception_files() {
-    if( isset($this->uri[1]) || isset($this->uri[2]) ) { // url too long
-      return;
-    }
-    switch( $this->uri[0] ) {
 
-      case 'robots.txt':
+    switch( $this->requestUri ) {
+
+      case '/robots.txt':
         header('Content-Type: text/plain');
         print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
         exit;
 
-      case 'sitemap.xml':
+      case '/sitemap.xml':
         $site = $this->get_site_url() . '/';
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
         $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
         foreach( array_keys($this->get_actions()) as $action ){
-          if( $action == 'home' ) { continue; }
+          if( $action == 'home' || $action == 'user' ) { continue; }
           $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
         }
         $sitemap .= '</urlset>';
