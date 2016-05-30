@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.4.8
+ * @version 0.4.9
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,7 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.4.8');
+define('ATTOGRAM_VERSION', '0.4.9');
 $debug = TRUE; // startup debug setting, overriden by config settings
 error_reporting(E_ALL); // dev
 ini_set('display_errors', '1'); // dev
@@ -32,6 +32,7 @@ class attogram {
   public $skip_files, $templates_dir, $functions_dir, $actions_dir, $configs_dir;
   public $actions, $action;
   public $admins, $is_admin, $admin_actions, $admin_dir;
+  public $attogram_directory;
 
   /**
    * __construct() - startup Attogram!
@@ -45,7 +46,7 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->load_config('config.php');
+    $this->load_config(__DIR__ . '/config.php');
     $this->autoloader();
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
@@ -131,7 +132,7 @@ class attogram {
     }
 
     // Set installation, directory and file locations
-    $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
+    $this->set_config('attogram_directory', @$config['attogram_directory'], __DIR__ .  '/../');
     $this->actions_dir = $this->attogram_directory . 'actions';
     $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
@@ -229,9 +230,16 @@ class attogram {
     if( $context && is_array($context) ) { print '<p class="bg-warning">' . implode($context,'<br />') . '</p>'; }
     if( $message ) { print '<p>' . $message . '</p>'; }
     print '</div>';
-    $this->page_footer();
-    exit;
-  }
+
+    if( isset($this->log->stack) && $this->log->stack ) {
+      print '<div class="container"><pre class="alert alert-debug">System Debug:<br />'
+      . implode($this->log->stack, '<br />')
+      . '</pre></div>';
+    }
+
+   $this->page_footer();
+   exit;
+ }
 
   /**
    * init_logger() - initialize the logger object, based on debug setting
