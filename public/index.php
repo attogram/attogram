@@ -46,6 +46,8 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
+    $this->__DIR__ = __DIR__;
+    $this->log->debug('__DIR__ = ' . $this->__DIR__);
     $this->load_config(__DIR__ . '/config.php');
 
     $this->autoloader();
@@ -146,7 +148,7 @@ class attogram {
     $this->log->debug('include main config: ' . $config_file);
 
     // Load the main configuration file, if available
-    if( !is_readable_file($config_file) ) {
+    if( !$this->is_readable_file($config_file) ) {
       $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
     } else {
       include_once($config_file);
@@ -172,7 +174,7 @@ class attogram {
     if( is_dir($this->configs_dir) && is_readable($this->configs_dir) ) {
       foreach( array_diff(scandir($this->configs_dir), $this->skip_files) as $f ) {
         $file = $this->configs_dir . "/$f";
-        if( !is_readable_file($file, '.php') ) { continue; } // php files only
+        if( !$this->is_readable_file($file, '.php') ) { continue; } // php files only
         include_once($file);
         $this->log->debug('include extra config: ' . $file);
       }
@@ -213,7 +215,7 @@ class attogram {
    */
   function autoloader() {
     $error = $missing = '';
-    if( isset($this->autoloader) && is_readable_file($this->autoloader,'.php') ) {
+    if( isset($this->autoloader) && $this->is_readable_file($this->autoloader,'.php') ) {
       include_once($this->autoloader);
       $check = array(
         '\Symfony\Component\HttpFoundation\Request', // REQUIRED
@@ -357,7 +359,7 @@ class attogram {
           break;
       } // end switch on parser
     } //end if action set
-    $this->log->error('ACTION: Action not found');
+    $this->log->error('ACTION: Action not found.  action=' . @$actions[$this->uri[0]]);
     $this->error404('This is not the action you are looking for');
   } // end function route()
 
@@ -400,7 +402,7 @@ class attogram {
    */
   function do_markdown( $file ) {
     $title = $content = '';
-    if( is_readable_file($file, '.md' ) ) {
+    if( $this->is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
       if( $page === FALSE ) {
           $this->log->error('DO_MARKDOWN: can not get file');
@@ -439,7 +441,7 @@ class attogram {
   function error404( $error='' ) {
 
     header('HTTP/1.0 404 Not Found');
-    if( is_readable_file($this->fof) ) {
+    if( $this->is_readable_file($this->fof) ) {
       include($this->fof);
       exit;
     }
@@ -464,7 +466,7 @@ class attogram {
    */
   function page_header( $title='' ) {
     $file = $this->templates_dir . '/header.php';
-    if( is_readable_file($file,'php') ) {
+    if( $this->is_readable_file($file,'php') ) {
       include($file);
       $this->log->debug('page_header, title: ' . $title
       //. ' caller: ' . @debug_backtrace()[1]['function']
@@ -486,7 +488,7 @@ class attogram {
    */
   function page_footer() {
     $file = $this->templates_dir . '/footer.php';
-    if( is_readable_file($file,'php') ) {
+    if( $this->is_readable_file($file,'php') ) {
       include($file);
       $this->log->debug('page_footer');
       return;
@@ -541,9 +543,9 @@ class attogram {
     }
     foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
       $file = $dir . "/$f";
-      if( is_readable_file($file, '.php') ) { // PHP files
+      if( $this->is_readable_file($file, '.php') ) { // PHP files
         $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
-      } elseif( is_readable_file($file, '.md') ) { // Markdown files
+      } elseif( $this->is_readable_file($file, '.md') ) { // Markdown files
         $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md'
         );
       }
@@ -563,7 +565,7 @@ class attogram {
     }
     foreach( array_diff(scandir($this->functions_dir), $this->skip_files) as $f ) {
       $file = $this->functions_dir . "/$f";
-      if( !is_readable_file($file) ) { continue; } // php files only
+      if( !$this->is_readable_file($file) ) { continue; } // php files only
       include_once($file);
       $this->log->debug('included function ' . $file);
     }
@@ -652,6 +654,27 @@ class attogram {
   function is_logged_in() {
     if( !is_object($this->session) ) { return FALSE; } // dev
     if( $this->session->get('attogram_id', FALSE) && $this->session->get('attogram_username', FALSE) ) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
+   * $this->is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   *
+   * @param string $file The name of the file to test
+   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   *
+   * @return boolean
+   */
+  function is_readable_file( $file=FALSE, $type='.php' ) {
+    if( !$file || !is_file($file) || !is_readable($file) ) {
+      return FALSE;
+    }
+    if( !$type || $type == '' || !is_string($type) ) { // error
+      return FALSE;
+    }
+    if( preg_match('/' . $type . '$/',$file) ) {
       return TRUE;
     }
     return FALSE;
@@ -887,26 +910,3 @@ class logger {
   public function info($message, array $context = array()) { $this->log('info',$message,$context); }
   public function debug($message, array $context = array()) { $this->log('debug',$message,$context); }
 } // end class logger
-
-
-// Global Utility Functions
-/**
- * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
- *
- * @param string $file The name of the file to test
- * @param string $type Optional. The file extension to allow. Defaults to '.php'
- *
- * @return boolean
- */
-function is_readable_file( $file=FALSE, $type='.php' ) {
-  if( !$file || !is_file($file) || !is_readable($file) ) {
-    return FALSE;
-  }
-  if( !$type || $type == '' || !is_string($type) ) { // error
-    return FALSE;
-  }
-  if( preg_match('/' . $type . '$/',$file) ) {
-    return TRUE;
-  }
-  return FALSE;
-}

@@ -18,7 +18,7 @@ if( !isset($title) || !$title || !is_string($title) ) {
 </head><body><noscript><div class="alert alert-danger">Please enable Javascript</div></noscript>
 <?php
 $navbar = $this->templates_dir . '/navbar.php';
-if( is_readable_file( $navbar, 'php' ) ) {
+if( $this->is_readable_file( $navbar, 'php' ) ) {
   include( $navbar );
 } else {
   $this->log->error("Missing navbar template: $navbar");
