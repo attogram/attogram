@@ -2,7 +2,6 @@
 
 ErrorDocument 403 '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Attogram Framework</title><style>body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px; color:#000; background-color:#fff; text-align:center; }</style></head><body><h1>Attogram Framework</h1><h2>403 Guru Meditation Error</h2><p>Please setup your Apache web server to use the <strong>./public/</strong> directory as the web root for this site!</p><p>More Info: <a href="https://github.com/attogram/attogram">Attogram Framework @ GitHub</a></p></body></html>'
 ErrorDocument 404 '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Attogram Framework</title><style>body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px; color:#000; background-color:#fff; text-align:center; }</style></head><body><h1>Attogram Framework</h1><h2>404 Guru Meditation Error</h2><p>Please setup your Apache web server to use the <strong>./public/</strong> directory as the web root for this site!</p><p>More Info: <a href="https://github.com/attogram/attogram">Attogram Framework @ GitHub</a></p></body></html>'
-ErrorDocument 500 'Attogram root - Error 500'
 
 DirectoryIndex index.php
 Options -Indexes
