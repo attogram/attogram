@@ -27,6 +27,7 @@ $attogram = new attogram();
  */
 class attogram {
 
+  public $debug;
   public $autoloader, $site_name, $depth, $force_slash_exceptions, $log, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
   public $sqlite_database, $db_name, $tables_dir;
@@ -45,7 +46,7 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->__DIR__ = __DIR__;
+    $this->__DIR__ = __DIR__; // dev
     $this->log->debug('__DIR__ = ' . $this->__DIR__);
     $this->load_config(__DIR__ . '/config.php');
 
@@ -56,25 +57,19 @@ class attogram {
     \Symfony\Component\Debug\ExceptionHandler::register(); // dev
     \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
 
-    $this->set_request();
+    $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
-    $this->end_slash(); // force slash at end, or no slash at end
+    $this->end_slash(); // force slash at end, or force no slash at end
 
     $this ->init_logger();
-    if( isset($_GET['debug']) && $this->is_admin() ) {
-      $this->debug = TRUE;
-      $this->init_logger();
-      $this->log->debug('Admin Debug turned ON');
-    }
 
     $this->set_uri();
-
 
     $this->check_depth(); // is URI short enough?
 
     $this->get_functions(); // load any files in ./functions/
 
-    $this->db = new sqlite_database( $this->db_name, $this->tables_dir );
+    $this->db = new sqlite_database( $this->db_name, $this->tables_dir, $this->debug );
 
     $this->sessioning();
 
@@ -186,6 +181,13 @@ class attogram {
     if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset homepage depth
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->set_config('autoloader', @$config['autoloader'], $this->autoloader );
+
+    // admin debug overrride?
+    if( isset($_GET['debug']) && $this->is_admin() ) {
+      $this->debug = TRUE;
+      $this->log->debug('Admin Debug turned ON');
+    }
+
   }
 
   /**
@@ -684,6 +686,7 @@ class attogram {
  */
 class sqlite_database {
 
+  public $debug;
   public $db_name, $db, $tables_directory, $tables, $skip_files, $log;
 
   /**
@@ -694,11 +697,12 @@ class sqlite_database {
    *
    * @return void
    */
-  function __construct( $db_name, $tables_dir ) {
+  function __construct( $db_name, $tables_dir, $debug=FALSE ) {
+    $this->debug = $debug;
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
     $this->skip_files = array('.','..','.htaccess');
-    if( class_exists('\Monolog\Logger') ) {
+    if( $this->debug && class_exists('\Monolog\Logger') ) {
 
       $this->log = new \Monolog\Logger('attogram');
 
