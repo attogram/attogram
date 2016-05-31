@@ -16,9 +16,10 @@
 namespace Attogram;
 
 define('ATTOGRAM_VERSION', '0.4.9');
-$debug = TRUE; // startup debug setting, overriden by config settings
+
 error_reporting(E_ALL); // dev
 ini_set('display_errors', '1'); // dev
+
 $attogram = new attogram();
 
 /**
@@ -41,8 +42,6 @@ class attogram {
    */
   function __construct() {
 
-    global $debug;
-
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
@@ -63,7 +62,7 @@ class attogram {
 
     $this ->init_logger();
     if( isset($_GET['debug']) && $this->is_admin() ) {
-      $this->debug = $debug = TRUE;
+      $this->debug = TRUE;
       $this->init_logger();
       $this->log->debug('Admin Debug turned ON');
     }
@@ -143,8 +142,6 @@ class attogram {
    */
   function load_config( $config_file='' ) {
 
-    global $debug;
-
     $this->log->debug('include main config: ' . $config_file);
 
     // Load the main configuration file, if available
@@ -182,7 +179,6 @@ class attogram {
 
     // Set configuration variables
     $this->set_config('debug', @$config['debug'], FALSE);
-    $debug = $this->debug;
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
     $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
@@ -699,11 +695,10 @@ class sqlite_database {
    * @return void
    */
   function __construct( $db_name, $tables_dir ) {
-    global $debug;
     $this->db_name = $db_name;
     $this->tables_directory = $tables_dir;
     $this->skip_files = array('.','..','.htaccess');
-    if( $debug && class_exists('\Monolog\Logger') ) {
+    if( class_exists('\Monolog\Logger') ) {
 
       $this->log = new \Monolog\Logger('attogram');
 
@@ -891,14 +886,12 @@ class sqlite_database {
 
 
 /**
- * Null PSR3 logger
+ * Nullish Stackish PSR3ish Logger
  *
  */
 class logger {
   public $stack;
   public function log($level, $message, array $context = array()) {
-    global $debug;
-    if( !$debug ) { return; }
     $this->stack[] = "$level: $message" . ( $context ? ': ' . print_r($context,1) : '');
   }
   public function emergency($message, array $context = array()) { $this->log('emergency',$message,$context); }

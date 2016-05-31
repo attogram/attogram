@@ -1,9 +1,7 @@
-<?php
-// Attogram Framework - Site Info v0.0.7
+<?php // Attogram Framework - Site Info v0.0.8
 
 namespace Attogram;
 
-global $debug;
 $title = 'Information';
 $this->page_header($title);
 
@@ -14,7 +12,7 @@ $info['Attogram Version'] = ATTOGRAM_VERSION;
 $info['Attogram Directory'] = info_dir($this->attogram_directory);
 $info['PHP Version'] = phpversion();
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
-$info['debug'] = ( $debug ? 'TRUE' : '<code>FALSE</code>' );
+$info['debug'] = ( $this->debug ? 'TRUE' : '<code>FALSE</code>' );
 
 $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
 $info['site_name'] = $this->site_name;
