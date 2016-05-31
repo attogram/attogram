@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.4.9
+ * @version 0.5.0-dev
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,10 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.4.9');
-
-error_reporting(E_ALL); // dev
-ini_set('display_errors', '1'); // dev
+define('ATTOGRAM_VERSION', '0.5.0-dev');
 
 $attogram = new attogram();
 
@@ -27,8 +24,8 @@ $attogram = new attogram();
  */
 class attogram {
 
-  public $debug;
-  public $autoloader, $site_name, $depth, $force_slash_exceptions, $log, $fof;
+  public $log, $autoloader, $debug;
+  public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
   public $sqlite_database, $db_name, $tables_dir;
   public $skip_files, $templates_dir, $functions_dir, $actions_dir, $configs_dir;
@@ -46,11 +43,14 @@ class attogram {
     $this->log = new Logger; // logger for startup tasks
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->__DIR__ = __DIR__; // dev
-    $this->log->debug('__DIR__ = ' . $this->__DIR__);
-    $this->load_config(__DIR__ . '/config.php');
+    $this->load_config(__DIR__ . '/config.php');  // Load the main configuration file
 
-    $this->autoloader();
+    $this->__DIR__ = __DIR__; // dev
+    $this->log->debug('__DIR__ = ' . $this->__DIR__); // dev
+
+    $this->autoloader(); // load up all the vendor goodies!
+
+    $this ->init_logger(); // Start full logging via monolog
 
     \Symfony\Component\Debug\Debug::enable(); // dev
     \Symfony\Component\Debug\ErrorHandler::register(); // dev
@@ -60,8 +60,6 @@ class attogram {
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->end_slash(); // force slash at end, or force no slash at end
-
-    $this ->init_logger();
 
     $this->set_uri();
 
@@ -74,9 +72,10 @@ class attogram {
     $this->sessioning();
 
     $this->route();
+
     $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
-    exit;
-  }
+
+  } // end function __construct()
 
   function set_request() {
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
@@ -90,6 +89,7 @@ class attogram {
 
   function set_uri() {
     $this->uri = explode('/', $this->pathInfo);
+    $this->log->debug('raw uri:', $this->uri);
     $trash = array_shift($this->uri); // take off first entry
     if( $this->uri[sizeof($this->uri) - 1] != '' ) {
       $this->uri[] = '';  // pretend there is a slash at end
@@ -250,20 +250,24 @@ class attogram {
     $this->log->error('Guru Meditation Error: ' . $error, $context);
     $this->page_header();
     print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
-    if( $error ) { print '<h2>' . $error . '</h2>'; }
-    if( $context && is_array($context) ) { print '<p class="bg-warning">' . implode($context,'<br />') . '</p>'; }
-    if( $message ) { print '<p>' . $message . '</p>'; }
+    if( $error ) {
+      print '<h2>' . $error . '</h2>';
+    }
+    if( $context && is_array($context) ) {
+      print '<p class="bg-warning">' . implode($context,'<br />') . '</p>';
+    }
+    if( $message ) {
+      print '<p>' . $message . '</p>';
+    }
     print '</div>';
-
     if( isset($this->log->stack) && $this->log->stack ) {
       print '<div class="container"><pre class="alert alert-debug">System Debug:<br />'
       . implode($this->log->stack, '<br />')
       . '</pre></div>';
     }
-
    $this->page_footer();
    exit;
- }
+ } // end function guru_meditation_error()
 
   /**
    * init_logger() - initialize the logger object, based on debug setting
@@ -437,9 +441,8 @@ class attogram {
    * @return void
    */
   function error404( $error='' ) {
-
     header('HTTP/1.0 404 Not Found');
-    if( $this->is_readable_file($this->fof) ) {
+    if( $this->is_readable_file($this->fof, '.php') ) {
       include($this->fof);
       exit;
     }
@@ -464,12 +467,9 @@ class attogram {
    */
   function page_header( $title='' ) {
     $file = $this->templates_dir . '/header.php';
-    if( $this->is_readable_file($file,'php') ) {
+    if( $this->is_readable_file($file,'.php') ) {
       include($file);
-      $this->log->debug('page_header, title: ' . $title
-      //. ' caller: ' . @debug_backtrace()[1]['function']
-      //. ' ' . @debug_backtrace()[2]['function']
-      );
+      $this->log->debug('page_header, title: ' . $title);
       return;
     }
     // Default page header
@@ -486,7 +486,7 @@ class attogram {
    */
   function page_footer() {
     $file = $this->templates_dir . '/footer.php';
-    if( $this->is_readable_file($file,'php') ) {
+    if( $this->is_readable_file($file,'.php') ) {
       include($file);
       $this->log->debug('page_footer');
       return;
@@ -563,7 +563,7 @@ class attogram {
     }
     foreach( array_diff(scandir($this->functions_dir), $this->skip_files) as $f ) {
       $file = $this->functions_dir . "/$f";
-      if( !$this->is_readable_file($file) ) { continue; } // php files only
+      if( !$this->is_readable_file($file,'.php') ) { continue; } // php files only
       include_once($file);
       $this->log->debug('included function ' . $file);
     }
