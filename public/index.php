@@ -923,22 +923,22 @@ class sqlite_database extends attogram_utils {
       return TRUE;
     }
     $dirs = $this->get_all_subdirectories( $this->modules_directory, 'tables');
-    $this->log->debug('GET_TABLES', $dirs);
+    //$this->log->debug('GET_TABLES', $dirs);
     if( !$dirs ) {
       $this->log->debug('GET_TABLES: No module tables found');
       return FALSE;
     }
     $this->tables = array();
     foreach( $dirs as $d ) {
-      $this->log->debug('GET_TABLES: d='. $d);
+      //$this->log->debug('GET_TABLES: d='. $d);
       foreach( array_diff(scandir($d), $this->skip_files) as $f ) {
         $file = $d . '/' . $f;
         if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
           continue; // .sql files only
         }
-        $this->log->debug(' .. f=' . $file);
         $table_name = str_replace('.sql','',$f);
         $this->tables[$table_name] = file_get_contents($file);
+        $this->log->debug('GET_TABLES: got table: ' . $table_name . ' from ' . $file);
       }
     }
     return TRUE;
