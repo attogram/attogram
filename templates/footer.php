@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Footer v0.0.3
+<?php // Attogram Framework - Page Footer v0.0.3
 
 namespace Attogram;
 

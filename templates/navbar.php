@@ -1,5 +1,4 @@
-<?php
-// Attogram Framework - Navbar v0.0.2
+<?php // Attogram Framework - Navbar v0.0.2
 
 ?>
 <nav class="navbar navbar-default">

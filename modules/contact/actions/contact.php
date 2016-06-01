@@ -1,5 +1,4 @@
-<?php
-// Attogram Framework - Contact Page v0.0.1
+<?php// Attogram Framework - Contact Page v0.0.1
 
 namespace Attogram;
 

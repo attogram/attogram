@@ -1,5 +1,4 @@
-<?php
-// Attogram Framework - Whatis module - whatis action v0.0.1
+<?php // Attogram Framework - Whatis module - whatis action v0.0.1
 /*
   Example Attogram subpath usage
 

@@ -1,5 +1,4 @@
-<?php
-// // Attogram Framework - Login Page v0.0.1
+<?php // Attogram Framework - User Module - Login Page v0.0.1
 
 namespace Attogram;
 

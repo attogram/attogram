@@ -1,5 +1,4 @@
-<?php
-// Attogram - action - list
+<?php // Attogram Framework - List Module - List Page v0.0.2
 
 namespace Attogram;
 

@@ -1,5 +1,4 @@
-<?php
-// Attogram - action - admin - lists
+<?php // Attogram Framework - List Module - List Admin v0.0.2
 
 namespace Attogram;
 

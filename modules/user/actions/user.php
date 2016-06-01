@@ -1,5 +1,4 @@
-<?php
-// Attogram Framekwork - User Page v0.0.2
+<?php // Attogram Framework - User Module - User Page v0.0.2
 
 namespace Attogram;
 

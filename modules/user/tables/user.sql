@@ -1,4 +1,4 @@
--- Attogram Framework - user table - v0.0.1
+-- Attogram Framework - User Module - user table - v0.0.1
 
 CREATE TABLE IF NOT EXISTS 'user' (
 'id' INTEGER PRIMARY KEY,

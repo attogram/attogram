@@ -1,5 +1,4 @@
-<?php
-// Attogram Framework - Message Admin v0.0.1
+<?php // Attogram Framework - Message Admin v0.0.1
 
 namespace Attogram;
 
