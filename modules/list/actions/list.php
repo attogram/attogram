@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - list
 
+namespace Attogram;
+
 $this->page_header('Attogram - List');
 
 print '<div class="container">';

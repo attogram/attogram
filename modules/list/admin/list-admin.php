@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - admin - lists
 
+namespace Attogram;
+
 $this->page_header('Attogram - Admin - Lists');
 ?>
 <div class="container">
