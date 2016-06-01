@@ -1,9 +1,11 @@
 <?php
+// Attogram Framework - Whatis module - whatis action v0.0.1
 /*
   Example Attogram subpath usage
 
-  - requires depth setting:
-      $config['depth']['whatis'] = 3; 
+  - config settings:
+  $config['depth']['whatis'] = 3;
+  $config['force_slash_exceptions'][] = 'whatis';
 
 */
 
@@ -17,7 +19,7 @@ $items = array(
 );
 $default = 'This page has information about:<br /><ul>';
 foreach( array_keys($items) as $i ) {
-  $default .= '<li><a href="./' . $i . '">' . $i . '</a></li>';
+  $default .= '<li><a href="' . $this->path . '/' . $this->uri[0] . '/' . $i . '">' . $i . '</a></li>';
 }
 $items['this page'] = $default . '</ul>';
 
