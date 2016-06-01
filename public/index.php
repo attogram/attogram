@@ -221,19 +221,19 @@ class attogram extends attogram_utils {
    * @return void
    */
   function load_config( $config_file='' ) {
-
+    global $config;
+    $config = array();
     // Load the main configuration file, if available
     $this->log->debug('include main config: ' . $config_file);
     if( !$this->is_readable_file($config_file, '.php') ) {
       $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
     } else {
-      include_once($config_file);
-      if( !isset($config) || !is_array($config) ) {
-        $this->log->notice('LOAD_CONFIG: $config array not found, using defaults');
-      }
+      include_once($config_file); // any $config['setting'] = value;
     }
 
-    // Set installation, directory and file locations
+    $this->log->debug(' ---------------- 1 config:', $config );
+
+    // Set installation, directory, file locations and defaults
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
     $this->modules_dir = $this->attogram_directory . 'modules';
     $this->templates_dir = $this->attogram_directory . 'templates';
@@ -242,16 +242,20 @@ class attogram extends attogram_utils {
     $this->db_name = $this->attogram_directory . 'db/global';
 
     $this->load_module_configs(); // Load modules configuration files, if available
+    $this->log->debug(' ---------------- 2 config:', $config );
+
 
     // Set configuration variables
     $this->set_config('debug', @$config['debug'], FALSE);
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
-    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // set default depth, if not found
-    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // set homepage depth, if not found
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->set_config('autoloader', @$config['autoloader'], $this->autoloader );
+
+    //$this->depth = array('*'=>2,''=>1);
+    $this->set_config('depth', @$config['depth'], $this->depth );
+
+
 
     // admin debug overrride?
     if( isset($_GET['debug']) && $this->is_admin() ) {
@@ -259,6 +263,7 @@ class attogram extends attogram_utils {
       $this->log->debug('Admin Debug turned ON');
     }
 
+    $this->log->debug(' ---------------- 3 config:', $config );
   } // end function load_config()
 
   /**
@@ -286,6 +291,7 @@ class attogram extends attogram_utils {
    * @return void
    */
   function load_module_configs() {
+    global $config;
     $dirs = $this->get_all_subdirectories( $this->modules_dir, 'configs');
     $this->log->debug('load_module_configs', $dirs);
     if( !$dirs ) {

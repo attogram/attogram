@@ -1,9 +1,7 @@
 <?php
-// Attogram Framework - Main Configuration File Example v0.0.2
+// Attogram Framework - Main Configuration File Example v0.0.3
 
 namespace Attogram;
-
-$config = array();
 
 // Uncomment to change default values...
 
