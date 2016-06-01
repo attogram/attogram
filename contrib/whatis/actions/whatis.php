@@ -1,11 +1,9 @@
 <?php
 /*
   Example Attogram subpath usage
-  
-  - Place this file in ./public/actions/whatis.php
-  
-  - add depth setting to ./public/config.php:
-      $config['depth']['whatis'] = 3; // depth for action 'whatis'
+
+  - requires depth setting:
+      $config['depth']['whatis'] = 3; 
 
 */
 
