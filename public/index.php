@@ -139,9 +139,8 @@ class attogram extends attogram_utils {
 
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
-    $this->end_slash(); // force slash at end, or force no slash at end
-
     $this->set_uri();
+    $this->end_slash(); // force slash at end, or force no slash at end
 
     $this->check_depth(); // is URI short enough?
 
@@ -188,7 +187,7 @@ class attogram extends attogram_utils {
          // This action IS NOT excepted from force slash at end
         $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $url ); // Force Trailing Slash
+        header('Location: ' . $url );  // Force Trailing Slash
         exit;
       }
     } else { // Yes slash at end of url
