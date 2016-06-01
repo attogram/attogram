@@ -19,16 +19,98 @@ define('ATTOGRAM_VERSION', '0.5.0-dev-module');
 
 $attogram = new attogram();
 
+class attogram_utils {
+
+  public $debug, $log, $skip_files;
+
+  function __construct() {
+    $this->debug = FALSE;
+    $this->log = new Logger(); // logger for startup tasks
+    $this->skip_files = array('.','..','.htaccess');
+  }
+
+  /**
+   * get_all_subdirectories()
+   */
+  function get_all_subdirectories( $dir, $name ) {
+    //$this->log->debug('get_all_subdirectories: scanning for: ' . $dir . '/*/' . $name);
+    if( !isset($dir) || !$dir || !is_string($dir)) {
+      $this->log->error('get_all_subdirectories: UNDEFINED dir');
+      return array();
+    }
+    if( !is_dir($dir) || !is_readable($dir) ) {
+      $this->log->error('get_all_subdirectories: UNREADABLE dir=' . $dir);
+      return array();
+    }
+    $r = array();
+    foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
+      //$this->log->debug('get_all_subdirectories: checking d='. $d);
+      $md = $dir . '/' . $d;
+      if( !is_dir($md) ) { continue; }
+      $md .= '/' . $name;
+      //$this->log->debug('get_all_subdirectories: checking '. $md);
+      if( !is_dir($md) || !is_readable($md) ) { continue; }
+      //$this->log->debug('get_all_subdirectories: OK: ' . $md);
+      $r[] = $md;
+    }
+    return $r;
+  } // end function get_all_subdirectories()
+
+  /**
+   * include_all_php_files_in_directory()
+   * @param string $dir The directory to search
+   */
+  function include_all_php_files_in_directory( $dir ) {
+    if( !is_dir($dir) || !is_readable($dir)) {
+      $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
+      return;
+    }
+    //$this->log->debug('include_all_php_files_in_directory: dir = ' . $dir);
+    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
+      $ff = $dir . '/' . $f;
+      if( $this->is_readable_file($ff,'.php') ) {
+        $this->log->debug('include: ' . $ff);
+        include_once($ff);
+      } else {
+        $this->log->error('include_all_php_files_in_directory: can not include: ' . $ff);
+      }
+    }
+  } // end function include_all_php_files_in_directory()
+
+  /**
+   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   *
+   * @param string $file The name of the file to test
+   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   *
+   * @return boolean
+   */
+  function is_readable_file( $file=FALSE, $type='.php' ) {
+    if( !$file || !is_file($file) || !is_readable($file) ) {
+      return FALSE;
+    }
+    if( !$type || $type == '' || !is_string($type) ) { // error
+      return FALSE;
+    }
+    if( preg_match('/' . $type . '$/',$file) ) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+} // end class attogram_utils
+
+
 /**
  * Attogram Framework
  */
-class attogram {
+class attogram extends attogram_utils {
 
-  public $attogram_directory, $modules_dir, $log, $autoloader, $debug;
+  public $attogram_directory, $modules_dir, $autoloader;
   public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
   public $db, $db_name, $tables_dir;
-  public $skip_files, $templates_dir, $functions_dir, $actions_dir, $configs_dir;
+  public $templates_dir, $functions_dir, $actions_dir, $configs_dir;
   public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
   /**
@@ -38,7 +120,8 @@ class attogram {
    */
   function __construct() {
 
-    $this->log = new Logger; // logger for startup tasks
+    parent::__construct();
+
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
     $this->load_config('config.php');  // Load the main configuration file
@@ -50,10 +133,10 @@ class attogram {
 
     $this ->init_logger(); // Start full logging via monolog
 
-    \Symfony\Component\Debug\Debug::enable(); // dev
-    \Symfony\Component\Debug\ErrorHandler::register(); // dev
-    \Symfony\Component\Debug\ExceptionHandler::register(); // dev
-    \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
+    // \Symfony\Component\Debug\Debug::enable(); // dev - kills phpLiteAdmin
+    // \Symfony\Component\Debug\ErrorHandler::register(); // dev
+    // \Symfony\Component\Debug\ExceptionHandler::register(); // dev
+    // \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
 
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
@@ -67,7 +150,7 @@ class attogram {
 
     $this->db = new sqlite_database(
       $this->db_name,
-      $this->tables_dir,
+      $this->modules_dir,
       $this->log,
       $this->debug
     );
@@ -163,7 +246,6 @@ class attogram {
     $this->fof = $this->attogram_directory . 'templates/404.php';
     $this->db_name = $this->attogram_directory . 'db/global';
     $this->configs_dir = $this->attogram_directory . 'configs';
-    $this->skip_files = array('.','..','.htaccess');
 
     $this->load_module_configs(); // Load modules configuration files, if available
 
@@ -220,50 +302,6 @@ class attogram {
       $this->include_all_php_files_in_directory( $d );
     }
   } // end function load_module_configs()
-
-  /**
-   * get_all_subdirectories()
-   */
-  function get_all_subdirectories( $dir, $name ) {
-    //$this->log->debug('get_all_subdirectories: scanning for: ' . $dir . '/*/' . $name);
-    if( !isset($dir) || !$dir || !is_string($dir)) {
-      $this->log->error('get_all_subdirectories: UNDEFINED dir');
-      return array();
-    }
-    if( !is_dir($dir) || !is_readable($dir) ) {
-      $this->log->error('get_all_subdirectories: UNREADABLE dir=' . $dir);
-      return array();
-    }
-    $r = array();
-    foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
-      //$this->log->debug('get_all_subdirectories: checking d='. $d);
-      $md = $dir . '/' . $d;
-      if( !is_dir($md) ) { continue; }
-      $md .= '/' . $name;
-      //$this->log->debug('get_all_subdirectories: checking '. $md);
-      if( !is_dir($md) || !is_readable($md) ) { continue; }
-      //$this->log->debug('get_all_subdirectories: OK: ' . $md);
-      $r[] = $md;
-    }
-    return $r;
-  } // end function get_all_subdirectories()
-
-  function include_all_php_files_in_directory( $dir ) {
-    if( !is_dir($dir) || !is_readable($dir)) {
-      $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
-      return;
-    }
-    //$this->log->debug('include_all_php_files_in_directory: dir = ' . $dir);
-    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
-      $ff = $dir . '/' . $f;
-      if( $this->is_readable_file($ff,'.php') ) {
-        $this->log->debug('include: ' . $ff);
-        include_once($ff);
-      } else {
-        $this->log->error('include_all_php_files_in_directory: can not include: ' . $ff);
-      }
-    }
-  } // end function include_all_php_files_in_directory()
 
   /**
    * autoloader() - auto load, or display fatal error
@@ -708,27 +746,6 @@ class attogram {
   }
 
   /**
-   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
-   *
-   * @param string $file The name of the file to test
-   * @param string $type (optional) The file extension to allow. Defaults to '.php'
-   *
-   * @return boolean
-   */
-  function is_readable_file( $file=FALSE, $type='.php' ) {
-    if( !$file || !is_file($file) || !is_readable($file) ) {
-      return FALSE;
-    }
-    if( !$type || $type == '' || !is_string($type) ) { // error
-      return FALSE;
-    }
-    if( preg_match('/' . $type . '$/',$file) ) {
-      return TRUE;
-    }
-    return FALSE;
-  }
-
-  /**
    * guru_meditation_error()
    */
   function guru_meditation_error( $error='', $context=array(), $message='' ) {
@@ -747,12 +764,11 @@ class attogram {
     print '</div>';
     if( isset($this->log->stack) && $this->log->stack ) {
       print '<div class="container"><pre class="alert alert-debug">System Debug:<br />'
-      . implode($this->log->stack, '<br />')
-      . '</pre></div>';
+      . implode($this->log->stack, '<br />') . '</pre></div>';
     }
    $this->page_footer();
    exit;
- } // end function guru_meditation_error()
+  } // end function guru_meditation_error()
 
 } // END of class attogram
 
@@ -760,26 +776,26 @@ class attogram {
 /**
  * Attogram sqlite_database
  */
-class sqlite_database {
+class sqlite_database extends attogram_utils {
 
-  public $debug;
-  public $db_name, $db, $tables_directory, $tables, $skip_files, $log;
+  public $db_name, $modules_directory, $db;
 
   /**
    * __construct() - initialize database settings
    *
    * @param string $db_name relative path to the SQLite database file
-   * @param string $tables_dir relative path to the table definitions directory
-   * @param object $logger psr3 logger object
-   * @param bool $debug
+   * @param string $modules_directory relative path to the Attogram modules directory
+   * @param object $log psr3 logger object
+   * @param bool $debug (optional) defaults to FALSE
+   *
    * @return void
    */
-  function __construct( $db_name, $tables_dir, $logger, $debug=FALSE ) {
+  function __construct( $db_name, $modules_directory, $log, $debug=FALSE ) {
+    parent::__construct();
     $this->debug = $debug;
+    $this->log = $log;
+    $this->modules_directory = $modules_directory;
     $this->db_name = $db_name;
-    $this->tables_directory = $tables_dir;
-    $this->log = $logger;
-    $this->skip_files = array('.','..','.htaccess');
   }
 
   /**
@@ -912,18 +928,24 @@ class sqlite_database {
     if( isset($this->tables) && is_array($this->tables) ) {
       return TRUE;
     }
-    if( !is_readable($this->tables_directory) ) {
-      $this->log->error('GET_TABLES: Tables directory not readable');
+    $dirs = $this->get_all_subdirectories( $this->modules_directory, 'tables');
+    $this->log->debug('GET_TABLES', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('GET_TABLES: No module tables found');
       return FALSE;
     }
     $this->tables = array();
-    foreach( array_diff(scandir($this->tables_directory), $this->skip_files) as $f ) {
-      $file = $this->tables_directory . "/$f";
-      if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
-        continue; // .sql files only
+    foreach( $dirs as $d ) {
+      $this->log->debug('GET_TABLES: d='. $d);
+      foreach( array_diff(scandir($d), $this->skip_files) as $f ) {
+        $file = $d . '/' . $f;
+        if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
+          continue; // .sql files only
+        }
+        $this->log->debug(' .. f=' . $file);
+        $table_name = str_replace('.sql','',$f);
+        $this->tables[$table_name] = file_get_contents($file);
       }
-      $table_name = str_replace('.sql','',$f);
-      $this->tables[$table_name] = file_get_contents($file);
     }
     return TRUE;
   }
