@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.0.8
+<?php // Attogram Framework - Site Info v0.0.9
 
 namespace Attogram;
 
@@ -18,9 +18,9 @@ $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em
 $info['site_name'] = $this->site_name;
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>Top Level</code>' );
-$info['pathInfo'] = $this->pathInfo;
-$info['requestUri'] = $this->requestUri;
-$info['uri'] = implode($this->uri,',');
+//$info['pathInfo'] = $this->pathInfo;
+//$info['requestUri'] = $this->requestUri;
+//$info['uri'] = implode($this->uri,',');
 //$info['depth'] =  info_array($this->depth,$keyed=1);
 //$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
 $info['admins'] = info_array($this->admins);
@@ -31,12 +31,7 @@ $info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this-
 
 $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
 $info['attogram_directory'] = info_dir($this->attogram_directory);
-$info['actions_dir'] = info_dir($this->actions_dir);
-$info['admin_dir'] = info_dir($this->admin_dir);
-$info['templates_dir '] = info_dir($this->templates_dir);
-$info['configs_dir'] = info_dir($this->configs_dir);
-$info['tables_dir'] = info_dir($this->tables_dir);
-$info['functions_dir'] = info_dir($this->functions_dir);
+$info['modules_dir'] = info_dir($this->modules_dir);
 $info['skip_files'] = info_array( $this->skip_files);
 
 $info['<a name="files"></a><h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
