@@ -224,14 +224,12 @@ class attogram extends attogram_utils {
     global $config;
     $config = array();
     // Load the main configuration file, if available
-    $this->log->debug('include main config: ' . $config_file);
+    $this->log->debug('load_config: include main config: ' . $config_file);
     if( !$this->is_readable_file($config_file, '.php') ) {
-      $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
+      $this->log->notice('load_config: config file not found, using defaults.');
     } else {
       include_once($config_file); // any $config['setting'] = value;
     }
-
-    $this->log->debug(' ---------------- 1 config:', $config );
 
     // Set installation, directory, file locations and defaults
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
@@ -242,8 +240,6 @@ class attogram extends attogram_utils {
     $this->db_name = $this->attogram_directory . 'db/global';
 
     $this->load_module_configs(); // Load modules configuration files, if available
-    $this->log->debug(' ---------------- 2 config:', $config );
-
 
     // Set configuration variables
     $this->set_config('debug', @$config['debug'], FALSE);
@@ -252,18 +248,15 @@ class attogram extends attogram_utils {
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->set_config('autoloader', @$config['autoloader'], $this->autoloader );
 
-    //$this->depth = array('*'=>2,''=>1);
     $this->set_config('depth', @$config['depth'], $this->depth );
-
-
+    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset: default homepage depth
+    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset: default p age depth
 
     // admin debug overrride?
     if( isset($_GET['debug']) && $this->is_admin() ) {
       $this->debug = TRUE;
-      $this->log->debug('Admin Debug turned ON');
+      $this->log->debug('load_config: Admin Debug turned ON');
     }
-
-    $this->log->debug(' ---------------- 3 config:', $config );
   } // end function load_config()
 
   /**

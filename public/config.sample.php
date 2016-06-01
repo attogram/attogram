@@ -3,6 +3,8 @@
 
 namespace Attogram;
 
+global $config;
+
 // Uncomment to change default values...
 
 // The Attogram installation directory, with trailing slash
