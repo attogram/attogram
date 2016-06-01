@@ -106,11 +106,10 @@ class attogram_utils {
  */
 class attogram extends attogram_utils {
 
-  public $attogram_directory, $modules_dir, $autoloader;
+  public $attogram_directory, $modules_dir, $templates_dir, $autoloader;
   public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
-  public $db, $db_name, $tables_dir;
-  public $templates_dir, $functions_dir, $actions_dir, $configs_dir;
+  public $db, $db_name;
   public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
   /**
@@ -237,15 +236,10 @@ class attogram extends attogram_utils {
     // Set installation, directory and file locations
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
     $this->modules_dir = $this->attogram_directory . 'modules';
-    $this->actions_dir = $this->attogram_directory . 'actions';
-    $this->admin_dir = $this->attogram_directory . 'admin';
     $this->templates_dir = $this->attogram_directory . 'templates';
-    $this->functions_dir = $this->attogram_directory . 'functions';
-    $this->tables_dir = $this->attogram_directory . 'tables';
     $this->autoloader = $this->attogram_directory . 'vendor/autoload.php';
     $this->fof = $this->attogram_directory . 'templates/404.php';
     $this->db_name = $this->attogram_directory . 'db/global';
-    $this->configs_dir = $this->attogram_directory . 'configs';
 
     $this->load_module_configs(); // Load modules configuration files, if available
 
