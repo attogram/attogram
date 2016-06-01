@@ -1,6 +1,8 @@
 <?php
 // Attogram - action - list
 
+namespace Attogram;
+
 $this->page_header('Attogram - List');
 
 print '<div class="container">';
@@ -21,7 +23,7 @@ foreach( $lists as $list ) {
   print '</ol>';
 }
 
-if( $this->is_admin() ) { print '<p>(<a href="../lists/">List Admin</a>)</p>'; }
+if( $this->is_admin() ) { print '<p>(<a href="../list-admin/">List Admin</a>)</p>'; }
 
 print '</div>';
 

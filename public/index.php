@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.0-dev
+ * @version 0.5.0-dev-module
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,23 +15,102 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.0-dev');
+define('ATTOGRAM_VERSION', '0.5.0-dev-module');
 
 $attogram = new attogram();
+
+class attogram_utils {
+
+  public $debug, $log, $skip_files;
+
+  function __construct() {
+    $this->debug = FALSE;
+    $this->log = new Logger(); // logger for startup tasks
+    $this->skip_files = array('.','..','.htaccess');
+  }
+
+  /**
+   * get_all_subdirectories()
+   */
+  function get_all_subdirectories( $dir, $name ) {
+    //$this->log->debug('get_all_subdirectories: scanning for: ' . $dir . '/*/' . $name);
+    if( !isset($dir) || !$dir || !is_string($dir)) {
+      $this->log->error('get_all_subdirectories: UNDEFINED dir');
+      return array();
+    }
+    if( !is_dir($dir) || !is_readable($dir) ) {
+      $this->log->error('get_all_subdirectories: UNREADABLE dir=' . $dir);
+      return array();
+    }
+    $r = array();
+    foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
+      //$this->log->debug('get_all_subdirectories: checking d='. $d);
+      $md = $dir . '/' . $d;
+      if( !is_dir($md) ) { continue; }
+      $md .= '/' . $name;
+      //$this->log->debug('get_all_subdirectories: checking '. $md);
+      if( !is_dir($md) || !is_readable($md) ) { continue; }
+      //$this->log->debug('get_all_subdirectories: OK: ' . $md);
+      $r[] = $md;
+    }
+    return $r;
+  } // end function get_all_subdirectories()
+
+  /**
+   * include_all_php_files_in_directory()
+   * @param string $dir The directory to search
+   */
+  function include_all_php_files_in_directory( $dir ) {
+    if( !is_dir($dir) || !is_readable($dir)) {
+      $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
+      return;
+    }
+    //$this->log->debug('include_all_php_files_in_directory: dir = ' . $dir);
+    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
+      $ff = $dir . '/' . $f;
+      if( $this->is_readable_file($ff,'.php') ) {
+        $this->log->debug('include: ' . $ff);
+        include_once($ff);
+      } else {
+        $this->log->error('include_all_php_files_in_directory: can not include: ' . $ff);
+      }
+    }
+  } // end function include_all_php_files_in_directory()
+
+  /**
+   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   *
+   * @param string $file The name of the file to test
+   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   *
+   * @return boolean
+   */
+  function is_readable_file( $file=FALSE, $type='.php' ) {
+    if( !$file || !is_file($file) || !is_readable($file) ) {
+      return FALSE;
+    }
+    if( !$type || $type == '' || !is_string($type) ) { // error
+      return FALSE;
+    }
+    if( preg_match('/' . $type . '$/',$file) ) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+} // end class attogram_utils
+
 
 /**
  * Attogram Framework
  */
-class attogram {
+class attogram extends attogram_utils {
 
-  public $log, $autoloader, $debug;
+  public $attogram_directory, $modules_dir, $templates_dir, $autoloader;
   public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
-  public $sqlite_database, $db_name, $tables_dir;
-  public $skip_files, $templates_dir, $functions_dir, $actions_dir, $configs_dir;
-  public $actions, $action;
-  public $admins, $is_admin, $admin_actions, $admin_dir;
-  public $attogram_directory;
+  public $db, $db_name;
+  public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
   /**
    * __construct() - startup Attogram!
@@ -40,22 +119,23 @@ class attogram {
    */
   function __construct() {
 
-    $this->log = new Logger; // logger for startup tasks
+    parent::__construct();
+
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
 
-    $this->load_config(__DIR__ . '/config.php');  // Load the main configuration file
+    $this->load_config('config.php');  // Load the main configuration file
 
-    $this->__DIR__ = __DIR__; // dev
-    $this->log->debug('__DIR__ = ' . $this->__DIR__); // dev
+    //$this->__DIR__ = __DIR__; // dev
+    //$this->log->debug('__DIR__ = ' . $this->__DIR__); // dev
 
     $this->autoloader(); // load up all the vendor goodies!
 
     $this ->init_logger(); // Start full logging via monolog
 
-    \Symfony\Component\Debug\Debug::enable(); // dev
-    \Symfony\Component\Debug\ErrorHandler::register(); // dev
-    \Symfony\Component\Debug\ExceptionHandler::register(); // dev
-    \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
+    // \Symfony\Component\Debug\Debug::enable(); // dev - kills phpLiteAdmin
+    // \Symfony\Component\Debug\ErrorHandler::register(); // dev
+    // \Symfony\Component\Debug\ExceptionHandler::register(); // dev
+    // \Symfony\Component\Debug\DebugClassLoader::enable(); // dev
 
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
@@ -67,7 +147,12 @@ class attogram {
 
     $this->get_functions(); // load any files in ./functions/
 
-    $this->db = new sqlite_database( $this->db_name, $this->tables_dir, $this->debug );
+    $this->db = new sqlite_database(
+      $this->db_name,
+      $this->modules_dir,
+      $this->log,
+      $this->debug
+    );
 
     $this->sessioning();
 
@@ -136,59 +221,43 @@ class attogram {
    * @return void
    */
   function load_config( $config_file='' ) {
-
-    $this->log->debug('include main config: ' . $config_file);
-
+    global $config;
+    $config = array();
     // Load the main configuration file, if available
-    if( !$this->is_readable_file($config_file) ) {
-      $this->log->notice('LOAD_CONFIG: config file not found, using defaults.');
+    $this->log->debug('load_config: include main config: ' . $config_file);
+    if( !$this->is_readable_file($config_file, '.php') ) {
+      $this->log->notice('load_config: config file not found, using defaults.');
     } else {
-      include_once($config_file);
-      if( !isset($config) || !is_array($config) ) {
-        $this->log->notice('LOAD_CONFIG: $config array not found, using defaults');
-      }
+      include_once($config_file); // any $config['setting'] = value;
     }
 
-    // Set installation, directory and file locations
-    $this->set_config('attogram_directory', @$config['attogram_directory'], __DIR__ .  '/../');
-    $this->actions_dir = $this->attogram_directory . 'actions';
-    $this->admin_dir = $this->attogram_directory . 'admin';
+    // Set installation, directory, file locations and defaults
+    $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
+    $this->modules_dir = $this->attogram_directory . 'modules';
     $this->templates_dir = $this->attogram_directory . 'templates';
-    $this->functions_dir = $this->attogram_directory . 'functions';
-    $this->tables_dir = $this->attogram_directory . 'tables';
     $this->autoloader = $this->attogram_directory . 'vendor/autoload.php';
     $this->fof = $this->attogram_directory . 'templates/404.php';
     $this->db_name = $this->attogram_directory . 'db/global';
-    $this->configs_dir = $this->attogram_directory . 'configs';
-    $this->skip_files = array('.','..','.htaccess');
 
-    // Load any extra configuration files, if available
-    if( is_dir($this->configs_dir) && is_readable($this->configs_dir) ) {
-      foreach( array_diff(scandir($this->configs_dir), $this->skip_files) as $f ) {
-        $file = $this->configs_dir . "/$f";
-        if( !$this->is_readable_file($file, '.php') ) { continue; } // php files only
-        include_once($file);
-        $this->log->debug('include extra config: ' . $file);
-      }
-    }
+    $this->load_module_configs(); // Load modules configuration files, if available
 
     // Set configuration variables
     $this->set_config('debug', @$config['debug'], FALSE);
     $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
     $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-    $this->set_config('depth', @$config['depth'], array('*'=>2,''=>1)); // default depth 2, homepage depth 1
-    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset default depth
-    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset homepage depth
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->set_config('autoloader', @$config['autoloader'], $this->autoloader );
+
+    $this->set_config('depth', @$config['depth'], $this->depth );
+    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset: default homepage depth
+    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset: default p age depth
 
     // admin debug overrride?
     if( isset($_GET['debug']) && $this->is_admin() ) {
       $this->debug = TRUE;
-      $this->log->debug('Admin Debug turned ON');
+      $this->log->debug('load_config: Admin Debug turned ON');
     }
-
-  }
+  } // end function load_config()
 
   /**
    * set_config() - set a system configuration variable
@@ -207,6 +276,25 @@ class attogram {
     }
     $this->log->debug('SET ' . $var_name . ' = ' . print_r($this->{$var_name},1));
   }
+
+  /**
+   * load_module_configs()
+   * Examines each module for a directory named 'configs'
+   * and loads all *.php files in that directory
+   * @return void
+   */
+  function load_module_configs() {
+    global $config;
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'configs');
+    $this->log->debug('load_module_configs', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('load_module_configs: No module configs found');
+    }
+    foreach( $dirs as $d ) {
+      //$this->log->debug('load_module_configs: d='. $d);
+      $this->include_all_php_files_in_directory( $d );
+    }
+  } // end function load_module_configs()
 
   /**
    * autoloader() - auto load, or display fatal error
@@ -242,32 +330,6 @@ class attogram {
     . '<a href="https://github.com/attogram/attogram-vendor/archive/master.zip">attogram-vendor</a> package.';
     $this->guru_meditation_error( $error, $missing, $fix );
   }
-
-  /**
-   * guru_meditation_error()
-   */
-  function guru_meditation_error( $error='', $context=array(), $message='' ) {
-    $this->log->error('Guru Meditation Error: ' . $error, $context);
-    $this->page_header();
-    print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
-    if( $error ) {
-      print '<h2>' . $error . '</h2>';
-    }
-    if( $context && is_array($context) ) {
-      print '<p class="bg-warning">' . implode($context,'<br />') . '</p>';
-    }
-    if( $message ) {
-      print '<p>' . $message . '</p>';
-    }
-    print '</div>';
-    if( isset($this->log->stack) && $this->log->stack ) {
-      print '<div class="container"><pre class="alert alert-debug">System Debug:<br />'
-      . implode($this->log->stack, '<br />')
-      . '</pre></div>';
-    }
-   $this->page_footer();
-   exit;
- } // end function guru_meditation_error()
 
   /**
    * init_logger() - initialize the logger object, based on debug setting
@@ -328,15 +390,18 @@ class attogram {
       $this->error404('No spelunking allowed');
     }
 
+    if( $this->uri[0] == '' ) { // The Homepage
+      $this->uri[0] = 'home';
+    }
+
+    $this->log->debug('action: uri[0]: ' . $this->uri[0]);
+
     $actions = $this->get_actions();
 
     if( $this->is_admin() ) {
         $actions = array_merge($actions, $this->get_admin_actions());
     }
-    if( $this->uri[0] == '' ) { // The Homepage
-      $this->uri[0] = 'home';
-    }
-    $this->log->debug('action: ' . $this->uri[0]);
+
     if( isset($actions[$this->uri[0]]) ) {
       switch( $actions[$this->uri[0]]['parser'] ) {
         case 'php':
@@ -506,10 +571,20 @@ class attogram {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
-    $this->actions = $this->get_actionables($this->actions_dir);
-    $this->log->debug('get_actions', array_keys($this->actions));
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'actions');
+    //$this->log->debug('get_action:', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('get_actions: No module actions found');
+    }
+    $this->actions = array();
+    foreach( $dirs as $d ) {
+      //$this->log->debug('get_actions: d='. $d);
+      $this->actions = array_merge($this->actions, $this->get_actionables($d) );
+    }
+    asort($this->actions);
+    $this->log->debug('get_actions: ', array_keys($this->actions));
     return $this->actions;
-  }
+  } // end function get_actions()
 
   /**
    * get_admin_actions() - create list of all admin pages from the admin directory
@@ -517,16 +592,23 @@ class attogram {
    * @return array
    */
   function get_admin_actions() {
-    if( !$this->is_admin() ) {
-      return array();
-    }
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
-    $this->admin_actions = $this->get_actionables($this->admin_dir);
-    $this->log->debug('get_admin_actions', array_keys($this->admin_actions));
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'admin');
+    //$this->log->debug('get_admin_actions:', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('get_admin_actions: No module admin actions found');
+    }
+    $this->admin_actions = array();
+    foreach( $dirs as $d ) {
+      //$this->log->debug('get_admin_actions: d='. $d);
+      $this->admin_actions = array_merge($this->admin_actions, $this->get_actionables($d) );
+    }
+    asort($this->admin_actions);
+    $this->log->debug('get_admin_actions: ', array_keys($this->admin_actions));
     return $this->admin_actions;
-  }
+  } // end function get_admin_actions()
 
   /**
    * get_actionables - create list of all useable action files from a directory
@@ -536,7 +618,7 @@ class attogram {
   function get_actionables( $dir ) {
     $r = array();
     if( !is_readable($dir) ) {
-      $this->error[] = 'GET_ACTIONABLES: directory not readable: ' . $dir;
+      $this->log->error('GET_ACTIONABLES: directory not readable: ' . $dir);
       return $r;
     }
     foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
@@ -557,17 +639,16 @@ class attogram {
    * @return void
    */
   function get_functions() {
-    if( !is_dir($this->functions_dir) || !is_readable($this->functions_dir) ) {
-      $this->log->notice('functions directory not found: ' . $this->functions_dir);
-      return FALSE;
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'functions');
+    //$this->log->debug('get_functions', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('get_functions: No module functions found');
     }
-    foreach( array_diff(scandir($this->functions_dir), $this->skip_files) as $f ) {
-      $file = $this->functions_dir . "/$f";
-      if( !$this->is_readable_file($file,'.php') ) { continue; } // php files only
-      include_once($file);
-      $this->log->debug('included function ' . $file);
+    foreach( $dirs as $d ) {
+      //$this->log->debug('get_functions: d='. $d);
+      $this->include_all_php_files_in_directory( $d );
     }
-  }
+  } // end function get_functions()
 
   /**
    * is_admin() - is access from an admin IP?
@@ -658,25 +739,29 @@ class attogram {
   }
 
   /**
-   * $this->is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
-   *
-   * @param string $file The name of the file to test
-   * @param string $type (optional) The file extension to allow. Defaults to '.php'
-   *
-   * @return boolean
+   * guru_meditation_error()
    */
-  function is_readable_file( $file=FALSE, $type='.php' ) {
-    if( !$file || !is_file($file) || !is_readable($file) ) {
-      return FALSE;
+  function guru_meditation_error( $error='', $context=array(), $message='' ) {
+    $this->log->error('Guru Meditation Error: ' . $error, $context);
+    $this->page_header();
+    print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
+    if( $error ) {
+      print '<h2>' . $error . '</h2>';
     }
-    if( !$type || $type == '' || !is_string($type) ) { // error
-      return FALSE;
+    if( $context && is_array($context) ) {
+      print '<p class="bg-warning">' . implode($context,'<br />') . '</p>';
     }
-    if( preg_match('/' . $type . '$/',$file) ) {
-      return TRUE;
+    if( $message ) {
+      print '<p>' . $message . '</p>';
     }
-    return FALSE;
-  }
+    print '</div>';
+    if( isset($this->log->stack) && $this->log->stack ) {
+      print '<div class="container"><pre class="alert alert-debug">System Debug:<br />'
+      . implode($this->log->stack, '<br />') . '</pre></div>';
+    }
+   $this->page_footer();
+   exit;
+  } // end function guru_meditation_error()
 
 } // END of class attogram
 
@@ -684,40 +769,26 @@ class attogram {
 /**
  * Attogram sqlite_database
  */
-class sqlite_database {
+class sqlite_database extends attogram_utils {
 
-  public $debug;
-  public $db_name, $db, $tables_directory, $tables, $skip_files, $log;
+  public $db_name, $modules_directory, $db;
 
   /**
    * __construct() - initialize database settings
    *
    * @param string $db_name relative path to the SQLite database file
-   * @param string $tables_dir relative path to the table definitions directory
+   * @param string $modules_directory relative path to the Attogram modules directory
+   * @param object $log psr3 logger object
+   * @param bool $debug (optional) defaults to FALSE
    *
    * @return void
    */
-  function __construct( $db_name, $tables_dir, $debug=FALSE ) {
+  function __construct( $db_name, $modules_directory, $log, $debug=FALSE ) {
+    parent::__construct();
     $this->debug = $debug;
+    $this->log = $log;
+    $this->modules_directory = $modules_directory;
     $this->db_name = $db_name;
-    $this->tables_directory = $tables_dir;
-    $this->skip_files = array('.','..','.htaccess');
-    if( $this->debug && class_exists('\Monolog\Logger') ) {
-
-      $this->log = new \Monolog\Logger('attogram');
-
-      $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"small text-danger\" style=\"padding:0;margin:0;\">DB:::%datetime%:%level_name%: %message% %context% %extra%</p>";
-      $dateformat = 'Y-m-d H:i:s:u';
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
-      $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-
-      //$bch = new \Monolog\Handler\BrowserConsoleHandler;
-      //$this->log->pushHandler( $bch );
-
-    } else {
-      $this->log = new logger();
-    }
   }
 
   /**
@@ -746,7 +817,7 @@ class sqlite_database {
       $this->log->error('GET_DB: error opening database');
       return FALSE;
     }
-    $this->log->debug("Got SQLite database: $this->db_name");
+    $this->log->debug("GET_DB: Got SQLite database: $this->db_name");
     return TRUE; // got database, into $this->db
   }
 
@@ -821,7 +892,7 @@ class sqlite_database {
    * @return object|boolean
    */
   function query_prepare( $sql ) {
-    $this->log->debug("prepare: $sql");
+    $this->log->debug("QUERY_PREPARE: prepare: $sql");
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
@@ -850,18 +921,24 @@ class sqlite_database {
     if( isset($this->tables) && is_array($this->tables) ) {
       return TRUE;
     }
-    if( !is_readable($this->tables_directory) ) {
-      $this->log->error('GET_TABLES: Tables directory not readable');
+    $dirs = $this->get_all_subdirectories( $this->modules_directory, 'tables');
+    //$this->log->debug('GET_TABLES', $dirs);
+    if( !$dirs ) {
+      $this->log->debug('GET_TABLES: No module tables found');
       return FALSE;
     }
     $this->tables = array();
-    foreach( array_diff(scandir($this->tables_directory), $this->skip_files) as $f ) {
-      $file = $this->tables_directory . "/$f";
-      if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
-        continue; // .sql files only
+    foreach( $dirs as $d ) {
+      //$this->log->debug('GET_TABLES: d='. $d);
+      foreach( array_diff(scandir($d), $this->skip_files) as $f ) {
+        $file = $d . '/' . $f;
+        if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
+          continue; // .sql files only
+        }
+        $table_name = str_replace('.sql','',$f);
+        $this->tables[$table_name] = file_get_contents($file);
+        $this->log->debug('GET_TABLES: got table: ' . $table_name . ' from ' . $file);
       }
-      $table_name = str_replace('.sql','',$f);
-      $this->tables[$table_name] = file_get_contents($file);
     }
     return TRUE;
   }
