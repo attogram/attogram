@@ -536,7 +536,7 @@ class attogram {
   function get_actionables( $dir ) {
     $r = array();
     if( !is_readable($dir) ) {
-      $this->error[] = 'GET_ACTIONABLES: directory not readable: ' . $dir;
+      $this->log->error('GET_ACTIONABLES: directory not readable: ' . $dir);
       return $r;
     }
     foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
