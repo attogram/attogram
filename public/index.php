@@ -658,7 +658,7 @@ class attogram {
   }
 
   /**
-   * $this->is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
    *
    * @param string $file The name of the file to test
    * @param string $type (optional) The file extension to allow. Defaults to '.php'
