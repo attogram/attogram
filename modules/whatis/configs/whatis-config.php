@@ -1,5 +1,5 @@
 <?php
-// whatis config
+// Attogram Framework - Whatis module - config v0.0.1
 
 namespace Attogram;
 
