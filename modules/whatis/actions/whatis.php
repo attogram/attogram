@@ -1,9 +1,9 @@
-<?php // Attogram Framework - Whatis module - whatis action v0.0.1
+<?php // Attogram Framework - Whatis module - whatis action v0.0.2
 /*
   Example Attogram subpath usage
 
   - config settings:
-  $config['depth']['whatis'] = 3;
+  $config['depth']['whatis'] = 2;
   $config['force_slash_exceptions'][] = 'whatis';
 
 */
@@ -23,7 +23,7 @@ foreach( array_keys($items) as $i ) {
 $items['this page'] = $default . '</ul>';
 
 if( !isset($this->uri[1]) || $this->uri[1] == '' ) {
-  $this->log->error('whatis: missing item: ' . $this->uri[1]);
+  $this->log->error('whatis: missing item: ' . @$this->uri[1]);
   $item = 'this page';
 } else {
   $item = $this->uri[1];
