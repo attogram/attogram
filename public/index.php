@@ -127,7 +127,7 @@ class attogram_utils
 
 
 /**
- * Attogram Framework
+ * attogram class - The Attogram Framework
  */
 class attogram extends attogram_utils
 {
@@ -250,14 +250,25 @@ class attogram extends attogram_utils
   }
 
   function set_uri() {
-    $this->log->debug('set_uri: pathInfo=' . $this->pathInfo);
+    //$this->log->debug('set_uri: pathInfo=' . $this->pathInfo);
     $this->uri = explode('/', $this->pathInfo);
-    $this->log->debug('raw uri:', $this->uri);
-    $trash = array_shift($this->uri); // take off first entry
-    if( $this->uri[sizeof($this->uri) - 1] != '' ) {
-      $this->uri[] = '';  // pretend there is a slash at end
+    //$this->log->debug('raw uri:', $this->uri);
+    //$this->log->debug('sizeof uri=' . sizeof($this->uri));
+    if( sizeof($this->uri) == 1 ) {
+      $this->log->debug('set_uri', $this->uri);
+      return; // super top level request
     }
-    $this->log->debug('uri:',$this->uri);
+    if( $this->uri[0] == '' ) {
+      $trash = array_shift($this->uri); // take off first blank entry
+    }
+    if( sizeof($this->uri) == 1 ) {
+      $this->log->debug('set_uri', $this->uri);
+      return; // top level request
+    }
+    if( $this->uri[sizeof($this->uri) - 1] == '' ) {
+      $trash = array_pop($this->uri); // take off last blank entry
+    }
+    $this->log->debug('set_uri', $this->uri);
   }
 
   function end_slash() {
