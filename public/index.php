@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.2
+ * @version 0.5.2-dev
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,7 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.2');
+define('ATTOGRAM_VERSION', '0.5.2-dev');
 
 $attogram = new attogram();
 
@@ -433,12 +433,20 @@ class attogram extends attogram_utils
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
           return;
         default:
-          $this->log->error('ACTION: No Parser Found');
+          $this->log->error('ROUTE: No Parser Found');
           $this->error404('No Way Out');
           break;
       } // end switch on parser
     } //end if action set
-    $this->log->error('ACTION: Action not found.  action=' . @$actions[$this->uri[0]]);
+    if( $this->uri[0] == 'home' ) { // missing the Home Page!
+      // Default Home Page
+      $this->log->error('ROUTE: missing home action - using default homepage');
+      $this->page_header('Home');
+      print 'Welcome to the Attogram Framework.  Do you know where my home page is?';
+      $this->page_footer();
+      return;
+    }
+    $this->log->error('ACTION: Action not found.  uri[0]=' . $this->uri[0] );
     $this->error404('This is not the action you are looking for');
   } // end function route()
 
