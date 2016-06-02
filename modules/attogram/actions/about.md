@@ -6,7 +6,7 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 Attogram gives developers a jumpstart to quickly create web sites.
 
-Attogram runs on PHP with Apache. It provides developers a skeleton site with:
+Attogram is a PHP-based framework that provides developers a skeleton site with:
 
 * file-based URL routing
 * IP-protected backend

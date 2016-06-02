@@ -24,7 +24,8 @@ $this->page_header('Attogram Framework v' . ATTOGRAM_VERSION);
 
 <div class="container">
 
-  <p>Attogram runs on <strong><a href="http://php.net/">PHP</a></strong> with <strong><a href="https://httpd.apache.org/">Apache</a></strong>. It provides developers a skeleton site with:</p>
+  <p>Attogram is a <strong><a href="http://php.net/">PHP</a></strong>-based framework
+     that provides developers a skeleton site with:</p>
   <ul>
   <li>file-based <strong>URL routing</strong></li>
   <li>IP-protected <strong>backend</strong></li>
@@ -34,7 +35,10 @@ $this->page_header('Attogram Framework v' . ATTOGRAM_VERSION);
   <li><strong><a href="http://jquery.com/">jQuery</a></strong> and <strong><a href="http://getbootstrap.com/">Bootstrap</a></strong></li>
   </ul>
   <p>After that, Attogram tries to stay out of your way while you <strong>do your thing</strong>!</p>
-  <p>Attogram is <a href="license/">Dual Licensed</a> under the <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>.
+  <p>Attogram is <a href="license/">Dual Licensed</a> under the
+     <a href="http://opensource.org/licenses/MIT">The MIT License</a>
+     or the <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>,
+     at your choosing.
   <p>Read more <strong><a href="about/">about Attogram</a></strong>.</p>
 
 </div>
