@@ -2,6 +2,8 @@ Attogram Framework
 ==================
 [//]: # ( Attogram Framework - About Page (markdown) - v0.0.4 )
 
+_Attogram now has modules!  Updated docs coming soon..._
+
 Attogram gives developers a jumpstart to quickly create web sites.
 
 Attogram runs on PHP with Apache. It provides developers a skeleton site with:
@@ -32,11 +34,11 @@ Setup: Install
     * Download latest code from GitHub:[`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
     * If composer is not available, also download the vendor distribution from [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip) and move the `./vendor/` directory to the top level of your install directory.
 
-* Setup apache to use `./public/` directory as the web site root.
+* Setup your web server to use the `./public/` directory as the web site root.
 
 * edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
 
-* copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings.
+* (optional) copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings .
 
 Setup: Admin
 ============
@@ -48,8 +50,9 @@ Setup: Admin
 Setup: Database
 ===============
 * Make sure the database file `./db/global` is writeable by the web server
-* load the homepage, goto admin action [**db-setup**](../db-setup/), click **Create Attogram Tables**
-* load the homepage, goto admin action [**db-admin**](../db-admin/), login as **attogram**
+* Tables are lazily created when needed.  To create all tables at once,
+goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tables**
+* phpLiteAdmin is available for database administration, goto the [**db-admin admin page**](../db-admin/), default password is **attogram**
 
 Setup: Users
 ============
