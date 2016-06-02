@@ -343,7 +343,7 @@ class attogram extends attogram_utils
     if( $this->debug && class_exists('\Monolog\Logger') ) {
       $this->log = new \Monolog\Logger('attogram');
       $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"text-danger\" style=\"padding:0;margin:0;\">%datetime%|%level_name%: %message% %context%</p>"; // %extra%
+      $format = "<p class=\"text-danger squished\">%datetime%|%level_name%: %message% %context%</p>"; // %extra%
       $dateformat = 'Y-m-d|H:i:s:u';
       $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
       $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
