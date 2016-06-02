@@ -857,7 +857,10 @@ class sqlite_database extends attogram_utils
       $this->log->error("QUERY: prepare failed: $sqlstate:$error_code:$error_string");
       return array();
     }
-    while( $x = each($bind) ) { $statement->bindParam( $x[0], $x[1]); }
+    while( $x = each($bind) ) {
+      $statement->bindParam( $x[0], $x[1]);
+    }
+    $this->log->debug('QUERY: bound:', $bind);
     if( !$statement->execute() ) {
       $this->log->error('QUERY: Can not execute query');
       return array();
@@ -893,8 +896,10 @@ class sqlite_database extends attogram_utils
     while( $x = each($bind) ) {
       $statement->bindParam($x[0], $x[1]);
     }
+    $this->log->debug('QUERYB: bound:', $bind);
     if( !$statement->execute() ) {
-      $this->log->error('QUERYB: execute failed');
+      list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
+      $this->log->error("QUERYB: execute failed: $sqlstate:$error_code:$error_string");
       return FALSE;
     }
     $this->log->debug('QUERYB TRUE');
@@ -917,7 +922,7 @@ class sqlite_database extends attogram_utils
     if( $sqlstate == 'HY000' && $error_code == '1' && preg_match('/^no such table/', $error_string) ) { // table not found
       $table = str_replace('no such table: ', '', $error_string); // get table name
       if( $this->create_table($table) ) { // create table
-        $this->log->error("QUERY_PREPARE: Created table: $table");
+        $this->log->notice("QUERY_PREPARE: Created table: $table");
         $statement = $this->db->prepare($sql);
         if( $statement ) { return $statement; } // try again
         $this->log->error('QUERY_PREPARE: Still can not prepare sql');
