@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Navbar v0.0.2
+<?php // Attogram Framework - Navbar v0.0.3
 
 ?>
 <nav class="navbar navbar-default">
@@ -27,10 +27,15 @@
       <ul class="nav navbar-nav navbar-right">
 <?php
       if( $this->is_logged_in() ) {
-        print '<li><a href="' . $this->path . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>' . $this->session->get('attogram_username','user') . '</b></a></li>';
+        print '<li><a href="' . $this->path
+        . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
+        . $this->session->get('attogram_username','user') . '</b></a></li>';
         print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
       } else {
-        print '<li><a href="' . $this->path . '/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
+        if( array_key_exists('login', $this->get_actions()) ) { // if User Module is loaded
+          print '<li><a href="' . $this->path
+          . '/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
+        }
       }
 
       if( $this->is_admin() ) {
