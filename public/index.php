@@ -60,7 +60,7 @@ class attogram_utils
   function get_all_subdirectories( $dir, $name ) {
     //$this->log->debug('get_all_subdirectories: scanning for: ' . $dir . '/*/' . $name);
     if( !isset($dir) || !$dir || !is_string($dir)) {
-      $this->log->error('get_all_subdirectories: UNDEFINED dir');
+      $this->log->error('get_all_subdirectories: UNDEFINED dir:' . print_r($dir,1));
       return array();
     }
     if( !is_dir($dir) || !is_readable($dir) ) {
@@ -846,7 +846,7 @@ class sqlite_database extends attogram_utils
    *
    * @return array
    */
-   function query( $sql, $bind=array() ) {
+  function query( $sql, $bind=array() ) {
     if( !$this->get_db() ) {
       $this->log->error('QUERY: Can not get database');
       return array();
@@ -879,7 +879,7 @@ class sqlite_database extends attogram_utils
    *
    * @return boolean
    */
-   function queryb( $sql, $bind=array() ) {
+  function queryb( $sql, $bind=array() ) {
     if( !$this->get_db() ) {
       $this->log->error('QUERYB: Can not get database');
       return FALSE;
@@ -899,7 +899,7 @@ class sqlite_database extends attogram_utils
     }
     $this->log->debug('QUERYB TRUE');
     return TRUE;
-  }
+   }
 
   /**
    * query_prepare()
@@ -934,7 +934,7 @@ class sqlite_database extends attogram_utils
    *
    * @return boolean
    */
-   function get_tables() {
+  function get_tables() {
     if( isset($this->tables) && is_array($this->tables) ) {
       return TRUE;
     }
@@ -967,7 +967,7 @@ class sqlite_database extends attogram_utils
    *
    * @return boolean
    */
-   function create_table( $table='' ) {
+  function create_table( $table='' ) {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
       $this->log->error("CREATE_TABLE: Unknown table: $table");
