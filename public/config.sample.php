@@ -19,7 +19,7 @@ global $config;
 // $config['admins'] = array( '127.0.0.1', '::1', );
 
 // Depth Settings
-// By default, all pages are allowed 2 levels (depth) in the URLs
+// By default, all pages are allowed 1 levels (depth) in the URLs
 // To change this setting per page, set the depth here:
 // $config['depth']['insert-action-name-here'] = 3;
 

@@ -209,7 +209,7 @@ class attogram extends attogram_utils
     $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->set_config('depth', @$config['depth'], $this->depth );
     if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset: default homepage depth
-    if( !isset($this->depth['*']) ) { $this->depth['*'] = 2; } // reset: default p age depth
+    if( !isset($this->depth['*']) ) { $this->depth['*'] = 1; } // reset: default p age depth
 
   } // end function load_config()
 
