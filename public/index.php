@@ -847,7 +847,7 @@ class sqlite_database extends attogram_utils
    * @return array
    */
   function query( $sql, $bind=array() ) {
-    $this->log->debug('QUERY: sql=' . $sql);
+    $this->log->debug('QUERY: backtrace=' . debug_backtrace()[1]['function'] . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERY: bind=',$bind);
     }
@@ -887,7 +887,7 @@ class sqlite_database extends attogram_utils
    * @return boolean
    */
   function queryb( $sql, $bind=array() ) {
-    $this->log->debug('QUERYB: sql=' . $sql);
+    $this->log->debug('QUERYB: backtrace=' . debug_backtrace()[1]['function'] . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERYB: bind=',$bind);
     }
