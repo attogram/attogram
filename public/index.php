@@ -847,6 +847,10 @@ class sqlite_database extends attogram_utils
    * @return array
    */
   function query( $sql, $bind=array() ) {
+    $this->log->debug('QUERY: sql=' . $sql);
+    if( $bind ) {
+      $this->log->debug('QUERY: bind=',$bind);
+    }
     if( !$this->get_db() ) {
       $this->log->error('QUERY: Can not get database');
       return array();
@@ -860,7 +864,7 @@ class sqlite_database extends attogram_utils
     while( $x = each($bind) ) {
       $statement->bindParam( $x[0], $x[1]);
     }
-    $this->log->debug('QUERY: bound:', $bind);
+    //$this->log->debug('QUERY: bound:', $bind);
     if( !$statement->execute() ) {
       $this->log->error('QUERY: Can not execute query');
       return array();
@@ -870,7 +874,7 @@ class sqlite_database extends attogram_utils
       $this->log->error('QUERY: Query failed');
       $r = array();
     }
-    $this->log->debug('QUERY: result', $r);
+    $this->log->debug('QUERY: result size=' . sizeof($r) );
     return $r;
   }
 
@@ -883,6 +887,10 @@ class sqlite_database extends attogram_utils
    * @return boolean
    */
   function queryb( $sql, $bind=array() ) {
+    $this->log->debug('QUERYB: sql=' . $sql);
+    if( $bind ) {
+      $this->log->debug('QUERYB: bind=',$bind);
+    }
     if( !$this->get_db() ) {
       $this->log->error('QUERYB: Can not get database');
       return FALSE;
@@ -896,7 +904,7 @@ class sqlite_database extends attogram_utils
     while( $x = each($bind) ) {
       $statement->bindParam($x[0], $x[1]);
     }
-    $this->log->debug('QUERYB: bound:', $bind);
+    //$this->log->debug('QUERYB: bound:', $bind);
     if( !$statement->execute() ) {
       list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
       $this->log->error("QUERYB: execute failed: $sqlstate:$error_code:$error_string");
@@ -914,7 +922,7 @@ class sqlite_database extends attogram_utils
    * @return object|boolean
    */
   function query_prepare( $sql ) {
-    $this->log->debug("QUERY_PREPARE: prepare: $sql");
+    //$this->log->debug("QUERY_PREPARE: $sql");
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
