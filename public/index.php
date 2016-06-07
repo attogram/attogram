@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.2-dev
+ * @version 0.5.2
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,7 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.2-dev');
+define('ATTOGRAM_VERSION', '0.5.2');
 
 $attogram = new attogram();
 
@@ -863,7 +863,7 @@ class sqlite_database extends attogram_utils
     }
     while( $x = each($bind) ) {
       $statement->bindParam( $x[0], $x[1] );
-      // possible:  Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based 
+      // possible:  Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based
     }
     //$this->log->debug('QUERY: bound:', $bind);
     if( !$statement->execute() ) {
