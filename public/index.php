@@ -862,7 +862,8 @@ class sqlite_database extends attogram_utils
       return array();
     }
     while( $x = each($bind) ) {
-      $statement->bindParam( $x[0], $x[1]);
+      $statement->bindParam( $x[0], $x[1] );
+      // possible:  Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based 
     }
     //$this->log->debug('QUERY: bound:', $bind);
     if( !$statement->execute() ) {
