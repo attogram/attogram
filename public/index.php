@@ -152,7 +152,7 @@ class attogram extends attogram_utils
     $this->set_uri();
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
-    $this->get_functions(); // load any files in ./functions/
+    $this->get_includes(); // load any files in ./functions/
     $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
     $this->sessioning(); // start sessions
     $this->route(); // Send us where we want to go
@@ -521,68 +521,6 @@ class attogram extends attogram_utils
   }
 
   /**
-   * error404() - display a 404 error page to user and exit
-   *
-   * @return void
-   */
-  function error404( $error='' ) {
-    header('HTTP/1.0 404 Not Found');
-    if( $this->is_readable_file($this->fof, '.php') ) {
-      include($this->fof);
-      exit;
-    }
-    // Default 404 page
-    $this->log->error('ERROR404: 404 template not found');
-    $this->page_header('404 Not Found');
-    print '<div class="container"><h1>404 Not Found</h1>';
-    if( $error ) {
-      print '<p>' . htmlentities($error) . '</p>';
-    }
-    print '</div>';
-    $this->page_footer();
-    exit;
-  }
-
-  /**
-   * page_header() - the web page header
-   *
-   * @param string $title The web page title
-   *
-   * @return void
-   */
-  function page_header( $title='' ) {
-    $file = $this->templates_dir . '/header.php';
-    if( $this->is_readable_file($file,'.php') ) {
-      include($file);
-      $this->log->debug('page_header, title: ' . $title);
-      return;
-    }
-    // Default page header
-    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
-    . '<meta name="viewport" content="width=device-width, initial-scale=1">'
-    . '<title>' . $title . '</title></head><body>';
-    $this->log->error('missing page_header ' . $file . ' - using default header');
-  }
-
-  /**
-   * page_footer() - the web page footer
-   *
-   * @return void
-   */
-  function page_footer() {
-    $file = $this->templates_dir . '/footer.php';
-    if( $this->is_readable_file($file,'.php') ) {
-      include($file);
-      $this->log->debug('page_footer');
-      return;
-    }
-    // Default page footer
-    print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
-    print '</body></html>';
-    $this->log->error('missing page_footer ' . $file . ' - using default footer');
-  }
-
-  /**
    * get_actions() - create list of all pages from the actions directory
    *
    * @return array
@@ -654,21 +592,21 @@ class attogram extends attogram_utils
   }
 
   /**
-   * get_functions() - include all PHP files in from the functions directory
+   * get_includes() - include all PHP files, from all modules' includes/ directory
    *
    * @return void
    */
-  function get_functions() {
+  function get_includes() {
     $dirs = $this->get_all_subdirectories( $this->modules_dir, 'includes');
-    //$this->log->debug('get_functions', $dirs);
+    //$this->log->debug('get_includes', $dirs);
     if( !$dirs ) {
-      $this->log->debug('get_functions: No module functions found');
+      $this->log->debug('get_includes: No module functions found');
     }
     foreach( $dirs as $d ) {
-      //$this->log->debug('get_functions: d='. $d);
+      //$this->log->debug('get_includes: d='. $d);
       $this->include_all_php_files_in_directory( $d );
     }
-  } // end function get_functions()
+  } // end function get_includes()
 
   /**
    * is_admin() - is access from an admin IP?
@@ -705,57 +643,42 @@ class attogram extends attogram_utils
   }
 
   /**
-   * login() - login a user into the system
+   * page_header() - the web page header
    *
-   * @return boolean
+   * @param string $title The web page title
+   *
+   * @return void
    */
-  function login() {
-    if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
-      $this->log->error('LOGIN: Please enter username and password');
-      return FALSE;
+  function page_header( $title='' ) {
+    $file = $this->templates_dir . '/header.php';
+    if( $this->is_readable_file($file,'.php') ) {
+      include($file);
+      $this->log->debug('page_header, title: ' . $title);
+      return;
     }
-    $user = $this->db->query(
-      'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
-      $bind=array(':u'=>$_POST['u'],':p'=>$_POST['p']) );
-
-    if( $this->db->db->errorCode() != '00000' ) { // query failed
-      $this->log->error('LOGIN: Login system offline');
-      return FALSE;
-    }
-    if( !$user ) { // no user, or wrong password
-      $this->log->error('LOGIN: Invalid login');
-      return FALSE;
-    }
-    if( !sizeof($user) == 1 ) { // corrupt data
-      $this->log->error('LOGIN: Invalid login');
-      return FALSE;
-    }
-    $user = $user[0];
-    $this->session->set('attogram_id', $user['id']);
-    $this->session->set('attogram_username', $user['username']);
-    $this->session->set('attogram_level', $user['level']);
-    $this->session->set('attogram_email', $user['email']);
-    if( !$this->db->queryb(
-      "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
-      $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
-      ) ) {
-        $this->log->error('LOGIN: can not updated last login info');
-    }
-    $this->log->debug('User Logged in');
-    return TRUE;
+    // Default page header
+    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+    . '<meta name="viewport" content="width=device-width, initial-scale=1">'
+    . '<title>' . $title . '</title></head><body>';
+    $this->log->error('missing page_header ' . $file . ' - using default header');
   }
 
   /**
-   * is_logged_in() - is a user logged into the system?
+   * page_footer() - the web page footer
    *
-   * @return boolean
+   * @return void
    */
-  function is_logged_in() {
-    if( !is_object($this->session) ) { return FALSE; } // dev
-    if( $this->session->get('attogram_id', FALSE) && $this->session->get('attogram_username', FALSE) ) {
-      return TRUE;
+  function page_footer() {
+    $file = $this->templates_dir . '/footer.php';
+    if( $this->is_readable_file($file,'.php') ) {
+      include($file);
+      $this->log->debug('page_footer');
+      return;
     }
-    return FALSE;
+    // Default page footer
+    print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
+    print '</body></html>';
+    $this->log->error('missing page_footer ' . $file . ' - using default footer');
   }
 
   /**
@@ -778,6 +701,29 @@ class attogram extends attogram_utils
    $this->page_footer();
    exit;
   } // end function guru_meditation_error()
+
+  /**
+   * error404() - display a 404 error page to user and exit
+   *
+   * @return void
+   */
+  function error404( $error='' ) {
+    header('HTTP/1.0 404 Not Found');
+    if( $this->is_readable_file($this->fof, '.php') ) {
+      include($this->fof);
+      exit;
+    }
+    // Default 404 page
+    $this->log->error('ERROR404: 404 template not found');
+    $this->page_header('404 Not Found');
+    print '<div class="container"><h1>404 Not Found</h1>';
+    if( $error ) {
+      print '<p>' . htmlentities($error) . '</p>';
+    }
+    print '</div>';
+    $this->page_footer();
+    exit;
+  }
 
 } // END of class attogram
 

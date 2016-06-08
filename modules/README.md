@@ -38,7 +38,7 @@ Standard modules included with the Attogram Framework distribution:
 * `./modules/database/` - SQLite database for Attogram
 * `./modules/database/admin_actions/db-admin.php` - Admin Action:  Database web admin via phpLiteAdmin
 * `./modules/database/admin_actions/db-setup.php` - Admin Action: Database table setup
-* `./modules/database/includes/sqlite_database.php` - The Attogram SQLite helper class
+* `./modules/database/includes/sqlite_database.php` - Attogram SQLite helper class
 * `./modules/database/includes/pager.php` - Pagination helper: function pager()
 * `./modules/database/includes/tabler.php` - Table view/edit helper: function tabler()
 
@@ -47,6 +47,7 @@ Standard modules included with the Attogram Framework distribution:
 * `./modules/user/actions/login.php` - Public Action: Login page
 * `./modules/user/actions/user.php` - Public Action: User page
 * `./modules/user/admin_actions/users.php` - Admin Action: Users editor
+* `./modules/user/includes/attogram_user.php` - Attogram User helper class
 * `./modules/user/tables/user.sql` - user database table definition
 
 # Misc

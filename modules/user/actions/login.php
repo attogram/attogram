@@ -1,10 +1,14 @@
-<?php // Attogram Framework - User Module - Login Page v0.0.1
+<?php // Attogram Framework - User Module - Login Page v0.0.4
 
 namespace Attogram;
 
 $message = '';
 if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
-  if( $this->login() ) {
+  if( !class_exists('Attogram\attogram_user') ) {
+    $this->log->error('login.php: attogram_user class not found');
+    $this->error404('attogram_user system kaput!');
+  }
+  if( \Attogram\attogram_user::login( $this->log, $this->db, $this->session ) ) {
     header('Location: ' . $this->path . '/');
     exit;
   }

@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Navbar v0.0.3
+<?php // Attogram Framework - Navbar v0.0.4
 
 ?>
 <nav class="navbar navbar-default">
@@ -26,29 +26,32 @@
     ?></ul>
       <ul class="nav navbar-nav navbar-right">
 <?php
-      if( $this->is_logged_in() ) {
+  if( !class_exists('Attogram\attogram_user') ) {
+    // user module not active ..
+  } else {
+    if( \Attogram\attogram_user::is_logged_in( $this->session ) ) {
+      print '<li><a href="' . $this->path
+      . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
+      . $this->session->get('attogram_username','user') . '</b></a></li>';
+      print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
+    } else {
+      if( array_key_exists('login', $this->get_actions()) ) { // if User Module is loaded
         print '<li><a href="' . $this->path
-        . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
-        . $this->session->get('attogram_username','user') . '</b></a></li>';
-        print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
-      } else {
-        if( array_key_exists('login', $this->get_actions()) ) { // if User Module is loaded
-          print '<li><a href="' . $this->path
-          . '/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
-        }
+        . '/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
       }
+    }
+  } // end if user module active
 
-      if( $this->is_admin() ) {
-        ?><li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
-          <ul class="dropdown-menu"><?php
-          foreach( array_keys($this->get_admin_actions()) as $a ) {
-            print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
-          }
-          ?></ul>
-        </li><?php
-      }
-      ?></ul>
+  if( $this->is_admin() ) {
+    print '<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    Admin <span class="caret"></span></a><ul class="dropdown-menu">';
+    foreach( array_keys($this->get_admin_actions()) as $a ) {
+      print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
+    }
+    print '</ul></li>';
+  }
+  ?></ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container-fluid -->
 </nav>
