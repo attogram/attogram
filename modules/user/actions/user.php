@@ -15,10 +15,10 @@ if( !\Attogram\attogram_user::is_logged_in() ) {
 $this->page_header('Attogram - User');
 
 print '<div class="container"><h1><span class="glyphicon glyphicon-user"></span> User</h1><hr />'
-. 'ID: <code>' . $this->session->get('attogram_id', 'null') . '</code>'
-. '<br />username: <code>' . $this->session->get('attogram_username', 'null') . '</code>'
-. '<br />level: <code>' . $this->session->get('attogram_level', 'null') . '</code>'
-. '<br />email: <code>' . $this->session->get('attogram_email', 'null') . '</code>'
+. 'ID: <code>' . @$_SESSION['attogram_id'] . '</code>'
+. '<br />username: <code>' . @$_SESSION['attogram_username'] . '</code>'
+. '<br />level: <code>' . @$_SESSION['attogram_level'] . '</code>'
+. '<br />email: <code>' . @$_SESSION['attogram_email'] . '</code>'
 . '<br />is_admin?:  ' . ($this->is_admin ? 'Yes' : 'No')
 . '</div>';
 
