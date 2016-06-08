@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.1
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.2
 
 namespace Attogram;
 
@@ -67,7 +67,7 @@ class sqlite_database extends attogram_utils
    * @return array
    */
   function query( $sql, $bind=array() ) {
-    $this->log->debug('QUERY: backtrace=' . debug_backtrace()[1]['function'] . ' sql=' . $sql);
+    $this->log->debug('QUERY: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERY: bind=',$bind);
     }
@@ -108,7 +108,7 @@ class sqlite_database extends attogram_utils
    * @return boolean
    */
   function queryb( $sql, $bind=array() ) {
-    $this->log->debug('QUERYB: backtrace=' . debug_backtrace()[1]['function'] . ' sql=' . $sql);
+    $this->log->debug('QUERYB: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERYB: bind=',$bind);
     }
