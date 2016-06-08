@@ -615,7 +615,7 @@ class attogram extends attogram_utils
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'admin');
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'admin_actions');
     //$this->log->debug('get_admin_actions:', $dirs);
     if( !$dirs ) {
       $this->log->debug('get_admin_actions: No module admin actions found');
@@ -659,7 +659,7 @@ class attogram extends attogram_utils
    * @return void
    */
   function get_functions() {
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'functions');
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'includes');
     //$this->log->debug('get_functions', $dirs);
     if( !$dirs ) {
       $this->log->debug('get_functions: No module functions found');
