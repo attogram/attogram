@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.0.3 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.0.4 )
 
 * Attogram can be easily extended by creating you own modules
 
@@ -10,9 +10,9 @@ Attogram Modules
 
 * Modules may have the following subdirectories:
 
- * `actions/` - The Public Actions (php or markdown files)
+ * `actions/` - The Public Actions (php or markdown files)  If present, the `home` action is used as the home page.
 
- * `admin_actions/` - The Admin-only Actions (php or markdown files)
+ * `admin_actions/` - The backend admin-only Actions (php or markdown files)
 
  * `configs/`- Configurations via `$config['configname'] = ...`, loaded at startup (php files only)
 
@@ -28,23 +28,26 @@ Attogram Modules
 Standard modules included with the Attogram Framework distribution:
 
 ## Module: Attogram
-* `./modules/attogram/`
-* Default site with information about Attogram
-* Actions: home page, about page, license page
-* Admin Actions: Attogram Info page
+* `./modules/attogram/` - Default site with information about Attogram
+* `./modules/attogram/actions/home.php` - Public Action: Home page
+* `./modules/attogram/actions/about.md` - Public Action: About page
+* `./modules/attogram/actions/license.php` - Public Action: License page
+* `./modules/attogram/admin_actions/info.php` - Admin Action: Attogram Info page
 
 ## Module: Database
-* `./modules/database/`
-* A SQLite database for Attogram
-* Admin actions: DB admin, DB setup
-* helper functions: pager() pagination, tabler() table helper
+* `./modules/database/` - SQLite database for Attogram
+* `./modules/database/admin_actions/db-admin.php` - Admin Action:  Database web admin via phpLiteAdmin
+* `./modules/database/admin_actions/db-setup.php` - Admin Action: Database table setup
+* `./modules/database/includes/sqlite_database.php` - The Attogram SQLite helper class
+* `./modules/database/includes/pager.php` - Pagination helper - function pager()
+* `./modules/database/includes/tabler.php` - Table view/edit helper - function tabler()
 
 ## Module: User
-* `./modules/user/`
-* Simple user system for Attogram
-* Actions: login page, user page
-* Admin Actions: user editor
-* requires `database` module
+* `./modules/user/` - Simple user system for Attogram. (requires `database` module)
+* `./modules/user/actions/login.php` - Public Action: Login page
+* `./modules/user/actions/user.php` - Public Action - User page
+* `./modules/user/admin_actions/users.php` - Admin Action: Users editor
+* `./modules/user/tables/user.sql` - user database table definition
 
 # Misc
 
