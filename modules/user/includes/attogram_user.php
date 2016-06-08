@@ -10,7 +10,7 @@ class attogram_user
    *
    * @return boolean
    */
-  public static function login( $log, $db, $session ) {
+  public static function login( $log, $db ) {
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
       $log->error('LOGIN: Please enter username and password');
       return FALSE;
@@ -32,10 +32,10 @@ class attogram_user
       return FALSE;
     }
     $user = $user[0];
-    $session->set('attogram_id', $user['id']);
-    $session->set('attogram_username', $user['username']);
-    $session->set('attogram_level', $user['level']);
-    $session->set('attogram_email', $user['email']);
+    $_SESSION['attogram_id'] = $user['id'];
+    $_SESSION['attogram_username'] = $user['username'];
+    $_SESSION['attogram_level'] = $user['level'];
+    $_SESSION['attogram_email'] = $user['email'];
     if( !$db->queryb(
       "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
       $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
@@ -51,9 +51,8 @@ class attogram_user
    *
    * @return boolean
    */
-  public static function is_logged_in( $session ) {
-    if( !is_object($session) ) { return FALSE; }
-    if( $session->get('attogram_id', FALSE) && $session->get('attogram_username', FALSE) ) {
+  public static function is_logged_in( ) {
+    if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username']) {
       return TRUE;
     }
     return FALSE;

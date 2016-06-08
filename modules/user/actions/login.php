@@ -8,7 +8,7 @@ if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
     $this->log->error('login.php: attogram_user class not found');
     $this->error404('attogram_user system kaput!');
   }
-  if( \Attogram\attogram_user::login( $this->log, $this->db, $this->session ) ) {
+  if( \Attogram\attogram_user::login( $this->log, $this->db ) ) {
     header('Location: ' . $this->path . '/');
     exit;
   }

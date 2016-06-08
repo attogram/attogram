@@ -29,10 +29,11 @@
   if( !class_exists('Attogram\attogram_user') ) {
     // user module not active ..
   } else {
-    if( \Attogram\attogram_user::is_logged_in( $this->session ) ) {
+    if( \Attogram\attogram_user::is_logged_in() ) {
       print '<li><a href="' . $this->path
       . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
-      . $this->session->get('attogram_username','user') . '</b></a></li>';
+      . ( (isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'])  ? $_SESSION['attogram_username'] : 'user')
+      . '</b></a></li>';
       print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
     } else {
       if( array_key_exists('login', $this->get_actions()) ) { // if User Module is loaded

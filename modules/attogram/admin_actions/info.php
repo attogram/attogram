@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.0.9
+<?php // Attogram Framework - Site Info v0.1.0
 
 namespace Attogram;
 
@@ -44,17 +44,16 @@ $info['footer'] = info_file($this->templates_dir . '/footer.php');
 
 $info['<a name="objects"></a><h3><span class="glyphicon glyphicon-paperclip"></span> <em>Objects:</em></h3>'] = '';
 $info['request'] = info_object($this->request);
-$info['session'] = info_object($this->session);
 $info['log'] = info_object($this->log);
+$info['db'] = info_object($this->db);
 
 $info['<a name="database"></a><h3><span class="glyphicon glyphicon-hdd"></span> <em>Database:</em></h3>'] = '';
-$info['db'] = info_object($this->db);
 $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 
 $info['<a name="user"></a><h3><span class="glyphicon glyphicon-user"></span> <em>User:</em></h3>'] = '';
-$info['# session attributes'] = $this->session->count();
-$info['session attributes'] = info_array( $this->session->all(), $key=1 );
+$info['# session attributes'] = sizeof($_SESSION);
+$info['session attributes'] = info_array( $_SESSION, $key=1 );
 
 print '
 <div class="container">
@@ -92,7 +91,7 @@ function info_array($array, $keyed=FALSE) {
   }
   $r = '';
   foreach( $array as $name=>$value ) {
-    $r .= '<li class="list-group-item"><strong>' . $name .'</strong> = <code>' . $value . '</code></li>';
+    $r .= '<li class="list-group-item"><strong>' . $name .'</strong> = <code>' . print_r($value,1) . '</code></li>';
   }
   return '<ul class="list-group">' . $r . '</ul>';
 }

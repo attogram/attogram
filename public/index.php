@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.4
+ * @version 0.5.5
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,7 +15,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.4');
+define('ATTOGRAM_VERSION', '0.5.5');
 
 $attogram = new attogram();
 
@@ -329,7 +329,6 @@ class attogram extends attogram_utils
     $missing = array();
     $check = array(
       '\Symfony\Component\HttpFoundation\Request', // REQUIRED
-      '\Symfony\Component\HttpFoundation\Session\Session', // REQUIRED
       //'\Monolog\Logger',  // Optional
       //'\Monolog\Handler\StreamHandler',  // Optional
       //'\Monolog\Formatter\LineFormatter',  // Optional
@@ -381,11 +380,12 @@ class attogram extends attogram_utils
    * @return void
    */
   function sessioning() {
-    $this->session = new \Symfony\Component\HttpFoundation\Session\Session();
-    $this->session->start();
-    $this->log->debug('Session started.', $this->session->all());
+    session_start();
+    $this->log->debug('Session started.', $_SESSION);
     if( isset($_GET['logoff']) ) {
-      $this->session->invalidate();
+      session_unset();
+      session_destroy();
+      session_start();
       $this->log->info('User loggged off');
     }
   }

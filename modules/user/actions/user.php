@@ -7,7 +7,7 @@ if( !class_exists('Attogram\attogram_user') ) {
   $this->error404('attogram_user system kaput!');
 }
 
-if( !\Attogram\attogram_user::is_logged_in( $this->session ) ) {
+if( !\Attogram\attogram_user::is_logged_in() ) {
   header('Location: ' . $this->path . '/login/');
   exit;
 }

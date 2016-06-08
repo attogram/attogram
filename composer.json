@@ -5,7 +5,7 @@
   "homepage": "https://github.com/attogram/attogram",
   "license": "(MIT or GPL-3.0+)",
   "require": {
-    "php": ">=5.5.9 || ^7.0",
+    "php": ">=5.3.3 || ^7.0",
     "ext-pdo": "*",
     "ext-pdo_sqlite": "*",
     "monolog/monolog": "~1.0",
