@@ -13,6 +13,8 @@ $info['Attogram Directory'] = info_dir($this->attogram_directory);
 $info['PHP Version'] = phpversion();
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
 $info['debug'] = ( $this->debug ? 'TRUE' : '<code>FALSE</code>' );
+$info['project_github'] = '<a href="' . $this->project_github . '">' . $this->project_github . '</a>';
+$info['project_packagist'] = '<a href="' . $this->project_packagist . '">' . $this->project_packagist . '</a>';
 
 $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
 $info['site_name'] = $this->site_name;
