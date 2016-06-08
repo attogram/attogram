@@ -1,4 +1,4 @@
-<?php // Attogram Framework - User Module - Tabler helper v0.0.1
+<?php // Attogram Framework - Database Module - Tabler helper v0.0.1
 
 namespace Attogram;
 
