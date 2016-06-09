@@ -4,7 +4,7 @@ namespace Attogram;
 
 ?>
 <footer class="footer">
- <div class="container">
+ <div class="container-fluid">
   <p><small>
     Powered by
     <a target="github" href="<?php print $this->project_github; ?>">Attogram Framework v<?php print ATTOGRAM_VERSION; ?></a>
