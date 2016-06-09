@@ -1,5 +1,7 @@
 <?php // Attogram Framework - Navbar v0.0.4
 
+namespace Attogram;
+
 ?>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -26,9 +28,7 @@
     ?></ul>
       <ul class="nav navbar-nav navbar-right">
 <?php
-  if( !class_exists('Attogram\attogram_user') ) {
-    // user module not active ..
-  } else {
+  if( class_exists('Attogram\attogram_user') ) {
     if( \Attogram\attogram_user::is_logged_in() ) {
       print '<li><a href="' . $this->path
       . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
@@ -44,9 +44,9 @@
   } // end if user module active
 
   if( $this->is_admin() ) {
-    print '<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-    Admin <span class="caret"></span></a><ul class="dropdown-menu">';
+    print '<li class="dropdown">'
+    . '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'
+    . 'Admin <span class="caret"></span></a><ul class="dropdown-menu">';
     foreach( array_keys($this->get_admin_actions()) as $a ) {
       print '<li><a href="' . $this->path . '/' . $a . '/">' . $a . '</a></li>';
     }
