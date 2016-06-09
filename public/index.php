@@ -15,6 +15,8 @@
 
 namespace Attogram;
 
+if(!ob_start("ob_gzhandler")) { ob_start(); } // speed things up!
+
 define('ATTOGRAM_VERSION', '0.5.5');
 
 $attogram = new attogram();
@@ -25,9 +27,10 @@ $attogram = new attogram();
 class attogram_utils
 {
 
-  public $debug, $log, $skip_files, $project_github, $project_packagist;
+  public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
 
   function __construct() {
+    $this->start_time = microtime(1);
     $this->debug = FALSE;
     $this->log = new Logger(); // logger for startup tasks
     $this->skip_files = array('.','..','.htaccess');
