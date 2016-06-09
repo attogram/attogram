@@ -2,7 +2,7 @@
 
 namespace Attogram;
 
-$this->page_header('Attogram - User Admin');
+$this->page_header('User Admin');
 
 if( !function_exists('Attogram\tabler') ) {
   $this->log->error('Users Admin: tabler function not found');

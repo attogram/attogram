@@ -7,7 +7,8 @@ class attogram_user
 
   /**
    * login() - login a user into the system
-   *
+   * @param obj $log - PSR-3 compliant logger object
+   * @param obj $db - The attogram database object
    * @return boolean
    */
   public static function login( $log, $db ) {
@@ -48,8 +49,7 @@ class attogram_user
 
   /**
    * is_logged_in() - is a user logged into the system?
-   *
-   * @return boolean
+   * @return bool
    */
   public static function is_logged_in( ) {
     if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username']) {

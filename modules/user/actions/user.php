@@ -3,8 +3,8 @@
 namespace Attogram;
 
 if( !class_exists('Attogram\attogram_user') ) {
-  $this->log->error('login.php: attogram_user class not found');
-  $this->error404('attogram_user system kaput!');
+  $this->log->error('modules/user/actions/user.php: attogram_user class not found');
+  $this->error404('User Page Disbled.  Attogram User module missing in action!');
 }
 
 if( !\Attogram\attogram_user::is_logged_in() ) {
@@ -12,7 +12,7 @@ if( !\Attogram\attogram_user::is_logged_in() ) {
   exit;
 }
 
-$this->page_header('Attogram - User');
+$this->page_header('User page');
 
 print '<div class="container"><h1><span class="glyphicon glyphicon-user"></span> User</h1><hr />'
 . 'ID: <code>' . @$_SESSION['attogram_id'] . '</code>'
