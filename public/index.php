@@ -25,8 +25,7 @@ $attogram = new attogram();
 class attogram_utils
 {
 
-  public $debug, $log, $skip_files;
-  public $project_github, $project_packagist;
+  public $debug, $log, $skip_files, $project_github, $project_packagist;
 
   function __construct() {
     $this->debug = FALSE;
@@ -38,11 +37,9 @@ class attogram_utils
 
   /**
    * set_config() - set a system configuration variable
-   *
-   * @param string $var_name
-   * @param string $config_val
-   * @param string $default_val
-   *
+   * @param string $var_name     The name of the variable
+   * @param string $config_val   The setting for the variable
+   * @param string $default_val  The default setting for the variable, if $config_val is empty
    * @return void
    */
   function set_config( $var_name, $config_val='', $default_val ) {
@@ -56,9 +53,11 @@ class attogram_utils
 
   /**
    * get_all_subdirectories()
+   * @param string $dir The directory to search within (ie: modules directory)
+   * @param string name The name of the subdirectories to find
+   * @return array
    */
   function get_all_subdirectories( $dir, $name ) {
-    //$this->log->debug('get_all_subdirectories: scanning for: ' . $dir . '/*/' . $name);
     if( !isset($dir) || !$dir || !is_string($dir)) {
       $this->log->error('get_all_subdirectories: UNDEFINED dir:' . print_r($dir,1));
       return array();
@@ -69,13 +68,10 @@ class attogram_utils
     }
     $r = array();
     foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
-      //$this->log->debug('get_all_subdirectories: checking d='. $d);
       $md = $dir . '/' . $d;
       if( !is_dir($md) ) { continue; }
       $md .= '/' . $name;
-      //$this->log->debug('get_all_subdirectories: checking '. $md);
       if( !is_dir($md) || !is_readable($md) ) { continue; }
-      //$this->log->debug('get_all_subdirectories: OK: ' . $md);
       $r[] = $md;
     }
     return $r;
@@ -84,6 +80,7 @@ class attogram_utils
   /**
    * include_all_php_files_in_directory()
    * @param string $dir The directory to search
+   * @return void
    */
   function include_all_php_files_in_directory( $dir ) {
     if( !is_dir($dir) || !is_readable($dir)) {
@@ -104,11 +101,9 @@ class attogram_utils
 
   /**
    * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
-   *
    * @param string $file The name of the file to test
    * @param string $type (optional) The file extension to allow. Defaults to '.php'
-   *
-   * @return boolean
+   * @return bool
    */
   function is_readable_file( $file=FALSE, $type='.php' ) {
     if( !$file || !is_file($file) || !is_readable($file) ) {
@@ -134,7 +129,7 @@ class attogram extends attogram_utils
 
   public $attogram_directory, $modules_dir, $templates_dir, $autoloader;
   public $site_name, $depth, $force_slash_exceptions, $fof;
-  public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri, $session;
+  public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri;
   public $db, $db_name;
   public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
@@ -153,8 +148,8 @@ class attogram extends attogram_utils
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
     $this->get_includes(); // load any files in ./functions/
-    $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
     $this->sessioning(); // start sessions
+    $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
     $this->route(); // Send us where we want to go
     $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
   } // end function __construct()
@@ -239,6 +234,9 @@ class attogram extends attogram_utils
     $this->guru_meditation_error( $error, $missing, $fix );
   } // end function autoloader()
 
+  /**
+   * set_request()
+   */
   function set_request() {
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->host = $this->request->getHost();
@@ -249,6 +247,9 @@ class attogram extends attogram_utils
     $this->path = $this->request->getBasePath();
   }
 
+  /**
+   * set_uri()
+   */
   function set_uri() {
     //$this->log->debug('set_uri: pathInfo=' . $this->pathInfo);
     $this->uri = explode('/', $this->pathInfo);
@@ -271,6 +272,9 @@ class attogram extends attogram_utils
     $this->log->debug('set_uri', $this->uri);
   }
 
+  /**
+   * end_slash()
+   */
   function end_slash() {
     if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
       if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
@@ -291,6 +295,9 @@ class attogram extends attogram_utils
     }
   }
 
+  /**
+   * check_depth()
+   */
   function check_depth() {
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
@@ -376,7 +383,6 @@ class attogram extends attogram_utils
 
   /**
    * sessioning() - start the session, logoff if requested
-   *
    * @return void
    */
   function sessioning() {
@@ -392,7 +398,6 @@ class attogram extends attogram_utils
 
   /**
    * route() - decide what action to take based on URI request
-   *
    * @return void
    */
   function route() {
@@ -452,12 +457,11 @@ class attogram extends attogram_utils
 
   /**
    * exception_files() - checks URI for exception files sitemap.xml, robots.txt
-   *
    * @return void
    */
   function exception_files() {
 
-    switch( $this->requestUri ) {
+    switch( $this->requestUri ) {  // dev - buggy if not top level - needs to only look at file, not path+file
 
       case '/robots.txt':
         header('Content-Type: text/plain');
@@ -482,9 +486,7 @@ class attogram extends attogram_utils
 
   /**
    * do_markdown() - parse and display a Markdown document
-   *
    * @param string $file The markdown file to load
-   *
    * @return void
    */
   function do_markdown( $file ) {
@@ -513,7 +515,6 @@ class attogram extends attogram_utils
 
   /**
    * get_site_url()
-   *
    * @return string
    */
   function get_site_url() {
@@ -522,7 +523,6 @@ class attogram extends attogram_utils
 
   /**
    * get_actions() - create list of all pages from the actions directory
-   *
    * @return array
    */
   function get_actions() {
@@ -530,13 +530,11 @@ class attogram extends attogram_utils
       return $this->actions;
     }
     $dirs = $this->get_all_subdirectories( $this->modules_dir, 'actions');
-    //$this->log->debug('get_action:', $dirs);
     if( !$dirs ) {
       $this->log->debug('get_actions: No module actions found');
     }
     $this->actions = array();
     foreach( $dirs as $d ) {
-      //$this->log->debug('get_actions: d='. $d);
       $this->actions = array_merge($this->actions, $this->get_actionables($d) );
     }
     asort($this->actions);
@@ -546,7 +544,6 @@ class attogram extends attogram_utils
 
   /**
    * get_admin_actions() - create list of all admin pages from the admin directory
-   *
    * @return array
    */
   function get_admin_actions() {
@@ -554,13 +551,11 @@ class attogram extends attogram_utils
       return $this->admin_actions;
     }
     $dirs = $this->get_all_subdirectories( $this->modules_dir, 'admin_actions');
-    //$this->log->debug('get_admin_actions:', $dirs);
     if( !$dirs ) {
       $this->log->debug('get_admin_actions: No module admin actions found');
     }
     $this->admin_actions = array();
     foreach( $dirs as $d ) {
-      //$this->log->debug('get_admin_actions: d='. $d);
       $this->admin_actions = array_merge($this->admin_actions, $this->get_actionables($d) );
     }
     asort($this->admin_actions);
@@ -570,7 +565,6 @@ class attogram extends attogram_utils
 
   /**
    * get_actionables - create list of all useable action files from a directory
-   *
    * @return array
    */
   function get_actionables( $dir ) {
@@ -593,24 +587,20 @@ class attogram extends attogram_utils
 
   /**
    * get_includes() - include all PHP files, from all modules' includes/ directory
-   *
    * @return void
    */
   function get_includes() {
     $dirs = $this->get_all_subdirectories( $this->modules_dir, 'includes');
-    //$this->log->debug('get_includes', $dirs);
     if( !$dirs ) {
       $this->log->debug('get_includes: No module functions found');
     }
     foreach( $dirs as $d ) {
-      //$this->log->debug('get_includes: d='. $d);
       $this->include_all_php_files_in_directory( $d );
     }
   } // end function get_includes()
 
   /**
    * is_admin() - is access from an admin IP?
-   *
    * @return boolean
    */
   function is_admin() {
@@ -644,9 +634,7 @@ class attogram extends attogram_utils
 
   /**
    * page_header() - the web page header
-   *
    * @param string $title The web page title
-   *
    * @return void
    */
   function page_header( $title='' ) {
@@ -665,7 +653,6 @@ class attogram extends attogram_utils
 
   /**
    * page_footer() - the web page footer
-   *
    * @return void
    */
   function page_footer() {
@@ -704,7 +691,6 @@ class attogram extends attogram_utils
 
   /**
    * error404() - display a 404 error page to user and exit
-   *
    * @return void
    */
   function error404( $error='' ) {
@@ -735,15 +721,13 @@ class attogram extends attogram_utils
 class logger
 {
   public $stack;
-  public function log($level, $message, array $context = array()) {
-    $this->stack[] = "$level: $message" . ( $context ? ': ' . print_r($context,1) : '');
-  }
-  public function emergency($message, array $context = array()) { $this->log('emergency',$message,$context); }
-  public function alert($message, array $context = array()) { $this->log('alert',$message,$context); }
-  public function critical($message, array $context = array()) { $this->log('critical',$message,$context); }
-  public function error($message, array $context = array()) { $this->log('error',$message,$context); }
-  public function warning($message, array $context = array()) { $this->log('warning',$message,$context); }
-  public function notice($message, array $context = array()) { $this->log('notice',$message,$context); }
-  public function info($message, array $context = array()) { $this->log('info',$message,$context); }
-  public function debug($message, array $context = array()) { $this->log('debug',$message,$context); }
+  public function log(string $level, string $message, array $context = array()) { $this->stack[] = "$level: $message" . ( $context ? ': ' . print_r($context,1) : ''); }
+  public function emergency(string $message, array $context = array()) { $this->log('emergency',$message,$context); }
+  public function alert(string $message, array $context = array()) { $this->log('alert',$message,$context); }
+  public function critical(string $message, array $context = array()) { $this->log('critical',$message,$context); }
+  public function error(string $message, array $context = array()) { $this->log('error',$message,$context); }
+  public function warning(string $message, array $context = array()) { $this->log('warning',$message,$context); }
+  public function notice(string $message, array $context = array()) { $this->log('notice',$message,$context); }
+  public function info(string $message, array $context = array()) { $this->log('info',$message,$context); }
+  public function debug(string $message, array $context = array()) { $this->log('debug',$message,$context); }
 } // end class logger
