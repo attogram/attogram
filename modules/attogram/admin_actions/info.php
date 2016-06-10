@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.0
+<?php // Attogram Framework - Site Info v0.1.1
 
 namespace Attogram;
 
@@ -25,6 +25,11 @@ $info['path'] = ( $this->path ? $this->path : '<code>Top Level</code>' );
 //$info['uri'] = implode($this->uri,',');
 //$info['depth'] =  info_array($this->depth,$keyed=1);
 //$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
+$robotstxt = $this->get_site_url() . '/robots.txt';
+$info['robots.txt'] = '<a href="' . $robotstxt . '">' . $robotstxt . '</a>';
+$sitemapxml = $this->get_site_url() . '/sitemap.xml';
+$info['sitemap.xml'] = '<a href="' . $sitemapxml . '">' . $sitemapxml . '</a>';
+
 $info['admins'] = info_array($this->admins);
 
 $info['<a name="actions"></a><h3><span class="glyphicon glyphicon-play"></span> <em>Actions:</em></h3>'] = '';

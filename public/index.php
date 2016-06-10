@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.6
+ * @version 0.5.6-dev
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -15,9 +15,11 @@
 
 namespace Attogram;
 
-if(!ob_start("ob_gzhandler")) { ob_start(); } // speed things up!
+if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
+  ob_start(); // if gzip handler not available, do normal buffer
+}
 
-define('ATTOGRAM_VERSION', '0.5.6');
+define('ATTOGRAM_VERSION', '0.5.6-dev');
 
 $attogram = new attogram();
 
@@ -463,14 +465,11 @@ class attogram extends attogram_utils
    * @return void
    */
   function exception_files() {
-
-    switch( $this->requestUri ) {  // dev - buggy if not top level - needs to only look at file, not path+file
-
+    switch( $this->pathInfo ) {
       case '/robots.txt':
         header('Content-Type: text/plain');
         print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
         exit;
-
       case '/sitemap.xml':
         $site = $this->get_site_url() . '/';
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
