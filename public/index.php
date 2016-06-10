@@ -7,7 +7,7 @@
  * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
  * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
  *
- * @version 0.5.6-dev
+ * @version 0.5.7-guru-meditation-loader
  * @license MIT
  * @license GPL
  * @copyright 2016 Attogram Developers https://github.com/attogram/attogram
@@ -19,7 +19,7 @@ if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
   ob_start(); // if gzip handler not available, do normal buffer
 }
 
-define('ATTOGRAM_VERSION', '0.5.6-dev');
+define('ATTOGRAM_VERSION', '0.5.7-guru-meditation-loader');
 
 $attogram = new attogram();
 
