@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Footer v0.0.6
+<?php // Attogram Framework - Page Footer v0.0.7
 
 namespace Attogram;
 
@@ -15,11 +15,4 @@ namespace Attogram;
   </p>
  </div>
 </footer>
-<?php
-if( $this->debug && isset($this->log->stack) && $this->log->stack ) {
-  print '<div class="container"><pre class="alert alert-debug">Debug Log:<br />'
-  . implode($this->log->stack, '<br />')
-  . '</pre></div>';
-}
-?>
 </body></html>

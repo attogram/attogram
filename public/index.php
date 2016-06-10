@@ -3,18 +3,18 @@
 namespace Attogram;
 
 $guru = new guru_meditation_loader( // wake up the guru
-  $debug             = 0,
+  $debug             = false,
   $project_name      = 'The Attogram Framework',
   $config_file       = './config.php',
   $project_loader    = '../attogram.php',
-  $vendor_autoloader = '../vendor/autoloader.php',
+  $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes  = array( '\Symfony\Component\HttpFoundation\Request',
-                              'Parsedown',
                               '\Monolog\Logger',
                               '\Monolog\Handler\BufferHandler',
                               '\Monolog\Handler\StreamHandler',
-                              '\Monolog\Formatter\LineFormatter', ) );
+                              '\Monolog\Formatter\LineFormatter',
+                              'Parsedown', ) );
 $guru->meditate();               // setup the configuration
 $guru->expand_consciousness();   // run the vendor autoloader
 $guru->inner_awareness();        // check for the required classes
@@ -84,6 +84,7 @@ class guru_meditation_loader
       $config['autoloader'] = $this->default_autoloader;
     }
     $this->autoloader = $config['autoloader'];
+    $this->debug('meditate: ' . $this->autoloader);
   } // end function meditate()
 
   function expand_consciousness() {
