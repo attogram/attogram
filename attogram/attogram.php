@@ -45,7 +45,13 @@ class attogram extends attogram_utils
     $this->check_depth(); // is URI short enough?
     $this->get_includes(); // load any files in ./functions/
     $this->sessioning(); // start sessions
-    $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
+    if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
+      $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
+      $this->log->debug('__construct: sqlite_database init OK');
+    } else {
+      $this->db = FALSE;
+      $this->log->error('__construct: sqlite_database class not found');
+    }
     $this->route(); // Send us where we want to go
     $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
   } // end function __construct()
