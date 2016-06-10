@@ -21,9 +21,8 @@ class sqlite_database extends attogram_utils
    * @return void
    */
   function __construct( $db_name, $modules_directory, $log, $debug=FALSE ) {
-    parent::__construct();
+    parent::__construct( $log );
     $this->debug = $debug;
-    $this->log = $log;
     $this->modules_directory = $modules_directory;
     $this->db_name = $db_name;
   }

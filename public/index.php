@@ -3,15 +3,15 @@
 namespace Attogram;
 
 $guru = new guru_meditation_loader( // wake up the guru
-  $debug             = FALSE,
+  $debug             = 0,
   $project_name      = 'The Attogram Framework',
   $config_file       = './config.php',
   $project_loader    = '../attogram.php',
   $vendor_autoloader = '../vendor/autoloader.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes  = array( '\Symfony\Component\HttpFoundation\Request',
-                              'Parsedown', ),
-  $useful_classes    = array( '\Monolog\Logger',
+                              'Parsedown',
+                              '\Monolog\Logger',
                               '\Monolog\Handler\BufferHandler',
                               '\Monolog\Handler\StreamHandler',
                               '\Monolog\Formatter\LineFormatter', ) );
@@ -37,8 +37,7 @@ class guru_meditation_loader
 {
 
   public $debug, $project_name, $config_file, $project_loader,
-         $default_autoloader, $vendor_download, $required_classes, $useful_classes,
-         $autoloader;
+         $default_autoloader, $vendor_download, $required_classes, $autoloader;
 
   function __construct( bool   $debug,
                         string $project_name,
@@ -46,8 +45,7 @@ class guru_meditation_loader
                         string $project_loader,
                         string $default_autoloader,
                         string $vendor_download,
-                        array  $required_classes,
-                        array  $useful_classes ) {
+                        array  $required_classes ) {
     $this->debug              = $debug;
     $this->project_name       = $project_name;
     $this->config_file        = $config_file;
@@ -55,8 +53,6 @@ class guru_meditation_loader
     $this->default_autoloader = $default_autoloader;
     $this->vendor_download    = $vendor_download;
     $this->required_classes   = $required_classes;
-    $this->useful_classes     = $useful_classes;
-    //$this->debug('__construct: ' . print_r($this,1));
     $this->debug('Guru Meditation Loader: awakening: ' . $this->project_name);
   }
 
@@ -116,6 +112,10 @@ class guru_meditation_loader
 
   function tranquility() {
       $this->debug('tranquility: ' . $this->project_loader);
+      if( $this->debug ) {
+        print '<p>This was only a test.  If this was a real guru, we would load up: ' . $this->project_loader . '</p>';
+        exit;
+      }
       include($this->project_loader);
   }
 

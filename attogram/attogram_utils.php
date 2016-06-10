@@ -10,10 +10,14 @@ class attogram_utils
 
   public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
 
-  function __construct() {
+  /**
+   * __construct()
+   * @param obj $log PSR-3 compliant log object
+   */
+  function __construct( $log ) {
     $this->start_time = microtime(1);
     $this->debug = FALSE;
-    $this->log = new Logger(); // logger for startup tasks
+    $this->log = $log;
     $this->skip_files = array('.','..','.htaccess');
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';

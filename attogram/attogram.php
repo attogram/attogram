@@ -31,11 +31,11 @@ class attogram extends attogram_utils
 
   /**
    * __construct() - startup Attogram!
-   *
+   * @param obj $log PSR-3 compliant log object
    * @return void
    */
-  function __construct() {
-    parent::__construct();
+  function __construct( $log ) {
+    parent::__construct( $log );
     $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
     $this->startup_attogram('config.php');
     $this->set_request(); // set all the request-related variables we need
@@ -56,48 +56,40 @@ class attogram extends attogram_utils
    * @return void
    */
   function startup_attogram( $config_file='' ) {
-
-    global $config;
-
-    $config = array();
-
-    // Load the main configuration file, if available
-    if( !$this->is_readable_file($config_file, '.php') ) {
+    global $config; // The Global Configuration Array
+    if( !isset($config) || !is_array($config) ) {
+      $config = array();
+    }
+    if( !$this->is_readable_file($config_file, '.php') ) { // Load the main configuration file, if available
       $this->log->notice('startup_attogram: config file not found, using defaults.');
     } else {
       $this->log->debug('startup_attogram: include: ' . $config_file);
       include_once($config_file); // any $config['setting'] = value;
     }
-
-    // Set installation, directory, file locations and defaults
+    $this->set_config('modules_dir', @$config['modules_dir'], '../modules');
+    $this->load_module_configs(); // Load modules configuration files, if available
     $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
-    $this->modules_dir = $this->attogram_directory . 'modules';
-    $this->templates_dir = $this->attogram_directory . 'templates';
-    $this->fof = $this->attogram_directory . 'templates/404.php';
-    $this->db_name = $this->attogram_directory . 'db/global';
-
-    // The Site Administrator IP addresses
-    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1'));
-
+    $this->set_config('templates_dir', @$config['templates_dir'], '../templates');
+    $this->set_config('fof', @$config['fof'], '../templates/404.php');
+    $this->set_config('db_name', @$config['db_name'], '../db/global');
+    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
+    $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
+    $this->set_config('depth', @$config['depth'], $this->depth ); // Depth settings
+    if( !isset($this->depth['']) ) { // check:  homepage depth defined
+      $this->depth[''] = 1;
+      $this->log->debug('startup_attogram: set homepage depth: 1');
+    }
+    if( !isset($this->depth['*']) ) {  // check: default depth defined
+      $this->depth['*'] = 1;
+      $this->log->debug('startup_attogram: set default depth: 1');
+    }
+    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
     // To Debug or Not To Debug, That is the quesion
     $this->set_config('debug', @$config['debug'], FALSE);
-    // admin debug overrride?
-    if( isset($_GET['debug']) && $this->is_admin() ) {
+    if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
       $this->debug = TRUE;
       $this->log->debug('startup_attogram: Admin Debug turned ON');
     }
-
-    $this->init_logger(); // Start full logging via monolog
-
-    $this->load_module_configs(); // Load modules configuration files, if available
-
-    // Set configuration variables
-    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
-    $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
-    $this->set_config('depth', @$config['depth'], $this->depth );
-    if( !isset($this->depth['']) ) { $this->depth[''] = 1; } // reset: default homepage depth
-    if( !isset($this->depth['*']) ) { $this->depth['*'] = 1; } // reset: default p age depth
-
   } // end function load_config()
 
   /**
@@ -183,7 +175,7 @@ class attogram extends attogram_utils
    */
   function load_module_configs() {
     global $config;
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'configs');
+    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'configs' );
     //$this->log->debug('load_module_configs', $dirs);
     if( !$dirs ) {
       $this->log->debug('load_module_configs: No module configs found');
@@ -193,37 +185,6 @@ class attogram extends attogram_utils
       $this->include_all_php_files_in_directory( $d );
     }
   } // end function load_module_configs()
-
-  /**
-   * init_logger() - initialize the logger object, based on debug setting
-   */
-  function init_logger() {
-    if( isset($this->log->stack) ) {
-      $saved_stack = $this->log->stack; // save any startup logs
-    }
-    if( $this->debug && class_exists('\Monolog\Logger') ) {
-      $this->log = new \Monolog\Logger('attogram');
-      $sh = new \Monolog\Handler\StreamHandler('php://output');
-      $format = "<p class=\"text-danger squished\">%datetime%|%level_name%: %message% %context%</p>"; // %extra%
-      $dateformat = 'Y-m-d|H:i:s:u';
-      $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
-      $this->log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
-      //$this->log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
-      $load_saved_stack = TRUE;
-    } else {
-      if( !isset($this->log) ) {
-        $this->log = new logger();
-        $load_saved_stack = TRUE;
-      } else {
-        $load_saved_stack = FALSE;
-      }
-    }
-    if( isset($saved_stack) && $load_saved_stack) {
-      foreach( $saved_stack as $event) {
-        $this->log->debug('STARTUP: ' . $event);
-      }
-    }
-  }
 
   /**
    * sessioning() - start the session, logoff if requested
