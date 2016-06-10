@@ -6,7 +6,7 @@ $guru = new guru_meditation_loader( // wake up the guru
   $debug             = false,
   $project_name      = 'The Attogram Framework',
   $config_file       = './config.php',
-  $project_loader    = '../attogram.php',
+  $project_loader    = '../load.php',
   $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes  = array( '\Symfony\Component\HttpFoundation\Request',
@@ -16,6 +16,7 @@ $guru = new guru_meditation_loader( // wake up the guru
                               '\Monolog\Formatter\LineFormatter',
                               'Parsedown', ) );
 $guru->meditate();               // setup the configuration
+//$guru->inner_eye();              // check .htaccess setup
 $guru->expand_consciousness();   // run the vendor autoloader
 $guru->inner_awareness();        // check for the required classes
 $guru->tranquility();            // Load the project!
@@ -58,13 +59,10 @@ class guru_meditation_loader
 
   function meditate() {
     global $config;
-    //$this->debug('meditate: ' . $this->config_file);
     if( is_file($this->config_file) ) {
-      //$this->debug('meditate: config_file IS_FILE OK');
       if( !is_readable($this->config_file) ) {
         $this->guru_meditation_error('Config file exists, but is not readable');
       }
-      //$this->debug('meditate: config_file IS_READABLE OK');
       $config_included = (include($this->config_file));
       if( !$config_included ) {
         $this->guru_meditation_error('Config file exists, but include failed');
@@ -89,7 +87,7 @@ class guru_meditation_loader
 
   function expand_consciousness() {
     if( isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader) ) {
-      include($this->autoloader);
+      include($this->autoloader); // dev todo - include check like in meditate()
       $this->debug('expand_consciousness: OK: ' . $this->autoloader);
       return;
     }
@@ -117,43 +115,40 @@ class guru_meditation_loader
         print '<p>This was only a test.  If this was a real guru, we would load up: ' . $this->project_loader . '</p>';
         exit;
       }
-      include($this->project_loader);
+      if( !is_file($this->project_loader) ) {
+        $this->guru_meditation_error('Project loader file missing: ' . $this->project_loader);
+      }
+      if( !is_readable($this->project_loader) ) {
+        $this->guru_meditation_error('Project loader file exists, but is not readable: ' . $this->project_loader);
+      }
+      $project_loader_included = (include($this->project_loader));
+      if( !$project_loader_included ) {
+        $this->guru_meditation_error('Project loader file exists, but include failed: ' . $this->project_loader);
+      }
+      $this->debug('tranquility: project_loader OK: ' . $this->project_loader);
   }
 
-  function debug( $msg ) {
+  function debug( $msg ) { // dev todo - save stack and load in attogram
     if( !$this->debug ) {
       return;
     }
     print '<pre style="padding:0;margin:0;">DEBUG: ' . print_r($msg,1) . '</pre>';
   }
 
-  function guru_meditation_error( $err='' ) {
-    print '<p>GURU MEDITATION ERROR</p>';
-    if( $err ) {
-      print_r($err);
-    }
-    exit;
-  }
 
-  /**
-   * guru_meditation_error()
-   */
-  function old_guru_meditation_error( $error='', $context=array(), $message='' ) {
-    $this->log->error('Guru Meditation Error: ' . $error, $context);
-    $this->page_header();
-    print '<div class="container text-center bg-danger"><h1><strong>Guru Meditation Error</strong></h1>';
-    if( $error ) {
-      print '<h2>' . $error . '</h2>';
-    }
-    if( $context && is_array($context) ) {
-      print '<p class="bg-warning">' . implode($context,'<br />') . '</p>';
-    }
-    if( $message ) {
-      print '<p>' . $message . '</p>';
-    }
-    print '</div>';
-   $this->page_footer();
-   exit;
+  function guru_meditation_error( $error='' ) {
+    print '<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attogram Framework</title>
+<style>body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px;
+color:#000; background-color:#fff; text-align:center; } </style></head><body>
+<h2>Guru Meditation Error</h2><h3>' . $this->project_name . '</h3>';
+  if( $error ) {
+    print '<h1 style="color:red">Error: ' . $error . '</h1>';
+  }
+  print '</body></html>';
+  exit;
   } // end function guru_meditation_error()
 
 } // end class guru_meditation_error()

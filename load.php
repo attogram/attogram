@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Project Loader v0.0.1
+<?php // Attogram Framework - load.php v0.0.1
 
 namespace Attogram;
 
@@ -12,7 +12,7 @@ if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
 include_once('attogram/logger.php');
 include_once('attogram/attogram_utils.php');
 include_once('attogram/attogram.php');
-
+  // dev - should check file existance & class existence -- here or via guru?
 // Setup Monolog
 if(
     (
