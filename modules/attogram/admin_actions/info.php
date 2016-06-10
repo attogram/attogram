@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.1
+<?php // Attogram Framework - Site Info v0.1.2
 
 namespace Attogram;
 
@@ -42,8 +42,7 @@ $info['modules_dir'] = info_dir($this->modules_dir);
 $info['skip_files'] = info_array( $this->skip_files);
 
 $info['<a name="files"></a><h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
-$info['action'] = info_file($this->action);
-$info['autoloader'] = info_file($this->autoloader);
+//$info['action'] = info_file($this->action);
 $info['fof'] = info_file($this->fof);
 $info['header'] = info_file($this->templates_dir . '/header.php');
 $info['nav_bar'] = info_file($this->templates_dir . '/navbar.php');
