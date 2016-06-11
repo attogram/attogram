@@ -17,6 +17,113 @@ namespace Attogram;
 
 define('ATTOGRAM_VERSION', '0.5.7-guru');
 
+
+/**
+ * attogram_utils class
+ */
+class attogram_utils
+{
+
+  public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
+
+  /**
+   * __construct()
+   * @param obj $log PSR-3 compliant log object
+   */
+  function __construct( $log ) {
+    $this->start_time = microtime(1);
+    $this->debug = FALSE;
+    $this->log = $log;
+    $this->skip_files = array('.','..','.htaccess');
+    $this->project_github = 'https://github.com/attogram/attogram';
+    $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
+  }
+
+  /**
+   * remember() - set a system configuration variable
+   * @param string $var_name     The name of the variable
+   * @param string $config_val   The setting for the variable
+   * @param string $default_val  The default setting for the variable, if $config_val is empty
+   * @return void
+   */
+  function remember( $var_name, $config_val='', $default_val ) {
+    if( $config_val ) {
+      $this->{$var_name} = $config_val;
+    } else {
+      $this->{$var_name} = $default_val;
+    }
+    $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
+  }
+
+  /**
+   * get_all_subdirectories()
+   * @param string $dir The directory to search within (ie: modules directory)
+   * @param string name The name of the subdirectories to find
+   * @return array
+   */
+  function get_all_subdirectories( $dir, $name ) {
+    if( !isset($dir) || !$dir || !is_string($dir)) {
+      $this->log->error('get_all_subdirectories: UNDEFINED dir:' . print_r($dir,1));
+      return array();
+    }
+    if( !is_dir($dir) || !is_readable($dir) ) {
+      $this->log->error('get_all_subdirectories: UNREADABLE dir=' . $dir);
+      return array();
+    }
+    $r = array();
+    foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
+      $md = $dir . '/' . $d;
+      if( !is_dir($md) ) { continue; }
+      $md .= '/' . $name;
+      if( !is_dir($md) || !is_readable($md) ) { continue; }
+      $r[] = $md;
+    }
+    return $r;
+  } // end function get_all_subdirectories()
+
+  /**
+   * include_all_php_files_in_directory()
+   * @param string $dir The directory to search
+   * @return void
+   */
+  function include_all_php_files_in_directory( $dir ) {
+    if( !is_dir($dir) || !is_readable($dir)) {
+      $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
+      return;
+    }
+    //$this->log->debug('include_all_php_files_in_directory: dir = ' . $dir);
+    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
+      $ff = $dir . '/' . $f;
+      if( $this->is_readable_file($ff,'.php') ) {
+        $this->log->debug('include: ' . $ff);
+        include_once($ff);
+      } else {
+        $this->log->error('include_all_php_files_in_directory: can not include: ' . $ff);
+      }
+    }
+  } // end function include_all_php_files_in_directory()
+
+  /**
+   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   * @param string $file The name of the file to test
+   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   * @return bool
+   */
+  function is_readable_file( $file=FALSE, $type='.php' ) {
+    if( !$file || !is_file($file) || !is_readable($file) ) {
+      return FALSE;
+    }
+    if( !$type || $type == '' || !is_string($type) ) { // error
+      return FALSE;
+    }
+    if( preg_match('/' . $type . '$/',$file) ) {
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+} // end class attogram_utils
+
 /**
  * attogram class - The Attogram Framework
  */
@@ -36,8 +143,8 @@ class attogram extends attogram_utils
    */
   function __construct( $log ) {
     parent::__construct( $log );
-    $this->log->debug('START Attogram v' . ATTOGRAM_VERSION);
-    $this->startup_attogram('config.php');
+    $this->log->debug('The Attogram Framework v' . ATTOGRAM_VERSION);
+    $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->set_uri();
@@ -57,44 +164,44 @@ class attogram extends attogram_utils
   } // end function __construct()
 
   /**
-   * startup_attogram()
+   * awaken()
    * @param string $config_file (optional)
    * @return void
    */
-  function startup_attogram( $config_file='' ) {
+  function awaken( $config_file='' ) {
     global $config; // The Global Configuration Array
     if( !isset($config) || !is_array($config) ) {
       $config = array();
     }
     if( !$this->is_readable_file($config_file, '.php') ) { // Load the main configuration file, if available
-      $this->log->notice('startup_attogram: config file not found, using defaults.');
+      $this->log->notice('awaken: config file not found, using defaults.');
     } else {
-      $this->log->debug('startup_attogram: include: ' . $config_file);
+      $this->log->debug('awaken: include: ' . $config_file);
       include_once($config_file); // any $config['setting'] = value;
     }
-    $this->set_config('modules_dir', @$config['modules_dir'], '../modules');
+    $this->remember('modules_dir', @$config['modules_dir'], '../modules');
     $this->load_module_configs(); // Load modules configuration files, if available
-    $this->set_config('attogram_directory', @$config['attogram_directory'], '../');
-    $this->set_config('templates_dir', @$config['templates_dir'], '../templates');
-    $this->set_config('fof', @$config['fof'], '../templates/404.php');
-    $this->set_config('db_name', @$config['db_name'], '../db/global');
-    $this->set_config('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
-    $this->set_config('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
-    $this->set_config('depth', @$config['depth'], $this->depth ); // Depth settings
+    $this->remember('attogram_directory', @$config['attogram_directory'], '../');
+    $this->remember('templates_dir', @$config['templates_dir'], '../templates');
+    $this->remember('fof', @$config['fof'], '../templates/404.php');
+    $this->remember('db_name', @$config['db_name'], '../db/global');
+    $this->remember('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
+    $this->remember('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
+    $this->remember('depth', @$config['depth'], $this->depth ); // Depth settings
     if( !isset($this->depth['']) ) { // check:  homepage depth defined
       $this->depth[''] = 1;
-      $this->log->debug('startup_attogram: set homepage depth: 1');
+      $this->log->debug('awaken: set homepage depth: 1');
     }
     if( !isset($this->depth['*']) ) {  // check: default depth defined
       $this->depth['*'] = 1;
-      $this->log->debug('startup_attogram: set default depth: 1');
+      $this->log->debug('awaken: set default depth: 1');
     }
-    $this->set_config('admins', @$config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
+    $this->remember('admins', @$config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
     // To Debug or Not To Debug, That is the quesion
-    $this->set_config('debug', @$config['debug'], FALSE);
+    $this->remember('debug', @$config['debug'], FALSE);
     if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
       $this->debug = TRUE;
-      $this->log->debug('startup_attogram: Admin Debug turned ON');
+      $this->log->debug('awaken: Admin Debug turned ON');
     }
   } // end function load_config()
 

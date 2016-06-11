@@ -3,9 +3,9 @@
 namespace Attogram;
 
 $guru = new guru_meditation_loader( // wake up the guru
-  $debug             = false,
   $project_name      = 'The Attogram Framework',
   $config_file       = './config.php',
+  $project_classes   = '../attogram/',
   $project_loader    = '../load.php',
   $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
@@ -14,10 +14,13 @@ $guru = new guru_meditation_loader( // wake up the guru
                               '\Monolog\Handler\BufferHandler',
                               '\Monolog\Handler\StreamHandler',
                               '\Monolog\Formatter\LineFormatter',
-                              'Parsedown', ) );
-$guru->meditate();               // setup the configuration
-//$guru->inner_eye();              // check .htaccess setup
+                              'Parsedown',
+                              'Attogram\attogram',
+                            ) );
+
+$guru->meditate();               // load the configuration
 $guru->expand_consciousness();   // run the vendor autoloader
+$guru->focus_mind();             // include project classes
 $guru->inner_awareness();        // check for the required classes
 $guru->tranquility();            // Load the project!
 
@@ -37,24 +40,24 @@ Open Source Dual License: (MIT or GPL-3.0+) at your choosing
 class guru_meditation_loader
 {
 
-  public $debug, $project_name, $config_file, $project_loader,
+  public $project_name, $config_file, $project_classes, $project_loader,
          $default_autoloader, $vendor_download, $required_classes, $autoloader;
 
-  function __construct( bool   $debug,
-                        string $project_name,
+  function __construct( string $project_name,
                         string $config_file,
+                        string $project_classes,
                         string $project_loader,
                         string $default_autoloader,
                         string $vendor_download,
                         array  $required_classes ) {
-    $this->debug              = $debug;
     $this->project_name       = $project_name;
     $this->config_file        = $config_file;
+    $this->project_classes    = $project_classes;
     $this->project_loader     = $project_loader;
     $this->default_autoloader = $default_autoloader;
     $this->vendor_download    = $vendor_download;
     $this->required_classes   = $required_classes;
-    $this->debug('Guru Meditation Loader: awakening: ' . $this->project_name);
+    $this->debug('Guru Meditation Loader: ' . $this->project_name);
   }
 
   function meditate() {
@@ -82,7 +85,6 @@ class guru_meditation_loader
       $config['autoloader'] = $this->default_autoloader;
     }
     $this->autoloader = $config['autoloader'];
-    $this->debug('meditate: ' . $this->autoloader);
   } // end function meditate()
 
   function expand_consciousness() {
@@ -93,6 +95,19 @@ class guru_meditation_loader
     }
     $this->guru_meditation_error( 'autoloader file not found: ' . $this->autoloader );
   } // end function expand_consciousness()
+
+  function focus_mind() {
+    if( !is_dir($this->project_classes) ) {
+      $this->guru_meditation_error('Missing project class directory: ' . $this->project_classes);
+    }
+    if( !is_readable($this->project_classes) ) {
+      $this->guru_meditation_error('Project class directory exists, but is unreadable: ' . $this->project_classes);
+    }
+    foreach( array_diff(scandir($this->project_classes),array('.','..')) as $f ) {
+      include_once( $this->project_classes . $f );
+      $this->debug('focus_mind: OK? ' . $this->project_classes . $f);
+    }
+  } // end function focus_mind()
 
   function inner_awareness() {
     $missing = array();
@@ -111,10 +126,6 @@ class guru_meditation_loader
 
   function tranquility() {
       $this->debug('tranquility: ' . $this->project_loader);
-      if( $this->debug ) {
-        print '<p>This was only a test.  If this was a real guru, we would load up: ' . $this->project_loader . '</p>';
-        exit;
-      }
       if( !is_file($this->project_loader) ) {
         $this->guru_meditation_error('Project loader file missing: ' . $this->project_loader);
       }
@@ -128,17 +139,13 @@ class guru_meditation_loader
       $this->debug('tranquility: project_loader OK: ' . $this->project_loader);
   }
 
-  function debug( $msg ) { // dev todo - save stack and load in attogram
-    if( !$this->debug ) {
-      return;
-    }
-    print '<pre style="padding:0;margin:0;">DEBUG: ' . print_r($msg,1) . '</pre>';
+  function debug( $msg ) {
+    global $config;
+    $config['guru_meditation_loader'][] = $msg;
   }
 
-
   function guru_meditation_error( $error='' ) {
-    print '<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Attogram Framework</title>
 <style>body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px;
