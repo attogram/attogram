@@ -7,8 +7,6 @@ $c->page_footer();
 
 
 ////////////////////////////////////////////////////////////////////////////////
-
-//
 ////////////////////////////////////////////////////////////////////////////////
 class attogram_check {
 
@@ -19,7 +17,7 @@ class attogram_check {
     // 💢 🆗 ☑ ✔ ✖ ❌ ❎ ❓ ❔ ❕ ❗ 🔴 🔵 💚
   }
   function check() {
-    ?><h1>🔬 Attogram Check Script</h1>
+    ?><h1>🔬 Attogram Framework Check</h1>
     <p><a href="">🔃 Reload</a> &nbsp; &nbsp; <?php print gmdate('Y-m-d H:i:s'); ?> UTC</p><?php
     print '<hr />';
     $this->check_index();
@@ -29,25 +27,30 @@ class attogram_check {
     $this->check_php();
     print '<hr />';
     $this->check_apache();
-    print '<hr />🔬 End of Attogram Check Script';
+    print '<hr />🔬 End of Attogram Framework Check';
   }
 
   function check_index() {
     $f = './index.php';
 
-    file_exists($f) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' - 1.0 - ' . $f . ' file exists</pre>';
+    file_exists($f) ? $fe = 'pass' : $fe = 'fail';
+    print '<pre class="' . $fe . '">' . $this->{$fe} . ' - 1.0 - ' . $f . ' file exists</pre>';
 
     is_readable($f) ? $r = 'pass' : $r = 'fail';
     print '<pre class="' . $r . '">' . $this->{$r} . ' - 1.1 - ' . $f . ' file is readable</pre>';
 
-    $file = new SplFileObject($f);
-    $r = $val = 'fail';
-    foreach( $file as $linenum=>$val ) {
-      if( preg_match('/class\s+guru_meditation_loader/', $val) ) {
-        $r = 'pass';
-        break;
+    if( $fe == 'pass' ) {
+      $file = new SplFileObject($f);
+      $r = $val = 'fail';
+      foreach( $file as $linenum=>$val ) {
+        if( preg_match('/class\s+guru_meditation_loader/', $val) ) {
+          $r = 'pass';
+          break;
+        }
       }
+    } else {
+      $r = 'fail';
+      $val = 'Not Found';
     }
     print '<pre class="' . $r . '">' . $this->{$r} . ' - 1.2 - ' . $f . ' file is Project Loader (' . trim($val) . ')</pre>';
   }
@@ -113,14 +116,16 @@ class attogram_check {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-    body { margin:0px 0px 0px 40px; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-    a { text-decoration: none; }
+    body { margin:0px 40px 0px 40px; font-size: 16px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    a { text-decoration:none; }
     h1, p, pre { padding:0; margin:0; }
+    hr { height:1px; border:0; background:#E0E0E0; }
     .pass { color: #006600; }
     .fail { color: #FF0000; }
     .unknown { color: #778899; }
+
     </style>
-    <title>Attogram Check Script</title></head><body><?php
+    <title>Attogram Framework Check</title></head><body><?php
   }
 
   function page_footer() {
