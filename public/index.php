@@ -147,12 +147,16 @@ class guru_meditation_loader
   function guru_meditation_error( $error='' ) {
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attogram Framework</title>
-<style>body { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px;
-color:#000; background-color:#fff; text-align:center; } </style></head><body>
-<h2>Guru Meditation Error</h2><h3>' . $this->project_name . '</h3>';
+<title>Guru Meditation Error</title>
+<style>
+body { margin:0 0 0 40px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+.icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }
+.err { color:red; }
+</style></head><body>
+<p><span class="icon">😢</span> Guru Meditation Error</p>
+';
   if( $error ) {
-    print '<h1 style="color:red">Error: ' . $error . '</h1>';
+    print '<p class="err"><span class="icon">💔</span> ' . $error . '</p>';
   }
   print '</body></html>';
   exit;
