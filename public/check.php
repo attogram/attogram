@@ -58,16 +58,7 @@ class attogram_check {
       $r = 'fail';
       $val = 'Not Found';
     }
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 1.2 - <strong>' . $f . '</strong> is Project Loader (found: ' . trim($val) . ')</pre>';
-  }
-
-  function good_uri() {
-    $ep = '/index.php';
-    if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
-      return $ep;
-    }
-    $docroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
-    return str_replace( $docroot, '', str_replace('\\', '/', __DIR__) ) . $ep;
+    print '<pre class="' . $r . '">' . $this->{$r} . ' 1.2 - <strong>' . $f . '</strong> is Project Loader (found: new guru_meditation_loader)</pre>';
   }
 
   function check_htaccess() {
@@ -167,7 +158,6 @@ class attogram_check {
   }
 
   function check_apache() {
-
     isset($_SERVER['SERVER_SOFTWARE']) ? $as = $_SERVER['SERVER_SOFTWARE'] : $as = array();
     $asr = explode(' ', $as);
     $av = $asr[0];
@@ -179,8 +169,6 @@ class attogram_check {
 
     (version_compare( $apache_version, '2.2.16' ) >= 0) ? $r = 'pass' : $r = 'fail';
     print '<pre class="' . $r . '">' . $this->{$r} . ' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is ' . $apache_version . ')</pre>';
-
-
 
     $apache_finder = array(
       '/etc/apache2/apache2.conf',
@@ -204,7 +192,8 @@ class attogram_check {
       if( sizeof($apache_found) == 1 ) {
         $r42 = 'pass';
         $r42_found = $apache_found[0];
-        $r43 = 'unknown';
+        $r43 = $this->apache_conf_examine( $apache_found[0] );
+
       } elseif( sizeof($apache_found) > 1 ) {
         $r42 = $r43 = 'fail';
         $r42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
@@ -215,7 +204,55 @@ class attogram_check {
     }
 
     print '<pre class="' . $r42 . '">' . $this->{$r42} . ' 4.2 - <strong>Apache conf</strong> exists (' . $r42_found . ')</pre>';
-    print '<pre class="' . $r43 . '">' . $this->{$r43} . ' 4.3 - <strong>Apache conf</strong> has "AllowOveride all"</pre>';
+    print '<pre class="' . $r43 . '">' . $this->{$r43} . ' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
+    . (isset($this->apache_override_dir) ? $this->apache_override_dir : '?') . ')</pre>';
+
+
+
+  }
+
+  function good_uri() {
+    $ep = '/index.php';
+    if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
+      return $ep;
+    }
+    $docroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+    return str_replace( $docroot, '', str_replace('\\', '/', __DIR__) ) . $ep;
+  }
+
+  function apache_conf_examine( $c ) {
+    $this_dir = '';
+    $ao = array();
+    $file = new SplFileObject($c);
+    foreach( $file as $linenum=>$val ) {
+      $val = trim($val);
+      if( !$val || $val[0] == '#' ) { continue; }
+      //print '<pre>LINE' . $linenum . ': |' . htmlentities($val) . '|</pre>';
+      if( preg_match('/^<Directory [\'"](.*)[\'"]>/', $val, $match) ) {
+        $this_dir = $match[1];
+        //$this_dir = str_replace('\\','/', $this_dir);
+        //print '<pre>**** DIR=' . $this_dir . '</pre>';
+      }
+      if( preg_match('/^AllowOverride /', $val) ) {
+        //print '<pre>**** DIR=' . $this_dir .'  AllowOverride=' . htmlentities($val)  . '</pre>';
+        $ao[$this_dir] = $val;
+      }
+      if( preg_match('/^DirectoryIndex /', $val) ) {
+        //print '<pre>**** DirectoryIndex  LINE: ' . htmlentities($val)  . '</pre>';
+      }
+    }
+
+    $home_dir = str_replace('\\','/', __DIR__);
+    if( !$ao ) { return 'fail'; }
+    foreach( $ao as $d=>$a ) {
+      //print "<pre>home_dir=$home_dir   d=$d    a=$a</pre>";
+      if( $d && preg_match('~' . $d . '~', $home_dir) && $a == 'AllowOverride All') {
+        //print "<pre>MATCHED home_dir=$home_dir  d=$d  a=$a</pre>";
+        $this->apache_override_dir = $d;
+        return 'pass';
+      }
+    }
+    return 'fail';
   }
 
   function page_header() {
