@@ -8,10 +8,6 @@ if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
   ob_start(); // if gzip handler not available, do normal buffer
 }
 
-// Load attogram classes
-//include_once('attogram/logger.php');
-//include_once('attogram/attogram.php');
-  // dev - should check file existance & class existence -- here or via guru?
 // Setup Monolog
 if(
     ( isset($config['debug']) && $config['debug'] ) // $config['debug'] = true
