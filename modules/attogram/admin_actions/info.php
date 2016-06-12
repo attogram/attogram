@@ -39,7 +39,8 @@ $info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this-
 $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
 $info['attogram_directory'] = info_dir($this->attogram_directory);
 $info['modules_dir'] = info_dir($this->modules_dir);
-$info['skip_files'] = info_array( $this->skip_files);
+$info['templates_dir'] = info_dir($this->templates_dir);
+$info['skip_files'] = info_array($this->skip_files);
 
 $info['<a name="files"></a><h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
 //$info['action'] = info_file($this->action);
