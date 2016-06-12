@@ -21,9 +21,8 @@ class sqlite_database extends attogram_utils
    * @return void
    */
   function __construct( $db_name, $modules_directory, $log, $debug=FALSE ) {
-    parent::__construct();
+    parent::__construct( $log );
     $this->debug = $debug;
-    $this->log = $log;
     $this->modules_directory = $modules_directory;
     $this->db_name = $db_name;
   }
@@ -48,12 +47,14 @@ class sqlite_database extends attogram_utils
     if( !is_file( $this->db_name ) ) {
       $this->log->debug('GET_DB: NOTICE: creating database file: ' . $this->db_name);
     }
+
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
-    } catch(PDOException $e) {
-      $this->log->error('GET_DB: error opening database');
+    } catch(\PDOException $e) {
+      $this->log->error('GET_DB: error opening database: ' . $e->getMessage());
       return FALSE;
     }
+
     $this->log->debug("GET_DB: Got SQLite database: $this->db_name");
     return TRUE; // got database, into $this->db
   }
