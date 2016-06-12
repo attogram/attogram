@@ -11,7 +11,7 @@ namespace Attogram;
     &nbsp;&nbsp; <small>|</small> &nbsp;&nbsp;
     <nobr>📆 <?php print gmdate('Y-m-d H:i:s'); ?> UTC</nobr>
     &nbsp;&nbsp; <small>|</small> &nbsp;&nbsp;
-    <nobr>💙 Page generated in <?php print round( (microtime(1) - $this->start_time), 4); ?> seconds</nobr>
+    <nobr>❤ Page generated in <?php print round( (microtime(1) - $this->start_time), 4); ?> seconds</nobr>
   </p>
  </div>
 </footer>
