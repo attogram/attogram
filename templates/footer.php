@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Footer v0.0.7
+<?php // Attogram Framework - Page Footer v0.0.8
 
 namespace Attogram;
 
@@ -11,7 +11,7 @@ namespace Attogram;
     &nbsp;&nbsp; <small>|</small> &nbsp;&nbsp;
     <nobr>📆 <?php print gmdate('Y-m-d H:i:s'); ?> UTC</nobr>
     &nbsp;&nbsp; <small>|</small> &nbsp;&nbsp;
-    <nobr>❤ Page generated in <?php print round( (microtime(1) - $this->start_time), 4); ?> seconds</nobr>
+    <nobr>❤ Page generated in <?php print round( (microtime(1) - $this->start_time), 3, PHP_ROUND_HALF_UP); ?> seconds</nobr>
   </p>
  </div>
 </footer>

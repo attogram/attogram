@@ -2,10 +2,12 @@
 /**
  * Attogram Framework
  *
- * The Attogram Framework provides developers a skeleton starter site
- * with file-based URL routing, IP-protected backend, simple user system,
- * integrated SQLite database with phpLiteAdmin, Markdown parser, jQuery and Bootstrap.
- * Attogram is Dual Licensed under the The MIT License or the GNU General Public License, at your choosing.
+ * The Attogram Framework provides developers a skeleton starter site with
+ * content modules, file-based URL routing, IP-protected backend, user system,
+ * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
+ *
+ * Attogram is Dual Open Source Licensed under the The MIT License
+ * or The GNU General Public License, at your choosing.
  *
  * @version 0.5.7
  * @license MIT
@@ -15,8 +17,7 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.7');
-
+define('ATTOGRAM_VERSION', '0.5.8-dev');
 
 /**
  * attogram_utils class
@@ -27,20 +28,22 @@ class attogram_utils
   public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
 
   /**
-   * __construct()
    * @param obj $log PSR-3 compliant log object
+   * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log ) {
+  function __construct( $log, bool $debug=FALSE ) {
     $this->start_time = microtime(1);
-    $this->debug = FALSE;
+    $this->debug = $debug;
     $this->log = $log;
     $this->skip_files = array('.','..','.htaccess');
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
+    $this->log->debug('START attogram_utils: debug=' . $this->debug . ' log=' . get_class($this->log));
+
   }
 
   /**
-   * remember() - set a system configuration variable
+   * set a system configuration variable
    * @param string $var_name     The name of the variable
    * @param string $config_val   The setting for the variable
    * @param string $default_val  The default setting for the variable, if $config_val is empty
@@ -137,13 +140,13 @@ class attogram extends attogram_utils
   public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
   /**
-   * __construct() - startup Attogram!
+   * prepare Attogram!
    * @param obj $log PSR-3 compliant log object
    * @return void
    */
   function __construct( $log ) {
     parent::__construct( $log );
-    $this->log->debug('The Attogram Framework v' . ATTOGRAM_VERSION);
+    $this->log->debug('START The Attogram Framework v' . ATTOGRAM_VERSION);
     $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
@@ -152,6 +155,7 @@ class attogram extends attogram_utils
     $this->check_depth(); // is URI short enough?
     $this->get_includes(); // load any files in ./functions/
     $this->sessioning(); // start sessions
+    // dev -- inject db object into attogram_utils::__construct instead...
     if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
       $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
       $this->log->debug('__construct: sqlite_database init OK');
@@ -160,7 +164,7 @@ class attogram extends attogram_utils
       $this->log->error('__construct: sqlite_database class not found');
     }
     $this->route(); // Send us where we want to go
-    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION);
+    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION . ' timer: ' . (microtime(1) - $this->start_time));
   } // end function __construct()
 
   /**

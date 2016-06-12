@@ -1,4 +1,4 @@
-<?php // Attogram Framework - load.php v0.0.1
+<?php // Attogram Framework - load.php v0.0.2
 
 namespace Attogram;
 
@@ -10,7 +10,7 @@ if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
 
 // Setup Monolog
 if(
-    ( isset($config['debug']) && $config['debug'] ) // $config['debug'] = true
+    ( isset($config['debug']) && is_bool($config['debug']) && $config['debug'] ) // $config['debug'] = true
   ||
     ( isset($_GET['debug'])   // admin debug url override ?debug
       && isset($config['admins'])
@@ -35,4 +35,8 @@ if( isset($config['guru_meditation_loader']) && is_array($config['guru_meditatio
   }
 }
 
-$attogram = new attogram( $log ); // Start Attogram Framework!
+if( !isset($config['debug'])) {
+  $config['debug'] = FALSE;
+}
+
+$attogram = new attogram( $log, $config['debug'] ); // Start Attogram Framework!
