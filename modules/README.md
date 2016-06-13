@@ -46,7 +46,7 @@ Standard modules included with the Attogram Framework distribution:
 * `./modules/user/` - Simple user system for Attogram. (requires `database` module)
 * `./modules/user/actions/login.php` - Public Action: Login page
 * `./modules/user/actions/user.php` - Public Action: User page
-* `./modules/user/admin_actions/users.php` - Admin Action: Users editor
+* `./modules/user/admin_actions/user-admin.php` - Admin Action: Users editor
 * `./modules/user/includes/attogram_user.php` - Attogram User helper class
 * `./modules/user/tables/user.sql` - user database table definition
 
