@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.3
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.4
 
 namespace Attogram;
 
@@ -8,7 +8,9 @@ namespace Attogram;
 class sqlite_database extends attogram_utils
 {
 
-  public $db_name, $modules_directory, $db;
+  public $db_name;
+  public $modules_directory;
+  public $db;
 
   /**
    * initialize database settings
@@ -46,14 +48,12 @@ class sqlite_database extends attogram_utils
     if( !is_file( $this->db_name ) ) {
       $this->log->debug('GET_DB: NOTICE: creating database file: ' . $this->db_name);
     }
-
     try {
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(\PDOException $e) {
       $this->log->error('GET_DB: error opening database: ' . $e->getMessage());
       return false;
     }
-
     $this->log->debug("GET_DB: Got SQLite database: $this->db_name");
     return true; // got database, into $this->db
   }
@@ -82,7 +82,7 @@ class sqlite_database extends attogram_utils
     }
     while( $x = each($bind) ) {
       $statement->bindParam( $x[0], $x[1] );
-      // possible:  Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based
+      // dev: Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based
     }
     if( !$statement->execute() ) {
       $this->log->error('QUERY: Can not execute query');
@@ -167,14 +167,12 @@ class sqlite_database extends attogram_utils
       return true;
     }
     $dirs = $this->get_all_subdirectories( $this->modules_directory, 'tables');
-    //$this->log->debug('GET_TABLES', $dirs);
     if( !$dirs ) {
       $this->log->debug('GET_TABLES: No module tables found');
       return false;
     }
     $this->tables = array();
     foreach( $dirs as $d ) {
-      //$this->log->debug('GET_TABLES: d='. $d);
       foreach( array_diff(scandir($d), $this->skip_files) as $f ) {
         $file = $d . '/' . $f;
         if( !is_file($file) || !is_readable($file) || !preg_match('/\.sql$/',$file) ) {
