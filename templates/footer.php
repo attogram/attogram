@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Footer v0.0.9
+<?php // Attogram Framework - Page Footer v0.1.0
 
 namespace Attogram;
 
@@ -11,7 +11,7 @@ print '
     <small>' . $divider . '
     <nobr>🚀 Powered by <a target="github" href="' . $this->project_github . '">Attogram v' . ATTOGRAM_VERSION . '</a></nobr>
     ' . $divider . '
-    <nobr>📆 ' . gmdate('Y-m-d H:i:s') . ' UTC</nobr>
+    <nobr>🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC</nobr>
     ' . $divider . '
     <nobr>👤 ' . $this->clientIp . '</nobr>
     ' . $divider . '
