@@ -9,13 +9,15 @@ $guru = new guru_meditation_loader( // wake up the guru
   $project_loader    = '../load.php',
   $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
-  $required_classes  = array( '\Symfony\Component\HttpFoundation\Request',
-                              '\Monolog\Logger',
+  $required_classes  = array( '\Attogram\attogram',
+                              '\Attogram\attogram_utils',
+                              '\Attogram\logger',
+                              '\Monolog\Formatter\LineFormatter',
                               '\Monolog\Handler\BufferHandler',
                               '\Monolog\Handler\StreamHandler',
-                              '\Monolog\Formatter\LineFormatter',
-                              'Parsedown',
-                              'Attogram\attogram',
+                              '\Monolog\Logger',
+                              '\Parsedown',
+                              '\Symfony\Component\HttpFoundation\Request',
                             ) );
 
 $guru->meditate();               // load the configuration
@@ -30,7 +32,7 @@ $guru->tranquility();            // Load the project!
 
 Guru Meditation Loader v0.0.1
 
-Copyright 2016 by The Attogram Developers https://github.com/attogram/attogram
+Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
 
 Open Source Dual License: (MIT or GPL-3.0+) at your choosing
 
@@ -57,7 +59,7 @@ class guru_meditation_loader
     $this->default_autoloader = $default_autoloader;
     $this->vendor_download    = $vendor_download;
     $this->required_classes   = $required_classes;
-    $this->debug('Guru Meditation Loader: ' . $this->project_name);
+    $this->debug('START Guru Meditation Loader: ' . $this->project_name);
   }
 
   function meditate() {
@@ -98,14 +100,17 @@ class guru_meditation_loader
 
   function focus_mind() {
     if( !is_dir($this->project_classes) ) {
-      $this->guru_meditation_error('Missing project class directory: ' . $this->project_classes);
+      $this->guru_meditation_error('Missing project directory: ' . $this->project_classes);
     }
     if( !is_readable($this->project_classes) ) {
-      $this->guru_meditation_error('Project class directory exists, but is unreadable: ' . $this->project_classes);
+      $this->guru_meditation_error('Project directory is unreadable: ' . $this->project_classes);
     }
     foreach( array_diff(scandir($this->project_classes),array('.','..')) as $f ) {
-      include_once( $this->project_classes . $f );
-      $this->debug('focus_mind: OK? ' . $this->project_classes . $f);
+      $included = ( include_once( $this->project_classes . $f ) );
+      if( !$included ) {
+        $this->guru_meditation_error('Failed to include project file: ' . $this->project_classes . $f);
+      }
+      $this->debug('focus_mind: OK: ' . $this->project_classes . $f);
     }
   } // end function focus_mind()
 
@@ -145,18 +150,24 @@ class guru_meditation_loader
   }
 
   function guru_meditation_error( $error='' ) {
+    global $config;
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guru Meditation Error</title>
 <style>
-body { margin:0 0 0 40px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+a { text-decoration:none; }
 .icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }
 .err { color:red; }
+.log { font-size: 15px; color:#333366; }
 </style></head><body>
-<p><span class="icon">😢</span> Guru Meditation Error</p>
-';
+<p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
   if( $error ) {
-    print '<p class="err"><span class="icon">💔</span> ' . $error . '</p>';
+    print '<p class="err"><a href=""><span class="icon">💔</span></a> ' . $error . '</p>';
+  }
+  if( isset($_GET['debug']) && isset($config['guru_meditation_loader']) ) {
+    print '<p class="log">🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC<br />💭 ';
+    print implode('<br />💭 ', $config['guru_meditation_loader']);
   }
   print '</body></html>';
   exit;
