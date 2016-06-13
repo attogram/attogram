@@ -19,6 +19,30 @@ $guru = new guru_meditation_loader( // wake up the guru
                               '\Symfony\Component\HttpFoundation\Request',
                             ) );
 
+/*
+DEV:
+
+ $required_configs = array(
+  array( 'name'=>'default_value' ),
+  array( 'debug'=>false ),
+  ...
+ )
+
+
+ LOAD ./config.php
+ LOAD ./modules/*/configs/*.php
+ SET attogram_directory
+ SET vendor_autoloader
+ SET modules_dir
+ SET debug
+ LOAD ./vendor/autoload.php
+ LOAD ./attogram/*.php
+ LOAD ./modules/*/includes/*.php
+ INSTANTIATE database object
+
+
+*/
+
 $guru->meditate();               // load the configuration
 $guru->expand_consciousness();   // run the vendor autoloader
 $guru->focus_mind();             // include project classes
