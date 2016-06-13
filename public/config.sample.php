@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Main Configuration File Example v0.0.3
+<?php // Attogram Framework - Main Configuration File Example v0.0.4
 
 namespace Attogram;
 
@@ -15,16 +15,17 @@ global $config;
 // The Site Name
 // $config['site_name'] = 'Attogram Framework';
 
-// List of Administrator IPs
+// Administrator IPs
+// (To use the Admin URL Debug Override [/?debug], this must be set here)
 // $config['admins'] = array( '127.0.0.1', '::1', );
 
-// autoloader
+// composer vendor autoloader
 // $config['autoloader'] = '../vendor/autoload.php';
 
-// Modules Directory
+// Modules Directory, with no trailing slash
 // $config['modules_dir'] = '../modules';
 
-// Templates directory
+// Templates directory, with no trailing slash
 // $config['templates_dir'] = '../templates';
 
 // Depth Settings
