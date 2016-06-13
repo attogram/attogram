@@ -9,7 +9,7 @@
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * _or_ the GNU General Public License version 3 or higher (GPL-3.0+).
  *
- * @version 0.5.8-dev
+ * @version 0.5.8
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -20,7 +20,7 @@ namespace Attogram;
 class attogram_utils
 {
 
-  const ATTOGRAM_VERSION = '0.5.8-dev';
+  const ATTOGRAM_VERSION = '0.5.8';
 
   public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
 
