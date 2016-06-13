@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.2
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.3
 
 namespace Attogram;
 
@@ -6,7 +6,6 @@ $guru = new guru_meditation_loader( // wake up the guru
   $project_name      = 'The Attogram Framework',
   $config_file       = './config.php',
   $project_classes   = '../attogram/',
-  $project_loader    = '../load.php',
   $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes  = array( '\Attogram\attogram',
@@ -42,7 +41,7 @@ Open Source Dual License: (MIT or GPL-3.0+) at your choosing
 class guru_meditation_loader
 {
 
-  public $project_name, $config_file, $project_classes, $project_loader,
+  public $project_name, $config_file, $project_classes,
          $default_autoloader, $vendor_download, $required_classes, $autoloader;
 
   /**
@@ -51,14 +50,12 @@ class guru_meditation_loader
   function __construct( string $project_name,
                         string $config_file,
                         string $project_classes,
-                        string $project_loader,
                         string $default_autoloader,
                         string $vendor_download,
                         array  $required_classes ) {
     $this->project_name       = $project_name;
     $this->config_file        = $config_file;
     $this->project_classes    = $project_classes;
-    $this->project_loader     = $project_loader;
     $this->default_autoloader = $default_autoloader;
     $this->vendor_download    = $vendor_download;
     $this->required_classes   = $required_classes;
