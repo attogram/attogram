@@ -39,7 +39,6 @@ class attogram_utils
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
     $this->log->debug('START attogram_utils: debug=' . $this->debug . ' log=' . get_class($this->log));
-
   }
 
   /**

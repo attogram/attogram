@@ -52,4 +52,4 @@ Standard modules included with the Attogram Framework distribution:
 
 # Misc
 
-* `./modules_disabled/` is a holding area for disabled modules.  Modules in this directory will not be loaded by Attogram.
+* More example modules can be found in the `./contrib/` directory. Modules in this directory will not be loaded by Attogram.
