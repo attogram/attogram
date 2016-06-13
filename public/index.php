@@ -30,14 +30,14 @@ DEV:
 
 
  LOAD ./config.php
- LOAD ./modules/*/configs/*.php
+ LOAD ./modules/ * /configs/*.php
  SET attogram_directory
  SET vendor_autoloader
  SET modules_dir
  SET debug
  LOAD ./vendor/autoload.php
  LOAD ./attogram/*.php
- LOAD ./modules/*/includes/*.php
+ LOAD ./modules/ * /includes/*.php
  INSTANTIATE database object
 
 
