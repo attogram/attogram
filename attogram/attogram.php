@@ -140,12 +140,11 @@ class attogram extends attogram_utils
   public $actions, $action, $admins, $is_admin, $admin_actions, $admin_dir;
 
   /**
-   * prepare Attogram!
    * @param obj $log PSR-3 compliant log object
-   * @return void
+   * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log ) {
-    parent::__construct( $log );
+  function __construct( $log, bool $debug=FALSE ) {
+    parent::__construct( $log, $debug );
     $this->log->debug('START The Attogram Framework v' . ATTOGRAM_VERSION);
     $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
