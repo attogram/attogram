@@ -2,7 +2,7 @@
 /**
  * Attogram Framework
  *
- * The Attogram Framework provides developers a skeleton starter site with
+ * The Attogram Framework provides developers a PHP skeleton starter site with
  * content modules, file-based URL routing, IP-protected backend, user system,
  * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
  *
