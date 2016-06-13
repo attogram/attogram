@@ -2,16 +2,20 @@ Attogram Framework
 ==================
 [//]: # ( Attogram Framework - README.md (markdown) - v0.0.7 )
 
-The Attogram Framework gives developers a jumpstart to quickly create web sites. Attogram uses PHP with Apache2. It includes URL routing, an IP-protected backend, a user system, an integrated SQLite database with web administration, a Markdown parser, jQuery and Bootstrap.
+* The Attogram Framework provides developers a skeleton starter site with
+content modules, file-based URL routing, IP-protected backend, user system,
+integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
 
-After that, Attogram tries to stay out of your way while you do your thing!
+* The Attogram Framework is Dual Licensed under the MIT License (MIT)
+_or_ the GNU General Public License version 3 or higher (GPL-3.0+), at your choosing.
 
-[Read more about how to install, setup and extend Attogram](modules/attogram/actions/about.md).
+* [Read more about how to install, setup and extend Attogram](modules/attogram/actions/about.md).
 
 More Info
 =========
 
 * Attogram @ GitHub: https://github.com/attogram/attogram
+* [Download latest Attogram as a zip file](https://github.com/attogram/attogram/archive/master.zip)
 
 * Attogram @ Packagist: https://packagist.org/packages/attogram/attogram-framework
 
