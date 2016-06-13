@@ -1,6 +1,6 @@
 {
   "name": "attogram/attogram-framework",
-  "description": "The Attogram Framework",
+  "description": "The Attogram Framework provides developers a PHP skeleton starter site with content modules, file-based URL routing, IP-protected backend, user system, integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.",
   "type": "project",
   "homepage": "https://github.com/attogram/attogram",
   "license": "(MIT or GPL-3.0+)",
