@@ -16,7 +16,7 @@ tabler(
   $table = 'user',
   $name_singular = 'user',
   $name_plural = 'users',
-  $public_link = FALSE,
+  $public_link = false,
   $col = array(
     array('class'=>'col-md-1', 'title'=>'<code>ID</code>', 'key'=>'id'),
     array('class'=>'col-md-5', 'title'=>'username', 'key'=>'username'),
@@ -28,7 +28,7 @@ tabler(
   ),
   $sql = 'SELECT * FROM user ORDER BY id',
   $admin_link = '../users/',
-  $show_edit = TRUE
+  $show_edit = true
 );
 
 $this->page_footer();

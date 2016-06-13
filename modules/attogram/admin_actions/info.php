@@ -8,11 +8,11 @@ $this->page_header($title);
 $info = array();
 
 $info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
-$info['Attogram Version'] = ATTOGRAM_VERSION;
+$info['Attogram Version'] = self::ATTOGRAM_VERSION;
 $info['Attogram Directory'] = info_dir($this->attogram_directory);
 $info['PHP Version'] = phpversion();
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
-$info['debug'] = ( $this->debug ? 'TRUE' : '<code>FALSE</code>' );
+$info['debug'] = ( $this->debug ? 'true' : '<code>false</code>' );
 $info['project_github'] = '<a href="' . $this->project_github . '">' . $this->project_github . '</a>';
 $info['project_packagist'] = '<a href="' . $this->project_packagist . '">' . $this->project_packagist . '</a>';
 
@@ -88,7 +88,7 @@ $this->page_footer();
 
 
 // Helper functions
-function info_array($array, $keyed=FALSE) {
+function info_array($array, $keyed=false) {
   if( !is_array($array) )  { return '<code>ERROR</code>'; }
   if( !$array ) {
     return '<code>null</code>';

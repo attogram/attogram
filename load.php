@@ -36,7 +36,7 @@ if( isset($config['guru_meditation_loader']) && is_array($config['guru_meditatio
 }
 
 if( !isset($config['debug'])) {
-  $config['debug'] = FALSE;
+  $config['debug'] = false;
 }
 
 $attogram = new attogram( $log, $config['debug'] ); // Start Attogram Framework!

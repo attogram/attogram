@@ -9,8 +9,8 @@ global $config;
 // The Attogram installation directory, with trailing slash
 // $config['attogram_directory'] = '../';
 
-// Debug/logging - TRUE or FALSE
-// $config['debug'] = FALSE;
+// Debug/logging - true or false
+// $config['debug'] = false;
 
 // The Site Name
 // $config['site_name'] = 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>';

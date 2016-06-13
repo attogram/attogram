@@ -1,9 +1,7 @@
-<?php // Attogram Framework - Check Script v0.0.1
+<?php // Attogram Framework - Check Script v0.0.2
 
 $c = new attogram_check();
 $c->check();
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,7 +10,7 @@ class attogram_check {
   function __construct() {
     $this->pass = '<span class="icon-s"><strong>💚 Pass</strong></span>'; // ✔ ☑  🆗 💚 😊
     $this->fail = '<span class="icon-s"><strong>🔴 Fail</strong></span>'; // ✖ ❌ ❎ ❕ ❗ 🔵 🔴 💔 😢 🙀 😿  🍅 💩
-    $this->unknown = '<span class="icon-s"><strong>🔳 ????</strong></span>'; // 💢 ❓ ❔ 😥 😴 ⭕ 🔳
+    $this->unknown = '<span class="icon-s"><strong>🔳 Skip</strong></span>'; // 💢 ❓ ❔ 😥 😴 ⭕ 🔳
     $this->divider = '<hr />';
     $this->spacer = ' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
   }
@@ -272,10 +270,6 @@ class attogram_check {
     .icon-s { font-size: 18px; vertical-align:middle; padding:0px; margin:0px; }
     </style>
     <title>Attogram Framework Check</title></head><body><?php
-  }
-
-  function page_footer() {
-    ?></body></html><?php
   }
 
 } // end class attogram_check

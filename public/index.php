@@ -74,8 +74,8 @@ class guru_meditation_loader
       if( !is_readable($this->config_file) ) {
         $this->guru_meditation_error('Config file exists, but is not readable: ' . $this->config_file);
       }
-      $config_included = (include($this->config_file));
-      if( !$config_included ) {
+      $included = (include($this->config_file));
+      if( !$included ) {
         $this->guru_meditation_error('Config file exists, but include failed: ' . $this->config_file);
       }
       $this->debug('meditate: config OK: ' . $this->config_file);
@@ -100,7 +100,7 @@ class guru_meditation_loader
    */
   function expand_consciousness() {
     if( isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader) ) {
-      $included = (include($this->autoloader));
+      $included = ( include($this->autoloader) );
       if( !$included ) {
         $this->guru_meditation_error('Autoloader file exists, but include failed: ' . $this->autoloader);
       }
@@ -157,11 +157,10 @@ class guru_meditation_loader
       if( !is_readable($this->project_loader) ) {
         $this->guru_meditation_error('Project loader file exists, but is not readable: ' . $this->project_loader);
       }
-      $project_loader_included = (include($this->project_loader));
+      $project_loader_included = ( include($this->project_loader) );
       if( !$project_loader_included ) {
         $this->guru_meditation_error('Project loader file exists, but include failed: ' . $this->project_loader);
       }
-      $this->debug('tranquility: project_loader OK: ' . $this->project_loader);
   }
 
   function debug( $msg ) {

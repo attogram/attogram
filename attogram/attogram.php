@@ -9,7 +9,7 @@
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * _or_ the GNU General Public License version 3 or higher (GPL-3.0+).
  *
- * @version 0.5.8
+ * @version 0.5.8-dev
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -17,13 +17,10 @@
 
 namespace Attogram;
 
-define('ATTOGRAM_VERSION', '0.5.8-dev');
-
-/**
- * attogram_utils class
- */
 class attogram_utils
 {
+
+  const ATTOGRAM_VERSION = '0.5.8-dev';
 
   public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
 
@@ -31,7 +28,7 @@ class attogram_utils
    * @param obj $log PSR-3 compliant log object
    * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log, bool $debug=FALSE ) {
+  public function __construct( $log, bool $debug=false ) {
     $this->start_time = microtime(1);
     $this->debug = $debug;
     $this->log = $log;
@@ -48,7 +45,7 @@ class attogram_utils
    * @param string $default_val  The default setting for the variable, if $config_val is empty
    * @return void
    */
-  function remember( $var_name, $config_val='', $default_val ) {
+  public function remember( $var_name, $config_val='', $default_val ) {
     if( $config_val ) {
       $this->{$var_name} = $config_val;
     } else {
@@ -63,7 +60,7 @@ class attogram_utils
    * @param string name The name of the subdirectories to find
    * @return array
    */
-  function get_all_subdirectories( $dir, $name ) {
+  public function get_all_subdirectories( $dir, $name ) {
     if( !isset($dir) || !$dir || !is_string($dir)) {
       $this->log->error('get_all_subdirectories: UNDEFINED dir:' . print_r($dir,1));
       return array();
@@ -88,7 +85,7 @@ class attogram_utils
    * @param string $dir The directory to search
    * @return void
    */
-  function include_all_php_files_in_directory( $dir ) {
+  public function include_all_php_files_in_directory( $dir ) {
     if( !is_dir($dir) || !is_readable($dir)) {
       $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
       return;
@@ -106,22 +103,22 @@ class attogram_utils
   } // end function include_all_php_files_in_directory()
 
   /**
-   * is_readable_file() - Tests if is a file exist, is readable, and is of a certain type.
+   * Tests if is a file exist, is readable, and is of a certain type.
    * @param string $file The name of the file to test
    * @param string $type (optional) The file extension to allow. Defaults to '.php'
    * @return bool
    */
-  function is_readable_file( $file=FALSE, $type='.php' ) {
+  public function is_readable_file( $file=false, $type='.php' ) {
     if( !$file || !is_file($file) || !is_readable($file) ) {
-      return FALSE;
+      return false;
     }
     if( !$type || $type == '' || !is_string($type) ) { // error
-      return FALSE;
+      return false;
     }
     if( preg_match('/' . $type . '$/',$file) ) {
-      return TRUE;
+      return true;
     }
-    return FALSE;
+    return false;
   }
 
 } // end class attogram_utils
@@ -142,9 +139,9 @@ class attogram extends attogram_utils
    * @param obj $log PSR-3 compliant log object
    * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log, bool $debug=FALSE ) {
+  function __construct( $log, bool $debug=false ) {
     parent::__construct( $log, $debug );
-    $this->log->debug('START The Attogram Framework v' . ATTOGRAM_VERSION);
+    $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
     $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
@@ -158,11 +155,11 @@ class attogram extends attogram_utils
       $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
       $this->log->debug('__construct: sqlite_database init OK');
     } else {
-      $this->db = FALSE;
+      $this->db = false;
       $this->log->error('__construct: sqlite_database class not found');
     }
     $this->route(); // Send us where we want to go
-    $this->log->debug('END Attogram v' . ATTOGRAM_VERSION . ' timer: ' . (microtime(1) - $this->start_time));
+    $this->log->debug('END Attogram v' . self::ATTOGRAM_VERSION . ' timer: ' . (microtime(1) - $this->start_time));
   } // end function __construct()
 
   /**
@@ -187,7 +184,7 @@ class attogram extends attogram_utils
     $this->remember('templates_dir', @$config['templates_dir'], '../templates');
     $this->remember('fof', @$config['fof'], '../templates/404.php');
     $this->remember('db_name', @$config['db_name'], '../db/global');
-    $this->remember('site_name', @$config['site_name'], 'Attogram Framework <small>v' . ATTOGRAM_VERSION . '</small>');
+    $this->remember('site_name', @$config['site_name'], 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>');
     $this->remember('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
     $this->remember('depth', @$config['depth'], $this->depth ); // Depth settings
     if( !isset($this->depth['']) ) { // check:  homepage depth defined
@@ -200,9 +197,9 @@ class attogram extends attogram_utils
     }
     $this->remember('admins', @$config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
     // To Debug or Not To Debug, That is the quesion
-    $this->remember('debug', @$config['debug'], FALSE);
+    $this->remember('debug', @$config['debug'], false);
     if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
-      $this->debug = TRUE;
+      $this->debug = true;
       $this->log->debug('awaken: Admin Debug turned ON');
     }
   } // end function load_config()
@@ -410,7 +407,7 @@ class attogram extends attogram_utils
     $title = $content = '';
     if( $this->is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
-      if( $page === FALSE ) {
+      if( $page === false ) {
           $this->log->error('DO_MARKDOWN: can not get file');
       } else {
         if( class_exists('Parsedown') ) {
@@ -525,14 +522,14 @@ class attogram extends attogram_utils
       return $this->is_admin;
     }
     if( isset($_GET['noadmin']) ) {
-      $this->is_admin = FALSE;
-      $this->log->debug('is_admin FALSE - noadmin override');
-      return FALSE;
+      $this->is_admin = false;
+      $this->log->debug('is_admin false - noadmin override');
+      return false;
     }
     if( !isset($this->admins) || !is_array($this->admins) ) {
-      $this->is_admin = FALSE;
-      $this->log->error('is_admin FALSE - missing $this->admins  array');
-      return FALSE;
+      $this->is_admin = false;
+      $this->log->error('is_admin false - missing $this->admins  array');
+      return false;
     }
     if( is_object($this->request) ) {
       $cip = $this->request->getClientIp();
@@ -540,13 +537,13 @@ class attogram extends attogram_utils
       $cip = $_SERVER['REMOTE_ADDR'];
     }
     if( @in_array($cip,$this->admins) ) {
-      $this->is_admin = TRUE;
-      $this->log->debug('is_admin TRUE ' . $cip);
-      return TRUE;
+      $this->is_admin = true;
+      $this->log->debug('is_admin true ' . $cip);
+      return true;
     }
-    $this->is_admin = FALSE;
-    $this->log->debug('is_admin FALSE ' . $cip);
-    return FALSE;
+    $this->is_admin = false;
+    $this->log->debug('is_admin false ' . $cip);
+    return false;
   }
 
   /**

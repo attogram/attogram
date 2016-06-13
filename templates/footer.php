@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Footer v0.1.0
+<?php // Attogram Framework - Page Footer v0.1.1
 
 namespace Attogram;
 
@@ -9,7 +9,7 @@ print '
   <p>
     <nobr><a href="' . $this->get_site_url() . '/">' .  $this->site_name . '</a></nobr>
     <small>' . $divider . '
-    <nobr>🚀 Powered by <a target="github" href="' . $this->project_github . '">Attogram v' . ATTOGRAM_VERSION . '</a></nobr>
+    <nobr>🚀 Powered by <a target="github" href="' . $this->project_github . '">Attogram v' . self::ATTOGRAM_VERSION . '</a></nobr>
     ' . $divider . '
     <nobr>🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC</nobr>
     ' . $divider . '

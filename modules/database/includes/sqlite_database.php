@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.2
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.3
 
 namespace Attogram;
 
@@ -11,16 +11,15 @@ class sqlite_database extends attogram_utils
   public $db_name, $modules_directory, $db;
 
   /**
-   * __construct() - initialize database settings
-   *
+   * initialize database settings
    * @param string $db_name relative path to the SQLite database file
    * @param string $modules_directory relative path to the Attogram modules directory
    * @param object $log psr3 logger object
-   * @param bool $debug (optional) defaults to FALSE
-   *
+   * @param bool $debug (optional) defaults to false
    * @return void
    */
-  function __construct( $db_name, $modules_directory, $log, $debug=FALSE ) {
+  function __construct( $db_name, $modules_directory, $log, $debug=false )
+  {
     parent::__construct( $log );
     $this->debug = $debug;
     $this->modules_directory = $modules_directory;
@@ -28,17 +27,17 @@ class sqlite_database extends attogram_utils
   }
 
   /**
-   * get_db() - Get the SQLite database object
-   *
+   * Get the SQLite database object
    * @return boolean
    */
-  function get_db() {
+  function get_db()
+  {
     if( is_object($this->db) && get_class($this->db) == 'PDO' ) {
-      return TRUE; // if PDO database object already set
+      return true; // if PDO database object already set
     }
     if( !in_array('sqlite', \PDO::getAvailableDrivers() ) ) {
       $this->log->error('GET_DB: SQLite PDO driver not found');
-      return FALSE;
+      return false;
     }
     if( is_file( $this->db_name ) && !is_writeable( $this->db_name ) ) {
       $this->log->error('GET_DB: NOTICE: database file not writeable: ' . $this->db_name);
@@ -52,22 +51,21 @@ class sqlite_database extends attogram_utils
       $this->db = new \PDO('sqlite:'. $this->db_name);
     } catch(\PDOException $e) {
       $this->log->error('GET_DB: error opening database: ' . $e->getMessage());
-      return FALSE;
+      return false;
     }
 
     $this->log->debug("GET_DB: Got SQLite database: $this->db_name");
-    return TRUE; // got database, into $this->db
+    return true; // got database, into $this->db
   }
 
   /**
-   * query() - Query the database, return an array of results
-   *
+   * Query the database, return an array of results
    * @param string $sql The SQL query
    * @param array $bind Optional, Array of values to bind into the SQL query
-   *
    * @return array
    */
-  function query( $sql, $bind=array() ) {
+  function query( $sql, $bind=array() )
+  {
     $this->log->debug('QUERY: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERY: bind=',$bind);
@@ -86,7 +84,6 @@ class sqlite_database extends attogram_utils
       $statement->bindParam( $x[0], $x[1] );
       // possible:  Warning: PDOStatement::bindParam(): SQLSTATE[HY093]: Invalid parameter number: Columns/Parameters are 1-based
     }
-    //$this->log->debug('QUERY: bound:', $bind);
     if( !$statement->execute() ) {
       $this->log->error('QUERY: Can not execute query');
       return array();
@@ -101,50 +98,46 @@ class sqlite_database extends attogram_utils
   }
 
   /**
-   * queryb() - Query the database, return only TRUE or FALSE
-   *
+   * Query the database, return only true or false
    * @param string $sql The SQL query
    * @param array $bind Optional, Array of values to bind into the SQL query
-   *
    * @return boolean
    */
-  function queryb( $sql, $bind=array() ) {
+  function queryb( $sql, $bind=array() )
+  {
     $this->log->debug('QUERYB: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
       $this->log->debug('QUERYB: bind=',$bind);
     }
     if( !$this->get_db() ) {
       $this->log->error('QUERYB: Can not get database');
-      return FALSE;
+      return false;
     }
     $statement = $this->query_prepare($sql);
     if( !$statement ) {
       list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
       $this->log->error("QUERYB: prepare failed: $sqlstate:$error_code:$error_string");
-      return FALSE;
+      return false;
     }
     while( $x = each($bind) ) {
       $statement->bindParam($x[0], $x[1]);
     }
-    //$this->log->debug('QUERYB: bound:', $bind);
     if( !$statement->execute() ) {
       list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
       $this->log->error("QUERYB: execute failed: $sqlstate:$error_code:$error_string");
-      return FALSE;
+      return false;
     }
-    $this->log->debug('QUERYB TRUE');
-    return TRUE;
+    $this->log->debug('QUERYB true');
+    return true;
    }
 
   /**
-   * query_prepare()
-   *
+   * Prepare a SQL query
    * @param string $sql The SQL query to prepare
-   *
    * @return object|boolean
    */
-  function query_prepare( $sql ) {
-    //$this->log->debug("QUERY_PREPARE: $sql");
+  function query_prepare( $sql )
+  {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
     list($sqlstate, $error_code, $error_string) = @$this->db->errorInfo();
@@ -156,28 +149,28 @@ class sqlite_database extends attogram_utils
         $statement = $this->db->prepare($sql);
         if( $statement ) { return $statement; } // try again
         $this->log->error('QUERY_PREPARE: Still can not prepare sql');
-        return FALSE;
+        return false;
       } else {
         $this->log->error("QUERY_PREPARE: Can not create table: $table");
-        return FALSE;
+        return false;
       }
     }
   }
 
   /**
-   * get_tables()
-   *
+   * Get the table definitions from all the modules
    * @return boolean
    */
-  function get_tables() {
+  function get_tables()
+  {
     if( isset($this->tables) && is_array($this->tables) ) {
-      return TRUE;
+      return true;
     }
     $dirs = $this->get_all_subdirectories( $this->modules_directory, 'tables');
     //$this->log->debug('GET_TABLES', $dirs);
     if( !$dirs ) {
       $this->log->debug('GET_TABLES: No module tables found');
-      return FALSE;
+      return false;
     }
     $this->tables = array();
     foreach( $dirs as $d ) {
@@ -192,27 +185,26 @@ class sqlite_database extends attogram_utils
         $this->log->debug('GET_TABLES: got table: ' . $table_name . ' from ' . $file);
       }
     }
-    return TRUE;
+    return true;
   }
 
   /**
-   * create_table() - Create a table in the active SQLite database
-   *
+   * Create a table in the active SQLite database
    * @param string $table The name of the table to create
-   *
    * @return boolean
    */
-  function create_table( $table='' ) {
+  function create_table( $table='' )
+  {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
       $this->log->error("CREATE_TABLE: Unknown table: $table");
-      return FALSE;
+      return false;
     }
     if( !$this->queryb( $this->tables[$table] ) ) {
       $this->log->error("CREATE_TABLE: failed to create: $table");
-      return FALSE;
+      return false;
     }
-    return TRUE;
+    return true;
   }
 
 } // END of class sqlite_database

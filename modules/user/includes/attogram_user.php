@@ -14,7 +14,7 @@ class attogram_user
   public static function login( $log, $db ) {
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
       $log->error('LOGIN: Please enter username and password');
-      return FALSE;
+      return false;
     }
     $user = $db->query(
       'SELECT id, username, level, email FROM user WHERE username = :u AND password = :p',
@@ -22,15 +22,15 @@ class attogram_user
 
     if( $db->db->errorCode() != '00000' ) { // query failed
       $log->error('LOGIN: Login system offline');
-      return FALSE;
+      return false;
     }
     if( !$user ) { // no user, or wrong password
       $log->error('LOGIN: Invalid login');
-      return FALSE;
+      return false;
     }
     if( !sizeof($user) == 1 ) { // corrupt data
       $log->error('LOGIN: Invalid login');
-      return FALSE;
+      return false;
     }
     $user = $user[0];
     $_SESSION['attogram_id'] = $user['id'];
@@ -44,7 +44,7 @@ class attogram_user
         $log->error('LOGIN: can not updated last login info');
     }
     $log->debug('User Logged in');
-    return TRUE;
+    return true;
   }
 
   /**
@@ -53,9 +53,9 @@ class attogram_user
    */
   public static function is_logged_in( ) {
     if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username']) {
-      return TRUE;
+      return true;
     }
-    return FALSE;
+    return false;
   }
 
 } // end class attogram_user
