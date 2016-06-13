@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.1
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.2
 
 namespace Attogram;
 
@@ -30,7 +30,7 @@ $guru->tranquility();            // Load the project!
 ********************************************************************************
 ********************************************************************************
 
-Guru Meditation Loader v0.0.1
+Guru Meditation Loader v0.0.2
 
 Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
 
@@ -45,6 +45,9 @@ class guru_meditation_loader
   public $project_name, $config_file, $project_classes, $project_loader,
          $default_autoloader, $vendor_download, $required_classes, $autoloader;
 
+  /**
+   * set the Guru vars
+   */
   function __construct( string $project_name,
                         string $config_file,
                         string $project_classes,
@@ -62,19 +65,22 @@ class guru_meditation_loader
     $this->debug('START Guru Meditation Loader: ' . $this->project_name);
   }
 
+  /**
+   * load the config file
+   */
   function meditate() {
     global $config;
     if( is_file($this->config_file) ) {
       if( !is_readable($this->config_file) ) {
-        $this->guru_meditation_error('Config file exists, but is not readable');
+        $this->guru_meditation_error('Config file exists, but is not readable: ' . $this->config_file);
       }
       $config_included = (include($this->config_file));
       if( !$config_included ) {
-        $this->guru_meditation_error('Config file exists, but include failed');
+        $this->guru_meditation_error('Config file exists, but include failed: ' . $this->config_file);
       }
       $this->debug('meditate: config OK: ' . $this->config_file);
     } else {
-      $this->debug('meditate: config_file NOT file');
+      $this->debug('meditate: config_file is NOT a file');
     }
     if( !isset($config) ) {
       $this->debug('meditate: $config NOT set');
@@ -89,13 +95,27 @@ class guru_meditation_loader
     $this->autoloader = $config['autoloader'];
   } // end function meditate()
 
+  /**
+   * run the vendor autoloader
+   */
   function expand_consciousness() {
     if( isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader) ) {
-      include($this->autoloader); // dev todo - include check like in meditate()
+      $included = (include($this->autoloader));
+      if( !$included ) {
+        $this->guru_meditation_error('Autoloader file exists, but include failed: ' . $this->autoloader);
+      }
       $this->debug('expand_consciousness: OK: ' . $this->autoloader);
       return;
     }
-    $this->guru_meditation_error( 'autoloader file not found: ' . $this->autoloader );
+    $this->guru_meditation_error(
+      $err = 'autoloader file not found: ' . $this->autoloader,
+      $fix = 'Possibile Fixes:'
+      . '<br /><br />- Is the path to the autoloader wrong?  Edit <strong>' . $this->config_file
+      . '</strong> and check for <strong>$config[\'autoloader\']</strong>'
+      . '<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?  Run <strong>composer install</strong>'
+      . '<br /><br />- Can\'t run composer? <a href="' . $this->vendor_download
+      . '"><strong>download the vendor zip file</strong></a> and install manually'
+    );
   } // end function expand_consciousness()
 
   function focus_mind() {
@@ -149,7 +169,7 @@ class guru_meditation_loader
     $config['guru_meditation_loader'][] = $msg;
   }
 
-  function guru_meditation_error( $error='' ) {
+  function guru_meditation_error( string $error='', string $fix='' ) {
     global $config;
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -159,11 +179,15 @@ body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica
 a { text-decoration:none; }
 .icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }
 .err { color:red; }
-.log { font-size: 15px; color:#333366; }
+.fix { font-size:18px; color:black;  }
+.log { font-size:15px; color:#333366; }
 </style></head><body>
 <p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
   if( $error ) {
     print '<p class="err"><a href=""><span class="icon">💔</span></a> ' . $error . '</p>';
+  }
+  if( $fix ) {
+    print '<p class="fix"><a href=""><span class="icon">🔧</span></a> ' . $fix . '</p>';
   }
   if( isset($_GET['debug']) && isset($config['guru_meditation_loader']) ) {
     print '<p class="log">🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC<br />💭 ';
