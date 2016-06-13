@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Database module - database config v0.0.1
+<?php // Attogram Framework - Database module - database config v0.0.2
 
 namespace Attogram;
 
