@@ -77,7 +77,7 @@ class attogram
       include_once($config_file); // any $config['setting'] = value;
     }
     $this->remember('modules_dir', @$config['modules_dir'], '../modules');
-    $this->load_module_configs(); // Load modules configuration files, if available
+    attogram_fs::load_module_configs( $this->modules_dir ); // Load modules configuration files, if available
     $this->remember('attogram_directory', @$config['attogram_directory'], '../');
     $this->remember('templates_dir', @$config['templates_dir'], '../templates');
     $this->remember('fof', @$config['fof'], '../templates/404.php');
@@ -189,23 +189,6 @@ class attogram
       $this->error404('No Swimming in the deep end');
     }
   }
-
-  /**
-   * load_module_configs()
-   * Examines each module for a directory named 'configs'
-   * and loads all *.php files in that directory
-   * @return void
-   */
-  function load_module_configs() {
-    global $config;
-    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'configs' );
-    if( !$dirs ) {
-      $this->log->debug('load_module_configs: No module configs found');
-    }
-    foreach( $dirs as $d ) {
-      attogram_fs::include_all_php_files_in_directory( $d );
-    }
-  } // end function load_module_configs()
 
   /**
    * sessioning() - start the session, logoff if requested

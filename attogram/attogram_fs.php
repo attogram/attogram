@@ -61,7 +61,7 @@ class attogram_fs
    * @param string $type (optional) The file extension to allow. Defaults to '.php'
    * @return bool
    */
-  public static function is_readable_file( $file=false, $type='.php' )
+  public static function is_readable_file( $file = false, $type = '.php' )
   {
     if( !$file || !is_file($file) || !is_readable($file) ) {
       return false;
@@ -82,6 +82,24 @@ class attogram_fs
   public static function get_skip_files()
   {
     return array( '.', '..', '.htaccess' );
+  }
+
+  /**
+   * Examines each module for a subdirectory named 'configs'
+   * and includes all *.php files from that directory
+   * @param string $modules_directory
+   * @return void
+   */
+  public function load_module_configs( $modules_directory )
+  {
+    global $config;
+    $dirs = self::get_all_subdirectories( $modules_directory, 'configs' );
+    if( !$dirs ) {
+      return;
+    }
+    foreach( $dirs as $d ) {
+      attogram_fs::include_all_php_files_in_directory( $d );
+    }
   }
 
 } // end class attogram_fs
