@@ -109,7 +109,7 @@ class attogram
 
   const ATTOGRAM_VERSION = '0.5.9-dev';
 
-  public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
+  public $start_time, $debug, $log, $skip_files, $project_github;
   public $attogram_directory, $modules_dir, $templates_dir;
   public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri;
@@ -127,7 +127,6 @@ class attogram
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
     $this->skip_files = attogram_fs::get_skip_files();
     $this->project_github = 'https://github.com/attogram/attogram';
-    $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
 
     $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
@@ -137,7 +136,7 @@ class attogram
     $this->check_depth(); // is URI short enough?
     $this->get_includes(); // load any files in ./functions/
     $this->sessioning(); // start sessions
-    // dev -- inject db object into attogram_utils::__construct instead...
+    // dev -- inject db object into __construct instead...
     if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
       $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
       $this->log->debug('__construct: sqlite_database init OK');
@@ -291,12 +290,10 @@ class attogram
   function load_module_configs() {
     global $config;
     $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'configs' );
-    //$this->log->debug('load_module_configs', $dirs);
     if( !$dirs ) {
       $this->log->debug('load_module_configs: No module configs found');
     }
     foreach( $dirs as $d ) {
-      //$this->log->debug('load_module_configs: d='. $d);
       attogram_fs::include_all_php_files_in_directory( $d );
     }
   } // end function load_module_configs()
@@ -580,7 +577,7 @@ class attogram
       return;
     }
     // Default page footer
-    print '<hr /><p>Powered by <a href="https://github.com/attogram/attogram">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
+    print '<hr /><p>Powered by <a href="' . $this->project_github . '">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
     print '</body></html>';
     $this->log->error('missing page_footer ' . $file . ' - using default footer');
   }
