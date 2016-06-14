@@ -86,6 +86,9 @@ class attogram
   {
     global $config; // The Global Configuration Array
 
+    if( !isset($config['admins']) ) { $config['admins'] = array('127.0.0.1','::1'); }
+    $this->remember('admins', $config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
+    
     if( !isset($config['debug']) ) { $config['debug'] = false; }
     $this->remember('debug', $config['debug'], false);
     if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
@@ -124,9 +127,6 @@ class attogram
       $this->depth['*'] = 1;
       $this->log->debug('awaken: set default depth: 1');
     }
-
-    if( !isset($config['admins']) ) { $config['admins'] = array('127.0.0.1','::1'); }
-    $this->remember('admins', $config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
 
   } // end function load_config()
 
