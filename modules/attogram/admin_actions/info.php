@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.2
+<?php // Attogram Framework - Site Info v0.1.4
 
 namespace Attogram;
 
@@ -14,17 +14,12 @@ $info['PHP Version'] = phpversion();
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
 $info['debug'] = ( $this->debug ? 'true' : '<code>false</code>' );
 $info['project_github'] = '<a href="' . $this->project_github . '">' . $this->project_github . '</a>';
-$info['project_packagist'] = '<a href="' . $this->project_packagist . '">' . $this->project_packagist . '</a>';
 
 $info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
 $info['site_name'] = $this->site_name;
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>Top Level</code>' );
-//$info['pathInfo'] = $this->pathInfo;
-//$info['requestUri'] = $this->requestUri;
-//$info['uri'] = implode($this->uri,',');
-//$info['depth'] =  info_array($this->depth,$keyed=1);
-//$info['force_slash_exceptions'] =  info_array($this->force_slash_exceptions);
+
 $robotstxt = $this->get_site_url() . '/robots.txt';
 $info['robots.txt'] = '<a href="' . $robotstxt . '">' . $robotstxt . '</a>';
 $sitemapxml = $this->get_site_url() . '/sitemap.xml';
@@ -40,7 +35,7 @@ $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-ope
 $info['attogram_directory'] = info_dir($this->attogram_directory);
 $info['modules_dir'] = info_dir($this->modules_dir);
 $info['templates_dir'] = info_dir($this->templates_dir);
-$info['skip_files'] = info_array($this->skip_files);
+$info['skip_files'] = info_array(attogram_fs::get_skip_files());
 
 $info['<a name="files"></a><h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
 //$info['action'] = info_file($this->action);
