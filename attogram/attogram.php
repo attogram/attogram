@@ -17,6 +17,90 @@
 
 namespace Attogram;
 
+/**
+ * Filesystem related functions
+ */
+class attogram_fs
+{
+
+  /**
+   * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name
+   * @param string $dir The directory to search within (ie: modules directory)
+   * @param string name The name of the subdirectories to find
+   * @return array
+   */
+  public static function get_all_subdirectories( $dir, $name )
+  {
+    if( !isset($dir) || !$dir || !is_string($dir) ) {
+      return array();
+    }
+    if( !is_dir($dir) || !is_readable($dir) ) {
+      return array();
+    }
+    $r = array();
+    foreach( array_diff( scandir($dir), self::get_skip_files() ) as $d ) {
+      $md = $dir . '/' . $d;
+      if( !is_dir($md) ) {
+        continue;
+      }
+      $md .= '/' . $name;
+      if( !is_dir($md) || !is_readable($md) ) {
+        continue;
+      }
+      $r[] = $md;
+    }
+    return $r;
+  } // end function get_all_subdirectories()
+
+  /**
+   * include_once all php files in a specific directory
+   * @param string $dir The directory to search
+   * @return void
+   */
+  public static function include_all_php_files_in_directory( $dir )
+  {
+    if( !is_dir($dir) || !is_readable($dir) ) {
+      return;
+    }
+    foreach( array_diff( scandir($dir), self::get_skip_files() ) as $f ) {
+      $ff = $dir . '/' . $f;
+      if( self::is_readable_file( $ff, '.php' ) ) {
+        include_once($ff);
+      }
+    }
+  } // end function include_all_php_files_in_directory()
+
+  /**
+   * Tests if is a file exist, is readable, and is of a certain type.
+   * @param string $file The name of the file to test
+   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   * @return bool
+   */
+  public static function is_readable_file( $file=false, $type='.php' )
+  {
+    if( !$file || !is_file($file) || !is_readable($file) ) {
+      return false;
+    }
+    if( !$type || $type == '' || !is_string($type) ) { // input error
+      return false;
+    }
+    if( preg_match( '/' . $type . '$/', $file ) ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * get an array of filenames to skip
+   * @return array
+   */
+  public static function get_skip_files()
+  {
+    return array( '.', '..', '.htaccess' );
+  }
+
+} // end class attogram_files
+
 class attogram_utils
 {
 
@@ -32,7 +116,7 @@ class attogram_utils
     $this->start_time = microtime(1);
     $this->debug = $debug;
     $this->log = $log;
-    $this->skip_files = array('.','..','.htaccess');
+    $this->skip_files = attogram_fs::get_skip_files();
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
     $this->log->debug('START attogram_utils: debug=' . $this->debug . ' log=' . get_class($this->log));
@@ -54,72 +138,6 @@ class attogram_utils
     $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
   }
 
-  /**
-   * get_all_subdirectories()
-   * @param string $dir The directory to search within (ie: modules directory)
-   * @param string name The name of the subdirectories to find
-   * @return array
-   */
-  public function get_all_subdirectories( $dir, $name ) {
-    if( !isset($dir) || !$dir || !is_string($dir)) {
-      $this->log->error('get_all_subdirectories: UNDEFINED dir:' . print_r($dir,1));
-      return array();
-    }
-    if( !is_dir($dir) || !is_readable($dir) ) {
-      $this->log->error('get_all_subdirectories: UNREADABLE dir=' . $dir);
-      return array();
-    }
-    $r = array();
-    foreach( array_diff(scandir($dir), $this->skip_files) as $d ) {
-      $md = $dir . '/' . $d;
-      if( !is_dir($md) ) { continue; }
-      $md .= '/' . $name;
-      if( !is_dir($md) || !is_readable($md) ) { continue; }
-      $r[] = $md;
-    }
-    return $r;
-  } // end function get_all_subdirectories()
-
-  /**
-   * include_all_php_files_in_directory()
-   * @param string $dir The directory to search
-   * @return void
-   */
-  public function include_all_php_files_in_directory( $dir ) {
-    if( !is_dir($dir) || !is_readable($dir)) {
-      $this->log->error('include_all_php_files_in_directory: Directory not found: ' . $dir);
-      return;
-    }
-    //$this->log->debug('include_all_php_files_in_directory: dir = ' . $dir);
-    foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
-      $ff = $dir . '/' . $f;
-      if( $this->is_readable_file($ff,'.php') ) {
-        $this->log->debug('include: ' . $ff);
-        include_once($ff);
-      } else {
-        $this->log->error('include_all_php_files_in_directory: can not include: ' . $ff);
-      }
-    }
-  } // end function include_all_php_files_in_directory()
-
-  /**
-   * Tests if is a file exist, is readable, and is of a certain type.
-   * @param string $file The name of the file to test
-   * @param string $type (optional) The file extension to allow. Defaults to '.php'
-   * @return bool
-   */
-  public function is_readable_file( $file=false, $type='.php' ) {
-    if( !$file || !is_file($file) || !is_readable($file) ) {
-      return false;
-    }
-    if( !$type || $type == '' || !is_string($type) ) { // error
-      return false;
-    }
-    if( preg_match('/' . $type . '$/',$file) ) {
-      return true;
-    }
-    return false;
-  }
 
 } // end class attogram_utils
 
@@ -172,7 +190,7 @@ class attogram extends attogram_utils
     if( !isset($config) || !is_array($config) ) {
       $config = array();
     }
-    if( !$this->is_readable_file($config_file, '.php') ) { // Load the main configuration file, if available
+    if( !attogram_fs::is_readable_file($config_file, '.php') ) { // Load the main configuration file, if available
       $this->log->notice('awaken: config file not found, using defaults.');
     } else {
       $this->log->debug('awaken: include: ' . $config_file);
@@ -287,14 +305,14 @@ class attogram extends attogram_utils
    */
   function load_module_configs() {
     global $config;
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'configs' );
+    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'configs' );
     //$this->log->debug('load_module_configs', $dirs);
     if( !$dirs ) {
       $this->log->debug('load_module_configs: No module configs found');
     }
     foreach( $dirs as $d ) {
       //$this->log->debug('load_module_configs: d='. $d);
-      $this->include_all_php_files_in_directory( $d );
+      attogram_fs::include_all_php_files_in_directory( $d );
     }
   } // end function load_module_configs()
 
@@ -405,7 +423,7 @@ class attogram extends attogram_utils
    */
   function do_markdown( $file ) {
     $title = $content = '';
-    if( $this->is_readable_file($file, '.md' ) ) {
+    if( attogram_fs::is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
       if( $page === false ) {
           $this->log->error('DO_MARKDOWN: can not get file');
@@ -443,7 +461,7 @@ class attogram extends attogram_utils
     if( is_array($this->actions) ) {
       return $this->actions;
     }
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'actions');
+    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'actions');
     if( !$dirs ) {
       $this->log->debug('get_actions: No module actions found');
     }
@@ -464,7 +482,7 @@ class attogram extends attogram_utils
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'admin_actions');
+    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'admin_actions');
     if( !$dirs ) {
       $this->log->debug('get_admin_actions: No module admin actions found');
     }
@@ -489,9 +507,9 @@ class attogram extends attogram_utils
     }
     foreach( array_diff(scandir($dir), $this->skip_files) as $f ) {
       $file = $dir . "/$f";
-      if( $this->is_readable_file($file, '.php') ) { // PHP files
+      if( attogram_fs::is_readable_file($file, '.php') ) { // PHP files
         $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
-      } elseif( $this->is_readable_file($file, '.md') ) { // Markdown files
+      } elseif( attogram_fs::is_readable_file($file, '.md') ) { // Markdown files
         $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md'
         );
       }
@@ -504,12 +522,12 @@ class attogram extends attogram_utils
    * @return void
    */
   function get_includes() {
-    $dirs = $this->get_all_subdirectories( $this->modules_dir, 'includes');
+    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'includes');
     if( !$dirs ) {
       $this->log->debug('get_includes: No module functions found');
     }
     foreach( $dirs as $d ) {
-      $this->include_all_php_files_in_directory( $d );
+      attogram_fs::include_all_php_files_in_directory( $d );
     }
   } // end function get_includes()
 
@@ -553,7 +571,7 @@ class attogram extends attogram_utils
    */
   function page_header( $title='' ) {
     $file = $this->templates_dir . '/header.php';
-    if( $this->is_readable_file($file,'.php') ) {
+    if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
       $this->log->debug('page_header, title: ' . $title);
       return;
@@ -571,7 +589,7 @@ class attogram extends attogram_utils
    */
   function page_footer() {
     $file = $this->templates_dir . '/footer.php';
-    if( $this->is_readable_file($file,'.php') ) {
+    if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
       $this->log->debug('page_footer');
       return;
@@ -588,7 +606,7 @@ class attogram extends attogram_utils
    */
   function error404( $error='' ) {
     header('HTTP/1.0 404 Not Found');
-    if( $this->is_readable_file($this->fof, '.php') ) {
+    if( attogram_fs::is_readable_file($this->fof, '.php') ) {
       include($this->fof);
       exit;
     }
