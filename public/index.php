@@ -53,7 +53,7 @@ $guru->tranquility();            // Load the project!
 ********************************************************************************
 ********************************************************************************
 
-Guru Meditation Loader v0.0.2
+Guru Meditation Loader v0.0.3
 
 Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
 
@@ -71,12 +71,12 @@ class guru_meditation_loader
   /**
    * set the Guru vars
    */
-  function __construct( string $project_name,
-                        string $config_file,
-                        string $project_classes,
-                        string $default_autoloader,
-                        string $vendor_download,
-                        array  $required_classes ) {
+  function __construct( $project_name,
+                       $config_file,
+                       $project_classes,
+                       $default_autoloader,
+                       $vendor_download,
+                       array $required_classes ) {
     $this->project_name       = $project_name;
     $this->config_file        = $config_file;
     $this->project_classes    = $project_classes;
@@ -218,7 +218,7 @@ class guru_meditation_loader
     $config['guru_meditation_loader'][] = $msg;
   }
 
-  function guru_meditation_error( string $error='', string $fix='' ) {
+  function guru_meditation_error( $error='', $fix='' ) {
     global $config;
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
