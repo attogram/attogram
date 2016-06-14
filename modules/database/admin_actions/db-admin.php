@@ -1,4 +1,4 @@
-<?php // Attogram Framework - phpLiteAdmin mod v0.0.1
+<?php // Attogram Framework - phpLiteAdmin mod v0.0.2
 
 //
 //	Project: phpLiteAdmin (https://bitbucket.org/phpliteadmin/public)
@@ -443,7 +443,10 @@ if (isset($_GET['resource'])) {
 
 // don't mess with this - required for the login session
 ini_set('session.cookie_httponly', '1');
-@session_start(); // Attogram - session already started
+
+if( !isset($_SESSION) ) { // Attogram - session already started
+	session_start();
+}
 
 if($debug==true)
 {
