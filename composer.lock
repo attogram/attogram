@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "be69f737f0afe43ceb69068bf0823aca",
-    "content-hash": "c6893223bcfdf4caad279780076ca41f",
+    "hash": "88f662463b983f33336d29dc3600867f",
+    "content-hash": "6048d2a26847e901f06f074664943c17",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -282,7 +282,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9 || ^7.0",
+        "php": ">=5.3.3 || ^7.0",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*"
     },
