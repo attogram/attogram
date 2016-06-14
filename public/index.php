@@ -65,8 +65,13 @@ Open Source Dual License: (MIT or GPL-3.0+) at your choosing
 class guru_meditation_loader
 {
 
-  public $project_name, $config_file, $project_classes,
-         $default_autoloader, $vendor_download, $required_classes, $autoloader;
+  public $project_name;
+  public $config_file;
+  public $project_classes;
+  public $default_autoloader;
+  public $vendor_download;
+  public $required_classes;
+  public $autoloader;
 
   /**
    * set the Guru vars
@@ -76,7 +81,8 @@ class guru_meditation_loader
                        $project_classes,
                        $default_autoloader,
                        $vendor_download,
-                       array $required_classes ) {
+                       array $required_classes )
+  {
     $this->project_name       = $project_name;
     $this->config_file        = $config_file;
     $this->project_classes    = $project_classes;
@@ -89,7 +95,8 @@ class guru_meditation_loader
   /**
    * load the config file
    */
-  function meditate() {
+  function meditate()
+  {
     global $config;
     if( is_file($this->config_file) ) {
       if( !is_readable($this->config_file) ) {
@@ -119,7 +126,8 @@ class guru_meditation_loader
   /**
    * run the vendor autoloader
    */
-  function expand_consciousness() {
+  function expand_consciousness()
+  {
     if( isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader) ) {
       $included = ( include($this->autoloader) );
       if( !$included ) {
@@ -139,7 +147,8 @@ class guru_meditation_loader
     );
   } // end function expand_consciousness()
 
-  function focus_mind() {
+  function focus_mind()
+  {
     if( !is_dir($this->project_classes) ) {
       $this->guru_meditation_error('Missing project directory: ' . $this->project_classes);
     }
@@ -155,7 +164,8 @@ class guru_meditation_loader
     }
   } // end function focus_mind()
 
-  function inner_awareness() {
+  function inner_awareness()
+  {
     $missing = array();
     foreach( $this->required_classes as $c ) {
       if( !class_exists($c) ) {
@@ -170,7 +180,8 @@ class guru_meditation_loader
     $this->guru_meditation_error( 'Required Classes Missing: ' . implode(', ', $missing));
   } // end function inner_awareness()
 
-  function tranquility() {
+  function tranquility()
+  {
       global $config;
       $this->debug('tranquility');
 
@@ -213,12 +224,14 @@ class guru_meditation_loader
 
   } // end function tranquility()
 
-  function debug( $msg ) {
+  function debug( $msg )
+  {
     global $config;
     $config['guru_meditation_loader'][] = $msg;
   }
 
-  function guru_meditation_error( $error='', $fix='' ) {
+  function guru_meditation_error( $error='', $fix='' )
+  {
     global $config;
     print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
