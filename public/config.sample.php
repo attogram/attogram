@@ -7,7 +7,7 @@ global $config;
 // Uncomment to change default values...
 
 // The Attogram installation directory, with trailing slash
-// $config['attogram_directory'] = '../';
+// $config['attogram_dir'] = '../';
 
 // Debug/logging - true or false
 // $config['debug'] = false;

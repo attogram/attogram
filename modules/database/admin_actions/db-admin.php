@@ -48,7 +48,7 @@
 $password = 'attogram';
 
 //directory relative to this file to search for databases (if false, manually list databases in the $databases variable)
-$directory = $this->attogram_directory . 'db/';
+$directory = $this->attogram_dir . 'db/';
 
 //whether or not to scan the subdirectories of the above directory infinitely deep
 $subdirectories = false;

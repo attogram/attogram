@@ -9,7 +9,7 @@ $info = array();
 
 $info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = self::ATTOGRAM_VERSION;
-$info['Attogram Directory'] = info_dir($this->attogram_directory);
+$info['Attogram Directory'] = info_dir($this->attogram_dir);
 $info['PHP Version'] = phpversion();
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
 $info['debug'] = ( $this->debug ? 'true' : '<code>false</code>' );
@@ -32,7 +32,7 @@ $info['actions'] = info_actions($this->actions, $this->depth, $this->force_slash
 $info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this->force_slash_exceptions);
 
 $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
-$info['attogram_directory'] = info_dir($this->attogram_directory);
+$info['attogram_dir'] = info_dir($this->attogram_dir);
 $info['modules_dir'] = info_dir($this->modules_dir);
 $info['templates_dir'] = info_dir($this->templates_dir);
 $info['skip_files'] = info_array(attogram_fs::get_skip_files());

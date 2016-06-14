@@ -40,19 +40,24 @@ class attogram_fs
   /**
    * include_once all php files in a specific directory
    * @param string $dir The directory to search
-   * @return void
+   * @return int The number of files successfully loaded
    */
   public static function include_all_php_files_in_directory( $dir )
   {
+    $count = 0;
     if( !is_dir($dir) || !is_readable($dir) ) {
-      return;
+      return $count;
     }
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $f ) {
       $ff = $dir . '/' . $f;
       if( self::is_readable_file( $ff, '.php' ) ) {
-        include_once($ff);
+        $included = (include($ff));
+        if( $included ) {
+            $count++;
+        }
       }
     }
+    return $count;
   } // end function include_all_php_files_in_directory()
 
   /**
@@ -87,19 +92,21 @@ class attogram_fs
   /**
    * Examines each module for a subdirectory named 'configs'
    * and includes all *.php files from that directory
-   * @param string $modules_directory
-   * @return void
+   * @param  string $modules_directory
+   * @return int The number of files successfully loaded
    */
   public static function load_module_configs( $modules_directory )
   {
     global $config;
+    $count = 0;
     $dirs = self::get_all_subdirectories( $modules_directory, 'configs' );
     if( !$dirs ) {
-      return;
+      return $count;
     }
     foreach( $dirs as $d ) {
-      attogram_fs::include_all_php_files_in_directory( $d );
+      $count += attogram_fs::include_all_php_files_in_directory( $d );
     }
+    return $count;
   }
 
   /**
@@ -110,13 +117,16 @@ class attogram_fs
    */
   public static function load_module_includes( $modules_directory )
   {
-    $dirs = self::get_all_subdirectories( $modules_directory , 'includes');
+    global $config;
+    $count = 0;
+    $dirs = self::get_all_subdirectories( $modules_directory, 'includes' );
     if( !$dirs ) {
-      return;
+      return $count;
     }
     foreach( $dirs as $d ) {
-      self::include_all_php_files_in_directory( $d );
+      $count += attogram_fs::include_all_php_files_in_directory( $d );
     }
+    return $count;
   } // end function get_includes()
 
 } // end class attogram_fs

@@ -22,11 +22,11 @@ class attogram
 
   const ATTOGRAM_VERSION = '0.5.9';
 
-  public $start_time;     // (float) microsecond time of awakening
+  public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
   public $log;           // (object) PSR3 Logger object
   public $project_github;     // (string) URL to Attogram Framework GitHub Project
-  public $attogram_directory; // (string) path to this installation
+  public $attogram_dir; // (string) path to this installation
   public $modules_dir;   // (string) path to the modules directory
   public $templates_dir; // (string) path to the templates directory
   public $site_name;     // (string) The Site Name
@@ -102,8 +102,8 @@ class attogram
     $this->log->debug('awaken: loading module configs');
     attogram_fs::load_module_configs( $this->modules_dir ); // Load modules configuration files, if available
 
-    if( !isset($config['attogram_directory']) ) { $config['attogram_directory'] = '../'; }
-    $this->remember('attogram_directory', $config['attogram_directory'], '../');
+    if( !isset($config['attogram_dir']) ) { $config['attogram_dir'] = '../'; }
+    $this->remember('attogram_dir', $config['attogram_dir'], '../');
 
     if( !isset($config['templates_dir']) ) { $config['templates_dir'] = '../templates'; }
     $this->remember('templates_dir', $config['templates_dir'], '../templates');
