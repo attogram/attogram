@@ -1,8 +1,8 @@
-<?php // Attogram Framework - Home Page v0.0.2
+<?php // Attogram Framework - Home Page v0.0.3
 
 namespace Attogram;
 
-$this->page_header('Attogram Framework v' . ATTOGRAM_VERSION);
+$this->page_header('Attogram Framework v' . self::ATTOGRAM_VERSION);
 
 ?>
 
