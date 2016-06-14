@@ -154,7 +154,7 @@ class guru_meditation_loader
       if( !$included ) {
         $this->guru_meditation_error('Config file exists, but include failed: ' . $this->config_file);
       }
-      $this->debug('meditate: config OK: ' . $this->config_file);
+      $this->debug('meditate: OK: ' . $this->config_file);
     } else {
       $this->debug('meditate: config_file is NOT a file');
     }
@@ -175,7 +175,10 @@ class guru_meditation_loader
     global $config;
     //if( !class_exists('attogram_fs') ) ....
     $count = attogram_fs::load_module_configs( $config['modules_dir'] );
-    $this->debug('meditate_deeper: ' . sizeof($count) . ' module configs :<br />' . implode( '<br />', $count ) );
+    //$this->debug('meditate_deeper: ' . sizeof($count) . ' module configs :<br />' . implode( '<br />', $count ) );
+    foreach( $count as $c ) {
+      $this->debug('meditate_deeper: OK: ' . $c);
+    }
   }
 
   /**
@@ -224,7 +227,9 @@ class guru_meditation_loader
     global $config;
     //if( !class_exists('attogram_fs') ) ....
     $count = attogram_fs::load_module_includes( $config['modules_dir'] );
-    $this->debug('focus_inner_eye: ' . sizeof($count) . ' module includes:<br />' . implode( '<br />', $count ) );
+    foreach( $count as $c ) {
+      $this->debug('focus_inner_eye: OK: ' . $c);
+    }
   }
 
   function inner_awareness()
