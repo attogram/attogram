@@ -102,4 +102,21 @@ class attogram_fs
     }
   }
 
+  /**
+   * Examines each module for a subdirectory named 'includes'
+   * and includes all *.php files from that directory
+   * @param string $modules_directory
+   * @return void
+   */
+  public function load_module_includes( $modules_directory )
+  {
+    $dirs = self::get_all_subdirectories( $modules_directory , 'includes');
+    if( !$dirs ) {
+      return;
+    }
+    foreach( $dirs as $d ) {
+      self::include_all_php_files_in_directory( $d );
+    }
+  } // end function get_includes()
+
 } // end class attogram_fs

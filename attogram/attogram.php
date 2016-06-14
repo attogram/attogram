@@ -46,7 +46,7 @@ class attogram
     $this->set_uri();
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
-    $this->get_includes(); // load any files in ./functions/
+    attogram_fs::load_module_includes( $this->modules_dir ); // Load modules includes files, if available
     $this->sessioning(); // start sessions
     // dev -- inject db object into __construct instead...
     if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
@@ -390,20 +390,6 @@ class attogram
     }
     return $r;
   }
-
-  /**
-   * get_includes() - include all PHP files, from all modules' includes/ directory
-   * @return void
-   */
-  function get_includes() {
-    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'includes');
-    if( !$dirs ) {
-      $this->log->debug('get_includes: No module functions found');
-    }
-    foreach( $dirs as $d ) {
-      attogram_fs::include_all_php_files_in_directory( $d );
-    }
-  } // end function get_includes()
 
   /**
    * is_admin() - is access from an admin IP?
