@@ -36,4 +36,4 @@ global $config;
 // End Slash Settings
 // By default, a slash / is forced onto the end of all URLs, if not already present.
 // To allow slash-less ending URLs, list the action names here:
-// $config['force_slash_exceptions'][] = 'action_name';
+// $config['no_end_slash'][] = 'action_name';

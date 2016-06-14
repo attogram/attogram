@@ -28,8 +28,8 @@ $info['sitemap.xml'] = '<a href="' . $sitemapxml . '">' . $sitemapxml . '</a>';
 $info['admins'] = info_array($this->admins);
 
 $info['<a name="actions"></a><h3><span class="glyphicon glyphicon-play"></span> <em>Actions:</em></h3>'] = '';
-$info['actions'] = info_actions($this->actions, $this->depth, $this->force_slash_exceptions);
-$info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this->force_slash_exceptions);
+$info['actions'] = info_actions($this->actions, $this->depth, $this->no_end_slash);
+$info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this->no_end_slash);
 
 $info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
 $info['attogram_dir'] = info_dir($this->attogram_dir);

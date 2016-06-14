@@ -80,7 +80,7 @@ PHP pages
 * Depth settings in `./public/config.php`
   * `$config['depth']['insert-action-name-here']`
 * End Slash settings in `./public/config.php`
-  * `$config['force_slash_exceptions'][] = 'insert-action-name-here'`
+  * `$config['no_end_slash'][] = 'insert-action-name-here'`
 
 Markdown pages
 ==============

@@ -5,4 +5,4 @@ namespace Attogram;
 global $config;
 
 $config['depth']['whatis'] = 2;
-$config['force_slash_exceptions'][] = 'whatis';
+$config['no_end_slash'][] = 'whatis';

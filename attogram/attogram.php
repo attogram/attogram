@@ -31,7 +31,7 @@ class attogram
   public $templates_dir; // (string) path to the templates directory
   public $site_name;     // (string) The Site Name
   public $depth;         // (array) Allowed depth settings
-  public $force_slash_exceptions; // (array) actions to NOT force slash at end
+  public $no_end_slash; // (array) actions to NOT force slash at end
   public $fof;           // (string) path + filename of 404 Not Found template
   public $request;       // (object) Symfony HttpFoundation Request object
   public $host;          // (string) Client Hostname
@@ -114,8 +114,8 @@ class attogram
     if( !isset($config['site_name']) ) { $config['site_name'] = 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>'; }
     $this->remember('site_name', $config['site_name'], 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>');
 
-    if( !isset($config['force_slash_exceptions']) ) { $config['force_slash_exceptions'] = array(); }
-    $this->remember('force_slash_exceptions', $config['force_slash_exceptions'], array() );
+    if( !isset($config['no_end_slash']) ) { $config['no_end_slash'] = array(); }
+    $this->remember('no_end_slash', $config['no_end_slash'], array() );
 
     if( !isset($config['depth']) ) { $config['depth'] = array(); }
     $this->remember('depth', $config['depth'], array() ); // Depth settings
@@ -190,7 +190,7 @@ class attogram
   public function end_slash()
   {
     if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
-      if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
+      if( is_array($this->no_end_slash) && !in_array( $this->uri[0], $this->no_end_slash ) ) {
          // This action IS NOT excepted from force slash at end
         $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
@@ -198,7 +198,7 @@ class attogram
         exit;
       }
     } else { // Yes slash at end of url
-      if( is_array($this->force_slash_exceptions) && in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
+      if( is_array($this->no_end_slash) && in_array( $this->uri[0], $this->no_end_slash ) ) {
         // This action IS excepted from force slash at end
         $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
