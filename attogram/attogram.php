@@ -120,7 +120,7 @@ class attogram
    * @param obj $log PSR-3 compliant log object
    * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log, bool $debug=false ) {
+  function __construct( $log, $debug=false ) {
     $this->start_time = microtime(1);
     $this->debug = $debug;
     $this->log = $log;
@@ -220,13 +220,10 @@ class attogram
   }
 
   /**
-   * set_uri()
+   * set uri array
    */
   function set_uri() {
-    //$this->log->debug('set_uri: pathInfo=' . $this->pathInfo);
     $this->uri = explode('/', $this->pathInfo);
-    //$this->log->debug('raw uri:', $this->uri);
-    //$this->log->debug('sizeof uri=' . sizeof($this->uri));
     if( sizeof($this->uri) == 1 ) {
       $this->log->debug('set_uri', $this->uri);
       return; // super top level request
