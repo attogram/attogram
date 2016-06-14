@@ -1,15 +1,17 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.5
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.0.6
 
 namespace Attogram;
 
 /**
  * Attogram sqlite_database
  */
-class sqlite_database extends attogram_utils
+class sqlite_database
 {
 
   public $db_name;
   public $modules_directory;
+  public $log;
+  public $debug;
   public $db;
 
   /**
@@ -22,10 +24,10 @@ class sqlite_database extends attogram_utils
    */
   function __construct( $db_name, $modules_directory, $log, $debug=false )
   {
-    parent::__construct( $log );
-    $this->debug = $debug;
-    $this->modules_directory = $modules_directory;
     $this->db_name = $db_name;
+    $this->modules_directory = $modules_directory;
+    $this->log = $log;
+    $this->debug = $debug;
   }
 
   /**

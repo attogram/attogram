@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.3
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.4
 
 namespace Attogram;
 
@@ -9,7 +9,7 @@ $guru = new guru_meditation_loader( // wake up the guru
   $vendor_autoloader = '../vendor/autoload.php',
   $vendor_download   = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes  = array( '\Attogram\attogram',
-                              '\Attogram\attogram_utils',
+                              '\Attogram\attogram_fs',
                               '\Attogram\logger',
                               '\Monolog\Formatter\LineFormatter',
                               '\Monolog\Handler\BufferHandler',

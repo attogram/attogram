@@ -101,52 +101,15 @@ class attogram_fs
 
 } // end class attogram_files
 
-class attogram_utils
+/**
+ * The Attogram Framework
+ */
+class attogram
 {
 
   const ATTOGRAM_VERSION = '0.5.8';
 
   public $start_time, $debug, $log, $skip_files, $project_github, $project_packagist;
-
-  /**
-   * @param obj $log PSR-3 compliant log object
-   * @param bool $debug (optional) Debug True/False.  Defaults to False.
-   */
-  public function __construct( $log, bool $debug=false ) {
-    $this->start_time = microtime(1);
-    $this->debug = $debug;
-    $this->log = $log;
-    $this->skip_files = attogram_fs::get_skip_files();
-    $this->project_github = 'https://github.com/attogram/attogram';
-    $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
-    $this->log->debug('START attogram_utils: debug=' . $this->debug . ' log=' . get_class($this->log));
-  }
-
-  /**
-   * set a system configuration variable
-   * @param string $var_name     The name of the variable
-   * @param string $config_val   The setting for the variable
-   * @param string $default_val  The default setting for the variable, if $config_val is empty
-   * @return void
-   */
-  public function remember( $var_name, $config_val='', $default_val ) {
-    if( $config_val ) {
-      $this->{$var_name} = $config_val;
-    } else {
-      $this->{$var_name} = $default_val;
-    }
-    $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
-  }
-
-
-} // end class attogram_utils
-
-/**
- * attogram class - The Attogram Framework
- */
-class attogram extends attogram_utils
-{
-
   public $attogram_directory, $modules_dir, $templates_dir;
   public $site_name, $depth, $force_slash_exceptions, $fof;
   public $request, $host, $clientIp, $pathInfo, $requestUri, $path, $uri;
@@ -158,8 +121,14 @@ class attogram extends attogram_utils
    * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
   function __construct( $log, bool $debug=false ) {
-    parent::__construct( $log, $debug );
+    $this->start_time = microtime(1);
+    $this->debug = $debug;
+    $this->log = $log;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
+    $this->skip_files = attogram_fs::get_skip_files();
+    $this->project_github = 'https://github.com/attogram/attogram';
+    $this->project_packagist = 'https://packagist.org/packages/attogram/attogram-framework';
+
     $this->awaken('config.php');
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
@@ -181,7 +150,7 @@ class attogram extends attogram_utils
   } // end function __construct()
 
   /**
-   * awaken()
+   * Awaken The Attogram Framework
    * @param string $config_file (optional)
    * @return void
    */
@@ -221,6 +190,22 @@ class attogram extends attogram_utils
       $this->log->debug('awaken: Admin Debug turned ON');
     }
   } // end function load_config()
+
+  /**
+   * set a system configuration variable
+   * @param string $var_name     The name of the variable
+   * @param string $config_val   The setting for the variable
+   * @param string $default_val  The default setting for the variable, if $config_val is empty
+   * @return void
+   */
+  public function remember( $var_name, $config_val='', $default_val ) {
+    if( $config_val ) {
+      $this->{$var_name} = $config_val;
+    } else {
+      $this->{$var_name} = $default_val;
+    }
+    $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
+  }
 
   /**
    * set_request()
