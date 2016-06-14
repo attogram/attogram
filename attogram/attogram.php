@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.0.5
+<?php // Attogram Framework - attogram class v0.0.6
 
 namespace Attogram;
 
@@ -96,15 +96,32 @@ class attogram
       $this->log->debug('awaken: include: ' . $config_file);
       include_once($config_file); // any $config['setting'] = value;
     }
-    $this->remember('modules_dir', @$config['modules_dir'], '../modules');
+
+    if( !isset($config['modules_dir']) ) { $config['modules_dir'] = '../modules'; }
+    $this->remember('modules_dir', $config['modules_dir'], '../modules');
+    $this->log->debug('awaken: loading module configs');
     attogram_fs::load_module_configs( $this->modules_dir ); // Load modules configuration files, if available
-    $this->remember('attogram_directory', @$config['attogram_directory'], '../');
-    $this->remember('templates_dir', @$config['templates_dir'], '../templates');
-    $this->remember('fof', @$config['fof'], '../templates/404.php');
-    $this->remember('db_name', @$config['db_name'], '../db/global');
-    $this->remember('site_name', @$config['site_name'], 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>');
-    $this->remember('force_slash_exceptions', @$config['force_slash_exceptions'], array() );
-    $this->remember('depth', @$config['depth'], $this->depth ); // Depth settings
+
+    if( !isset($config['attogram_directory']) ) { $config['attogram_directory'] = '../'; }
+    $this->remember('attogram_directory', $config['attogram_directory'], '../');
+
+    if( !isset($config['templates_dir']) ) { $config['templates_dir'] = '../templates'; }
+    $this->remember('templates_dir', $config['templates_dir'], '../templates');
+
+    if( !isset($config['fof']) ) { $config['fof'] = '../templates/404.php'; }
+    $this->remember('fof', $config['fof'], '../templates/404.php');
+
+    if( !isset($config['db_name']) ) { $config['db_name'] = '../db/global'; }
+    $this->remember('db_name', $config['db_name'], '../db/global');
+
+    if( !isset($config['site_name']) ) { $config['site_name'] = 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>'; }
+    $this->remember('site_name', $config['site_name'], 'Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small>');
+
+    if( !isset($config['force_slash_exceptions']) ) { $config['force_slash_exceptions'] = array(); }
+    $this->remember('force_slash_exceptions', $config['force_slash_exceptions'], array() );
+
+    if( !isset($config['depth']) ) { $config['depth'] = array(); }
+    $this->remember('depth', $config['depth'], array() ); // Depth settings
     if( !isset($this->depth['']) ) { // check:  homepage depth defined
       $this->depth[''] = 1;
       $this->log->debug('awaken: set homepage depth: 1');
@@ -113,9 +130,13 @@ class attogram
       $this->depth['*'] = 1;
       $this->log->debug('awaken: set default depth: 1');
     }
-    $this->remember('admins', @$config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
+
+    if( !isset($config['admins']) ) { $config['admins'] = array('127.0.0.1','::1'); }
+    $this->remember('admins', $config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
+
     // To Debug or Not To Debug, That is the quesion
-    $this->remember('debug', @$config['debug'], false);
+    if( !isset($config['debug']) ) { $config['debug'] = false; }
+    $this->remember('debug', $config['debug'], false);
     if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
       $this->debug = true;
       $this->log->debug('awaken: Admin Debug turned ON');

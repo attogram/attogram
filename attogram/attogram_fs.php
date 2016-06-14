@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.5
+<?php // Attogram Framework - attogram_fs class v0.0.6
 
 namespace Attogram;
 
