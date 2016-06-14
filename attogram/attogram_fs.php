@@ -90,7 +90,7 @@ class attogram_fs
    * @param string $modules_directory
    * @return void
    */
-  public function load_module_configs( $modules_directory )
+  public static function load_module_configs( $modules_directory )
   {
     global $config;
     $dirs = self::get_all_subdirectories( $modules_directory, 'configs' );
@@ -108,7 +108,7 @@ class attogram_fs
    * @param string $modules_directory
    * @return void
    */
-  public function load_module_includes( $modules_directory )
+  public static function load_module_includes( $modules_directory )
   {
     $dirs = self::get_all_subdirectories( $modules_directory , 'includes');
     if( !$dirs ) {
