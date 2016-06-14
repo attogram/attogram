@@ -1,8 +1,8 @@
-<?php // Attogram Framework - Page Footer v0.1.1
+<?php // Attogram Framework - Page Footer v0.1.2
 
 namespace Attogram;
 
-$divider = '&nbsp;&nbsp; | &nbsp;&nbsp';
+$divider = '&nbsp;&nbsp; | &nbsp;&nbsp;';
 print '
 <footer class="footer">
  <div class="container-fluid">
