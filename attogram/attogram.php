@@ -59,13 +59,12 @@ class attogram
     $this->log = $log;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
     $this->project_github = 'https://github.com/attogram/attogram';
-    $this->awaken('config.php');
+    $this->awaken();
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->set_uri();
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
-    attogram_fs::load_module_includes( $this->modules_dir ); // Load modules includes files, if available
     $this->sessioning(); // start sessions
     // dev -- inject db object into __construct instead...
     if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
@@ -81,26 +80,21 @@ class attogram
 
   /**
    * Awaken The Attogram Framework
-   * @param string $config_file (optional)
    * @return void
    */
-  public function awaken( $config_file = '' )
+  public function awaken()
   {
     global $config; // The Global Configuration Array
-    if( !isset($config) || !is_array($config) ) {
-      $config = array();
-    }
-    if( !attogram_fs::is_readable_file($config_file, '.php') ) { // Load the main configuration file, if available
-      $this->log->notice('awaken: config file not found, using defaults.');
-    } else {
-      $this->log->debug('awaken: include: ' . $config_file);
-      include_once($config_file); // any $config['setting'] = value;
+
+    if( !isset($config['debug']) ) { $config['debug'] = false; }
+    $this->remember('debug', $config['debug'], false);
+    if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
+      $this->debug = true;
+      $this->log->debug('awaken: Admin Debug turned ON');
     }
 
     if( !isset($config['modules_dir']) ) { $config['modules_dir'] = '../modules'; }
     $this->remember('modules_dir', $config['modules_dir'], '../modules');
-    $this->log->debug('awaken: loading module configs');
-    attogram_fs::load_module_configs( $this->modules_dir ); // Load modules configuration files, if available
 
     if( !isset($config['attogram_dir']) ) { $config['attogram_dir'] = '../'; }
     $this->remember('attogram_dir', $config['attogram_dir'], '../');
@@ -134,13 +128,6 @@ class attogram
     if( !isset($config['admins']) ) { $config['admins'] = array('127.0.0.1','::1'); }
     $this->remember('admins', $config['admins'], array('127.0.0.1','::1')); // The Site Administrator IP addresses
 
-    // To Debug or Not To Debug, That is the quesion
-    if( !isset($config['debug']) ) { $config['debug'] = false; }
-    $this->remember('debug', $config['debug'], false);
-    if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
-      $this->debug = true;
-      $this->log->debug('awaken: Admin Debug turned ON');
-    }
   } // end function load_config()
 
   /**

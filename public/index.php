@@ -173,10 +173,9 @@ class guru_meditation_loader
 
   function meditate_deeper() {
     global $config;
-    $this->debug('meditate_deeper: IN DEV ********************* $config[modules_dir] = "' . @$config['modules_dir'] . '"');
     //if( !class_exists('attogram_fs') ) ....
     $count = attogram_fs::load_module_configs( $config['modules_dir'] );
-    $this->debug('meditate_deeper: IN DEV ********************* count: ' . $count);
+    $this->debug('meditate_deeper: ' . $count . ' module configs loaded');
   }
 
   /**
@@ -222,7 +221,10 @@ class guru_meditation_loader
 
   function focus_inner_eye()
   {
-    $this->debug('focus_inner_eye: IN DEV *********************');
+    global $config;
+    //if( !class_exists('attogram_fs') ) ....
+    $count = attogram_fs::load_module_includes( $config['modules_dir'] );
+    $this->debug('focus_inner_eye: ' . $count . ' module includes loaded');
   }
 
   function inner_awareness()
