@@ -175,7 +175,7 @@ class guru_meditation_loader
     global $config;
     //if( !class_exists('attogram_fs') ) ....
     $count = attogram_fs::load_module_configs( $config['modules_dir'] );
-    $this->debug('meditate_deeper: ' . $count . ' module configs loaded');
+    $this->debug('meditate_deeper: ' . sizeof($count) . ' module configs :<br />' . implode( '<br />', $count ) );
   }
 
   /**
@@ -224,7 +224,7 @@ class guru_meditation_loader
     global $config;
     //if( !class_exists('attogram_fs') ) ....
     $count = attogram_fs::load_module_includes( $config['modules_dir'] );
-    $this->debug('focus_inner_eye: ' . $count . ' module includes loaded');
+    $this->debug('focus_inner_eye: ' . sizeof($count) . ' module includes:<br />' . implode( '<br />', $count ) );
   }
 
   function inner_awareness()
@@ -262,10 +262,9 @@ class guru_meditation_loader
   function tranquility()
   {
       global $config;
-      $this->debug('tranquility');
 
-      if( !ob_start("ob_gzhandler") ) { // speed things up! gzip buffer
-        ob_start(); // if gzip handler not available, do normal buffer
+      if( ob_start('ob_gzhandler') ) { // speed things up! gz compession
+        $this->debug('tranquility: ob_gzhandler active');
       }
 
       // Setup Monolog
@@ -293,10 +292,6 @@ class guru_meditation_loader
         foreach( $config['guru_meditation_loader'] as $g ) {
           $log->debug($g); // save loader debug log
         }
-      }
-
-      if( !isset($config['debug']) ) {
-        $config['debug'] = false;
       }
 
       $attogram = new attogram( $log, $config['debug'] ); // Start Attogram Framework!

@@ -38,26 +38,26 @@ class attogram_fs
   } // end function get_all_subdirectories()
 
   /**
-   * include_once all php files in a specific directory
+   * include all php files in a specific directory
    * @param string $dir The directory to search
-   * @return int The number of files successfully loaded
+   * @return array List of the files successfully loaded
    */
   public static function include_all_php_files_in_directory( $dir )
   {
-    $count = 0;
+    $included = array();
     if( !is_dir($dir) || !is_readable($dir) ) {
-      return $count;
+      return $included;
     }
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $f ) {
       $ff = $dir . '/' . $f;
       if( self::is_readable_file( $ff, '.php' ) ) {
-        $included = (include($ff));
-        if( $included ) {
-            $count++;
+        $ok = (include($ff));
+        if( $ok ) {
+            $included[] = $ff;
         }
       }
     }
-    return $count;
+    return $included;
   } // end function include_all_php_files_in_directory()
 
   /**
@@ -93,40 +93,42 @@ class attogram_fs
    * Examines each module for a subdirectory named 'configs'
    * and includes all *.php files from that directory
    * @param  string $modules_directory
-   * @return int The number of files successfully loaded
+   * @return array List of the files successfully loaded
    */
   public static function load_module_configs( $modules_directory )
   {
     global $config;
-    $count = 0;
+    $included = array();
     $dirs = self::get_all_subdirectories( $modules_directory, 'configs' );
     if( !$dirs ) {
-      return $count;
+      return $included;
     }
     foreach( $dirs as $d ) {
-      $count += attogram_fs::include_all_php_files_in_directory( $d );
+      $inc = attogram_fs::include_all_php_files_in_directory( $d );
+      $included = array_merge( $included, $inc );
     }
-    return $count;
+    return $included;
   }
 
   /**
    * Examines each module for a subdirectory named 'includes'
    * and includes all *.php files from that directory
    * @param string $modules_directory
-   * @return void
+   * @return array List of the files successfully loaded
    */
   public static function load_module_includes( $modules_directory )
   {
     global $config;
-    $count = 0;
+    $included = array();
     $dirs = self::get_all_subdirectories( $modules_directory, 'includes' );
     if( !$dirs ) {
-      return $count;
+      return $included;
     }
     foreach( $dirs as $d ) {
-      $count += attogram_fs::include_all_php_files_in_directory( $d );
+      $inc = attogram_fs::include_all_php_files_in_directory( $d );
+      $included = array_merge( $included, $inc );
     }
-    return $count;
+    return $included;
   } // end function get_includes()
 
 } // end class attogram_fs
