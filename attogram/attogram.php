@@ -33,7 +33,7 @@ class attogram
    * @param obj $log PSR-3 compliant log object
    * @param bool $debug (optional) Debug True/False.  Defaults to False.
    */
-  function __construct( $log, $debug=false ) {
+  public function __construct( $log, $debug = false ) {
     $this->start_time = microtime(1);
     $this->debug = $debug;
     $this->log = $log;
@@ -65,7 +65,7 @@ class attogram
    * @param string $config_file (optional)
    * @return void
    */
-  function awaken( $config_file='' ) {
+  public function awaken( $config_file = '' ) {
     global $config; // The Global Configuration Array
     if( !isset($config) || !is_array($config) ) {
       $config = array();
@@ -109,7 +109,7 @@ class attogram
    * @param string $default_val  The default setting for the variable, if $config_val is empty
    * @return void
    */
-  public function remember( $var_name, $config_val='', $default_val ) {
+  public function remember( $var_name, $config_val = '', $default_val ) {
     if( $config_val ) {
       $this->{$var_name} = $config_val;
     } else {
@@ -121,7 +121,7 @@ class attogram
   /**
    * set_request()
    */
-  function set_request() {
+  public function set_request() {
     $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->host = $this->request->getHost();
     $this->clientIp = $this->request->getClientIp();
@@ -134,7 +134,7 @@ class attogram
   /**
    * set uri array
    */
-  function set_uri() {
+  public function set_uri() {
     $this->uri = explode('/', $this->pathInfo);
     if( sizeof($this->uri) == 1 ) {
       $this->log->debug('set_uri', $this->uri);
@@ -156,7 +156,7 @@ class attogram
   /**
    * end_slash()
    */
-  function end_slash() {
+  public function end_slash() {
     if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
       if( is_array($this->force_slash_exceptions) && !in_array( $this->uri[0], $this->force_slash_exceptions ) ) {
          // This action IS NOT excepted from force slash at end
@@ -179,7 +179,7 @@ class attogram
   /**
    * check_depth()
    */
-  function check_depth() {
+  public function check_depth() {
     $depth = $this->depth['*']; // default depth
     if( isset($this->depth[$this->uri[0]]) ) {
       $depth = $this->depth[$this->uri[0]];
@@ -194,7 +194,7 @@ class attogram
    * sessioning() - start the session, logoff if requested
    * @return void
    */
-  function sessioning() {
+  public function sessioning() {
     session_start();
     $this->log->debug('Session started.', $_SESSION);
     if( isset($_GET['logoff']) ) {
@@ -209,7 +209,7 @@ class attogram
    * route() - decide what action to take based on URI request
    * @return void
    */
-  function route() {
+  public function route() {
 
     if( is_dir($this->uri[0]) ) {  // requesting a directory?
       $this->log->error('ROUTE: 403 Action Forbidden');
@@ -268,7 +268,7 @@ class attogram
    * exception_files() - checks URI for exception files sitemap.xml, robots.txt
    * @return void
    */
-  function exception_files() {
+  public function exception_files() {
     switch( $this->pathInfo ) {
       case '/robots.txt':
         header('Content-Type: text/plain');
@@ -295,7 +295,7 @@ class attogram
    * @param string $file The markdown file to load
    * @return void
    */
-  function do_markdown( $file ) {
+  public function do_markdown( $file ) {
     $title = $content = '';
     if( attogram_fs::is_readable_file($file, '.md' ) ) {
       $page = @file_get_contents($file);
@@ -323,7 +323,7 @@ class attogram
    * get_site_url()
    * @return string
    */
-  function get_site_url() {
+  public function get_site_url() {
     return $this->request->getSchemeAndHttpHost() . $this->path;
   }
 
@@ -331,7 +331,7 @@ class attogram
    * get_actions() - create list of all pages from the actions directory
    * @return array
    */
-  function get_actions() {
+  public function get_actions() {
     if( is_array($this->actions) ) {
       return $this->actions;
     }
@@ -352,7 +352,7 @@ class attogram
    * get_admin_actions() - create list of all admin pages from the admin directory
    * @return array
    */
-  function get_admin_actions() {
+  public function get_admin_actions() {
     if( is_array($this->admin_actions) ) {
       return $this->admin_actions;
     }
@@ -373,7 +373,7 @@ class attogram
    * get_actionables - create list of all useable action files from a directory
    * @return array
    */
-  function get_actionables( $dir ) {
+  public function get_actionables( $dir ) {
     $r = array();
     if( !is_readable($dir) ) {
       $this->log->error('GET_ACTIONABLES: directory not readable: ' . $dir);
@@ -395,7 +395,7 @@ class attogram
    * is_admin() - is access from an admin IP?
    * @return boolean
    */
-  function is_admin() {
+  public function is_admin() {
     if( isset($this->is_admin) && is_bool($this->is_admin) ) {
       return $this->is_admin;
     }
@@ -429,7 +429,7 @@ class attogram
    * @param string $title The web page title
    * @return void
    */
-  function page_header( $title='' ) {
+  public function page_header( $title = '' ) {
     $file = $this->templates_dir . '/header.php';
     if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
@@ -447,7 +447,7 @@ class attogram
    * page_footer() - the web page footer
    * @return void
    */
-  function page_footer() {
+  public function page_footer() {
     $file = $this->templates_dir . '/footer.php';
     if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
@@ -464,7 +464,7 @@ class attogram
    * error404() - display a 404 error page to user and exit
    * @return void
    */
-  function error404( $error='' ) {
+  public function error404( $error = '' ) {
     header('HTTP/1.0 404 Not Found');
     if( attogram_fs::is_readable_file($this->fof, '.php') ) {
       include($this->fof);
