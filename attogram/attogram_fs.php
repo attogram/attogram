@@ -90,29 +90,11 @@ class attogram_fs
   }
 
   /**
-   * Examines each module for a subdirectory named 'configs'
-   * and includes all *.php files from that directory
-   * @param  string $modules_directory
-   * @return array List of the files successfully loaded
-   */
-  public static function load_module_configs( $modules_directory )
-  {
-    global $config;
-    return self::load_module_subdirectories( $modules_directory, 'configs' );
-  } // end function load_module_configs()
-
-  /**
-   * Examines each module for a subdirectory named 'includes'
+   * Examines each module for a named subdirectory
    * and includes all *.php files from that directory
    * @param string $modules_directory
    * @return array List of the files successfully loaded
    */
-  public static function load_module_includes( $modules_directory )
-  {
-    global $config;
-    return self::load_module_subdirectories( $modules_directory, 'includes' );
-  } // end function load_module_includes()
-
   public static function load_module_subdirectories( $modules_directory, $subdirectory )
   {
     global $config;

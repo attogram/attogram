@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.6
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.7
 
 namespace Attogram;
 
@@ -6,7 +6,6 @@ global $config;
 
 // Default configuration
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
-
 $config['attogram_dir']  = '../'; // with trailing slash
 $config['autoloader']    = $config['attogram_dir'] . 'vendor/autoload.php';
 $config['modules_dir']   = $config['attogram_dir'] . 'modules';   // without trailing slash
@@ -15,6 +14,7 @@ $config['debug']         = false;
 $config['site_name']     = 'The Attogram Framework';
 $config['admins']        = array( '127.0.0.1', '::1', );
 
+// Load the Project
 $guru = new guru_meditation_loader(
   $project_name        = $config['site_name'],
   $config_file         = './config.php',
@@ -174,8 +174,7 @@ class guru_meditation_loader
   function meditate_deeper() {
     global $config;
     //if( !class_exists('attogram_fs') ) ....
-    $count = attogram_fs::load_module_configs( $config['modules_dir'] );
-    //$this->debug('meditate_deeper: ' . sizeof($count) . ' module configs :<br />' . implode( '<br />', $count ) );
+    $count = attogram_fs::load_module_subdirectories( $config['modules_dir'], 'configs' );
     foreach( $count as $c ) {
       $this->debug('meditate_deeper: OK: ' . $c);
     }
@@ -226,7 +225,7 @@ class guru_meditation_loader
   {
     global $config;
     //if( !class_exists('attogram_fs') ) ....
-    $count = attogram_fs::load_module_includes( $config['modules_dir'] );
+    $count = attogram_fs::load_module_subdirectories( $config['modules_dir'], 'includes' );
     foreach( $count as $c ) {
       $this->debug('focus_inner_eye: OK: ' . $c);
     }
