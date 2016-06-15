@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.6
+<?php // Attogram Framework - attogram_fs class v0.0.7
 
 namespace Attogram;
 
@@ -104,7 +104,7 @@ class attogram_fs
       return $included;
     }
     foreach( $dirs as $d ) {
-      $inc = attogram_fs::include_all_php_files_in_directory( $d );
+      $inc = self::include_all_php_files_in_directory( $d );
       $included = array_merge( $included, $inc );
     }
     return $included;
@@ -125,7 +125,7 @@ class attogram_fs
       return $included;
     }
     foreach( $dirs as $d ) {
-      $inc = attogram_fs::include_all_php_files_in_directory( $d );
+      $inc = self::include_all_php_files_in_directory( $d );
       $included = array_merge( $included, $inc );
     }
     return $included;
