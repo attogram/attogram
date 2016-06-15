@@ -59,7 +59,7 @@ class attogram
     $this->log = $log;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
     $this->project_github = 'https://github.com/attogram/attogram';
-    $this->awaken();
+    $this->awaken(); // set the configuration
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->set_uri();
@@ -104,7 +104,7 @@ class attogram
 
     if( !isset($config['templates_dir']) ) { $config['templates_dir'] = $this->attogram_dir . 'templates'; }
     $this->remember('templates_dir', $config['templates_dir'],          $this->attogram_dir . 'templates');
-
+    // dev todo - load all ./modules/*/templates/*.php - cascading override these default settings,
     $this->templates['header'] = $this->templates_dir . '/header.php';
     $this->templates['navbar'] = $this->templates_dir . '/navbar.php';
     $this->templates['footer'] = $this->templates_dir . '/footer.php';
@@ -514,7 +514,7 @@ class attogram
   {
     header('HTTP/1.0 404 Not Found');
     if( attogram_fs::is_readable_file( $this->templates['fof'], '.php' ) ) {
-      include($this->fof);
+      include($this->templates['fof']);
       exit;
     }
     // Default 404 page
