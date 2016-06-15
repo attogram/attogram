@@ -28,6 +28,7 @@ class sqlite_database
     $this->modules_directory = $modules_directory;
     $this->log = $log;
     $this->debug = $debug;
+    $this->log->debug('START sqlite_database');
   }
 
   /**

@@ -67,12 +67,14 @@ class attogram
     $this->check_depth(); // is URI short enough?
     $this->sessioning(); // start sessions
     // dev -- inject db object into __construct instead...
-    if( class_exists('Attogram\sqlite_database') ) { // if database module is loaded
+    if( class_exists('\Attogram\sqlite_database') ) { // if database module is loaded
       $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
-      $this->log->debug('__construct: sqlite_database init OK');
+      if( !$this->db ) {
+        $this->log->error('attogram::__construct: sqlite_database initialization failed');
+      }
     } else {
       $this->db = false;
-      $this->log->error('__construct: sqlite_database class not found');
+      $this->log->error('attogram::__construct: sqlite_database class not found');
     }
     $this->route(); // Send us where we want to go
     $this->log->debug('END Attogram v' . self::ATTOGRAM_VERSION . ' timer: ' . (microtime(1) - $this->start_time));
@@ -117,7 +119,7 @@ class attogram
     if( !isset($this->templates['fof']) ) {
       $this->templates['fof']    = $this->templates_dir . '/404.php';
     }
-    
+
     if( !isset($config['db_name']) ) { $config['db_name'] = '../db/global'; }
     $this->remember('db_name', $config['db_name'], '../db/global');
 
