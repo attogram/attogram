@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.0.7
+<?php // Attogram Framework - attogram class v0.0.8
 
 namespace Attogram;
 
@@ -49,14 +49,16 @@ class attogram
   public $admin_actions; // (array) memory variable for $this->get_admin_actions()
 
   /**
-   * @param obj $log PSR-3 compliant log object
-   * @param bool $debug (optional) Debug True/False.  Defaults to False.
+   * @param obj  $log      PSR-3 logger object
+   * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
+   * @param bool $debug    (optional) Debug True/False.  Defaults to False.
    */
-  public function __construct( $log, $debug = false )
+  public function __construct( $log, $request, $debug = false )
   {
     $this->start_time = microtime(1);
-    $this->debug = $debug;
     $this->log = $log;
+    $this->request = $request;
+    $this->debug = $debug;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->awaken(); // set the configuration
@@ -93,10 +95,6 @@ class attogram
 
     if( !isset($config['debug']) ) { $config['debug'] = false; }
     $this->remember('debug', $config['debug'], false);
-    if( isset($_GET['debug']) && $this->is_admin() ) { // admin debug overrride?
-      $this->debug = true;
-      $this->log->debug('awaken: Admin Debug turned ON');
-    }
 
     if( !isset($config['attogram_dir']) ) { $config['attogram_dir'] = '../'; }
     $this->remember('attogram_dir', $config['attogram_dir'],          '../');
@@ -189,7 +187,6 @@ class attogram
    */
   public function set_request()
   {
-    $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $this->host = $this->request->getHost();
     $this->clientIp = $this->request->getClientIp();
     $this->log->debug("host: $this->host  IP: $this->clientIp");

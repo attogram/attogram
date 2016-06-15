@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.7
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.8
 
 namespace Attogram;
 
@@ -300,8 +300,11 @@ class guru_meditation_loader
         }
       }
 
+      // create Request object
+      $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
       // Start Attogram Framework!
-      $attogram = new attogram( $log, $config['debug'] );
+      $attogram = new attogram( $log, $request, $config['debug'] );
 
   } // end function tranquility()
 
