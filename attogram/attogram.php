@@ -20,19 +20,19 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.6.0';
+  const ATTOGRAM_VERSION = '0.6.1-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
   public $log;           // (object) PSR3 Logger object
-  public $project_github;     // (string) URL to Attogram Framework GitHub Project
-  public $attogram_dir; // (string) path to this installation
+  public $project_github;// (string) URL to Attogram Framework GitHub Project
+  public $attogram_dir;  // (string) path to this installation
   public $modules_dir;   // (string) path to the modules directory
   public $templates_dir; // (string) path to the templates directory
+  public $templates;     // (array) list of templates
   public $site_name;     // (string) The Site Name
   public $depth;         // (array) Allowed depth settings
-  public $no_end_slash; // (array) actions to NOT force slash at end
-  public $fof;           // (string) path + filename of 404 Not Found template
+  public $no_end_slash;  // (array) actions to NOT force slash at end
   public $request;       // (object) Symfony HttpFoundation Request object
   public $host;          // (string) Client Hostname
   public $clientIp;      // (string) Client IP Address
@@ -96,17 +96,19 @@ class attogram
       $this->log->debug('awaken: Admin Debug turned ON');
     }
 
-    if( !isset($config['modules_dir']) ) { $config['modules_dir'] = '../modules'; }
-    $this->remember('modules_dir', $config['modules_dir'], '../modules');
-
     if( !isset($config['attogram_dir']) ) { $config['attogram_dir'] = '../'; }
-    $this->remember('attogram_dir', $config['attogram_dir'], '../');
+    $this->remember('attogram_dir', $config['attogram_dir'],          '../');
 
-    if( !isset($config['templates_dir']) ) { $config['templates_dir'] = '../templates'; }
-    $this->remember('templates_dir', $config['templates_dir'], '../templates');
+    if( !isset($config['modules_dir']) ) { $config['modules_dir'] = $this->attogram_dir . 'modules'; }
+    $this->remember('modules_dir', $config['modules_dir'],          $this->attogram_dir . 'modules');
 
-    if( !isset($config['fof']) ) { $config['fof'] = '../templates/404.php'; }
-    $this->remember('fof', $config['fof'], '../templates/404.php');
+    if( !isset($config['templates_dir']) ) { $config['templates_dir'] = $this->attogram_dir . 'templates'; }
+    $this->remember('templates_dir', $config['templates_dir'],          $this->attogram_dir . 'templates');
+
+    $this->templates['header'] = $this->templates_dir . '/header.php';
+    $this->templates['navbar'] = $this->templates_dir . '/navbar.php';
+    $this->templates['footer'] = $this->templates_dir . '/footer.php';
+    $this->templates['fof']    = $this->templates_dir . '/404.php';
 
     if( !isset($config['db_name']) ) { $config['db_name'] = '../db/global'; }
     $this->remember('db_name', $config['db_name'], '../db/global');
@@ -473,7 +475,7 @@ class attogram
    */
   public function page_header( $title = '' )
   {
-    $file = $this->templates_dir . '/header.php';
+    $file = $this->templates['header'];
     if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
       $this->log->debug('page_header, title: ' . $title);
@@ -492,7 +494,7 @@ class attogram
    */
   public function page_footer()
   {
-    $file = $this->templates_dir . '/footer.php';
+    $file = $this->templates['footer'];
     if( attogram_fs::is_readable_file($file,'.php') ) {
       include($file);
       $this->log->debug('page_footer');
@@ -511,7 +513,7 @@ class attogram
   public function error404( $error = '' )
   {
     header('HTTP/1.0 404 Not Found');
-    if( attogram_fs::is_readable_file($this->fof, '.php') ) {
+    if( attogram_fs::is_readable_file( $this->templates['fof'], '.php' ) ) {
       include($this->fof);
       exit;
     }
