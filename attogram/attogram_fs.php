@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.7
+<?php // Attogram Framework - attogram_fs class v0.0.8
 
 namespace Attogram;
 
@@ -38,7 +38,7 @@ class attogram_fs
   } // end function get_all_subdirectories()
 
   /**
-   * include all php files in a specific directory
+   * Include all php files in a specific directory
    * @param string $dir The directory to search
    * @return array List of the files successfully loaded
    */
@@ -50,11 +50,11 @@ class attogram_fs
     }
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $f ) {
       $ff = $dir . '/' . $f;
-      if( self::is_readable_file( $ff, '.php' ) ) {
-        $ok = (include($ff));
-        if( $ok ) {
-            $included[] = $ff;
-        }
+      if( !self::is_readable_file( $ff, '.php' ) ) {
+        continue;
+      }
+      if( (include($ff)) ) {
+          $included[] = $ff;
       }
     }
     return $included;
@@ -98,17 +98,8 @@ class attogram_fs
   public static function load_module_configs( $modules_directory )
   {
     global $config;
-    $included = array();
-    $dirs = self::get_all_subdirectories( $modules_directory, 'configs' );
-    if( !$dirs ) {
-      return $included;
-    }
-    foreach( $dirs as $d ) {
-      $inc = self::include_all_php_files_in_directory( $d );
-      $included = array_merge( $included, $inc );
-    }
-    return $included;
-  }
+    return self::load_module_subdirectories( $modules_directory, 'configs' );
+  } // end function load_module_configs()
 
   /**
    * Examines each module for a subdirectory named 'includes'
@@ -119,8 +110,14 @@ class attogram_fs
   public static function load_module_includes( $modules_directory )
   {
     global $config;
+    return self::load_module_subdirectories( $modules_directory, 'includes' );
+  } // end function load_module_includes()
+
+  public static function load_module_subdirectories( $modules_directory, $subdirectory )
+  {
+    global $config;
     $included = array();
-    $dirs = self::get_all_subdirectories( $modules_directory, 'includes' );
+    $dirs = self::get_all_subdirectories( $modules_directory, $subdirectory );
     if( !$dirs ) {
       return $included;
     }
@@ -129,6 +126,6 @@ class attogram_fs
       $included = array_merge( $included, $inc );
     }
     return $included;
-  } // end function get_includes()
+  } // end function load_module_subdirectories()
 
 } // end class attogram_fs
