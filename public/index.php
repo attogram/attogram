@@ -267,11 +267,12 @@ class guru_meditation_loader
   {
       global $config;
 
-      if( ob_start('ob_gzhandler') ) { // speed things up! gz compession
+      // Speed things up! gz compession
+      if( ob_start('ob_gzhandler') ) {
         $this->debug('tranquility: ob_gzhandler active');
       }
 
-      // Setup Monolog
+      // Setup The Logger
       if(
           ( isset($config['debug']) && is_bool($config['debug']) && $config['debug'] ) // $config['debug'] = true
         ||
@@ -292,13 +293,15 @@ class guru_meditation_loader
         $log = new \Attogram\logger();
       }
 
+      // Save guru log to the new Logger
       if( isset($config['guru_meditation_loader']) && is_array($config['guru_meditation_loader']) ) {
         foreach( $config['guru_meditation_loader'] as $g ) {
-          $log->debug($g); // save loader debug log
+          $log->debug($g);
         }
       }
 
-      $attogram = new attogram( $log, $config['debug'] ); // Start Attogram Framework!
+      // Start Attogram Framework!
+      $attogram = new attogram( $log, $config['debug'] );
 
   } // end function tranquility()
 

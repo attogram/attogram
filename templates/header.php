@@ -21,7 +21,7 @@ if( !isset($title) || !$title || !is_string($title) ) {
 <script src="<?php print $this->path; ?>/web/bootstrap/js/bootstrap.min.js"></script>
 </head><body><noscript><div class="alert alert-danger">Please enable Javascript</div></noscript>
 <?php
-$navbar = $this->templates_dir . '/navbar.php';
+$navbar = $this->templates['navbar'];
 if( attogram_fs::is_readable_file( $navbar, 'php' ) ) {
   include( $navbar );
 } else {

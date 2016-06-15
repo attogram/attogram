@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.0.6
+<?php // Attogram Framework - attogram class v0.0.7
 
 namespace Attogram;
 
@@ -12,7 +12,7 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * _or_ the GNU General Public License version 3 or higher (GPL-3.0+).
  *
- * @version 0.6.0
+ * @version 0.6.1-dev
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -104,12 +104,20 @@ class attogram
 
     if( !isset($config['templates_dir']) ) { $config['templates_dir'] = $this->attogram_dir . 'templates'; }
     $this->remember('templates_dir', $config['templates_dir'],          $this->attogram_dir . 'templates');
-    // dev todo - load all ./modules/*/templates/*.php - cascading override these default settings,
-    $this->templates['header'] = $this->templates_dir . '/header.php';
-    $this->templates['navbar'] = $this->templates_dir . '/navbar.php';
-    $this->templates['footer'] = $this->templates_dir . '/footer.php';
-    $this->templates['fof']    = $this->templates_dir . '/404.php';
-
+    $this->get_module_templates();
+    if( !isset($this->templates['header']) ) {
+      $this->templates['header'] = $this->templates_dir . '/header.php';
+    }
+    if( !isset($this->templates['navbar']) ) {
+      $this->templates['navbar'] = $this->templates_dir . '/navbar.php';
+    }
+    if( !isset($this->templates['footer']) ) {
+      $this->templates['footer'] = $this->templates_dir . '/footer.php';
+    }
+    if( !isset($this->templates['fof']) ) {
+      $this->templates['fof']    = $this->templates_dir . '/404.php';
+    }
+    
     if( !isset($config['db_name']) ) { $config['db_name'] = '../db/global'; }
     $this->remember('db_name', $config['db_name'], '../db/global');
 
@@ -131,6 +139,32 @@ class attogram
     }
 
   } // end function load_config()
+
+  /**
+   * Set module templates
+   * @return void
+   */
+  public function get_module_templates()
+  {
+    $d = attogram_fs::get_all_subdirectories( $this->modules_dir, 'templates' );
+    if( !$d ) {
+      $this->log->debug('get_module_templates: no module templates found');
+      return;
+    }
+    foreach( $d as $md ) {
+      foreach( array_diff( scandir($md), attogram_fs::get_skip_files() ) as $f ) {
+          $file = "$md/$f";
+          if( attogram_fs::is_readable_file( $file, '.php' ) ) {
+            $name = preg_replace( '/\.php$/', '', $f );
+            $this->templates[$name] = $file;
+            $this->log->debug('get_module_templates: ' . $name. ' = ' . $file);
+          } else {
+            $this->log->error('get_module_templates: File not readable: ' . $file);
+          }
+      }
+    }
+  } // end function get_module_templates()
+
 
   /**
    * set a system configuration variable
