@@ -106,7 +106,7 @@ class attogram
 
     if( !isset($config['templates_dir']) ) { $config['templates_dir'] = $this->attogram_dir . 'templates'; }
     $this->remember('templates_dir', $config['templates_dir'],          $this->attogram_dir . 'templates');
-    $this->get_module_templates();
+    $this->set_module_templates();
     if( !isset($this->templates['header']) ) {
       $this->templates['header'] = $this->templates_dir . '/header.php';
     }
@@ -146,7 +146,7 @@ class attogram
    * Set module templates
    * @return void
    */
-  public function get_module_templates()
+  public function set_module_templates()
   {
     $d = attogram_fs::get_all_subdirectories( $this->modules_dir, 'templates' );
     if( !$d ) {
@@ -155,18 +155,17 @@ class attogram
     }
     foreach( $d as $md ) {
       foreach( array_diff( scandir($md), attogram_fs::get_skip_files() ) as $f ) {
-          $file = "$md/$f";
-          if( attogram_fs::is_readable_file( $file, '.php' ) ) {
-            $name = preg_replace( '/\.php$/', '', $f );
-            $this->templates[$name] = $file;
-            $this->log->debug('get_module_templates: ' . $name. ' = ' . $file);
-          } else {
-            $this->log->error('get_module_templates: File not readable: ' . $file);
-          }
+        $file = "$md/$f";
+        if( attogram_fs::is_readable_file( $file, '.php' ) ) {
+          $name = preg_replace( '/\.php$/', '', $f );
+          $this->templates[$name] = $file; // Set the template
+          $this->log->debug('get_module_templates: ' . $name. ' = ' . $file);
+        } else {
+          $this->log->error('get_module_templates: File not readable: ' . $file);
+        }
       }
     }
-  } // end function get_module_templates()
-
+  } // end function set_module_templates()
 
   /**
    * set a system configuration variable
