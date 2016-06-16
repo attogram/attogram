@@ -1,15 +1,16 @@
-<?php // Attogram Framework - Database Module - Pager v0.0.2
+<?php // Attogram Framework - Database Module - Pager & get_set_limit_and_offset v0.0.4
 
 namespace Attogram;
 
 /**
- * pager() - pagination
+ * Show pagination links
  * @param  int    $count   The Total Resultset Count
  * @param  int    $limit   The # of results to list per page
  * @param  int    $offset  The item# to start the list
- * @return string           HTML fragment
+ * @return string          HTML fragment
  */
-function pager( int $count, int $limit, int $offset ) {
+function pager( $count, $limit, $offset )
+{
 
   if( $limit > $count ) {
     $limit = $count;
@@ -50,4 +51,25 @@ function pager( int $count, int $limit, int $offset ) {
   }
 
   return '<div class="container">' . $r . '</div>';
+}
+
+
+/**
+ * Get requested limit and offset from URI, and set real limit and offset
+ * @return array  Array of (limit,offset)
+ */
+function get_set_limit_and_offset()
+{
+  if( isset($_GET['l']) && $_GET['l'] ) { // LIMIT
+    $limit = (int)$_GET['l'];
+    if( isset($_GET['o']) && $_GET['o'] ) { // OFFSET
+      $offset = (int)$_GET['o'];
+    } else {
+      $offset = 0;
+    }
+  } else {
+    $limit = 1000;
+    $offset = 0;
+  }
+  return array( $limit, $offset );
 }
