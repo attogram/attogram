@@ -9,8 +9,8 @@ namespace Attogram;
  * content modules, file-based URL routing, IP-protected backend, user system,
  * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
  *
- * The Attogram Framework is Dual Licensed under the MIT License (MIT)
- * _or_ the GNU General Public License version 3 or higher (GPL-3.0+).
+ * The Attogram Framework is Dual Licensed, at your chooseing, under the
+ * MIT License (MIT) _or_ the GNU General Public License version 3 (GPL-3.0+).
  *
  * @version 0.6.2-dev
  * @license MIT
