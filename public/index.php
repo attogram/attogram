@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.8
+<?php // Attogram Framework - Guru Meditation Loader - v0.0.9
 
 namespace Attogram;
 
@@ -69,6 +69,8 @@ class guru_meditation_loader
                         $vendor_download, array $required_classes, array $required_interfaces )
   {
 
+    error_reporting(0);
+    ini_set( 'display_errors', 0 );
     set_error_handler(array( $this, 'guru_meditation_error_handler' ));
     register_shutdown_function(array( $this, 'guru_meditation_shutdown' ));
     $this->project_name        = $project_name;
