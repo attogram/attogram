@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Navbar v0.0.5
+<?php // Attogram Framework - Navbar v0.0.6
 
 namespace Attogram;
 
@@ -30,8 +30,7 @@ namespace Attogram;
 <?php
   if( class_exists('\Attogram\attogram_user') ) {
     if( \Attogram\attogram_user::is_logged_in() ) {
-      print '<li><a href="' . $this->path
-      . '/user/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <b>'
+      print '<li><a href="' . $this->path . '/user/"><span class="icon-s">👤</span> <b>'
       . ( (isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'])  ? $_SESSION['attogram_username'] : 'user')
       . '</b></a></li>';
       print '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
