@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.5
+<?php // Attogram Framework - Site Info v0.1.6
 
 namespace Attogram;
 
@@ -6,7 +6,6 @@ $title = 'Information';
 $this->page_header($title);
 
 $info = array();
-
 $info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = self::ATTOGRAM_VERSION;
 $info['Attogram Directory'] = info_dir($this->attogram_dir);
@@ -50,6 +49,8 @@ $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 
 $info['<a name="user"></a><h3><span class="glyphicon glyphicon-user"></span> <em>User:</em></h3>'] = '';
+$info['host'] = $this->host;
+$info['IP'] = $this->clientIp;
 $info['# session attributes'] = sizeof($_SESSION);
 $info['session attributes'] = info_array( $_SESSION, $key=1 );
 

@@ -12,7 +12,7 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * _or_ the GNU General Public License version 3 or higher (GPL-3.0+).
  *
- * @version 0.6.1
+ * @version 0.6.2-dev
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -20,11 +20,12 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.6.1';
+  const ATTOGRAM_VERSION = '0.6.2-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
   public $log;           // (object) PSR3 Logger object
+  public $request;       // (object) Symfony HttpFoundation Request object
   public $project_github;// (string) URL to Attogram Framework GitHub Project
   public $attogram_dir;  // (string) path to this installation
   public $modules_dir;   // (string) path to the modules directory
@@ -33,7 +34,6 @@ class attogram
   public $site_name;     // (string) The Site Name
   public $depth;         // (array) Allowed depth settings
   public $no_end_slash;  // (array) actions to NOT force slash at end
-  public $request;       // (object) Symfony HttpFoundation Request object
   public $host;          // (string) Client Hostname
   public $clientIp;      // (string) Client IP Address
   public $pathInfo;      // (string)
