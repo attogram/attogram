@@ -53,7 +53,6 @@ function pager( $count, $limit, $offset )
   return '<div class="container">' . $r . '</div>';
 }
 
-
 /**
  * Get requested limit and offset from URI, and set real limit and offset
  * @return array  Array of (limit,offset)
