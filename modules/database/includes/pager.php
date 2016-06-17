@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Database Module - Pager & get_set_limit_and_offset v0.0.4
+<?php // Attogram Framework - Database Module - Pager & get_set_limit_and_offset v0.0.5
 
 namespace Attogram;
 
@@ -55,9 +55,11 @@ function pager( $count, $limit, $offset )
 
 /**
  * Get requested limit and offset from URI, and set real limit and offset
- * @return array  Array of (limit,offset)
+ * @param  int    $default_limit  (optional) The default limit, if not set. Defaults to 1000
+ * @param  int    $default_offset (optional) The default offset, if not set. Defaults to 0
+ * @return array                  Array of (limit,offset)
  */
-function get_set_limit_and_offset()
+function get_set_limit_and_offset( $default_limit = 1000, $default_offset = 0 )
 {
   if( isset($_GET['l']) && $_GET['l'] ) { // LIMIT
     $limit = (int)$_GET['l'];
@@ -67,8 +69,8 @@ function get_set_limit_and_offset()
       $offset = 0;
     }
   } else {
-    $limit = 1000;
-    $offset = 0;
+    $limit = $default_limit;
+    $offset = $default_offset;
   }
   return array( $limit, $offset );
 }
