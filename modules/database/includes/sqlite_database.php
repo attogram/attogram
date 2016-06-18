@@ -347,13 +347,17 @@ class sqlite_database implements attogram_database
   }
 
   /**
-   * Get requested limit and offset from URI, and set real limit and offset
-   * @param  int    $default_limit  (optional) The default limit, if not set. Defaults to 1000
-   * @param  int    $default_offset (optional) The default offset, if not set. Defaults to 0
+   * Get requested Query limit and offset from HTTP GET variables,
+   * error check, and then return valid limit and offset
+   * @param  int    $default_limit  (optional) The default limit, if not set.   Defaults to 1000
+   * @param  int    $default_offset (optional) The default offset, if not set.  Defaults to 0
+   * @param  int    $max_limit      (optional) The maximum allowed limit value. Defaults to 5000
+   * @param  int    $min_limit      (optional) The minimum allowed limit value. Defaults to 100
    * @return array                  Array of (limit,offset)
    */
-  public function get_set_limit_and_offset( $default_limit = 1000, $default_offset = 0 )
+  public function get_set_limit_and_offset( $default_limit = 1000, $default_offset = 0, $max_limit = 5000, $min_limit = 100 )
   {
+    //$this->log->debug("get_set_limit_and_offset: default_limit=$default_limit default_offset=$default_offset max_limit=$max_limit min_limit=$min_limit ");
     if( isset($_GET['l']) && $_GET['l'] ) { // LIMIT
       $limit = (int)$_GET['l'];
       if( isset($_GET['o']) && $_GET['o'] ) { // OFFSET
@@ -365,6 +369,13 @@ class sqlite_database implements attogram_database
       $limit = $default_limit;
       $offset = $default_offset;
     }
+    if( $limit > $max_limit ) {
+      $limit = $max_limit;
+    }
+    if( $limit < $min_limit ) {
+      $limit = $min_limit;
+    }
+    //$this->log->debug("get_set_limit_and_offset: limit=$limit offset=$offset");
     return array( $limit, $offset );
   }
 
