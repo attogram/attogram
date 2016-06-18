@@ -53,7 +53,7 @@ class sqlite_database implements attogram_database
    * @param bool $debug (optional) defaults to false
    * @return void
    */
-  function __construct( $db_name, $modules_directory, $log, $debug=false )
+  public function __construct( $db_name, $modules_directory, $log, $debug = false )
   {
     $this->db_name = $db_name;
     $this->modules_directory = $modules_directory;
@@ -66,7 +66,7 @@ class sqlite_database implements attogram_database
    * Initialize the database connection
    * @return bool true on successful initialization, false on error
    */
-  function init_db()
+  public function init_db()
   {
     if( is_object($this->db) && get_class($this->db) == 'PDO' ) {
       return true; // if PDO database object already set
@@ -94,11 +94,11 @@ class sqlite_database implements attogram_database
 
   /**
    * Query the database, return an array of results
-   * @param string $sql The SQL query
-   * @param array $bind Optional, Array of values to bind into the SQL query
-   * @return array
+   * @param  string $sql  The SQL query
+   * @param  array  $bind (optional) Array of name/values to bind into the SQL query
+   * @return array        An array of results
    */
-  function query( $sql, $bind=array() )
+  public function query( $sql, $bind = array() )
   {
     $this->log->debug('QUERY: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
@@ -133,11 +133,11 @@ class sqlite_database implements attogram_database
 
   /**
    * Query the database, return only true or false
-   * @param string $sql The SQL query
-   * @param array $bind Optional, Array of values to bind into the SQL query
-   * @return boolean
+   * @param  string $sql  The SQL query
+   * @param  array  $bind (optional) Array of name/values to bind into the SQL query
+   * @return bool         true on successful query, false on error
    */
-  function queryb( $sql, $bind=array() )
+  public function queryb( $sql, $bind = array() )
   {
     $this->log->debug('QUERYB: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
@@ -170,7 +170,7 @@ class sqlite_database implements attogram_database
    * @param string $sql The SQL query to prepare
    * @return object|boolean
    */
-  function query_prepare( $sql )
+  public function query_prepare( $sql )
   {
     $statement = $this->db->prepare($sql);
     if( $statement ) { return $statement; }
@@ -195,7 +195,7 @@ class sqlite_database implements attogram_database
    * Get the table definitions from all the modules
    * @return boolean
    */
-  function get_tables()
+  public function get_tables()
   {
     if( isset($this->tables) && is_array($this->tables) ) {
       return true;
@@ -225,7 +225,7 @@ class sqlite_database implements attogram_database
    * @param string $table The name of the table to create
    * @return boolean
    */
-  function create_table( $table='' )
+  public function create_table( $table='' )
   {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
@@ -238,7 +238,6 @@ class sqlite_database implements attogram_database
     }
     return true;
   }
-
 
   /**
    * tabler - HTML table with view of database table content, plus optional admin links
@@ -256,17 +255,8 @@ class sqlite_database implements attogram_database
    *
    * @return string                HTML fragment
    */
-  public function tabler(
-    $attogram,
-    $table,
-    $name_singular,
-    $name_plural,
-    $public_link,
-    $col,
-    $sql,
-    $admin_link,
-    $show_edit
-  ) {
+  public function tabler( $attogram, $table, $name_singular, $name_plural, $public_link, $col, $sql, $admin_link, $show_edit )
+  {
 
     $result = $attogram->db->query($sql);
 
@@ -336,7 +326,6 @@ class sqlite_database implements attogram_database
     }
     print '</tbody></table></div>';
   }
-
 
   /**
    * Show pagination links
