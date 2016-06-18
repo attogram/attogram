@@ -242,7 +242,6 @@ class sqlite_database implements attogram_database
   /**
    * tabler - HTML table with view of database table content, plus optional admin links
    *
-   * @param  obj    $attogram      The Attogram object
    * @param  string $table         The table name
    * @param  string $name_singular The name of what we are editing, singular form
    * @param  string $name_plural   The name of what we are editing, plural form
@@ -255,10 +254,10 @@ class sqlite_database implements attogram_database
    *
    * @return string                HTML fragment
    */
-  public function tabler( $attogram, $table, $name_singular, $name_plural, $public_link, $col, $sql, $admin_link, $show_edit )
+  public function tabler( $table, $name_singular, $name_plural, $public_link, $col, $sql, $admin_link, $show_edit )
   {
 
-    $result = $attogram->db->query($sql);
+    $result = $this->query($sql);
 
     if( $show_edit ) {
       $admin_create = '../db-admin/?table=' . $table .'&amp;action=row_create';
@@ -279,10 +278,10 @@ class sqlite_database implements attogram_database
       print '<a target="_db" href="' . $admin_create . '"><span class="glyphicon glyphicon-plus"></span> '
       . 'new ' . $name_singular . '</a>';
     } else {
-      if( $attogram->is_admin() ) {
-        print ' &nbsp; &nbsp; &nbsp; '
-        . '<a href="' . $admin_link . '"><span class="glyphicon glyphicon-wrench"></span> Admin</a>';
-      }
+      //if( $attogram->is_admin() ) {
+      //  print ' &nbsp; &nbsp; &nbsp; '
+      //  . '<a href="' . $admin_link . '"><span class="glyphicon glyphicon-wrench"></span> Admin</a>';
+      //}
     }
 
     print '</p><table class="table table-bordered table-hover table-condensed"><colgroup>';

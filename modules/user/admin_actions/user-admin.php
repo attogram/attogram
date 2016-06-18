@@ -1,18 +1,10 @@
-<?php // Attogram Framework - User Module - User Admin v0.1.0
+<?php // Attogram Framework - User Module - User Admin v0.1.1
 
 namespace Attogram;
 
 $this->page_header('User Admin');
 
-if( !function_exists('Attogram\tabler') ) {
-  $this->log->error('Users Admin: tabler function not found');
-  print '<div class="container">error: tabler function does not exist</div>';
-  $this->page_footer();
-  exit;
-}
-
 $this->db->tabler(
-  $attogram = $this,
   $table = 'user',
   $name_singular = 'user',
   $name_plural = 'users',
