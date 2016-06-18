@@ -1,4 +1,4 @@
-<?php // Attogram Framework - User Module - User Admin v0.0.5
+<?php // Attogram Framework - User Module - User Admin v0.1.0
 
 namespace Attogram;
 
@@ -11,7 +11,7 @@ if( !function_exists('Attogram\tabler') ) {
   exit;
 }
 
-tabler(
+$this->db->tabler(
   $attogram = $this,
   $table = 'user',
   $name_singular = 'user',
