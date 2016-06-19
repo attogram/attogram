@@ -246,11 +246,6 @@ class sqlite_database implements attogram_database
       }
       print '<a target="_db" href="' . $admin_create . '"><span class="glyphicon glyphicon-plus"></span> '
       . 'new ' . $name_singular . '</a>';
-    } else {
-      //if( $attogram->is_admin() ) {
-      //  print ' &nbsp; &nbsp; &nbsp; '
-      //  . '<a href="' . $admin_link . '"><span class="glyphicon glyphicon-wrench"></span> Admin</a>';
-      //}
     }
 
     print '</p><table class="table table-bordered table-hover table-condensed"><colgroup>';
@@ -299,7 +294,7 @@ class sqlite_database implements attogram_database
    * Show pagination links
    * @param  int    $count   The Total Resultset Count
    * @param  int    $limit   The # of results to list per page
-   * @param  int    $offset  The item# to start the list
+   * @param  int    $offset  The item # to start the list
    * @return string          HTML fragment
    */
   public function pager( $count, $limit, $offset )
@@ -363,16 +358,18 @@ class sqlite_database implements attogram_database
       if( isset($_GET['o']) && $_GET['o'] ) { // OFFSET
         $offset = (int)$_GET['o'];
       } else {
-        $offset = 0;
+        $offset = $default_offset;
       }
     } else {
       $limit = $default_limit;
       $offset = $default_offset;
     }
     if( $limit > $max_limit ) {
+      $this->log->notice("get_set_limit_and_offset: limit=$limit too large.  Setting to max limit=$max_limit");
       $limit = $max_limit;
     }
     if( $limit < $min_limit ) {
+      $this->log->notice("get_set_limit_and_offset: limit=$limit too small.  Setting to min limit=$min_limit");
       $limit = $min_limit;
     }
     //$this->log->debug("get_set_limit_and_offset: limit=$limit offset=$offset");
