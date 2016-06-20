@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.0.8
+<?php // Attogram Framework - attogram class v0.0.9
 
 namespace Attogram;
 
@@ -12,7 +12,7 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed, at your chooseing, under the
  * MIT License (MIT) _or_ the GNU General Public License version 3 (GPL-3.0+).
  *
- * @version 0.6.2
+ * @version 0.6.3-dev
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -20,7 +20,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.6.2';
+  const ATTOGRAM_VERSION = '0.6.3-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
@@ -70,7 +70,7 @@ class attogram
     $this->sessioning(); // start sessions
     // dev -- inject db object into __construct instead...
     if( class_exists('\Attogram\sqlite_database') ) { // if database module is loaded
-      $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log, $this->debug);  // init the database, sans-connection
+      $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log );  // init the database, sans-connection
       if( !$this->db ) {
         $this->log->error('attogram::__construct: sqlite_database initialization failed');
       }
