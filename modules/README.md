@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.0.5 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.0 )
 
 * Easily create modules to extend Attogram!
 
@@ -14,7 +14,7 @@ Attogram Modules
 
  * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
 
- * `configs/`- Configurations via `$config['configname'] = ...`, loaded at startup (.php files only)
+ * `configs/`- Configurations via `global $config; $config['configname'] = ...`, loaded at startup (.php files only)
 
  * `includes/` - Included files, loaded at startup (.php files only)
 
@@ -38,11 +38,10 @@ Standard modules included with the Attogram Framework distribution:
 
 ## Module: Database
 * `./modules/database/` - SQLite database for Attogram
-* `./modules/database/admin_actions/db-admin.php` - Admin Action:  Database web admin via phpLiteAdmin
+* `./modules/database/admin_actions/db-admin.php` - Admin Action: Database web admin via phpLiteAdmin
 * `./modules/database/admin_actions/db-setup.php` - Admin Action: Database table setup
+* `./modules/database/includes/attogram_database.php` - Attogram Database Interface
 * `./modules/database/includes/sqlite_database.php` - Attogram SQLite helper class
-* `./modules/database/includes/pager.php` - Pagination helper: function pager()
-* `./modules/database/includes/tabler.php` - Table view/edit helper: function tabler()
 
 ## Module: User
 * `./modules/user/` - Simple user system for Attogram. (requires `database` module)

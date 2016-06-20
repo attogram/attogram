@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - attogram_database interface 0.0.1
+<?php  // Attogram Framework - Database Module - attogram_database interface 0.0.2
 
 namespace Attogram;
 
@@ -14,7 +14,7 @@ interface attogram_database
    * @param  array  $bind (optional) Array of name/values to bind into the SQL query
    * @return array        An array of results
    */
-  public function query( $sql, $bind = array() );
+  public function query( $sql, array $bind = array() );
 
   /**
    * Query the database, return only true or false
@@ -22,7 +22,7 @@ interface attogram_database
    * @param  array  $bind (optional) Array of name/values to bind into the SQL query
    * @return bool         true on successful query, false on error
    */
-  public function queryb( $sql, $bind = array() );
+  public function queryb( $sql, array $bind = array() );
 
   /**
    * Initialize the database connection

@@ -10,8 +10,8 @@ class attogram_fs
 
   /**
    * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name
-   * @param string $dir The directory to search within (ie: modules directory)
-   * @param string name The name of the subdirectories to find
+   * @param string $dir  The directory to search within (ie: modules directory)
+   * @param string $name The name of the subdirectories to find
    * @return array
    */
   public static function get_all_subdirectories( $dir, $name )
@@ -39,8 +39,8 @@ class attogram_fs
 
   /**
    * Include all php files in a specific directory
-   * @param string $dir The directory to search
-   * @return array List of the files successfully loaded
+   * @param  string $dir The directory to search
+   * @return array       List of the files successfully included
    */
   public static function include_all_php_files_in_directory( $dir )
   {
@@ -62,8 +62,8 @@ class attogram_fs
 
   /**
    * Tests if is a file exist, is readable, and is of a certain type.
-   * @param string $file The name of the file to test
-   * @param string $type (optional) The file extension to allow. Defaults to '.php'
+   * @param  string $file The name of the file to test
+   * @param  string $type (optional) The file extension to allow. Defaults to '.php'
    * @return bool
    */
   public static function is_readable_file( $file = false, $type = '.php' )
@@ -90,8 +90,7 @@ class attogram_fs
   }
 
   /**
-   * Examines each module for a named subdirectory
-   * and includes all *.php files from that directory
+   * Examines each module for a named subdirectory, then includes all *.php files from that directory
    * @param string $modules_directory
    * @return array List of the files successfully loaded
    */
