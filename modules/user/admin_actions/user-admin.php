@@ -1,11 +1,14 @@
-<?php // Attogram Framework - User Module - User Admin v0.1.1
+<?php // Attogram Framework - User Module - User Admin v0.2.0
 
 namespace Attogram;
 
-$this->page_header('User Admin');
+$this->page_header('👥 Users');
+
+print '<div class="container"><h1 class="squished">👥 Users</h1></div>';
 
 $this->db->tabler(
   $table = 'user',
+  $table_id = 'id',
   $name_singular = 'user',
   $name_plural = 'users',
   $public_link = false,
@@ -20,7 +23,8 @@ $this->db->tabler(
   ),
   $sql = 'SELECT * FROM user ORDER BY id',
   $admin_link = '../users/',
-  $show_edit = true
+  $show_edit = true,
+  $per_page = 20
 );
 
 $this->page_footer();

@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.1.1
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.0
 
 namespace Attogram;
 
@@ -8,26 +8,23 @@ namespace Attogram;
 class sqlite_database implements attogram_database
 {
 
-  public $db_name;
-  public $modules_directory;
-  public $log;
-  public $debug;
-  public $db;
+  public $db_name;            // (string) path/filename of the SQLite database file
+  public $modules_directory;  // (string) The Attogram Modules directory
+  public $log;                // (object) PSR-3 compliant logger
+  public $db;                 // (object) The PDO database object
 
   /**
    * initialize database settings
    * @param string $db_name relative path to the SQLite database file
    * @param string $modules_directory relative path to the Attogram modules directory
    * @param object $log psr3 logger object
-   * @param bool $debug (optional) defaults to false
    * @return void
    */
-  public function __construct( $db_name, $modules_directory, $log, $debug = false )
+  public function __construct( $db_name, $modules_directory, $log )
   {
     $this->db_name = $db_name;
     $this->modules_directory = $modules_directory;
     $this->log = $log;
-    $this->debug = $debug;
     $this->log->debug('START sqlite_database');
   }
 
@@ -67,7 +64,7 @@ class sqlite_database implements attogram_database
    * @param  array  $bind (optional) Array of name/values to bind into the SQL query
    * @return array        An array of results
    */
-  public function query( $sql, $bind = array() )
+  public function query( $sql, array $bind = array() )
   {
     $this->log->debug('QUERY: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
@@ -106,7 +103,7 @@ class sqlite_database implements attogram_database
    * @param  array  $bind (optional) Array of name/values to bind into the SQL query
    * @return bool         true on successful query, false on error
    */
-  public function queryb( $sql, $bind = array() )
+  public function queryb( $sql, array $bind = array() )
   {
     $this->log->debug('QUERYB: backtrace=' . ( ($btr = debug_backtrace()) ? $btr[1]['function'] : '?' ) . ' sql=' . $sql);
     if( $bind ) {
@@ -194,7 +191,7 @@ class sqlite_database implements attogram_database
    * @param string $table The name of the table to create
    * @return boolean
    */
-  public function create_table( $table='' )
+  public function create_table( $table )
   {
     $this->get_tables();
     if( !isset($this->tables[$table]) ) {
@@ -212,6 +209,7 @@ class sqlite_database implements attogram_database
    * tabler - HTML table with view of database table content, plus optional admin links
    *
    * @param  string $table         The table name
+   * @param  string $table_id      The name of the table ID field (or equivilant )
    * @param  string $name_singular The name of what we are editing, singular form
    * @param  string $name_plural   The name of what we are editing, plural form
    * @param  array  $col           Column Display Info - array of array('class'=>'...', 'title'=>'...', 'key'=>'...')
@@ -220,12 +218,33 @@ class sqlite_database implements attogram_database
    * @param  string $public_link   URL to the public version of this view
    * @param  string $admin_link    URL to the admin version of this view
    * @param  bool   $show_edit     Show edit tools
+   * @param  int    $per_page      (optional) The number of results to show per page. Defaults to 50
    *
    * @return string                HTML fragment
    */
-  public function tabler( $table, $name_singular, $name_plural, $public_link, $col, $sql, $admin_link, $show_edit )
+  public function tabler( $table, $table_id, $name_singular, $name_plural, $public_link, array $col, $sql, $admin_link, $show_edit, $per_page )
   {
 
+    $count_sql = 'SELECT count(' . $table_id . ') AS count FROM ' . $table;
+    $c = $this->query($count_sql);
+    if( $c ) {
+      $count = $c[0]['count'];
+    } else {
+      $count = 0;
+    }
+
+    list( $limit, $offset ) = $this->get_set_limit_and_offset(
+      $default_limit = $per_page,
+      $default_offset = 0,
+      $max_limit = 1000,
+      $min_limit = 5
+    );
+
+    $this->log->debug("TABLER: count=$count limit=$limit offset=$offset");
+    $sql .= " LIMIT $limit";
+    if( $offset ) {
+      $sql .= ", $offset";
+    }
     $result = $this->query($sql);
 
     if( $show_edit ) {
@@ -236,16 +255,15 @@ class sqlite_database implements attogram_database
       $admin_create = $admin_edit = $admin_delete = '';
     }
 
-    print '<div class="container"><p>'
-    . '<strong>' . count($result) . '</strong> <a href="">' . $name_plural . '</a>';
+    print $this->pager( $count, $limit, $offset );
+
+    print '<div class="container"><p>';
 
     if( $show_edit ) {
-      print ' &nbsp; &nbsp; &nbsp; ';
       if( $public_link ) {
-        print '<a href="' . $public_link . '"><span class="glyphicon glyphicon-user"></span> view</a> &nbsp; &nbsp; &nbsp; ';
+        print '<a href="' . $public_link . '">👤 view</a> &nbsp; &nbsp; &nbsp; ';
       }
-      print '<a target="_db" href="' . $admin_create . '"><span class="glyphicon glyphicon-plus"></span> '
-      . 'new ' . $name_singular . '</a>';
+      print '<a target="_db" href="' . $admin_create . '">➕ new ' . $name_singular . '</a>';
     }
 
     print '</p><table class="table table-bordered table-hover table-condensed"><colgroup>';
