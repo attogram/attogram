@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.0 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.1 )
 
 * Easily create modules to extend Attogram!
 
@@ -14,7 +14,7 @@ Attogram Modules
 
  * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
 
- * `configs/`- Configurations via `global $config; $config['configname'] = ...`, loaded at startup (.php files only)
+ * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
 
  * `includes/` - Included files, loaded at startup (.php files only)
 
