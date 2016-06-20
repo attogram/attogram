@@ -4,7 +4,6 @@
   "type": "project",
   "homepage": "https://github.com/attogram/attogram",
   "license": "(MIT or GPL-3.0+)",
-  "minimum-stability": "dev",
   "require": {
     "php": ">=5.3.3 || ^7.0",
     "ext-pdo": "*",
@@ -17,7 +16,7 @@
   "authors": [
     {
       "name": "Attogram Developers",
-      "homepage": "https://github.com/attogram/attogram"
+      "homepage": "https://www.patreon.com/attogram"
     }
   ],
   "support": {
