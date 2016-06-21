@@ -69,8 +69,8 @@ class guru_meditation_loader
                         $vendor_download, array $required_classes, array $required_interfaces )
   {
 
-    //error_reporting(0);   // dev - hides fatal errors? why not caught by shutdown function?
-    //ini_set( 'display_errors', 0 );
+    //error_reporting(0); // dev - hide errors
+    //ini_set( 'display_errors', 0 ); // dev - hide errors
     set_error_handler(array( $this, 'guru_meditation_error_handler' ));
     register_shutdown_function(array( $this, 'guru_meditation_shutdown' ));
     $this->project_name        = $project_name;
