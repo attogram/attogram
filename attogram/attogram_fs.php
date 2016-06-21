@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.8
+<?php // Attogram Framework - attogram_fs class v0.0.9
 
 namespace Attogram;
 
@@ -16,20 +16,17 @@ class attogram_fs
    */
   public static function get_all_subdirectories( $dir, $name )
   {
-    if( !isset($dir) || !$dir || !is_string($dir) ) {
-      return array();
-    }
-    if( !is_dir($dir) || !is_readable($dir) ) {
+    if( !isset($dir) || !$dir || !is_string($dir) ||  !is_readable($dir) ) {
       return array();
     }
     $r = array();
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $d ) {
       $md = $dir . '/' . $d;
-      if( !is_dir($md) ) {
+      if( !is_readable($md) ) {
         continue;
       }
       $md .= '/' . $name;
-      if( !is_dir($md) || !is_readable($md) ) {
+      if( !is_readable($md) ) {
         continue;
       }
       $r[] = $md;
@@ -45,7 +42,7 @@ class attogram_fs
   public static function include_all_php_files_in_directory( $dir )
   {
     $included = array();
-    if( !is_dir($dir) || !is_readable($dir) ) {
+    if( !is_readable($dir) ) {
       return $included;
     }
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $f ) {
@@ -68,10 +65,7 @@ class attogram_fs
    */
   public static function is_readable_file( $file = false, $type = '.php' )
   {
-    if( !$file || !is_file($file) || !is_readable($file) ) {
-      return false;
-    }
-    if( !$type || $type == '' || !is_string($type) ) { // input error
+    if( !$file || !$type || $type == '' || !is_string($type) || !is_string($file) || !is_readable($file) ) {
       return false;
     }
     if( preg_match( '/' . $type . '$/', $file ) ) {
