@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.0
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.1
 
 namespace Attogram;
 
@@ -313,9 +313,10 @@ class sqlite_database implements attogram_database
    * @param  int    $count   The Total Resultset Count
    * @param  int    $limit   The # of results to list per page
    * @param  int    $offset  The item # to start the list
+   * @param  string $pre_qs  (optional) URL Query String to prepend to pagination links, pairs of  name=value&name=value&...
    * @return string          HTML fragment
    */
-  public function pager( $count, $limit, $offset )
+  public function pager( $count, $limit, $offset, $pre_qs = '' )
   {
 
     if( $limit > $count ) {
@@ -344,13 +345,20 @@ class sqlite_database implements attogram_database
     if( $total_pages ) {
       $r .= '<ul class="pagination squished">';
       $p_offset = 0;
+      if( $pre_qs ) {
+        $url_start = '?' . $pre_qs . '&';
+      } else {
+        $url_start = '?';
+      }
+
       for( $x = 0; $x < $total_pages; $x++ ) {
         if( $start_count == $p_offset + 1 ) {
           $active = ' class="active"';
         } else {
           $active = '';
         }
-        $r .= '<li' . $active . '><a href="?l=' . $limit . '&o=' . $p_offset . '">' . ($x+1) . '</a></li>';
+        $url = $url_start . 'l=' . $limit . '&amp;o=' . $p_offset;
+        $r .= '<li' . $active . '><a href="' . $url . '">' . ($x+1) . '</a></li>';
         $p_offset += $limit;
       }
       $r .= '</ul>';
