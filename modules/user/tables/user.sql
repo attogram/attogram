@@ -1,4 +1,4 @@
--- Attogram Framework - User Module - user table - v0.0.4
+-- Attogram Framework - User Module - user table - v0.1.0
 
 CREATE TABLE IF NOT EXISTS 'user' (
 'id' INTEGER PRIMARY KEY,
@@ -6,6 +6,4 @@ CREATE TABLE IF NOT EXISTS 'user' (
 'password' TEXT NOT NULL,
 'email' TEXT NOT NULL,
 'level' INTEGER NOT NULL DEFAULT '0',
-'last_login' DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-'last_host' TEXT NOT NULL
 )
