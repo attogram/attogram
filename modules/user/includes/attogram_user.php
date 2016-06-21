@@ -2,16 +2,28 @@
 
 namespace Attogram;
 
-class attogram_user
+interface attogram_user_interface {
+  public static function login( $PSR_3_logger_object, $database_object );
+  public static function logout();
+  public static function is_logged_in();
+}
+
+
+/**
+ * A very simple user system, with very minimal security.
+ * Not recommended for production environment
+ */
+class attogram_user implements attogram_user_interface
 {
 
   /**
-   * login() - login a user into the system
-   * @param obj $log - PSR-3 compliant logger object
-   * @param obj $db - The attogram database object
-   * @return boolean
+   * login a user into the system
+   * @param  obj   $log  PSR-3 compliant logger object
+   * @param  obj   $db   The attogram database object
+   * @return bool
    */
-  public static function login( $log, $db ) {
+  public static function login( $log, $db )
+  {
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
       $log->error('LOGIN: Please enter username and password');
       return false;
@@ -37,21 +49,26 @@ class attogram_user
     $_SESSION['attogram_username'] = $user['username'];
     $_SESSION['attogram_level'] = $user['level'];
     $_SESSION['attogram_email'] = $user['email'];
-    if( !$db->queryb(
-      "UPDATE user SET last_login = datetime('now'), last_host = :last_host WHERE id = :id",
-      $bind = array(':id'=>$user['id'], ':last_host'=>$_SERVER['REMOTE_ADDR'])
-      ) ) {
-        $log->error('LOGIN: can not updated last login info');
-    }
     $log->debug('User Logged in');
     return true;
   }
 
   /**
-   * is_logged_in() - is a user logged into the system?
+   * logout a user
+   */
+  public static function logout()
+  {
+    session_unset();
+    session_destroy();
+    session_start();
+  }
+
+  /**
+   * is a user logged into the system?
    * @return bool
    */
-  public static function is_logged_in( ) {
+  public static function is_logged_in( )
+  {
     if( isset($_SESSION['attogram_id']) && $_SESSION['attogram_id'] && isset($_SESSION['attogram_username']) && $_SESSION['attogram_username']) {
       return true;
     }
