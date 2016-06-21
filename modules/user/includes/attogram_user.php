@@ -1,13 +1,19 @@
-<?php // Attogram Framework - User Module - attogram_user class v0.0.4
+<?php // Attogram Framework - User Module - attogram_user class v0.1.0
 
 namespace Attogram;
 
+/**
+ * Attogram User Object Interface
+ */
 interface attogram_user_interface {
-  public static function login( $PSR_3_logger_object, $database_object );
-  public static function logout();
-  public static function is_logged_in();
-}
 
+  public static function login( $PSR_3_logger_object, $database_object );
+
+  public static function logout();
+
+  public static function is_logged_in();
+
+}
 
 /**
  * A very simple user system, with very minimal security.
@@ -25,7 +31,7 @@ class attogram_user implements attogram_user_interface
   public static function login( $log, $db )
   {
     if( !isset($_POST['u']) || !isset($_POST['p']) || !$_POST['u'] || !$_POST['p'] ) {
-      $log->error('LOGIN: Please enter username and password');
+      $log->error('LOGIN: missing username or password');
       return false;
     }
     $user = $db->query(
@@ -41,7 +47,7 @@ class attogram_user implements attogram_user_interface
       return false;
     }
     if( !sizeof($user) == 1 ) { // corrupt data
-      $log->error('LOGIN: Invalid login');
+      $log->error('LOGIN: Login system error');
       return false;
     }
     $user = $user[0];
@@ -49,7 +55,7 @@ class attogram_user implements attogram_user_interface
     $_SESSION['attogram_username'] = $user['username'];
     $_SESSION['attogram_level'] = $user['level'];
     $_SESSION['attogram_email'] = $user['email'];
-    $log->debug('User Logged in');
+    $log->debug('LOGIN: User Logged in');
     return true;
   }
 
