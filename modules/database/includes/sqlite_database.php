@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.1
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.2
 
 namespace Attogram;
 
@@ -203,6 +203,26 @@ class sqlite_database implements attogram_database
       return false;
     }
     return true;
+  }
+
+  /**
+   * Get the count of entries in a table
+   * @param string $table    The table name
+   * @param string $id_field (optional) The id field used for counting
+   * @param string $where    (optional) The SQL WHERE clause to add
+   * @return int             The number of entries
+   */
+  public function get_table_count( $table, $id_field = 'id', $where = '' )
+  {
+    $sql = 'SELECT count(' . $id_field . ') AS count FROM ' . $table;
+    if( $where ) {
+      $sql .= ' ' . $where;
+    }
+    $count = $this->query($sql);
+    if( $count ) {
+      return $count[0]['count'];
+    }
+    return 0;
   }
 
   /**
