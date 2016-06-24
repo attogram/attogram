@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.2
+<?php // Attogram Framework - Check Script v0.0.3
 
 $c = new attogram_check();
 $c->check();
@@ -19,7 +19,7 @@ class attogram_check {
     $this->page_header();
     print '<h1><span class="icon">🔬</span> Attogram Framework Check</h1>'
     . '<p><span class="icon">👉</span> <strong>' . __DIR__ . '</strong>'
-    . $this->spacer . '<a href=""><span class="icon">🔃</span></a>'
+    . $this->spacer . '<a href="' . @$_SERVER['SCRIPT_NAME'] . '"><span class="icon">🔃</span></a>'
     . $this->spacer . '<span class="icon">🕑</span> ' . gmdate('Y-m-d H:i:s') . ' UTC'
     . $this->spacer . '<a href="./"><span class="icon">🏠</span></a></p>';
     print $this->divider;
@@ -272,4 +272,7 @@ class attogram_check {
     <title>Attogram Framework Check</title></head><body><?php
   }
 
+  function page_footer() {
+    ?></body></html><?php
+  }
 } // end class attogram_check
