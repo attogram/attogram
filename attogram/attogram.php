@@ -12,7 +12,7 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed, at your chooseing, under the
  * MIT License (MIT) _or_ the GNU General Public License version 3 (GPL-3.0+).
  *
- * @version 0.6.4
+ * @version 0.6.5-dev
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -20,7 +20,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.6.4';
+  const ATTOGRAM_VERSION = '0.6.5-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
@@ -148,7 +148,7 @@ class attogram
   {
     $d = attogram_fs::get_all_subdirectories( $this->modules_dir, 'templates' );
     if( !$d ) {
-      $this->log->debug('get_module_templates: no module templates found');
+      $this->log->debug('set_module_templates: no module templates found');
       return;
     }
     foreach( $d as $md ) {
@@ -157,9 +157,9 @@ class attogram
         if( attogram_fs::is_readable_file( $file, '.php' ) ) {
           $name = preg_replace( '/\.php$/', '', $f );
           $this->templates[$name] = $file; // Set the template
-          $this->log->debug('get_module_templates: ' . $name. ' = ' . $file);
+          $this->log->debug('set_module_templates: ' . $name. ' = ' . $file);
         } else {
-          $this->log->error('get_module_templates: File not readable: ' . $file);
+          $this->log->error('set_module_templates: File not readable: ' . $file);
         }
       }
     }
