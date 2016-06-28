@@ -368,6 +368,7 @@ class attogram
     if( $mime_type ) {
       header('Content-Type:' . $mime_type);
     }
+    // DEV todo - cache headers here
     include($file);
     exit;
   } // end function virtual_web_directory()
