@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.12 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.13 )
 
 * Easily create modules to extend Attogram!
 
@@ -24,8 +24,8 @@ Attogram Modules
 
  * `public/` - Files for public consumption. Served via requests to the `web/` virtual web directory
 
-* Modules are loaded in directory list order.
- * Action names cascade: a duplicate action name will overwrite any previous modules action of the same name.
+* Modules are loaded in _directory list order_.
+ * Actions and files _cascade_: a duplicate action name or file will overwrite any previous modules action or file of the same name.
 
 # Standard Modules
 
@@ -37,6 +37,11 @@ Standard modules included with the Attogram Framework distribution:
 * `./modules/attogram/actions/about.md` - Public Action: About page
 * `./modules/attogram/actions/license.php` - Public Action: License page
 * `./modules/attogram/admin_actions/info.php` - Admin Action: Attogram Info page
+* `./modules/attogram/public/attogram.css` - Virtual Web Directory: attogram global CSS
+* `./modules/attogram/public/jquery.min.js` - Virtual Web Directory: jQuery library
+* `./modules/attogram/public/bootstrap/css/bootstrap.min.css` - Virtual Web Directory: Bootstrap library CSS
+* `./modules/attogram/public/bootstrap/fonts/glyphicons-halflings-regular.[eot,svg,ttf,woff,woff2]` - Virtual Web Directory: Bootstrap glyph font
+* `./modules/attogram/public/bootstrap/js/bootstrap.min.js` - Virtual Web Directory: Bootstrap library javascript
 
 ## Module: Database
 * `./modules/database/` - SQLite database for Attogram
