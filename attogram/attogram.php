@@ -64,8 +64,8 @@ class attogram
     $this->awaken(); // set the configuration
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
-    $this->set_uri(); // make array of the URI request
     $this->virtual_web_directory(); // do virtual web directory requests
+    $this->set_uri(); // make array of the URI request
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
     $this->sessioning(); // start sessions
@@ -345,6 +345,9 @@ class attogram
       return; // not a virtual web directory request
     }
     $test = explode('/', $this->pathInfo);
+    if( sizeof($test) < 3 || $test[2] == '') { // empty request
+      $this->error404('Virtual Nothingness Found');
+    }
     $trash = array_shift($test); // take off top level
     $trash = array_shift($test); // take off virtual web directory
     $req = implode('/', $test); // the virtual web request
@@ -352,7 +355,7 @@ class attogram
     $file = false;
     foreach( $mod as $m ) {
       $test_file = $m . '/' . $req;
-      if( !is_readable($test_file) ) {
+      if( !is_readable($test_file) || is_dir($test_file) ) {
         continue;
       }
       $file = $test_file; // found file -- cascade set the file
