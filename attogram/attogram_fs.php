@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.9
+<?php // Attogram Framework - attogram_fs class v0.0.10
 
 namespace Attogram;
 
@@ -103,4 +103,26 @@ class attogram_fs
     return $included;
   } // end function load_module_subdirectories()
 
+  /**
+   * get the mime type of a file
+   */
+  public static function get_mime_type( $file )
+  {
+    $mime_type = finfo_file( finfo_open(FILEINFO_MIME_TYPE), $file );
+    switch( pathinfo( $file, PATHINFO_EXTENSION ) ) { // https://bugs.php.net/bug.php?id=53035
+      case 'css':
+        $mime_type = 'text/css';
+        break;
+      case 'js':
+        $mime_type = 'application/javascript';
+        break;
+      case 'xml':
+        $mime_type = 'text/xml';
+        break;
+      case 'php':
+        $mime_type = false; // do not do content type header, not needed for native php
+        break;
+    }
+    return $mime_type;
+  }
 } // end class attogram_fs

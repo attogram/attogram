@@ -64,7 +64,8 @@ class attogram
     $this->awaken(); // set the configuration
     $this->set_request(); // set all the request-related variables we need
     $this->exception_files(); // do robots.txt, sitemap.xml
-    $this->set_uri();
+    $this->set_uri(); // make array of the URI request
+    $this->virtual_web_directory(); // do virtual web directory requests
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
     $this->sessioning(); // start sessions
@@ -334,7 +335,42 @@ class attogram
   } // end function route()
 
   /**
-   * exception_files() - checks URI for exception files sitemap.xml, robots.txt
+   * checks if request is for the virtual web directory
+   * and serve the appropriate module file
+   * @return void
+   */
+  public function virtual_web_directory() {
+    $virtual_web_directory = 'web';
+    if( !preg_match( '/^\/' . $virtual_web_directory . '\//', $this->pathInfo ) ) {
+      return; // not a virtual web directory request
+    }
+    $test = explode('/', $this->pathInfo);
+    $trash = array_shift($test); // take off top level
+    $trash = array_shift($test); // take off virtual web directory
+    $req = implode('/', $test); // the virtual web request
+    $mod = attogram_fs::get_all_subdirectories( $this->modules_dir, 'public' );
+    $file = false;
+    foreach( $mod as $m ) {
+      $test_file = $m . '/' . $req;
+      if( !is_readable($test_file) ) {
+        continue;
+      }
+      $file = $test_file; // found file -- cascade set the file
+    }
+    if( !$file ) {
+      $this->error404('Virtually Nothing Found');
+    }
+    // DEV todo - security check here
+    $mime_type = attogram_fs::get_mime_type($file);
+    if( $mime_type ) {
+      header('Content-Type:' . $mime_type);
+    }
+    include($file);
+    exit;
+  } // end function virtual_web_directory()
+
+  /**
+   * checks URI for exception files sitemap.xml, robots.txt
    * @return void
    */
   public function exception_files()

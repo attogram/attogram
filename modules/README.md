@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.1 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.12 )
 
 * Easily create modules to extend Attogram!
 
@@ -21,6 +21,8 @@ Attogram Modules
  * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
 
  * `templates/` - Templates, to override default Attogram templates  (.php files only)
+
+ * `public/` - Files for public consumption. Served via requests to the `web/` virtual web directory
 
 * Modules are loaded in directory list order.
  * Action names cascade: a duplicate action name will overwrite any previous modules action of the same name.
