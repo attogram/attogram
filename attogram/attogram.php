@@ -366,15 +366,21 @@ class attogram
 
     // DEV todo - security check here
 
-
     $this->do_cache_headers(); // DEV todo
 
     $mime_type = attogram_fs::get_mime_type($file);
     if( $mime_type ) {
       header('Content-Type:' . $mime_type);
-      readfile($file);
+      $result = readfile($file);
+      if( !$result ) {
+        $this->log->error('virtual_web_directory: can not read file: ' . htmlentities($file) );
+        $this->error404('Virtually unreadable');
+      }
     } else {
-        include($file);
+      if( !(include($file)) ) {
+        $this->log->error('virtual_web_directory: can not include file: ' . htmlentities($file) );
+        $this->error404('Virtually unincludeable');
+      }
     }
     exit;
   } // end function virtual_web_directory()
