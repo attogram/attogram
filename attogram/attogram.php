@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.1.0
+<?php // Attogram Framework - attogram class v0.1.1
 
 namespace Attogram;
 
@@ -363,13 +363,19 @@ class attogram
     if( !$file ) {
       $this->error404('Virtually Nothing Found');
     }
+
     // DEV todo - security check here
+
+
+    $this->do_cache_headers(); // DEV todo
+
     $mime_type = attogram_fs::get_mime_type($file);
     if( $mime_type ) {
       header('Content-Type:' . $mime_type);
+      readfile($file);
+    } else {
+        include($file);
     }
-    $this->do_cache_headers();
-    include($file);
     exit;
   } // end function virtual_web_directory()
 
