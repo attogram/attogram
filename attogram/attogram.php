@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.0.10
+<?php // Attogram Framework - attogram class v0.1.0
 
 namespace Attogram;
 
@@ -368,10 +368,16 @@ class attogram
     if( $mime_type ) {
       header('Content-Type:' . $mime_type);
     }
-    // DEV todo - cache headers here
+    $this->do_cache_headers();
     include($file);
     exit;
   } // end function virtual_web_directory()
+
+  public function do_cache_headers() {
+    // TODO dev - header('Cache-Control: max-age:31536000');
+
+  } // end function do_cache_headers()
+
 
   /**
    * checks URI for exception files sitemap.xml, robots.txt

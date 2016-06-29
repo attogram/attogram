@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.10
+<?php // Attogram Framework - attogram_fs class v0.0.11
 
 namespace Attogram;
 
@@ -12,11 +12,11 @@ class attogram_fs
    * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name
    * @param string $dir  The directory to search within (ie: modules directory)
    * @param string $name The name of the subdirectories to find
-   * @return array
+   * @return array       List of the directories found
    */
   public static function get_all_subdirectories( $dir, $name )
   {
-    if( !isset($dir) || !$dir || !is_string($dir) ||  !is_readable($dir) ) {
+    if( !isset($dir) || !$dir || !is_string($dir) || !is_readable($dir) ) {
       return array();
     }
     $r = array();
@@ -105,6 +105,8 @@ class attogram_fs
 
   /**
    * get the mime type of a file
+   * @param string $file  The file to examine
+   * @return string       The mime type, or false
    */
   public static function get_mime_type( $file )
   {
@@ -122,6 +124,22 @@ class attogram_fs
       case 'php':
         $mime_type = false; // do not do content type header, not needed for native php
         break;
+      case 'eot':
+        $mime_type = 'application/vnd.ms-fontobject';
+        break;
+      case 'svg':
+        $mime_type = 'image/svg+xml';
+        break;
+      case 'ttf':
+        $mime_type = 'application/font-sfnt';
+        break;
+      case 'woff':
+        $mime_type = 'application/font-woff';
+        break;
+      case 'woff2':
+        $mime_type = 'application/font-woff2';
+        break;
+
     }
     return $mime_type;
   }
