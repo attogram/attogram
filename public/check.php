@@ -186,19 +186,20 @@ class attogram_check {
     foreach( $apache_finder as $af ) {
       if( is_file($af) && is_readable($af) ) {
         $apache_found[] = $af;
+        break; // only do irst found...
       }
-      if( sizeof($apache_found) == 1 ) {
+    }
+
+    if( sizeof($apache_found) == 1 ) {
         $r42 = 'pass';
         $r42_found = $apache_found[0];
         $r43 = $this->apache_conf_examine( $apache_found[0] );
-
-      } elseif( sizeof($apache_found) > 1 ) {
+    } elseif( sizeof($apache_found) > 1 ) {
         $r42 = $r43 = 'fail';
         $r42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
-      } else {
+    } else {
         $r42 = $r43 = 'fail';
         $r42_found = 'Not Found';
-      }
     }
 
     print '<pre class="' . $r42 . '">' . $this->{$r42} . ' 4.2 - <strong>Apache conf</strong> exists (' . $r42_found . ')</pre>';
