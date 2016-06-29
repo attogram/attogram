@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.3
+<?php // Attogram Framework - Check Script v0.0.4
 
 $c = new attogram_check();
 $c->check();
@@ -194,9 +194,9 @@ class attogram_check {
         $r42 = 'pass';
         $r42_found = $apache_found[0];
         $r43 = $this->apache_conf_examine( $apache_found[0] );
-    } elseif( sizeof($apache_found) > 1 ) {
-        $r42 = $r43 = 'fail';
-        $r42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
+    //} elseif( sizeof($apache_found) > 1 ) {
+    //    $r42 = $r43 = 'fail';
+    //    $r42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
     } else {
         $r42 = $r43 = 'fail';
         $r42_found = 'Not Found';
