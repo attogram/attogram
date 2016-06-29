@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Footer v0.1.2
+<?php // Attogram Framework - Page Footer v0.1.4
 
 namespace Attogram;
 
@@ -7,15 +7,17 @@ print '
 <footer class="footer">
  <div class="container-fluid">
   <p>
-    <nobr><a href="' . $this->get_site_url() . '/">' .  $this->site_name . '</a></nobr>
-    <small>' . $divider . '
-    <nobr>🚀 Powered by <a target="github" href="' . $this->project_github . '">Attogram <small>v' . self::ATTOGRAM_VERSION . '</small></a></nobr>
+    <small>
+    <span style="white-space: nowrap"><a href="' . $this->get_site_url() . '/">' .  $this->site_name . '</a></span>
     ' . $divider . '
-    <nobr>🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC</nobr>
+    <span style="white-space: nowrap">🚀 Powered by <a target="github" href="' . $this->project_github . '">Attogram <small>v' . attogram::ATTOGRAM_VERSION . '</small></a></span>
     ' . $divider . '
-    <nobr>👤 ' . $this->clientIp . '</nobr>
+    <span style="white-space: nowrap">🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC</span>
     ' . $divider . '
-    <nobr>🏁 ' . round( (microtime(1) - $this->start_time), 3, PHP_ROUND_HALF_UP) . ' seconds</nobr></small>
+    <span style="white-space: nowrap">👤 ' . $this->clientIp . '</span>
+    ' . $divider . '
+    <span style="white-space: nowrap">🏁 ' . round( (microtime(1) - $this->start_time), 3, PHP_ROUND_HALF_UP) . ' seconds</span>
+    </small>
   </p>
  </div>
 </footer>
