@@ -612,12 +612,16 @@ class attogram
       print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
       . htmlentities($name) . '</a></li>';
     }
-    print '</ul><p><p>Admin Actions:<ul>';
-    foreach( $this->get_admin_actions() as $name => $val ) {
-      print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
-      . htmlentities($name) . '</a></li>';
+    print '</ul><p>';
+    if( $this->is_admin() ) {
+      print '<p>Admin Actions:<ul>';
+      foreach( $this->get_admin_actions() as $name => $val ) {
+        print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
+        . htmlentities($name) . '</a></li>';
+      }
+      print '</ul></p>';
     }
-    print '</ul></p></div>';
+    print '</div>';
     $this->page_footer();
   }
 
