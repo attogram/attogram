@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.1.2
+<?php // Attogram Framework - attogram class v0.1.3
 
 namespace Attogram;
 
@@ -12,7 +12,7 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed, at your chooseing, under the
  * MIT License (MIT) _or_ the GNU General Public License version 3 (GPL-3.0+).
  *
- * @version 0.6.7
+ * @version 0.6.8
  * @license MIT
  * @license GPL-3.0+
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -20,7 +20,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.6.7';
+  const ATTOGRAM_VERSION = '0.6.8-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
@@ -323,11 +323,7 @@ class attogram
       } // end switch on parser
     } //end if action set
     if( $this->uri[0] == 'home' ) { // missing the Home Page!
-      // Default Home Page
-      $this->log->error('ROUTE: missing home action - using default homepage');
-      $this->page_header('Home');
-      print 'Welcome to the Attogram Framework.  Do you know where my home page is?';
-      $this->page_footer();
+      $this->default_homepage();
       return;
     }
     $this->log->error('ACTION: Action not found.  uri[0]=' . $this->uri[0] );
@@ -385,11 +381,13 @@ class attogram
     exit;
   } // end function virtual_web_directory()
 
+  /**
+   * send HTTP cache headers
+   */
   public function do_cache_headers() {
     // TODO dev - header('Cache-Control: max-age:31536000');
 
   } // end function do_cache_headers()
-
 
   /**
    * checks URI for exception files sitemap.xml, robots.txt
@@ -594,6 +592,33 @@ class attogram
     print '<hr /><p>Powered by <a href="' . $this->project_github . '">Attogram v' . ATTOGRAM_VERSION . '</a></p>';
     print '</body></html>';
     $this->log->error('missing page_footer ' . $file . ' - using default footer');
+  }
+
+  /**
+   * Show the default home page
+   */
+  public function default_homepage()
+  {
+    $this->log->error('ROUTE: missing home action - using default homepage');
+    $this->page_header('Home');
+    print '<div class="container">'
+    . '<h1>Welcome to the Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small></h1>'
+    . '<p>To replace this page, create a file named '
+    . '<code>home.php</code> or <code>home.md</code> '
+    . ' in any <code>modules/*/actions/</code> directory</p>'
+    . '<p>Public Actions:<ul>'
+    ;
+    foreach( $this->get_actions() as $name => $val ) {
+      print '<li><a href="' . $this->path . '/' . urlencode($name) . '">'
+      . htmlentities($name) . '</a></li>';
+    }
+    print '</ul><p><p>Admin Actions:<ul>';
+    foreach( $this->get_admin_actions() as $name => $val ) {
+      print '<li><a href="' . $this->path . '/' . urlencode($name) . '">'
+      . htmlentities($name) . '</a></li>';
+    }
+    print '</ul></p></div>';
+    $this->page_footer();
   }
 
   /**
