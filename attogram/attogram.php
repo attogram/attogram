@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.1.3
+<?php // Attogram Framework - attogram class v0.1.4
 
 namespace Attogram;
 
@@ -609,12 +609,12 @@ class attogram
     . '<p>Public Actions:<ul>'
     ;
     foreach( $this->get_actions() as $name => $val ) {
-      print '<li><a href="' . $this->path . '/' . urlencode($name) . '">'
+      print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
       . htmlentities($name) . '</a></li>';
     }
     print '</ul><p><p>Admin Actions:<ul>';
     foreach( $this->get_admin_actions() as $name => $val ) {
-      print '<li><a href="' . $this->path . '/' . urlencode($name) . '">'
+      print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
       . htmlentities($name) . '</a></li>';
     }
     print '</ul></p></div>';
