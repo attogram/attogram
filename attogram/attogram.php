@@ -442,8 +442,8 @@ class attogram
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
-    $this->log->debug('do_markdown ' . $file);
-    exit;
+    $this->log->debug('DO_MARKDOWN: ' . $file);
+    //exit;
   }
 
   /**
