@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.1.4
+<?php // Attogram Framework - attogram class v0.1.5
 
 namespace Attogram;
 
@@ -417,33 +417,46 @@ class attogram
   }
 
   /**
-   * do_markdown() - parse and display a Markdown document
+   * get HTML from a markdown file
+   * @param string $file The markdown file to parse
+   * @return string      HTML fragment or false
+   */
+  public function get_markdown( $file )
+  {
+    if( !attogram_fs::is_readable_file($file, '.md' ) ) {
+      $this->log->error('GET_MARKDOWN: can not read file: ' . $this->web_display($file));
+      return false;
+    }
+    if( !class_exists('Parsedown') ) {
+      $this->log->error('GET_MARKDOWN: can not find parser');
+      return false;
+    }
+    $page = @file_get_contents($file);
+    if( $page === false ) {
+      $this->log->error('GET_MARKDOWN: can not get file contents: ' . $this->web_display($file));
+      return false;
+    }
+    $content = \Parsedown::instance()->text( $page );
+    if( !$content ) {
+      $this->log->error('GET_MARKDOWN: parse failed on file: ' . $this->web_display($file));
+      return false;
+    }
+    return $content;
+  } // end function get_markdown
+
+  /**
+   * display a Markdown document, with standard page header and footer
    * @param string $file The markdown file to load
    * @return void
    */
   public function do_markdown( $file )
   {
-    $title = $content = '';
-    if( attogram_fs::is_readable_file($file, '.md' ) ) {
-      $page = @file_get_contents($file);
-      if( $page === false ) {
-          $this->log->error('DO_MARKDOWN: can not get file');
-      } else {
-        if( class_exists('Parsedown') ) {
-          $title = trim( strtok($page, "\n") ); // get first line of file, use as page title
-          $content = \Parsedown::instance()->text( $page );
-        } else {
-          $this->log->error('DO_MARKDOWN: can not find parser');
-        }
-      }
-    } else {
-      $this->log->error('DO_MARKDOWN: can not read file');
-    }
+    $title = 'MARKDOWN';  // TODO dev - $title input, and default to 1st line of file $title = trim( strtok($page, "\n") ); // get first line of file, use as page title
+    $content = $this->get_markdown($file);
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
     $this->log->debug('DO_MARKDOWN: ' . $file);
-    //exit;
   }
 
   /**
