@@ -41,7 +41,7 @@ $guru = new guru_meditation_loader(
 ********************************************************************************
 ********************************************************************************
 
-Guru Meditation Loader v0.0.6
+Guru Meditation Loader v0.0.7
 
 Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
 
@@ -173,6 +173,10 @@ class guru_meditation_loader
     $this->autoloader = $config['autoloader'];
   } // end function meditate()
 
+
+  /**
+   * load module configs
+   */
   function meditate_deeper() {
     global $config;
     //if( !class_exists('attogram_fs') ) ....
