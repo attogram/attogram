@@ -1,15 +1,17 @@
-<?php // Attogram Framework - 404 Page v0.0.2
+<?php // Attogram Framework - 404 Page Template v0.0.3
 
-header("HTTP/1.0 404 Not Found");
+header('HTTP/1.0 404 Not Found');
 
-$this->page_header('404 Not Found');
-?>
-<div class="container">
-  <h1>404 Not Found</h1><?php
+$title = '😕 404 Not Found';
 
-  if( isset($error) && $error ) {
-    print '<p>Error: <code>' . htmlentities($error) . '</code></p>';
-  }
-?></div>
-<?php
+$this->page_header($title);
+
+print '<div class="container"><h1>' . $title . '</h1>';
+
+if( isset($error) && $error ) {
+  print '<h2>💔 <code>' . htmlentities($error) . '</code></h2>';
+}
+
+print '</div>';
+
 $this->page_footer();
