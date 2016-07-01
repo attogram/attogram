@@ -1,32 +1,31 @@
 Attogram Framework License
 ==================
-[//]: # ( Attogram Framework - License.md (markdown) - v0.2.0 )
+[//]: # ( Attogram Framework - License.md (markdown) - v0.2.1 )
 
-<div class="container">
-<p>The Attogram Framework is an open source project.</p>
-<p>Attogram is dual licensed under
+The Attogram Framework is an open source project.
+
+Attogram is dual licensed under
 <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the
-<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>, at your choosing.</p>
-<p>The Attogram distribution includes <a href="#other">other open source projects</a>.</p>
-</div>
+<a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>, at your choosing.
 
-<div class="container">
+The Attogram distribution includes <a href="#other">other open source projects</a>.
+
 <hr />
-<p>
+
 <strong>Attogram Framework - MIT License</strong>
-</p><p>
+
 Copyright (c) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
-</p><p>
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-</p><p>
+
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-</p><p>
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,30 +33,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-</p>
-</div>
 
-<div class="container">
 <hr />
-<p>
+
 <strong>Attogram Framework - GNU General Public License</strong>
-</p><p>
-    Copyright (C) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
-</p><p>
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-</p><p>
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-</p>
-</div>
 
-<div class="container" dir="ltr">
+Copyright (C) 2016 Attogram Developers <a href="https://github.com/attogram/attogram/">https://github.com/attogram/attogram/</a>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
 <hr />
+
 <h3 style="text-align: center;">GNU GENERAL PUBLIC LICENSE</h3>
 <p style="text-align: center;">Version 3, 29 June 2007</p>
 
@@ -742,17 +736,15 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 &lt;<a href="http://www.gnu.org/philosophy/why-not-lgpl.html">http://www.gnu.org/philosophy/why-not-lgpl.html</a>&gt;.</p>
 
-</div>
 
-<div class="container">
 <a name="other"></a>
 <hr />
-<p>Other Open Source Software included with Attogram:</p>
+
+Other Open Source Software included with Attogram:
+
 <ul>
 <li>phpLiteAdmin - GPL License - <a href="https://www.phpliteadmin.org/">https://www.phpliteadmin.org/</a></li>
 <li>jQuery - MIT License - <a href="http://jquery.org/license/">http://jquery.org/license/</a></li>
 <li>Bootstrap - MIT License - <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
 <li>Parsedown - MIT License - <a href="http://parsedown.org/">http://parsedown.org/</a></li>
-
 </ul>
-</div>
