@@ -1,8 +1,8 @@
-<?php // Attogram Framework - about page - README.md loader v0.0.1
+<?php // Attogram Framework - about page - README.md loader v0.0.2
 
 namespace Attogram;
 
-$readme = '../README.md';
+$readme = $this->attogram_dir . 'README.md';
 
 if( !is_readable($readme) ) {
   $this->log->error('about.php: file not found: ' . $readme);
