@@ -1,6 +1,6 @@
 Attogram Modules
 ===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.13 )
+[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.14 )
 
 * Easily create modules to extend Attogram!
 
@@ -46,7 +46,7 @@ Standard modules included with the Attogram Framework distribution:
 ## Module: Database
 * `./modules/database/` - SQLite database for Attogram
 * `./modules/database/admin_actions/db-admin.php` - Admin Action: Database web admin via phpLiteAdmin
-* `./modules/database/admin_actions/db-setup.php` - Admin Action: Database table setup
+* `./modules/database/admin_actions/db-tables.php` - Admin Action: Database table information
 * `./modules/database/includes/attogram_database.php` - Attogram Database Interface
 * `./modules/database/includes/sqlite_database.php` - Attogram SQLite helper class
 
