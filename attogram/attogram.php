@@ -564,7 +564,7 @@ class attogram
   public function page_header( $title = '' )
   {
     $file = $this->templates['header'];
-    if( attogram_fs::is_readable_file($file,'.php') ) {
+    if( attogram_fs::is_readable_file( $file,'.php' ) ) {
       include($file);
       $this->log->debug('page_header, title: ' . $title);
       return;
