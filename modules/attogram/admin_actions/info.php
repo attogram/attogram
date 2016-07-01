@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.6
+<?php // Attogram Framework - Site Info v0.1.7
 
 namespace Attogram;
 
@@ -6,7 +6,7 @@ $title = 'Information';
 $this->page_header($title);
 
 $info = array();
-$info['<a name="attogram"></a><h3><span class="glyphicon glyphicon-flash"></span> <em>Attogram:</em></h3>'] = '';
+$info['<a name="attogram"></a><h3>🚀 <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = self::ATTOGRAM_VERSION;
 $info['Attogram Directory'] = info_dir($this->attogram_dir);
 $info['PHP Version'] = phpversion();
@@ -14,7 +14,7 @@ $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
 $info['debug'] = ( $this->debug ? 'true' : '<code>false</code>' );
 $info['project_github'] = '<a href="' . $this->project_github . '">' . $this->project_github . '</a>';
 
-$info['<a name="site"></a><h3><span class="glyphicon glyphicon-home"></span> <em>Site:</em></h3>'] = '';
+$info['<a name="site"></a><h3>🏠 <em>Site:</em></h3>'] = '';
 $info['site_name'] = $this->site_name;
 $info['site_url'] = '<a href="' . $this->get_site_url() . '">' . $this->get_site_url() . '</a>';
 $info['path'] = ( $this->path ? $this->path : '<code>Top Level</code>' );
@@ -26,29 +26,28 @@ $info['sitemap.xml'] = '<a href="' . $sitemapxml . '">' . $sitemapxml . '</a>';
 
 $info['admins'] = info_array($this->admins);
 
-$info['<a name="actions"></a><h3><span class="glyphicon glyphicon-play"></span> <em>Actions:</em></h3>'] = '';
+$info['<a name="actions"></a><h3>▶ <em>Actions:</em></h3>'] = '';
 $info['actions'] = info_actions($this->actions, $this->depth, $this->no_end_slash);
 $info['admin_actions'] = info_actions($this->admin_actions, $this->depth, $this->no_end_slash);
 
-$info['<a name="directories"></a><h3><span class="glyphicon glyphicon-folder-open"></span> <em>Directories:</em></h3>'] = '';
+$info['<a name="directories"></a><h3>📂 <em>Directories:</em></h3>'] = '';
 $info['attogram_dir'] = info_dir($this->attogram_dir);
 $info['modules_dir'] = info_dir($this->modules_dir);
 $info['templates_dir'] = info_dir($this->templates_dir);
 
-
-$info['<a name="files"></a><h3><span class="glyphicon glyphicon-file"></span> <em>Files:</em></h3>'] = '';
+$info['<a name="files"></a><h3>📄 <em>Files:</em></h3>'] = '';
 $info['templates'] = info_array($this->templates, 1);
 $info['skip_files'] = info_array(attogram_fs::get_skip_files());
-$info['<a name="objects"></a><h3><span class="glyphicon glyphicon-paperclip"></span> <em>Objects:</em></h3>'] = '';
+$info['<a name="objects"></a><h3>📎 <em>Objects:</em></h3>'] = '';
 $info['request'] = info_object($this->request);
 $info['log'] = info_object($this->log);
 $info['db'] = info_object($this->db);
 
-$info['<a name="database"></a><h3><span class="glyphicon glyphicon-hdd"></span> <em>Database:</em></h3>'] = '';
+$info['<a name="database"></a><h3>💾 <em>Database:</em></h3>'] = '';
 $info['db_name'] = info_file($this->db_name);
 $info['database_size'] = (file_exists($this->db_name) ? filesize($this->db_name) : '<code>null</code>') . ' bytes';
 
-$info['<a name="user"></a><h3><span class="glyphicon glyphicon-user"></span> <em>User:</em></h3>'] = '';
+$info['<a name="user"></a><h3>👤 <em>User:</em></h3>'] = '';
 $info['host'] = $this->host;
 $info['IP'] = $this->clientIp;
 $info['# session attributes'] = sizeof($_SESSION);
@@ -56,7 +55,7 @@ $info['session attributes'] = info_array( $_SESSION, $key=1 );
 
 print '
 <div class="container">
- <h1><span class="glyphicon glyphicon-info-sign"></span> ' . $title . '</h1>
+ <h1>💁 ' . $title . '</h1>
  <p>
  <a href="#attogram">attogram</a> -
  <a href="#site">site</a> -
