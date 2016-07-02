@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Main Configuration File Example v0.0.5
+<?php // Attogram Framework - Main Configuration File Example v0.0.6
 
 namespace Attogram;
 
@@ -20,13 +20,16 @@ global $config;
 // $config['admins'] = array( '127.0.0.1', '::1', );
 
 // composer vendor autoloader
-// $config['autoloader'] = '../vendor/autoload.php';
+// $config['autoloader'] = $config['attogram_dir'] . 'vendor/autoload.php';
 
 // Modules Directory, with no trailing slash
-// $config['modules_dir'] = '../modules';
+// $config['modules_dir'] = $config['attogram_dir'] . 'modules';
 
 // Templates directory, with no trailing slash
-// $config['templates_dir'] = '../templates';
+// $config['templates_dir'] = $config['attogram_dir'] . 'templates';
+
+// The database name (full path to sqlite database file)
+// $config['db_name'] = $config['attogram_dir'] . 'db/global';
 
 // Depth Settings
 // By default, all pages are allowed 1 levels (depth) in the URLs
