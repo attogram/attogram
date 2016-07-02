@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Events log v0.0.1
+<?php // Attogram Framework - Events log v0.0.2
 
 namespace Attogram;
 
@@ -9,7 +9,7 @@ print '<p>last 500 events:</p>';
 $e = $this->db->query('SELECT * FROM event ORDER BY time DESC LIMIT 500');
 
 foreach( $e as $v ) {
-  print htmlentities( $v['message'], ENT_COMPAT, 'UTF-8' )  . '<br />';
+  print $this->web_display( $v['message'] ) . '<br />';
 }
 
 print '</div>';
