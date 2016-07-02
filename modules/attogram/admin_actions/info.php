@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.7
+<?php // Attogram Framework - Site Info v0.1.8
 
 namespace Attogram;
 
@@ -10,6 +10,7 @@ $info['<a name="attogram"></a><h3>🚀 <em>Attogram:</em></h3>'] = '';
 $info['Attogram Version'] = self::ATTOGRAM_VERSION;
 $info['Attogram Directory'] = info_dir($this->attogram_dir);
 $info['PHP Version'] = phpversion();
+$info['PHP_OS'] = PHP_OS;
 $info['Server Software'] = $this->request->server->get('SERVER_SOFTWARE');
 $info['debug'] = ( $this->debug ? 'true' : '<code>false</code>' );
 $info['project_github'] = '<a href="' . $this->project_github . '">' . $this->project_github . '</a>';
