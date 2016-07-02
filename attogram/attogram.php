@@ -397,7 +397,7 @@ class attogram
   {
     switch( $this->pathInfo ) {
       case '/robots.txt':
-        header('Content-Type: text/plain');
+        header('Content-Type: text/plain; charset=utf-8');
         print 'Sitemap: ' . $this->get_site_url() . '/sitemap.xml';
         exit;
       case '/sitemap.xml':
@@ -410,7 +410,7 @@ class attogram
           $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
         }
         $sitemap .= '</urlset>';
-        header ('Content-Type:text/xml');
+        header ('Content-Type: text/xml; charset=utf-8');
         print $sitemap;
         exit;
     }

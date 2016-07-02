@@ -847,7 +847,7 @@ if ($auth->isAuthorized())
 		$export_filename = str_replace(array("\r", "\n"), '',$_POST['filename']); // against http header injection (php < 5.1.2 only)
 		if($_POST['export_type']=="sql")
 		{
-			header('Content-Type: text/sql');
+			header('Content-Type: text/sql; charset=utf-8');
 			header('Content-Disposition: attachment; filename="'.$export_filename.'.'.$_POST['export_type'].'";');
 			if(isset($_POST['tables']))
 				$tables = $_POST['tables'];
@@ -866,7 +866,7 @@ if ($auth->isAuthorized())
 		}
 		else if($_POST['export_type']=="csv")
 		{
-			header("Content-type: application/csv");
+			header("Content-type: application/csv; charset=utf-8");
 			header('Content-Disposition: attachment; filename="'.$export_filename.'.'.$_POST['export_type'].'";');
 			header("Pragma: no-cache");
 			header("Expires: 0");
@@ -912,7 +912,7 @@ if ($auth->isAuthorized())
 	//- Download (backup) a database file (as SQLite file, not as dump)
 	if(isset($_GET['download']) && isManagedDB($_GET['download'])!==false)
 	{
-		header("Content-type: application/octet-stream");
+		header("Content-type: application/octet-stream; charset=utf-8");
 		header('Content-Disposition: attachment; filename="'.basename($_GET['download']).'";');
 		header("Pragma: no-cache");
 		header("Expires: 0");
