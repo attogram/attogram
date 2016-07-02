@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.1
+<?php // Attogram Framework - attogram class v0.2.2
 
 namespace Attogram;
 
@@ -306,11 +306,11 @@ class attogram
             $this->error404('The pages of the book are blank');
           }
           $this->log->debug('include ' . $this->action);
-          $this->event->info( $this->clientIp . ' PHP Action Load', $this->uri );
+          //$this->event->info( $this->clientIp . ' PHP Action Load', $this->uri );
           include($this->action);
           return;
         case 'md':
-          $this->event->info( $this->clientIp . ' MarkDown Action Load', $this->uri );
+          //$this->event->info( $this->clientIp . ' MarkDown Action Load', $this->uri );
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
           return;
         default:
@@ -320,7 +320,7 @@ class attogram
       } // end switch on parser
     } //end if action set
     if( $this->uri[0] == 'home' ) { // missing the Home Page!
-      $this->event->info( $this->clientIp . ' Default Homepage', $this->uri );
+      //$this->event->info( $this->clientIp . ' Default Homepage', $this->uri );
       $this->default_homepage();
       return;
     }
