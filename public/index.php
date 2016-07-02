@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.0.9
+<?php // Attogram Framework - Guru Meditation Loader - v0.1.0
 
 namespace Attogram;
 
@@ -13,6 +13,7 @@ $config['templates_dir'] = $config['attogram_dir'] . 'templates'; // without tra
 $config['debug']         = false;
 $config['site_name']     = 'The Attogram Framework';
 $config['admins']        = array( '127.0.0.1', '::1', );
+$config['db_name']       = $config['attogram_dir'] . 'db/global';
 
 // Load the Project
 $guru = new guru_meditation_loader(
@@ -41,7 +42,7 @@ $guru = new guru_meditation_loader(
 ********************************************************************************
 ********************************************************************************
 
-Guru Meditation Loader v0.0.7
+Guru Meditation Loader v0.1.0
 
 Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
 
@@ -278,7 +279,7 @@ class guru_meditation_loader
         $this->debug('tranquility: ob_gzhandler active');
       }
 
-      // Setup The Logger
+      // Setup The Debug Logger
       if(
           ( isset($config['debug']) && is_bool($config['debug']) && $config['debug'] ) // $config['debug'] = true
         ||
@@ -299,6 +300,9 @@ class guru_meditation_loader
         $log = new \Attogram\logger();
       }
 
+      // Setup the Event Logger
+      $event = new \Attogram\logger();
+
       // Save guru log to the new Logger
       if( isset($config['guru_meditation_loader']) && is_array($config['guru_meditation_loader']) ) {
         foreach( $config['guru_meditation_loader'] as $g ) {
@@ -306,11 +310,17 @@ class guru_meditation_loader
         }
       }
 
+      // create database object
+      $db = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
+      if( !$db ) {
+        $log->error('guru_meditation_loader: sqlite_database initialization failed');
+      }
+
       // create Request object
       $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
       // Start Attogram Framework!
-      $attogram = new attogram( $log, $request, $config['debug'] );
+      $attogram = new attogram( $log, $event, $db, $request, $config['debug'] );
 
   } // end function tranquility()
 

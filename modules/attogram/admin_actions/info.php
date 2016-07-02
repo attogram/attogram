@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Site Info v0.1.8
+<?php // Attogram Framework - Site Info v0.1.9
 
 namespace Attogram;
 
@@ -39,10 +39,12 @@ $info['templates_dir'] = info_dir($this->templates_dir);
 $info['<a name="files"></a><h3>📄 <em>Files:</em></h3>'] = '';
 $info['templates'] = info_array($this->templates, 1);
 $info['skip_files'] = info_array(attogram_fs::get_skip_files());
+
 $info['<a name="objects"></a><h3>📎 <em>Objects:</em></h3>'] = '';
-$info['request'] = info_object($this->request);
 $info['log'] = info_object($this->log);
+$info['event'] = info_object($this->event);
 $info['db'] = info_object($this->db);
+$info['request'] = info_object($this->request);
 
 $info['<a name="database"></a><h3>💾 <em>Database:</em></h3>'] = '';
 $info['db_name'] = info_file($this->db_name);

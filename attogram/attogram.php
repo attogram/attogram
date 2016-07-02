@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.1.5
+<?php // Attogram Framework - attogram class v0.2.0
 
 namespace Attogram;
 
@@ -24,7 +24,9 @@ class attogram
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
-  public $log;           // (object) PSR3 Logger object
+  public $log;           // (object) Debug Log - PSR-3 Logger object
+  public $event;         // (object) Event Log - PSR-3 Logger object
+  public $db;            // (object) The Attogram Database Object
   public $request;       // (object) Symfony HttpFoundation Request object
   public $project_github;// (string) URL to Attogram Framework GitHub Project
   public $attogram_dir;  // (string) path to this installation
@@ -40,7 +42,6 @@ class attogram
   public $requestUri;    // (string)
   public $path;          // (string) Relative URL path to this installation
   public $uri;           // (array) The Current URI
-  public $db;            // (object) The Attogram Database Object
   public $db_name;       // (string) path + filename of the sqlite database file
   public $actions;       // (array) memory variable for $this->get_actions()
   public $action;        // (string) The Current Action name
@@ -49,14 +50,18 @@ class attogram
   public $admin_actions; // (array) memory variable for $this->get_admin_actions()
 
   /**
-   * @param obj  $log      PSR-3 logger object
+   * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
+   * @param obj  $event    Event Log - PSR-3 logger object, interface: \Psr\Log\LoggerInterface
+   * @param obj  $db       Attogram Database object, interface: \Attogram\attogram_database
    * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
    * @param bool $debug    (optional) Debug True/False.  Defaults to False.
    */
-  public function __construct( $log, $request, $debug = false )
+  public function __construct( $log, $event, $db, $request, $debug = false )
   {
     $this->start_time = microtime(1);
     $this->log = $log;
+    $this->event = $event;
+    $this->db = $db;
     $this->request = $request;
     $this->debug = $debug;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
@@ -69,16 +74,6 @@ class attogram
     $this->end_slash(); // force slash at end, or force no slash at end
     $this->check_depth(); // is URI short enough?
     $this->sessioning(); // start sessions
-    // dev -- inject db object into __construct instead...
-    if( class_exists('\Attogram\sqlite_database') ) { // if database module is loaded
-      $this->db = new sqlite_database($this->db_name, $this->modules_dir, $this->log );  // init the database, sans-connection
-      if( !$this->db ) {
-        $this->log->error('attogram::__construct: sqlite_database initialization failed');
-      }
-    } else {
-      $this->db = false;
-      $this->log->error('attogram::__construct: sqlite_database class not found');
-    }
     $this->route(); // Send us where we want to go
     $this->log->debug('END Attogram v' . self::ATTOGRAM_VERSION . ' timer: ' . (microtime(1) - $this->start_time));
   } // end function __construct()
