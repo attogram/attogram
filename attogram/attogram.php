@@ -366,7 +366,7 @@ class attogram
 
     $mime_type = attogram_fs::get_mime_type($file);
     if( $mime_type ) {
-      header('Content-Type:' . $mime_type);
+      header('Content-Type:' . $mime_type . '; charset=utf-8');
       $result = readfile($file);
       if( !$result ) {
         $this->log->error('virtual_web_directory: can not read file: ' . htmlentities($file) );
