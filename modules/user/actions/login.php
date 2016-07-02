@@ -10,6 +10,7 @@ if( !class_exists('Attogram\attogram_user') ) {
 $message = '';
 if( isset($_POST['login']) ) { // attempt to login, buffer errors to show later
   if( \Attogram\attogram_user::login( $this->log, $this->db ) ) {
+    $this->event->info ($this->clientIp . ' LOGIN: id: ' . $_SESSION['attogram_id'] . ' username: ' . $_SESSION['attogram_username']);
     header('Location: ' . $this->path . '/');
     exit;
   }
