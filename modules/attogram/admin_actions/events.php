@@ -3,12 +3,13 @@
 namespace Attogram;
 
 $this->page_header('Event Log');
-print '<div class="container">';
+print '<div class="container"><h1>Event Log</h1>';
+print '<p>last 500 events:</p>';
 
-$e = $this->db->query('SELECT * FROM event ORDER BY time DESC');
+$e = $this->db->query('SELECT * FROM event ORDER BY time DESC LIMIT 500');
 
 foreach( $e as $v ) {
-  print '<pre>' . print_r( $v, 1 ) . '</pre>';
+  print $v['message'] . '<br />';
 }
 
 print '</div>';
