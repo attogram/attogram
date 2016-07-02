@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.1.0
+<?php // Attogram Framework - Guru Meditation Loader - v0.1.2
 
 namespace Attogram;
 
@@ -38,19 +38,7 @@ $guru = new guru_meditation_loader(
                          )
 );
 
-/** ****************************************************************************
-********************************************************************************
-********************************************************************************
-
-Guru Meditation Loader v0.1.0
-
-Copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
-
-Open Source Dual License: (MIT or GPL-3.0+) at your choosing
-
-********************************************************************************
-********************************************************************************
-***************************************************************************** */
+/** ************************************************************************* */
 class guru_meditation_loader
 {
 
@@ -174,7 +162,6 @@ class guru_meditation_loader
     $this->autoloader = $config['autoloader'];
   } // end function meditate()
 
-
   /**
    * load module configs
    */
@@ -279,7 +266,7 @@ class guru_meditation_loader
         $this->debug('tranquility: ob_gzhandler active');
       }
 
-      // Setup The Debug Logger
+      // Create the Debug Logger
       if(
           ( isset($config['debug']) && is_bool($config['debug']) && $config['debug'] ) // $config['debug'] = true
         ||
@@ -289,38 +276,50 @@ class guru_meditation_loader
             && in_array($_SERVER['REMOTE_ADDR'], $config['admins'])
           )
       ) {
-        $log = new \Monolog\Logger('attogram');
+        $log = new \Monolog\Logger('debug');
         $sh = new \Monolog\Handler\StreamHandler('php://output');
         $format = "<p class=\"text-danger squished\">%datetime%|%level_name%: %message% %context%</p>"; // %extra%
         $dateformat = 'Y-m-d|H:i:s:u';
-        $sh->setFormatter( new \Monolog\Formatter\LineFormatter($format, $dateformat) );
+        $sh->setFormatter( new \Monolog\Formatter\LineFormatter( $format, $dateformat ) );
         $log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
         // $log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
       } else {
         $log = new \Attogram\logger();
       }
 
-      // Setup the Event Logger
-      $event = new \Attogram\logger();
-
-      // Save guru log to the new Logger
+      // Save guru startup log to the Debug logger
       if( isset($config['guru_meditation_loader']) && is_array($config['guru_meditation_loader']) ) {
         foreach( $config['guru_meditation_loader'] as $g ) {
           $log->debug($g);
         }
       }
 
-      // create database object
+      // Create database object
       $db = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
       if( !$db ) {
         $log->error('guru_meditation_loader: sqlite_database initialization failed');
       }
 
+      // Create the Event logger
+      if( !$db ) {
+        $event = new \Attogram\logger(); // no database, use null logger
+      } else {
+        // Setup the Event Logger
+        $event = new \Monolog\Logger('event');
+        $event->pushHandler( new \Attogram\event_logger( $db ) );
+      }
+
       // create Request object
       $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
-      // Start Attogram Framework!
-      $attogram = new attogram( $log, $event, $db, $request, $config['debug'] );
+      // Start the Attogram Framework!
+      $attogram = new attogram(
+        $log,
+        $event,
+        $db,
+        $request,
+        $config['debug']
+      );
 
   } // end function tranquility()
 
@@ -333,30 +332,30 @@ class guru_meditation_loader
   function guru_meditation_error( $error='', $fix='' )
   {
     global $config;
-    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guru Meditation Error</title>
-<style>
-body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
-a { text-decoration:none; }
-.icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }
-.err { color:red; }
-.fix { font-size:18px; color:black;  }
-.log { font-size:15px; color:#333366; }
-</style></head><body>
-<p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
-  if( $error ) {
-    print '<p class="err"><a href=""><span class="icon">💔</span></a> ' . $error . '</p>';
-  }
-  if( $fix ) {
-    print '<p class="fix"><a href=""><span class="icon">🔧</span></a> ' . $fix . '</p>';
-  }
-  if( isset($_GET['debug']) && isset($config['guru_meditation_loader']) ) {
-    print '<p class="log">🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC<br />💭 ';
-    print implode('<br />💭 ', $config['guru_meditation_loader']);
-  }
-  print '</body></html>';
-  exit;
+    print '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+    . '<meta name="viewport" content="width=device-width, initial-scale=1">'
+    . '<title>Guru Meditation Error</title>'
+    . '<style>'
+    . ' body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }'
+    . ' a { text-decoration:none; }'
+    . ' .icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }'
+    . ' .err { color:red; }'
+    . ' .fix { font-size:18px; color:black;  }'
+    . ' .log { font-size:15px; color:#333366; }'
+    . '</style></head><body>'
+    . '<p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
+    if( $error ) {
+      print '<p class="err"><a href=""><span class="icon">💔</span></a> ' . $error . '</p>';
+    }
+    if( $fix ) {
+      print '<p class="fix"><a href=""><span class="icon">🔧</span></a> ' . $fix . '</p>';
+    }
+    if( isset($_GET['debug']) && isset($config['guru_meditation_loader']) ) {
+      print '<p class="log">🕑 ' . gmdate('Y-m-d H:i:s') . ' UTC<br />💭 ';
+      print implode( '<br />💭 ', $config['guru_meditation_loader'] );
+    }
+    print '</body></html>';
+    exit;
   } // end function guru_meditation_error()
 
 } // end class guru_meditation_error()

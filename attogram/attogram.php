@@ -61,6 +61,7 @@ class attogram
     $this->start_time = microtime(1);
     $this->log = $log;
     $this->event = $event;
+    $this->event->debug('EVENT LOG STARTED');
     $this->db = $db;
     $this->request = $request;
     $this->debug = $debug;
@@ -68,6 +69,7 @@ class attogram
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->awaken(); // set the configuration
     $this->set_request(); // set all the request-related variables we need
+    $this->log->debug( "host: $this->host  IP: $this->clientIp");
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->virtual_web_directory(); // do virtual web directory requests
     $this->set_uri(); // make array of the URI request
@@ -185,7 +187,6 @@ class attogram
   {
     $this->host = $this->request->getHost();
     $this->clientIp = $this->request->getClientIp();
-    $this->log->debug("host: $this->host  IP: $this->clientIp");
     $this->pathInfo = $this->request->getPathInfo();
     $this->requestUri = $this->request->getRequestUri();
     $this->path = $this->request->getBasePath();
