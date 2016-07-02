@@ -61,7 +61,7 @@ class attogram
     $this->start_time = microtime(1);
     $this->log = $log;
     $this->event = $event;
-    $this->event->debug('EVENT LOG STARTED');
+
     $this->db = $db;
     $this->request = $request;
     $this->debug = $debug;
@@ -69,7 +69,7 @@ class attogram
     $this->project_github = 'https://github.com/attogram/attogram';
     $this->awaken(); // set the configuration
     $this->set_request(); // set all the request-related variables we need
-    $this->log->debug( "host: $this->host  IP: $this->clientIp");
+    $this->log->debug("host: $this->host  IP: $this->clientIp");
     $this->exception_files(); // do robots.txt, sitemap.xml
     $this->virtual_web_directory(); // do virtual web directory requests
     $this->set_uri(); // make array of the URI request
@@ -640,6 +640,7 @@ class attogram
    */
   public function error404( $error = '' )
   {
+    $this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
     header('HTTP/1.0 404 Not Found');
     if( attogram_fs::is_readable_file( $this->templates['fof'], '.php' ) ) {
       include($this->templates['fof']);

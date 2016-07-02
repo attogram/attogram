@@ -9,7 +9,7 @@ print '<p>last 500 events:</p>';
 $e = $this->db->query('SELECT * FROM event ORDER BY time DESC LIMIT 500');
 
 foreach( $e as $v ) {
-  print $v['message'] . '<br />';
+  print htmlentities( $v['message'], ENT_COMPAT, 'UTF-8' )  . '<br />';
 }
 
 print '</div>';
