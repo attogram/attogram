@@ -14,20 +14,17 @@ if( $offset ) {
   $sql .= ' OFFSET ' . $offset;
 }
 
-$e = $this->db->query($sql);
+$events = $this->db->query($sql);
+
+$count = $this->db->get_table_count('event');
 
 $this->page_header('⌚ Event Log');
 
 print '<div class="container"><h1 class="squished">⌚ Event Log</h1>';
 
-print $this->db->pager(
-  $this->db->get_table_count('event'),
-  $limit,
-  $offset,
-  $prepend_query_string = ''
-);
+print $this->db->pager( $count, $limit, $offset );
 
-foreach( $e as $v ) {
+foreach( $events as $v ) {
   $vm = explode( ' ', $v['message'] );
   $datetime = ltrim( $vm[0], '[' ) . ' ' . rtrim( $vm[1], ']');
   $type = rtrim( $vm[2], ':' );
@@ -36,14 +33,15 @@ foreach( $e as $v ) {
   $message = implode(' ', $vm);
   $message = rtrim($message); $message = rtrim($message, '[..]'); $message = rtrim($message);
   $message = rtrim($message); $message = rtrim($message, '[..]'); $message = rtrim($message);
-
   print '<div class="row" style="border:1px solid #ccc;">'
   . '<div class="col-sm-2"><small>' . $datetime . '</small></div>'
   . '<div class="col-sm-1"><small>' . $type . '</small></div>'
   . '<div class="col-sm-9">' . $this->web_display($message) . '</div>'
   . '</div>';
-
 }
 
+print $this->db->pager( $count, $limit, $offset );
+
 print '</div>';
+
 $this->page_footer();
