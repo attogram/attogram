@@ -351,7 +351,7 @@ class sqlite_database implements attogram_database
       $end_count = $count;
     }
 
-    $r = "<p>Showing #$start_count to #$end_count of <code>$count</code> results</p>";
+    $r = '<p class="small">Showing # ' . "<strong>$start_count</strong> - <strong>$end_count</strong> of <code>$count</code> results</p>";
 
     if( $limit <= 0 ) {
       $total_pages = 0;
@@ -363,7 +363,7 @@ class sqlite_database implements attogram_database
     }
 
     if( $total_pages ) {
-      $r .= '<ul class="pagination squished">';
+      $r .= '<ul class="pagination pagination-sm squished">';
       $p_offset = 0;
       if( $pre_qs ) {
         $url_start = '?' . $pre_qs . '&';
@@ -384,7 +384,7 @@ class sqlite_database implements attogram_database
       $r .= '</ul>';
     }
 
-    return '<div class="container">' . $r . '</div>';
+    return $r;
   }
 
   /**
