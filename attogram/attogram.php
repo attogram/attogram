@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.2
+<?php // Attogram Framework - attogram class v0.2.3
 
 namespace Attogram;
 
@@ -642,7 +642,7 @@ class attogram
    */
   public function error404( $error = '' )
   {
-    $this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
+    //$this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
     header('HTTP/1.0 404 Not Found');
     if( attogram_fs::is_readable_file( $this->templates['fof'], '.php' ) ) {
       include($this->templates['fof']);
