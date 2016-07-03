@@ -347,6 +347,9 @@ class sqlite_database implements attogram_database
     }
     $start_count = $offset + 1;
     $end_count = $offset + $limit;
+    if( !$end_count ) {
+      $start_count = 0;
+    }
     if( $end_count > $count ) {
       $end_count = $count;
     }
