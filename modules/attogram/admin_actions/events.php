@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Events log v0.1.0
+<?php // Attogram Framework - Events log v0.1.1
 
 namespace Attogram;
 
@@ -11,12 +11,15 @@ list( $limit, $offset ) = $this->db->get_set_limit_and_offset(
 
 $sql = 'SELECT * FROM event ORDER BY id DESC LIMIT ' . $limit;
 if( $offset ) {
-  $sql .= ', ' . $offset;
+  $sql .= ' OFFSET ' . $offset;
 }
+
 $e = $this->db->query($sql);
 
 $this->page_header('⌚ Event Log');
+
 print '<div class="container"><h1 class="squished">⌚ Event Log</h1>';
+
 print $this->db->pager(
   $this->db->get_table_count('event'),
   $limit,
