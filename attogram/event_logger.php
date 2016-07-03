@@ -1,4 +1,4 @@
-<?php // Attogram Framework - event_logger class v0.0.1
+<?php // Attogram Framework - event_logger class v0.0.2
 
 namespace Attogram;
 
@@ -12,8 +12,8 @@ class event_logger extends AbstractProcessingHandler
     /**
      * start the event Logger
     * @param object $db     Attogram Database object
-    * @param string $level  (optional) Defaults to debug
-    * @param bool   $bubble (optional) Defaults to true
+    * @param string $level  (optional) Minimum reporting level, Defaults to debug
+    * @param bool   $bubble (optional) Bubble up, Defaults to true
     * @return void
     */
     public function __construct( $db, $level = Logger::DEBUG, $bubble = true )
@@ -29,15 +29,14 @@ class event_logger extends AbstractProcessingHandler
      */
     protected function write( array $record )
     {
-        $sql = 'INSERT INTO event (channel, level, message, time)'
-        . ' VALUES (:channel, :level, :message, :time)';
-        $bind = array(
-            'channel' => $record['channel'],
-            'level' => $record['level'],
-            'message' => $record['formatted'],
-            'time' => $record['datetime']->format('U'),
-        );
-        $result = $this->db->queryb( $sql, $bind );
+      $result = $this->db->queryb(
+        'INSERT INTO event (channel,level,message,time) VALUES (:channel,:level,:message,:time)',
+        array('channel' => $record['channel'],
+              'level' => $record['level'],
+              'message' => $record['formatted'],
+              'time' => $record['datetime']->format('U')
+        )
+      );
     }
 
 } // end class class event_logger
