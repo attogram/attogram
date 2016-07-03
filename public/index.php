@@ -57,9 +57,10 @@ class guru_meditation_loader
   function __construct( $project_name, $config_file,$project_classes, $default_autoloader,
                         $vendor_download, array $required_classes, array $required_interfaces )
   {
-
-    //error_reporting(0); // dev - hide errors
-    //ini_set( 'display_errors', 0 ); // dev - hide errors
+    error_reporting( E_ALL );
+    ini_set( 'display_errors', E_ALL );
+    //error_reporting(            E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
+    //ini_set( 'display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
     set_error_handler(array( $this, 'guru_meditation_error_handler' ));
     register_shutdown_function(array( $this, 'guru_meditation_shutdown' ));
     $this->project_name        = $project_name;
@@ -127,7 +128,7 @@ class guru_meditation_loader
     $last = error_get_last();
     switch( $last['type'] ) {
       case E_ERROR:
-        $this->guru_meditation_error( 'Fatal Error:<br />' . str_replace( "\n", '<br />', $last['message'] ) );
+        $this->guru_meditation_error( 'Shutdown due to Fatal Error:<br />' . str_replace( "\n", '<br />', $last['message'] ) );
     }
   }
 
