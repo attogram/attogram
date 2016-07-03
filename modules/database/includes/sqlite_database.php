@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.3
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.4
 
 namespace Attogram;
 
@@ -275,6 +275,7 @@ class sqlite_database implements attogram_database
       $admin_create = $admin_edit = $admin_delete = '';
     }
 
+    print '<div class="container">';
     print $this->pager( $count, $limit, $offset );
 
     print '<p>';
@@ -325,7 +326,7 @@ class sqlite_database implements attogram_database
       }
       print '</tr>';
     }
-    print '</tbody></table>';
+    print '</tbody></table><div>';
   }
 
   /**
