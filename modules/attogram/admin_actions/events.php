@@ -1,12 +1,28 @@
-<?php // Attogram Framework - Events log v0.0.3
+<?php // Attogram Framework - Events log v0.1.0
 
 namespace Attogram;
 
-$this->page_header('Event Log');
-print '<div class="container"><h1>Event Log</h1>';
-print '<p>last 1000 events:</p>';
+list( $limit, $offset ) = $this->db->get_set_limit_and_offset(
+  $default_limit  = 1000,
+  $default_offset = 0,
+  $max_limit      = 10000,
+  $min_limit      = 10
+);
 
-$e = $this->db->query('SELECT * FROM event ORDER BY id DESC LIMIT 1000');
+$sql = 'SELECT * FROM event ORDER BY id DESC LIMIT ' . $limit;
+if( $offset ) {
+  $sql .= ', ' . $offset;
+}
+$e = $this->db->query($sql);
+
+$this->page_header('⌚ Event Log');
+print '<div class="container"><h1 class="squished">⌚ Event Log</h1>';
+print $this->db->pager(
+  $this->db->get_table_count('event'),
+  $limit,
+  $offset,
+  $prepend_query_string = ''
+);
 
 foreach( $e as $v ) {
   $vm = explode( ' ', $v['message'] );
@@ -18,13 +34,11 @@ foreach( $e as $v ) {
   $message = rtrim($message); $message = rtrim($message, '[..]'); $message = rtrim($message);
   $message = rtrim($message); $message = rtrim($message, '[..]'); $message = rtrim($message);
 
-  print '
-  <div class="row" style="border:1px solid #ccc;">
-   <div class="col-sm-2"><small>' . $datetime . '</small></div>
-   <div class="col-sm-1"><small>' . $type . '</small></div>
-   <div class="col-sm-9">' . $this->web_display($message) . '</div>
-  </div>
-  ';
+  print '<div class="row" style="border:1px solid #ccc;">'
+  . '<div class="col-sm-2"><small>' . $datetime . '</small></div>'
+  . '<div class="col-sm-1"><small>' . $type . '</small></div>'
+  . '<div class="col-sm-9">' . $this->web_display($message) . '</div>'
+  . '</div>';
 
 }
 
