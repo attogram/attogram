@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Events log v0.1.1
+<?php // Attogram Framework - Events log v0.1.2
 
 namespace Attogram;
 
@@ -36,7 +36,7 @@ foreach( $events as $v ) {
   print '<div class="row" style="border:1px solid #ccc;">'
   . '<div class="col-sm-2"><small>' . $datetime . '</small></div>'
   . '<div class="col-sm-1"><small>' . $type . '</small></div>'
-  . '<div class="col-sm-9">' . $this->web_display($message) . '</div>'
+  . '<div class="col-sm-9">' . $message . '</div>'
   . '</div>';
 }
 
