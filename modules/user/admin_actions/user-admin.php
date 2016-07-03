@@ -1,10 +1,10 @@
-<?php // Attogram Framework - User Module - User Admin v0.2.2
+<?php // Attogram Framework - User Module - User Admin v0.2.3
 
 namespace Attogram;
 
 $this->page_header('👥 User Admin');
 
-print '<div class="container"><h1 class="squished">👥 User Admin</h1></div>';
+print '<div class="container"><h1 class="squished">👥 User Admin</h1>';
 
 $this->db->tabler(
   $table = 'user',
@@ -25,4 +25,5 @@ $this->db->tabler(
   $per_page = 20
 );
 
+print '</div>';
 $this->page_footer();
