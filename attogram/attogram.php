@@ -388,8 +388,8 @@ class attogram
   } // end function do_cache_headers()
 
   /**
-   * checks URI for exception files sitemap.xml, robots.txt
-   * @return void
+   * Do requests for exception files: sitemap.xml, robots.txt
+   * @return void exit
    */
   public function exception_files()
   {
@@ -400,12 +400,14 @@ class attogram
         exit;
       case '/sitemap.xml':
         $site = $this->get_site_url() . '/';
-        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        $sitemap .= ' <url><loc>' . $site . '</loc></url>' . "\n";
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
+        . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        . '<url><loc>' . $site . '</loc></url>';
         foreach( array_keys($this->get_actions()) as $action ){
-          if( $action == 'home' || $action == 'user' ) { continue; }
-          $sitemap .= ' <url><loc>' . $site . $action . '/</loc></url>' . "\n";
+          if( $action == 'home' || $action == 'user' ) {
+            continue;
+          }
+          $sitemap .= '<url><loc>' . $site . $action . '/</loc></url>';
         }
         $sitemap .= '</urlset>';
         header ('Content-Type: text/xml; charset=utf-8');
