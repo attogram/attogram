@@ -365,16 +365,16 @@ class attogram
     $mime_type = attogram_fs::get_mime_type($file);
     if( $mime_type ) {
       header('Content-Type:' . $mime_type . '; charset=utf-8');
-      $result = readfile($file);
+      $result = readfile($file); // send file to browser
       if( !$result ) {
         $this->log->error('virtual_web_directory: can not read file: ' . htmlentities($file) );
         $this->error404('Virtually unreadable');
       }
-    } else {
-      if( !(include($file)) ) {
-        $this->log->error('virtual_web_directory: can not include file: ' . htmlentities($file) );
-        $this->error404('Virtually unincludeable');
-      }
+      exit;
+    }
+    if( !(include($file)) ) { // include native PHP file
+      $this->log->error('virtual_web_directory: can not include file: ' . htmlentities($file) );
+      $this->error404('Virtually unincludeable');
     }
     exit;
   } // end function virtual_web_directory()
