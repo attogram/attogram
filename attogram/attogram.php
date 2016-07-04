@@ -380,7 +380,7 @@ class attogram
   public function do_cache_headers( $file ) {
     $lastmod = filemtime($file);
     if( !$lastmod ) {
-      $lastmode = time();
+      $lastmod = time();
     }
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastmod) . ' GMT');
     header('Etag: ' . $lastmod);
