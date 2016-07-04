@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.3
+<?php // Attogram Framework - attogram class v0.2.4
 
 namespace Attogram;
 
@@ -379,12 +379,14 @@ class attogram
    */
   public function do_cache_headers( $file ) {
     $lastmod = filemtime($file);
-    $etag = md5_file($file);
+    if( !$lastmod ) {
+      $lastmode = time();
+    }
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastmod) . ' GMT');
-    header('Etag: ' . $etag);
+    header('Etag: ' . $lastmod);
     $server_if_mod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
     $server_if_none = trim($_SERVER['HTTP_IF_NONE_MATCH']);
-    if (  $server_if_mod == $lastmod || $server_if_none == $etag ) {
+    if (  $server_if_mod == $lastmod || $server_if_none == $lastmod ) {
         header('HTTP/1.1 304 Not Modified');
         exit;
     }
