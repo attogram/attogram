@@ -9,12 +9,11 @@ namespace Attogram;
  * content modules, file-based URL routing, IP-protected backend, user system,
  * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
  *
- * The Attogram Framework is Dual Licensed, at your chooseing, under the
- * MIT License (MIT) _or_ the GNU General Public License version 3 (GPL-3.0+).
+ * The Attogram Framework is Dual Licensed under the MIT License (MIT)
+ * _or_ the GNU General Public License version 3 (GPL-3.0+), at your choosing.
  *
  * @version 0.7.0
- * @license MIT
- * @license GPL-3.0+
+ * @license (MIT or GPL-3.0+)
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
  */
 class attogram
@@ -306,11 +305,9 @@ class attogram
             $this->error404('The pages of the book are blank');
           }
           $this->log->debug('include ' . $this->action);
-          //$this->event->info( $this->clientIp . ' PHP Action Load', $this->uri );
           include($this->action);
           return;
         case 'md':
-          //$this->event->info( $this->clientIp . ' MarkDown Action Load', $this->uri );
           $this->do_markdown( $actions[$this->uri[0]]['file'] );
           return;
         default:
@@ -320,7 +317,6 @@ class attogram
       } // end switch on parser
     } //end if action set
     if( $this->uri[0] == 'home' ) { // missing the Home Page!
-      //$this->event->info( $this->clientIp . ' Default Homepage', $this->uri );
       $this->default_homepage();
       return;
     }
@@ -357,8 +353,6 @@ class attogram
     if( !$file ) {
       $this->error404('Virtually Nothing Found');
     }
-
-    // DEV todo - security check here
 
     $this->do_cache_headers( $file );
 
@@ -460,12 +454,15 @@ class attogram
    */
   public function do_markdown( $file )
   {
-    $title = 'MARKDOWN';  // TODO dev - $title input, and default to 1st line of file $title = trim( strtok($page, "\n") ); // get first line of file, use as page title
+    $this->log->debug('DO_MARKDOWN: ' . $file);
+    $title = 'MARKDOWN';
+    // TODO dev - $title input, and default to 1st line of file
+    // $title = trim( strtok($page, "\n") );
+    // get first line of file, use as page title
     $content = $this->get_markdown($file);
     $this->page_header($title);
     print '<div class="container">' . $content . '</div>';
     $this->page_footer();
-    $this->log->debug('DO_MARKDOWN: ' . $file);
   }
 
   /**
