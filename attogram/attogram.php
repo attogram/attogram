@@ -378,8 +378,7 @@ class attogram
    * @param string $file
    */
   public function do_cache_headers( $file ) {
-    $lastmod = filemtime($file);
-    if( !$lastmod ) {
+    if( !$lastmod = filemtime($file) ) {
       $lastmod = time();
     }
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $lastmod) . ' GMT');
