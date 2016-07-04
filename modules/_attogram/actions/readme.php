@@ -1,28 +1,12 @@
-<?php // Attogram Framework - readme page v0.1.1
+<?php // Attogram Framework - README page v0.1.2
 
 namespace Attogram;
 
-$this->page_header('Readme');
-print '<div class="container">';
+$f = $this->attogram_dir . 'README.md';
 
-// Main README file
-$readme = $this->attogram_dir . 'README.md';
-if( !is_readable($readme) ) {
-  $this->log->error('readme.php: file not found: ' . $readme);
-  //$this->error404('README file lost in the wind');
-} else {
-  print $this->get_markdown($readme);
+if( !is_readable($f) ) {
+  $this->log->error('readme.php: file not found: ' . $f );
+  $this->error404('README file lost in the wind');
 }
 
-// All Modules README's
-foreach( attogram_fs::get_all_subdirectories( $this->modules_dir, $name='' ) as $m ) {
-  $mrm = $m . 'README.md';
-  if( !is_readable($mrm) ) {
-    continue;
-  }
-  print '<p><hr /><em>' . $this->web_display($mrm) . ':</em></p>';
-  print $this->get_markdown($mrm);
-}
-
-print '</div>';
-$this->page_footer();
+$this->do_markdown( $f, 'README' );

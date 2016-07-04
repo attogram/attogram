@@ -1,14 +1,14 @@
 Attogram Framework License
 ==================
-[//]: # ( Attogram Framework - License.md (markdown) - v0.2.1 )
+[//]: # ( Attogram Framework - License.md (markdown) - v0.2.2 )
 
 The Attogram Framework is an open source project.
 
-Attogram is dual licensed under
+The Attogram Framework is dual licensed under
 <a href="http://opensource.org/licenses/MIT">The MIT License</a> or the
 <a href="http://opensource.org/licenses/GPL-3.0">GNU General Public License</a>, at your choosing.
 
-The Attogram distribution includes <a href="#other">other open source projects</a>.
+The Attogram Framework distribution includes <a href="#other">other open source projects</a>.
 
 <hr />
 
@@ -740,7 +740,7 @@ Public License instead of this License.  But first, please read
 <a name="other"></a>
 <hr />
 
-Other Open Source Software included with Attogram:
+Other Open Source Software included with The Attogram Framework distribution:
 
 <ul>
 <li>phpLiteAdmin - GPL License - <a href="https://www.phpliteadmin.org/">https://www.phpliteadmin.org/</a></li>
