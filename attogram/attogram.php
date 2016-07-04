@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.4
+<?php // Attogram Framework - attogram class v0.2.3
 
 namespace Attogram;
 
@@ -450,18 +450,21 @@ class attogram
   /**
    * display a Markdown document, with standard page header and footer
    * @param string $file The markdown file to load
+   * @param string $title (optional) Page title
    * @return void
    */
-  public function do_markdown( $file )
+  public function do_markdown( $file, $title = '' )
   {
     $this->log->debug('DO_MARKDOWN: ' . $file);
-    $title = 'MARKDOWN';
+    if( !$title ) {
+        $title = 'MARKDOWN';
+    }
     // TODO dev - $title input, and default to 1st line of file
     // $title = trim( strtok($page, "\n") );
     // get first line of file, use as page title
-    $content = $this->get_markdown($file);
+
     $this->page_header($title);
-    print '<div class="container">' . $content . '</div>';
+    print '<div class="container">' . $this->get_markdown($file) . '</div>';
     $this->page_footer();
   }
 
