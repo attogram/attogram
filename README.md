@@ -176,7 +176,7 @@ Attogram Modules
 Standard modules included with the Attogram Framework distribution:
 
 ## Module: Attogram
-* `./modules/_attogram/` - Default site with information about Attogram
+* `./modules/_attogram/` - Default Attogram info and files
 * `./modules/_attogram/actions/about.md` - Public Action: About page
 * `./modules/_attogram/actions/home.php` - Public Action: Home page
 * `./modules/_attogram/actions/license.php` - Public Action: License page
