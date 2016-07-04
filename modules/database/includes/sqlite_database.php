@@ -1,4 +1,4 @@
-<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.4
+<?php  // Attogram Framework - Database Module - sqlite_database class v0.3.5
 
 namespace Attogram;
 
@@ -150,10 +150,9 @@ class sqlite_database implements attogram_database
         if( $statement ) { return $statement; } // try again
         $this->log->error('QUERY_PREPARE: Still can not prepare sql');
         return false;
-      } else {
-        $this->log->error("QUERY_PREPARE: Can not create table: $table");
-        return false;
       }
+      $this->log->error("QUERY_PREPARE: Can not create table: $table");
+      return false;
     }
   }
 
