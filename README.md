@@ -175,7 +175,7 @@ Attogram Modules
 
 Standard modules included with the Attogram Framework distribution:
 
-## Module: Attogram
+## Module: \_attogram
 * `./modules/_attogram/` - Default Attogram info and files
 * `./modules/_attogram/actions/about.md` - Public Action: About page
 * `./modules/_attogram/actions/home.php` - Public Action: Home page
@@ -189,14 +189,14 @@ Standard modules included with the Attogram Framework distribution:
 * `./modules/_attogram/public/bootstrap/js/bootstrap.min.js` - Virtual Web Directory: Bootstrap library javascript
 * `./modules/_attogram/tables/event.sql` - Event lo database table definition
 
-## Module: Database
+## Module: \_database
 * `./modules/_database/` - SQLite database for Attogram
 * `./modules/_database/admin_actions/db-admin.php` - Admin Action: Database web admin via phpLiteAdmin
 * `./modules/_database/admin_actions/db-tables.php` - Admin Action: Database table information
 * `./modules/_database/includes/attogram_database.php` - Attogram Database Interface
 * `./modules/_database/includes/sqlite_database.php` - Attogram SQLite helper class
 
-## Module: User
+## Module: \_user
 * `./modules/_user/` - Simple user system for Attogram. (requires `database` module)
 * `./modules/_user/actions/login.php` - Public Action: Login page
 * `./modules/_user/actions/user.php` - Public Action: User page
