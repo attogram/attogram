@@ -1,4 +1,4 @@
-<?php // Attogram Framework - readme page v0.1.0
+<?php // Attogram Framework - readme page v0.1.1
 
 namespace Attogram;
 
@@ -20,7 +20,7 @@ foreach( attogram_fs::get_all_subdirectories( $this->modules_dir, $name='' ) as 
   if( !is_readable($mrm) ) {
     continue;
   }
-  print '<p><hr /><em>' . htmlentities($mrm) . ':</em></p>';
+  print '<p><hr /><em>' . $this->web_display($mrm) . ':</em></p>';
   print $this->get_markdown($mrm);
 }
 
