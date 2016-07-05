@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.4
+<?php // Attogram Framework - attogram class v0.2.5
 
 namespace Attogram;
 
@@ -19,7 +19,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.7.0-dev';
+  const ATTOGRAM_VERSION = '0.7.0';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
