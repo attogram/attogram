@@ -3,8 +3,18 @@ Attogram Framework CHANGELOG
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.6.9...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.0...HEAD)
 - in dev...
+
+## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
+- started this `CHANGELOG.md`!
+- fix for proper Bootstrap container div on editor pages
+- allow HTML in event log messages
+- renamed core modules to `./modules/_attogram/`, `./modules/_database/`, and `./modules/_user/`
+- moved bootstrap, jquery and css files back to `./public/web/` for faster loading/caching
+- Cache/ETAG setup for virtual web directory files
+- new ote function:  `get_markdown($file)` returns string of HTML version of markdown file
+- misc refactoring and design tests
 
 ## [v0.6.9](https://github.com/attogram/attogram/compare/3b97137...v0.6.9) - 2016-07-03
 - Event log system added
