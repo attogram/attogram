@@ -4,7 +4,8 @@ Attogram Framework CHANGELOG
 * Click version number to view a diff comparison of changes since the previous release
 
 ## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.0...HEAD)
-- in dev...
+- formatting and links in this CHANGELOG.md file
+
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
 - started this `CHANGELOG.md`!
@@ -14,7 +15,7 @@ Attogram Framework CHANGELOG
 - renamed core modules to [`./modules/_attogram/`](./modules/_attogram/), [`./modules/_database/`](./modules/_database/), and [`./modules/_user/`](./modules/_user/)
 - moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/) for faster loading/caching
 - Cache/ETAG setup for virtual web directory files
-- new ote function:  `get_markdown($file)` returns string of HTML version of markdown file
+- new ote function:  [`get_markdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427) returns string of HTML version of markdown file
 - misc refactoring and design tests
 
 ## [v0.6.9](https://github.com/attogram/attogram/compare/3b97137...v0.6.9) - 2016-07-03
