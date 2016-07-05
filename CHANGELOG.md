@@ -21,7 +21,7 @@ Attogram Framework CHANGELOG
 ## [v0.6.9](https://github.com/attogram/attogram/compare/3b97137...v0.6.9) - 2016-07-03
 - Event log system added
 - UTF-8 header fixes
-- new actions: [`./modules/_attogram/readme.php`](./modules/_attogram/readme.php), [`./modules/_attogram/license.php`](./modules/_attogram/license.php)
+- new public actions: [`./modules/_attogram/actions/readme.php`](./modules/_attogram/actions/readme.php), [`./modules/_attogram/actions/license.php`](./modules/_attogram/actions/license.php)
 - new hard-coded homepage shows when no `home.php` or `home.md` actions found
 - misc bug fixes and design updates
 - announcement: https://www.patreon.com/posts/6016378
