@@ -3,7 +3,8 @@
 * Click version number to view a diff comparison of changes since the previous release
 
 ## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.0...HEAD)
-- formatting and links in this `CHANGELOG.md` file
+- updated formatting and links in this `./CHANGELOG.md` file
+- updated [`./TODO.md`](./TODO.md) with existing [open issues](https://github.com/attogram/ote/issues) from github
 
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
@@ -13,9 +14,9 @@
 - allow HTML in event log messages
 - renamed core modules to [`./modules/_attogram/`](./modules/_attogram/), [`./modules/_database/`](./modules/_database/), and [`./modules/_user/`](./modules/_user/)
 - moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/) for faster loading/caching
-- new ote function: [`do_cache_headers($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
+- new attogram function: [`do_cache_headers($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
 sets Last-Modified and Etag headers, and responds to HTTP_IF_MODIFIED_SINCE / HTTP_IF_NONE_MATCH requests for better caching of virtual web directory files
-- new ote function:  [`get_markdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
+- new attogram function:  [`get_markdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
 returns string of HTML version of markdown file
 - misc refactoring and design tests
 
