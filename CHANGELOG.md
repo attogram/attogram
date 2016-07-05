@@ -4,7 +4,7 @@
 
 ## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.0...HEAD)
 - updated formatting and links in this `./CHANGELOG.md` file
-- updated [`./TODO.md`](./TODO.md) with existing [open issues](https://github.com/attogram/ote/issues) from github
+- updated [`./TODO.md`](./TODO.md) with existing [open issues](https://github.com/attogram/attogram/issues) from github
 
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
