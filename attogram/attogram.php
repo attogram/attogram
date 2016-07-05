@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.5
+<?php // Attogram Framework - attogram class v0.2.6
 
 namespace Attogram;
 
@@ -12,14 +12,13 @@ namespace Attogram;
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * _or_ the GNU General Public License version 3 (GPL-3.0+), at your choosing.
  *
- * @version 0.7.0
  * @license (MIT or GPL-3.0+)
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
  */
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.7.0';
+  const ATTOGRAM_VERSION = '0.7.1-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
