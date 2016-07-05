@@ -1,10 +1,9 @@
-Attogram Framework CHANGELOG
-===
+# Attogram Framework CHANGELOG
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
 ## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.0...HEAD)
-- formatting and links in this CHANGELOG.md file
+- formatting and links in this `CHANGELOG.md` file
 
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
