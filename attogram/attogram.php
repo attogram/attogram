@@ -283,12 +283,14 @@ class attogram
       $this->uri[0] = 'home';
     }
 
-    $this->log->debug('action: uri[0]: ' . $this->uri[0]);
+    $this->log->debug('ROUTE: action: uri[0]: ' . $this->uri[0]);
 
     $actions = $this->get_actions();
 
     if( $this->is_admin() ) {
-        $actions = array_merge($actions, $this->get_admin_actions());
+        $actions = array_merge( $actions, $this->get_admin_actions() );
+        // dev TODO - error -array_merge does not save numeric indexi, causing numeric-named actions to fail
+        // example: [123][file]=actions/123.php  will get set to [0][file]=actions/123.php
     }
 
     if( isset($actions[$this->uri[0]]) ) {
@@ -303,7 +305,7 @@ class attogram
             $this->log->error('ROUTE: Unreadable action');
             $this->error404('The pages of the book are blank');
           }
-          $this->log->debug('include ' . $this->action);
+          $this->log->debug('ROUTE:   include ' . $this->action);
           include($this->action);
           return;
         case 'md':
@@ -319,7 +321,7 @@ class attogram
       $this->default_homepage();
       return;
     }
-    $this->log->error('ACTION: Action not found.  uri[0]=' . $this->uri[0] );
+    $this->log->error('ROUTE: Action not found.  uri[0]=' . $this->uri[0] );
     $this->error404('This is not the action you are looking for');
   } // end function route()
 
@@ -533,12 +535,11 @@ class attogram
       return $r;
     }
     foreach( array_diff( scandir($dir), attogram_fs::get_skip_files() ) as $f ) {
-      $file = $dir . "/$f";
+      $file = $dir . '/' . $f;
       if( attogram_fs::is_readable_file($file, '.php') ) { // PHP files
         $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
       } elseif( attogram_fs::is_readable_file($file, '.md') ) { // Markdown files
-        $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md'
-        );
+        $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md' );
       }
     }
     return $r;
