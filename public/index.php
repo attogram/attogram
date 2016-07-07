@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.1.2
+<?php // Attogram Framework - Guru Meditation Loader - v0.1.3
 
 namespace Attogram;
 
@@ -296,10 +296,14 @@ class guru_meditation_loader
       }
 
       // Create database object
-      $db = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
-      if( !$db ) {
-        $log->error('guru_meditation_loader: sqlite_database initialization failed');
+      $db = false;
+      if( class_exists('Attogram\sqlite_database') ) {
+        $db = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
+        if( !$db ) {
+          $log->error('guru_meditation_loader: sqlite_database initialization failed');
+        }        
       }
+
 
       // Create the Event logger
       if( !$db ) {
