@@ -1,4 +1,6 @@
-# Attogram Framework TODO
+# TODO: [Attogram Framework](https://github.com/attogram/attogram)
+
+* [Issue #14](https://github.com/attogram/attogram/issues/14) - pull request on [composer/installers](https://github.com/composer/installers/) for Attogram modules
 
 * [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
 
@@ -11,7 +13,5 @@
 * [Issue #9](https://github.com/attogram/attogram/issues/9) - MariaDB/MySQL support
 
 * [Issue #4](https://github.com/attogram/attogram/issues/4) - Set phpliteadmin password via database module config
-
-* [Issue #3](https://github.com/attogram/attogram/issues/3) - Allow modules to have their own composer.json files (autoloaded by attogram composer)
 
 * [Issue #2](https://github.com/attogram/attogram/issues/2) - option to use CDN for Bootstrap and jQuery
