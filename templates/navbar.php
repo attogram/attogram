@@ -42,7 +42,7 @@ namespace Attogram;
     }
   } // end if user module active
 
-  if( $this->is_admin() ) {
+  if( $this->is_admin() && $this->get_admin_actions() ) {
     print '<li class="dropdown">'
     . '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'
     . 'Admin <span class="caret"></span></a><ul class="dropdown-menu">';

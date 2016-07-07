@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.8
+<?php // Attogram Framework - attogram class v0.2.9
 
 namespace Attogram;
 
@@ -638,16 +638,20 @@ class attogram
     . ' in any <code>modules/*/actions/</code> directory</p>'
     . '<p>Public Actions:<ul>'
     ;
+    if( !$this->get_actions() ) {
+      print '<li><em>No actions yet</em></li>';
+    }
     foreach( $this->get_actions() as $name => $val ) {
-      print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
-      . htmlentities($name) . '</a></li>';
+      print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">' . htmlentities($name) . '</a></li>';
     }
     print '</ul><p>';
     if( $this->is_admin() ) {
       print '<p>Admin Actions:<ul>';
+      if( !$this->get_admin_actions() ) {
+        print '<li><em>No admin actions yet</em></li>';
+      }
       foreach( $this->get_admin_actions() as $name => $val ) {
-        print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">'
-        . htmlentities($name) . '</a></li>';
+        print '<li><a href="' . $this->path . '/' . urlencode($name) . '/">' . htmlentities($name) . '</a></li>';
       }
       print '</ul></p>';
     }
