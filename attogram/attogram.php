@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.7
+<?php // Attogram Framework - attogram class v0.2.8
 
 namespace Attogram;
 
@@ -18,7 +18,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.7.2';
+  const ATTOGRAM_VERSION = '0.7.3-dev';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
@@ -287,10 +287,9 @@ class attogram
 
     $actions = $this->get_actions();
 
-
     if( $this->is_admin() ) {
       foreach( $this->get_admin_actions() as $name => $actionable ) {
-        $this->actions[$name] = $actionable;
+        $actions[$name] = $actionable;
       }
     }
 
@@ -630,7 +629,7 @@ class attogram
    */
   public function default_homepage()
   {
-    $this->log->error('ROUTE: missing home action - using default homepage');
+    $this->log->error('using default_homepage');
     $this->page_header('Home');
     print '<div class="container">'
     . '<h1>Welcome to the Attogram Framework <small>v' . self::ATTOGRAM_VERSION . '</small></h1>'
