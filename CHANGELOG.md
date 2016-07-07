@@ -2,9 +2,11 @@
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.1...HEAD)
-- New [TODOs](./TODO.md):
- - [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.2...HEAD)
+
+## [v0.7.2](https://github.com/attogram/attogram/compare/v0.7.1...v0.7.2) - 2016-07-07
+- bugfix to allow numeric actions ( ./actions/123.php, ./actions/123.md, etc. )
+- New [TODO](./TODO.md): [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
 
 ## [v0.7.1](https://github.com/attogram/attogram/compare/v0.7.0...v0.7.1) - 2016-07-05
 - updated formatting and links in this `./CHANGELOG.md` file
