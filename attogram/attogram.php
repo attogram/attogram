@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.6
+<?php // Attogram Framework - attogram class v0.2.7
 
 namespace Attogram;
 
@@ -287,10 +287,11 @@ class attogram
 
     $actions = $this->get_actions();
 
+
     if( $this->is_admin() ) {
-        $actions = array_merge( $actions, $this->get_admin_actions() );
-        // dev TODO - error -array_merge does not save numeric indexi, causing numeric-named actions to fail
-        // example: [123][file]=actions/123.php  will get set to [0][file]=actions/123.php
+      foreach( $this->get_admin_actions() as $name => $actionable ) {
+        $this->actions[$name] = $actionable;
+      }
     }
 
     if( isset($actions[$this->uri[0]]) ) {
@@ -317,12 +318,15 @@ class attogram
           break;
       } // end switch on parser
     } //end if action set
+
     if( $this->uri[0] == 'home' ) { // missing the Home Page!
       $this->default_homepage();
       return;
     }
+
     $this->log->error('ROUTE: Action not found.  uri[0]=' . $this->uri[0] );
     $this->error404('This is not the action you are looking for');
+
   } // end function route()
 
   /**
@@ -494,7 +498,9 @@ class attogram
     }
     $this->actions = array();
     foreach( $dirs as $d ) {
-      $this->actions = array_merge($this->actions, $this->get_actionables($d) );
+      foreach( $this->get_actionables($d) as $name => $actionable ) {
+        $this->actions[$name] = $actionable;
+      }
     }
     asort($this->actions);
     $this->log->debug('get_actions: ', array_keys($this->actions));
@@ -516,7 +522,9 @@ class attogram
     }
     $this->admin_actions = array();
     foreach( $dirs as $d ) {
-      $this->admin_actions = array_merge($this->admin_actions, $this->get_actionables($d) );
+      foreach( $this->get_actionables($d) as $name => $actionable ) {
+        $this->admin_actions[$name] = $actionable;
+      }
     }
     asort($this->admin_actions);
     $this->log->debug('get_admin_actions: ', array_keys($this->admin_actions));
