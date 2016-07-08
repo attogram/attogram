@@ -4,24 +4,20 @@ use PHPUnit\Framework\TestCase;
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
+    protected $attogram_class_file;
 
-    public function testDebug()
+    public function setUp()
     {
-        // Assert
-        $this->assertEquals( 1, 1 );
+        $this->attogram_class_file = __DIR__ . '/../attogram/attogram.php';
     }
 
-    public function testPushAndPop()
+    public function testInclude()
     {
-        $stack = [];
-        $this->assertEquals(0, count($stack));
+      include_once( $this->attogram_class_file );
 
-        array_push($stack, 'foo');
-        $this->assertEquals('foo', $stack[count($stack)-1]);
-        $this->assertEquals(1, count($stack));
-
-        $this->assertEquals('foo', array_pop($stack));
-        $this->assertEquals(0, count($stack));
+      $this->assertTrue(
+          class_exists('Attogram\attogram'),
+          'Attogram class not found: file=' . $this->attogram_class_file );
     }
 
     /**
