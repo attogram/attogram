@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
 
-
     public function testDebug()
     {
         // Assert
