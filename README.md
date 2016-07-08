@@ -1,6 +1,8 @@
 Attogram Framework
 ==================
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.2 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.3 )
+
+[![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 
 * The Attogram Framework provides developers a PHP skeleton starter site with
 content modules, file-based URL routing, IP-protected backend, user system,
