@@ -1,23 +1,21 @@
-<?php // Attogram Framework - Attogram Test v0.0.1
+<?php // Attogram Framework - Attogram Test v0.0.2
 
 use PHPUnit\Framework\TestCase;
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
-    protected $attogram_class_file;
+
+    protected $attogram;
 
     public function setUp()
     {
-        $this->attogram_class_file = __DIR__ . '/../attogram/attogram.php';
+        include_once( __DIR__ . '/../attogram/attogram.php' );
+        //$this->attogram = new Attogram\attogram();
     }
 
-    public function testInclude()
+    public function testClassExists()
     {
-      include_once( $this->attogram_class_file );
-
-      $this->assertTrue(
-          class_exists('Attogram\attogram'),
-          'Attogram class not found: file=' . $this->attogram_class_file );
+        $this->assertTrue( class_exists('Attogram\attogram'), 'Attogram class not found' );
     }
 
     /**
