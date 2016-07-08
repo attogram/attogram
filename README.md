@@ -6,9 +6,9 @@ Attogram Framework
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
 [![Latest Unstable Version](https://poser.pugx.org/attogram/attogram-framework/v/unstable)](https://packagist.org/packages/attogram/attogram-framework)
 [![Total Downloads](https://poser.pugx.org/attogram/attogram-framework/downloads)](https://packagist.org/packages/attogram/attogram-framework)
-[![License](https://poser.pugx.org/attogram/attogram-framework/license)](LICENSE.md)
-[`[CHANGELOG]`](CHANGELOG.md)
-[`[TODO]`](TODO.md)
+[![License](https://poser.pugx.org/attogram/attogram-framework/license)](https://github.com/attogram/attogram/blob/master/LICENSE.md)
+[`[CHANGELOG]`](https://github.com/attogram/attogram/blob/master/CHANGELOG.md)
+[`[TODO]`](https://github.com/attogram/attogram/blob/master/TODO.md)
 
 * The Attogram Framework provides developers a PHP skeleton starter site with
 content modules, file-based URL routing, IP-protected backend, user system,
