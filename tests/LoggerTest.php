@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Logger Test v0.0.1
+<?php // Attogram Framework - Logger Test v0.0.2
 
 use PHPUnit\Framework\TestCase;
 
@@ -24,8 +24,8 @@ class LoggerTest extends PHPUnit\Framework\TestCase
     public function testInterface()
     {
         $this->assertTrue(
-          is_a( $this->logger, 'Attogram\logger'),
-          'class logger does NOT implement \Psr\Log\LoggerInterface'
+          ( array( 'Psr\Log\LoggerInterface'=>'Psr\Log\LoggerInterface' ) == class_implements( $this->logger ) ),
+          'class logger does NOT implement Psr\Log\LoggerInterface'
         );
     }
 }
