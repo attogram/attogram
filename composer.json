@@ -25,6 +25,11 @@
   "support": {
     "docs": "https://github.com/attogram/attogram/wiki"
   },
+  "suggest": {
+    "attogram/attogram-base": "Base Module for the Attogram Framework",
+    "attogram/attogram-database": "Database Module for the Attogram Framework",
+    "attogram/attogram-user": "User Module for the Attogram Framework"
+  },
   "keywords": [
     "attogram",
     "attogram framework",
