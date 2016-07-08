@@ -20,7 +20,7 @@
 
     <filter>
       <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">../attogram</directory>
+        <directory suffix=".php">./attogram</directory>
       </whitelist>
     </filter>
 
