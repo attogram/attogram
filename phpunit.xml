@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="vendor/autoload.php"
@@ -12,20 +11,21 @@
          syntaxCheck="false"
         >
 
-    <testsuites>
-        <testsuite name="Attogram test suit">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
+ <testsuites>
+  <testsuite name="Attogram test suit">
+   <directory>./tests/</directory>
+  </testsuite>
+ </testsuites>
 
-    <filter>
-      <whitelist processUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">./attogram</directory>
-      </whitelist>
-    </filter>
+ <filter>
+  <whitelist processUncoveredFilesFromWhitelist="true">
+   <directory suffix=".php">./attogram</directory>
+   <file>./public/index.php</file>
+  </whitelist>
+ </filter>
 
-    <logging>
-      <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-    </logging>
+ <logging>
+  <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+ </logging>
 
 </phpunit>
