@@ -2,8 +2,17 @@
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.2...HEAD)
-- `.travis.yml`
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.3...HEAD)
+
+## [v0.7.3](https://github.com/attogram/attogram/compare/v0.7.2...v0.7.3) - 2016-07-08
+- Removed all modules from main distribution.  Core modules now have their own repository:
+ - https://github.com/attogram/attogram-base
+ - https://github.com/attogram/attogram-database
+ - https://github.com/attogram/attogram-user
+- setup framework for Travis CI integration: https://travis-ci.org/attogram/attogram
+- setup framework for future phpunit Unit Testing
+- bugfixes on numeric actions, missing db object, empty menus
+- pimp buttons on the [README](https://github.com/attogram/attogram/blob/master/README.md)
 
 ## [v0.7.2](https://github.com/attogram/attogram/compare/v0.7.1...v0.7.2) - 2016-07-07
 - bugfix to allow numeric actions ( ./actions/123.php, ./actions/123.md, etc. )
