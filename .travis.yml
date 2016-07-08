@@ -16,3 +16,6 @@ matrix:
 before_script:
   - composer self-update
   - composer install
+
+script:
+  - composer --bootstrap ./vendor/autoload.php tests
