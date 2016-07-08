@@ -18,4 +18,14 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+      <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">../attogram</directory>
+        <directory suffix=".php">../public</directory>
+        <directory suffix=".php">../templates</directory>
+        <directory suffix=".php">../modules</directory>
+        <directory suffix=".php">../xtra</directory>
+      </whitelist>
+    </filter>
+
 </phpunit>
