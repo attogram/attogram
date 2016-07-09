@@ -19,4 +19,4 @@ matrix:
 
 before_script:
   - composer self-update
-  - composer --ignore-platform-reqs install
+  - composer --ignore-platform-reqs --verbose install 
