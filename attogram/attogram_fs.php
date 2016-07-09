@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram_fs class v0.0.11
+<?php // Attogram Framework - attogram_fs class v0.0.12
 
 namespace Attogram;
 
@@ -19,7 +19,7 @@ class attogram_fs
     if( !isset($dir) || !$dir || !is_string($dir) || !is_readable($dir) ) {
       return array();
     }
-    $r = array();
+    $result = array();
     foreach( array_diff( scandir($dir), self::get_skip_files() ) as $d ) {
       $md = $dir . '/' . $d;
       if( !is_readable($md) ) {
@@ -29,9 +29,9 @@ class attogram_fs
       if( !is_readable($md) ) {
         continue;
       }
-      $r[] = $md;
+      $result[] = $md;
     }
-    return $r;
+    return $result;
   } // end function get_all_subdirectories()
 
   /**

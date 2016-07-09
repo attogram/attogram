@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.4
+<?php // Attogram Framework - Check Script v0.0.5
 
 $c = new attogram_check();
 $c->check();
@@ -37,45 +37,45 @@ class attogram_check {
   function check_index() {
     $f = './index.php';
 
-    file_exists($f) ? $fe = 'pass' : $fe = 'fail';
-    print '<pre class="' . $fe . '">' . $this->{$fe} . ' 1.0 - <strong>' . $f . '</strong> exists</pre>';
+    file_exists($f) ? $fileexists = 'pass' : $fileexists = 'fail';
+    print '<pre class="' . $fileexists . '">' . $this->{$fileexists} . ' 1.0 - <strong>' . $f . '</strong> exists</pre>';
 
-    is_readable($f) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 1.1 - <strong>' . $f . '</strong> is readable</pre>';
+    is_readable($f) ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 1.1 - <strong>' . $f . '</strong> is readable</pre>';
 
-    if( $fe == 'pass' ) {
+    if( $fileexists == 'pass' ) {
       $file = new SplFileObject($f);
-      $r = $val = 'fail';
+      $result = $val = 'fail';
       foreach( $file as $linenum=>$val ) {
         if( preg_match('/new\s+guru_meditation_loader/', $val) ) {
-          $r = 'pass';
+          $result = 'pass';
           break;
         }
       }
     } else {
-      $r = 'fail';
+      $result = 'fail';
       $val = 'Not Found';
     }
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 1.2 - <strong>' . $f . '</strong> is Project Loader (found: new guru_meditation_loader)</pre>';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 1.2 - <strong>' . $f . '</strong> is Project Loader (found: new guru_meditation_loader)</pre>';
   }
 
   function check_htaccess() {
     $f = './.htaccess';
 
-    file_exists($f) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 2.0 - <strong>' . $f . '</strong> exists</pre>';
+    file_exists($f) ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 2.0 - <strong>' . $f . '</strong> exists</pre>';
 
-    is_readable($f) ? $fr = 'pass' : $fr = 'fail';
-    print '<pre class="' . $fr . '">' . $this->{$fr} . ' 2.1 - <strong>' . $f . '</strong> is readable</pre>';
+    is_readable($f) ? $filereadable = 'pass' : $filereadable = 'fail';
+    print '<pre class="' . $filereadable . '">' . $this->{$filereadable} . ' 2.1 - <strong>' . $f . '</strong> is readable</pre>';
 
     $count = $found = array();
     $count['FallbackResource'] = $count['ErrorDocument 404'] = $count['ErrorDocument 403'] = $count['DirectoryIndex'] = 0;
     $found['FallbackResource'] = $found['ErrorDocument 404'] = $found['ErrorDocument 403'] = $found['DirectoryIndex'] = '?';
-    $r22 = $r23 = $r24 = $r25 = $r26 = $r27 = $r28 = $r29 = 'fail';
+    $result22 = $result23 = $result24 = $result25 = $result26 = $result27 = $result28 = $result29 = 'fail';
 
     $good_uri = $this->good_uri();
 
-    if( $fr == 'pass' ) {
+    if( $filereadable == 'pass' ) {
       $file = new SplFileObject($f);
 
       foreach( $file as $linenum=>$val ) {
@@ -84,7 +84,7 @@ class attogram_check {
           $count['FallbackResource']++;
           if( preg_match('/FallbackResource\s+(.*)\s+$/', $val, $match) ) {
             $found['FallbackResource'] = trim($match[1]);
-            if( trim($match[1]) == $good_uri) { $r26 = 'pass'; }
+            if( trim($match[1]) == $good_uri) { $result26 = 'pass'; }
           }
           continue;
         }
@@ -92,7 +92,7 @@ class attogram_check {
           $count['ErrorDocument 403']++;
           if( preg_match('/ErrorDocument\s+403\s+(.*)\s+$/', $val, $match) ) {
             $found['ErrorDocument 403'] = trim($match[1]);
-            if( trim($match[1]) == $good_uri) { $r27 = 'pass'; }
+            if( trim($match[1]) == $good_uri) { $result27 = 'pass'; }
           }
           continue;
         }
@@ -100,7 +100,7 @@ class attogram_check {
           $count['ErrorDocument 404']++;
           if( preg_match('/ErrorDocument\s+404\s+(.*)\s+$/', $val, $match) ) {
             $found['ErrorDocument 404'] = trim($match[1]);
-            if( trim($match[1]) == $good_uri) { $r28 = 'pass'; }
+            if( trim($match[1]) == $good_uri) { $result28 = 'pass'; }
           }
           continue;
         }
@@ -108,51 +108,51 @@ class attogram_check {
           $count['DirectoryIndex']++;
           if( preg_match('/DirectoryIndex\s+(.*)\s+$/', $val, $match) ) {
             $found['DirectoryIndex'] = trim($match[1]);
-            if( trim($match[1]) == 'index.php') { $r29 = 'pass'; }
+            if( trim($match[1]) == 'index.php') { $result29 = 'pass'; }
           }
           continue;
         }
       } // end foreach line of file
       if( isset($count['FallbackResource']) && $count['FallbackResource'] == 1 ) {
-        $r22 = 'pass';
+        $result22 = 'pass';
       }
       if( isset($count['ErrorDocument 403']) && $count['ErrorDocument 403'] == 1 ) {
-        $r23 = 'pass';
+        $result23 = 'pass';
       }
       if( isset($count['ErrorDocument 404']) && $count['ErrorDocument 404'] == 1 ) {
-        $r24 = 'pass';
+        $result24 = 'pass';
       }
       if( isset($count['DirectoryIndex']) && $count['DirectoryIndex'] == 1 ) {
-        $r25 = 'pass';
+        $result25 = 'pass';
       }
     } // end file check
 
-    $r = 'unknown';
-    print '<pre class="' . $r22 . '">' . $this->{$r22} . ' 2.2 - <strong>FallbackResource</strong> found once (found: ' . $count['FallbackResource'] . ')</pre>';
-    print '<pre class="' . $r23.  '">' . $this->{$r23} . ' 2.3 - <strong>ErrorDocument 403</strong> found once (found: ' . $count['ErrorDocument 403'] . ')</pre>';
-    print '<pre class="' . $r24 . '">' . $this->{$r24} . ' 2.4 - <strong>ErrorDocument 404</strong> found once (found: ' . $count['ErrorDocument 404'] . ')</pre>';
-    print '<pre class="' . $r25 . '">' . $this->{$r25} . ' 2.5 - <strong>DirectoryIndex</strong> found once (found: ' . $count['DirectoryIndex'] . ')</pre>';
-    print '<pre class="' . $r26 . '">' . $this->{$r26} . ' 2.6 - <strong>FallbackResource ' . $good_uri . '</strong> (found: ' . $found['FallbackResource'] . ')</pre>';
-    print '<pre class="' . $r27 . '">' . $this->{$r27} . ' 2.7 - <strong>ErrorDocument 403 ' . $good_uri . '</strong> (found: ' . $found['ErrorDocument 403'] . ')</pre>';
-    print '<pre class="' . $r28 . '">' . $this->{$r28} . ' 2.8 - <strong>ErrorDocument 404 ' . $good_uri . '</strong> (found: ' . $found['ErrorDocument 404'] . ')</pre>';
-    print '<pre class="' . $r29 . '">' . $this->{$r29} . ' 2.9 - <strong>DirectoryIndex index.php</strong> (found: ' . $found['DirectoryIndex'] . ')</pre>';
+    $result = 'unknown';
+    print '<pre class="' . $result22 . '">' . $this->{$result22} . ' 2.2 - <strong>FallbackResource</strong> found once (found: ' . $count['FallbackResource'] . ')</pre>';
+    print '<pre class="' . $result23.  '">' . $this->{$result23} . ' 2.3 - <strong>ErrorDocument 403</strong> found once (found: ' . $count['ErrorDocument 403'] . ')</pre>';
+    print '<pre class="' . $result24 . '">' . $this->{$result24} . ' 2.4 - <strong>ErrorDocument 404</strong> found once (found: ' . $count['ErrorDocument 404'] . ')</pre>';
+    print '<pre class="' . $result25 . '">' . $this->{$result25} . ' 2.5 - <strong>DirectoryIndex</strong> found once (found: ' . $count['DirectoryIndex'] . ')</pre>';
+    print '<pre class="' . $result26 . '">' . $this->{$result26} . ' 2.6 - <strong>FallbackResource ' . $good_uri . '</strong> (found: ' . $found['FallbackResource'] . ')</pre>';
+    print '<pre class="' . $result27 . '">' . $this->{$result27} . ' 2.7 - <strong>ErrorDocument 403 ' . $good_uri . '</strong> (found: ' . $found['ErrorDocument 403'] . ')</pre>';
+    print '<pre class="' . $result28 . '">' . $this->{$result28} . ' 2.8 - <strong>ErrorDocument 404 ' . $good_uri . '</strong> (found: ' . $found['ErrorDocument 404'] . ')</pre>';
+    print '<pre class="' . $result29 . '">' . $this->{$result29} . ' 2.9 - <strong>DirectoryIndex index.php</strong> (found: ' . $found['DirectoryIndex'] . ')</pre>';
   }
 
   function check_php() {
 
     $v = phpversion();
-    (version_compare( $v, '5.3.3' ) >= 0) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 3.0 - <strong>PHP</strong> Version is >= 5.3.3 (current is ' . $v . ')</pre>';
+    (version_compare( $v, '5.3.3' ) >= 0) ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 3.0 - <strong>PHP</strong> Version is >= 5.3.3 (current is ' . $v . ')</pre>';
 
-    class_exists('PDO') ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 3.1 - <strong>PDO</strong> extension enabled</pre>';
+    class_exists('PDO') ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 3.1 - <strong>PDO</strong> extension enabled</pre>';
 
     if( class_exists('PDO') ) {
-      in_array('sqlite', \PDO::getAvailableDrivers()) ? $r = 'pass' : $r = 'fail';
+      in_array('sqlite', \PDO::getAvailableDrivers()) ? $result = 'pass' : $result = 'fail';
     } else {
-      $r = 'fail';
+      $result = 'fail';
     }
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 3.2 - <strong>PDO sqlite</strong> driver installed</pre>';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 3.2 - <strong>PDO sqlite</strong> driver installed</pre>';
   }
 
   function check_apache() {
@@ -162,11 +162,11 @@ class attogram_check {
     $avr = explode('/', $av);
     $apache = $avr[0];
     $apache_version = $avr[1];
-    ( $apache == 'Apache' ) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 4.0 - <strong>Apache Server</strong> in use</pre>';
+    ( $apache == 'Apache' ) ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 4.0 - <strong>Apache Server</strong> in use</pre>';
 
-    (version_compare( $apache_version, '2.2.16' ) >= 0) ? $r = 'pass' : $r = 'fail';
-    print '<pre class="' . $r . '">' . $this->{$r} . ' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is ' . $apache_version . ')</pre>';
+    (version_compare( $apache_version, '2.2.16' ) >= 0) ? $result = 'pass' : $result = 'fail';
+    print '<pre class="' . $result . '">' . $this->{$result} . ' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is ' . $apache_version . ')</pre>';
 
     $apache_finder = array(
       '/etc/apache2/apache2.conf',
@@ -191,19 +191,19 @@ class attogram_check {
     }
 
     if( sizeof($apache_found) == 1 ) {
-        $r42 = 'pass';
-        $r42_found = $apache_found[0];
-        $r43 = $this->apache_conf_examine( $apache_found[0] );
+        $result42 = 'pass';
+        $result42_found = $apache_found[0];
+        $result43 = $this->apache_conf_examine( $apache_found[0] );
     //} elseif( sizeof($apache_found) > 1 ) {
-    //    $r42 = $r43 = 'fail';
-    //    $r42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
+    //    $result42 = $result43 = 'fail';
+    //    $result42_found = 'Error: ' . sizeof($apache_found) . ' conf files found';
     } else {
-        $r42 = $r43 = 'fail';
-        $r42_found = 'Not Found';
+        $result42 = $result43 = 'fail';
+        $result42_found = 'Not Found';
     }
 
-    print '<pre class="' . $r42 . '">' . $this->{$r42} . ' 4.2 - <strong>Apache conf</strong> exists (' . $r42_found . ')</pre>';
-    print '<pre class="' . $r43 . '">' . $this->{$r43} . ' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
+    print '<pre class="' . $result42 . '">' . $this->{$result42} . ' 4.2 - <strong>Apache conf</strong> exists (' . $result42_found . ')</pre>';
+    print '<pre class="' . $result43 . '">' . $this->{$result43} . ' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
     . (isset($this->apache_override_dir) ? $this->apache_override_dir : '?') . ')</pre>';
 
 
