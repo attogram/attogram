@@ -10,12 +10,13 @@ Attogram Framework
 [`[CHANGELOG]`](https://github.com/attogram/attogram/blob/master/CHANGELOG.md)
 [`[TODO]`](https://github.com/attogram/attogram/blob/master/TODO.md)
 
-* The Attogram Framework provides developers a PHP skeleton starter site with
+The Attogram Framework provides developers a PHP skeleton starter site with
 content modules, file-based URL routing, IP-protected backend, user system,
 integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
 
-* The Attogram Framework is Dual Licensed under the MIT License (MIT)
-_or_ the GNU General Public License version 3 or higher (GPL-3.0+), at your choosing.
+After that, Attogram tries to stay out of your way while you do your thing!
+
+_Attogram now has modules!  Updated docs coming soon..._
 
 More Info
 =========
@@ -32,23 +33,6 @@ Notes
 
 * Or get the Attogram vendor package @ GitHub: https://github.com/attogram/attogram-vendor
 
-
-_Attogram now has modules!  Updated docs coming soon..._
-
-Attogram gives developers a jumpstart to quickly create web sites.
-
-Attogram is a PHP-based framework that provides developers a skeleton site with:
-
-* file-based URL routing
-* IP-protected backend
-* simple user system
-* integrated SQLite database with phpLiteAdmin
-* Markdown parser
-* jQuery and Bootstrap
-
-After that, Attogram tries to stay out of your way while you do your thing!
-
-Attogram is Dual Licensed under the The MIT License *or* the GNU General Public License, at your choosing.
 
 Requirements
 ============
@@ -179,38 +163,11 @@ Attogram Modules
 * Modules are loaded in _directory list order_.
  * Actions and files _cascade_: a duplicate action name or file will overwrite any previous modules action or file of the same name.
 
-# Standard Modules
+# Core Modules:
+* Attogram Base - https://github.com/attogram/attogram-base
+* Attogram Database - https://github.com/attogram/attogram-database
+* Attogram User - https://github.com/attogram/attogram-user
 
-Standard modules included with the Attogram Framework distribution:
-
-## Module: \_attogram
-* `./modules/_attogram/` - Default Attogram info and files
-* `./modules/_attogram/actions/about.md` - Public Action: About page
-* `./modules/_attogram/actions/home.php` - Public Action: Home page
-* `./modules/_attogram/actions/license.php` - Public Action: License page
-* `./modules/_attogram/admin_actions/info.php` - Admin Action: Attogram Info page
-* `./modules/_attogram/admin_actions/events.php` - Admin Action: Event log view page
-* `./modules/_attogram/public/attogram.css` - Virtual Web Directory: attogram global CSS
-* `./modules/_attogram/public/jquery.min.js` - Virtual Web Directory: jQuery library
-* `./modules/_attogram/public/bootstrap/css/bootstrap.min.css` - Virtual Web Directory: Bootstrap library CSS
-* `./modules/_attogram/public/bootstrap/fonts/glyphicons-halflings-regular.[eot,svg,ttf,woff,woff2]` - Virtual Web Directory: Bootstrap glyph font
-* `./modules/_attogram/public/bootstrap/js/bootstrap.min.js` - Virtual Web Directory: Bootstrap library javascript
-* `./modules/_attogram/tables/event.sql` - Event lo database table definition
-
-## Module: \_database
-* `./modules/_database/` - SQLite database for Attogram
-* `./modules/_database/admin_actions/db-admin.php` - Admin Action: Database web admin via phpLiteAdmin
-* `./modules/_database/admin_actions/db-tables.php` - Admin Action: Database table information
-* `./modules/_database/includes/attogram_database.php` - Attogram Database Interface
-* `./modules/_database/includes/sqlite_database.php` - Attogram SQLite helper class
-
-## Module: \_user
-* `./modules/_user/` - Simple user system for Attogram. (requires `database` module)
-* `./modules/_user/actions/login.php` - Public Action: Login page
-* `./modules/_user/actions/user.php` - Public Action: User page
-* `./modules/_user/admin_actions/user-admin.php` - Admin Action: Users editor
-* `./modules/_user/includes/attogram_user.php` - Attogram User helper class
-* `./modules/_user/tables/user.sql` - user database table definition
 
 # Misc
 
