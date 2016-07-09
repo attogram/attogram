@@ -14,9 +14,11 @@ matrix:
   allow_failures:
     - php: 5.3
     - php: 5.4
-    - php: 5.5
     - php: nightly
 
 before_script:
   - composer self-update
-  - composer --ignore-platform-reqs --verbose install 
+  - composer --ignore-platform-reqs --verbose install
+
+script:
+  - phpunit --verbose --debug
