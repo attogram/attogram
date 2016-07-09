@@ -1,4 +1,4 @@
-# Attogram Framework - .travis.yml v0.0.3
+# Attogram Framework - .travis.yml v0.0.4
 # Travis CL configuration for https://travis-ci.org/attogram/attogram
 
 language: php
@@ -26,5 +26,4 @@ before_script:
   - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then wget https://phar.phpunit.de/phpunit-old.phar; fi;
 
 script:
-  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then php phpunit-old.phar --verbose --debug --configuration=phpunit.xml; fi;
-  - if [[ "$USE_OLD_PHPUNIT" = "0" ]]; then phpunit --verbose --debug --configuration=phpunit-coverage.xml; fi;
+  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then php phpunit-old.phar --verbose --debug --configuration=phpunit.xml; else phpunit --verbose --debug --configuration=phpunit-coverage.xml; fi;
