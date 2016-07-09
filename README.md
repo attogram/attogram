@@ -1,6 +1,5 @@
-Attogram Framework
-==================
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.3 )
+# Attogram Framework
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.5 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -18,30 +17,18 @@ After that, Attogram tries to stay out of your way while you do your thing!
 
 _Attogram now has modules!  Updated docs coming soon..._
 
-More Info
-=========
+## More Info
+* Attogram Framework @ GitHub: https://github.com/attogram/attogram
+* Attogram Framework @ Packagist: https://packagist.org/packages/attogram/attogram-framework
+* Attogram Framework @ Travis CI: https://travis-ci.org/attogram/attogram
+* Attogram Framework vendor package @ GitHub: [(download ZIP)](https://github.com/attogram/attogram-vendor/archive/master.zip) https://github.com/attogram/attogram-vendor
 
-* Attogram @ GitHub: https://github.com/attogram/attogram
-
-* [Download latest Attogram as a zip file](https://github.com/attogram/attogram/archive/master.zip)
-
-* Attogram @ Packagist: https://packagist.org/packages/attogram/attogram-framework
-
-Notes
-=====
-* Need the `vendor` directory and can't run composer?  Download and install the [Attogram vendor package as a zip file](https://github.com/attogram/attogram-vendor/archive/master.zip).
-
-* Or get the Attogram vendor package @ GitHub: https://github.com/attogram/attogram-vendor
-
-
-Requirements
-============
-* PHP5 or PHP7, with SQLite PDO driver
+## Requirements
+* PHP 5.3.3 or higher, or PHP7
+* PHP installed with SQLite PDO driver
 * Apache 2.2.16 or higher, with setting: AllowOveride all
 
-Setup: Install
-==============
-
+## Setup: Install
 * Get Attogram:
   * use Composer:  
     `composer create-project attogram/attogram-framework your-install-directory`
@@ -55,33 +42,51 @@ Setup: Install
 
 * (optional) copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings .
 
-Setup: Admin
-============
+## Setup: Admin
 * admin pages are IP protected
 * change the allowed admin IPs by setting `$config['admins']` in `./public/config.php`
 * default admin IPs is localhost in ip4 and ip6: `array( '127.0.0.1', '::1' )`
 * admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
-Setup: Database
-===============
+## Setup: Database
 * Make sure the database file `./db/global` is writeable by the web server
 * Tables are lazily created when needed.  To create all tables at once,
 goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tables**
 * phpLiteAdmin is available for database administration, goto the [**db-admin admin page**](../db-admin/), default password is **attogram**
 
-Setup: Users
-============
+## Setup: Users
 * load the homepage, goto admin action [**users**](../users/), click **Create New User**
 * enter username, password, etc. and click **Insert**
 * load the homepage, click [**login**](../login), login as the new user
 
-Create a page
-=============
+## Attogram Modules
+* Easily create modules to extend Attogram!
+* Each module lives in its own subdirectory within the Attogram `./modules/` directory.
+
+### Module Structure
+* Modules may have the following subdirectories:
+ * `actions/` - The Public Actions (.php or .md markdown files)  If present, the `home` action is used as the home page.
+ * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
+ * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
+ * `includes/` - Included files, loaded at startup (.php files only)
+ * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
+ * `templates/` - Templates, to override default Attogram templates  (.php files only)
+ * `public/` - Files for public consumption. Served via requests to the `web/` virtual web directory
+* Modules are loaded in _directory list order_.
+ * Actions and files _cascade_: a duplicate action name or file will overwrite any previous modules action or file of the same name.
+
+### Core Modules:
+* Attogram Base - https://github.com/attogram/attogram-base
+* Attogram Database - https://github.com/attogram/attogram-database
+* Attogram User - https://github.com/attogram/attogram-user
+
+## Old Docs:
+
+## Create a page
 * create a new **PHP** or **Markdown** file in the `./actions/` directory, add anything you want!
 * The filename is used as the page URL.  ./actions/**example**.php = example.com/**example**/
 
-PHP pages
-=========
+## PHP pages
 * PHP filenames must end in `.php`
 * The Attogram object is available via the `$this` variable
 * Helpful functions:
@@ -97,78 +102,29 @@ PHP pages
 * End Slash settings in `./public/config.php`
   * `$config['no_end_slash'][] = 'insert-action-name-here'`
 
-Markdown pages
-==============
+## Markdown pages
 * Markdown filenames must end in `.md`
 * The first line of the Markdown file is used as the page title
 
-Remove a page
-=============
+## Remove a page
 * delete the pages corresponding file from the `./actions/` directory
 
-Admin pages
-===========
-* create/delete the same as normal pages, but in the `./admin/` directory
+## Admin pages
+* create/delete the same as normal pages, but in the `./admin_actions/` directory
 
-Database tables
-===============
+## Database tables
 * To add a table, add a file into `./tables/` directory
 * The filename must be the name of the table
 * File content is the sql `CREATE TABLE ...` statement
 * tables are automatically created upon first use
 
-Web discovery
-=============
+## Web discovery
 * If [`./robots.txt`](../robots.txt) does not exist, Attogram dynamically serves it, with a link to the Sitemap
 * If [`./sitemap.xml`](../sitemap.xml) does not exist, Attogram dynamically serves it, with a listing of all public pages
 
-Admin URL overrides
-===================
+## Admin URL overrides
 * admins may use URL/[`?noadmin`](?noadmin) on any page to turn off admin access
 * admins may use URL/[`?debug`](?debug) on any page to turn on debugging
 
-More Info
-=========
-* Attogram @ GitHub: https://github.com/attogram/attogram
-* Attogram vendor package @ GitHub: https://github.com/attogram/attogram-vendor
-* Attogram @ Packagist: https://packagist.org/packages/attogram/attogram-framework
-* Demo: http://getitdaily.com/attogram/
-
-Attogram Modules
-===
-[//]: # ( Attogram Framework - Modules Readme (markdown) - v0.1.14 )
-
-* Easily create modules to extend Attogram!
-
-* Each module lives in its own subdirectory within the Attogram `./modules/` directory.
-
-# Module Structure
-
-* Modules may have the following subdirectories:
-
- * `actions/` - The Public Actions (.php or .md markdown files)  If present, the `home` action is used as the home page.
-
- * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
-
- * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
-
- * `includes/` - Included files, loaded at startup (.php files only)
-
- * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
-
- * `templates/` - Templates, to override default Attogram templates  (.php files only)
-
- * `public/` - Files for public consumption. Served via requests to the `web/` virtual web directory
-
-* Modules are loaded in _directory list order_.
- * Actions and files _cascade_: a duplicate action name or file will overwrite any previous modules action or file of the same name.
-
-# Core Modules:
-* Attogram Base - https://github.com/attogram/attogram-base
-* Attogram Database - https://github.com/attogram/attogram-database
-* Attogram User - https://github.com/attogram/attogram-user
-
-
-# Misc
-
+## Misc
 * More example modules can be found in the `./xtra/` directory. Modules in that directory will not be loaded by Attogram.
