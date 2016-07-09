@@ -26,4 +26,5 @@ before_script:
   - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then wget https://phar.phpunit.de/phpunit-old.phar; fi;
 
 script:
-  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then php phpunit-old.phar --verbose --debug; else phpunit --verbose --debug; fi;
+  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then php phpunit-old.phar --verbose --debug --configuration=phpunit.xml; fi;
+  - if [[ "$USE_OLD_PHPUNIT" = "0" ]]; then phpunit --verbose --debug --configuration=phpunit-coverage.xml; fi;
