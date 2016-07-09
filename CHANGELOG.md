@@ -2,7 +2,13 @@
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.3...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.4...HEAD)
+
+## [v0.7.4](https://github.com/attogram/attogram/compare/v0.7.3...v0.7.4) - 2016-07-09
+- updates to Travis CI integration: https://travis-ci.org/attogram/attogram
+ - for PHP 5.3 and PHP 5.4: use old phpunit, do not do code coverage
+ - for PHP 5.5+: use new phpunit, do code coverage
+- continued testing setup
 
 ## [v0.7.3](https://github.com/attogram/attogram/compare/v0.7.2...v0.7.3) - 2016-07-08
 - Removed all modules from main distribution.  Core modules now have their own repository:

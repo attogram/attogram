@@ -18,7 +18,7 @@ namespace Attogram;
 class attogram
 {
 
-  const ATTOGRAM_VERSION = '0.7.3';
+  const ATTOGRAM_VERSION = '0.7.4';
 
   public $start_time;    // (float) microsecond time of awakening
   public $debug;         // (boolean) debug on/off
