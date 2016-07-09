@@ -1,23 +1,16 @@
-# Attogram Framework - .travis.yml v0.0.2
+# Attogram Framework - .travis.yml v0.0.3
 # Travis CL configuration for https://travis-ci.org/attogram/attogram
 
 language: php
 
 php:
   - 5.3
-  env: USE_OLD_PHPUNIT=1
   - 5.4
-  env: USE_OLD_PHPUNIT=1
   - 5.5
-  env: USE_OLD_PHPUNIT=0
   - 5.6
-  env: USE_OLD_PHPUNIT=0
   - 7.0
-  env: USE_OLD_PHPUNIT=0
   - hhvm
-  env: USE_OLD_PHPUNIT=0
   - nightly
-  env: USE_OLD_PHPUNIT=0
 
 matrix:
   fast_finish: true
@@ -27,6 +20,10 @@ matrix:
 before_script:
   - composer self-update
   - composer --ignore-platform-reqs --verbose install
+
+  - USE_OLD_PHPUNIT=0
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.3" ]]; then USE_OLD_PHPUNIT=1; fi;
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.4" ]]; then USE_OLD_PHPUNIT=1; fi;
   - echo 'TRAVIS_PHP_VERSION: ' $TRAVIS_PHP_VERSION
   - echo 'USE_OLD_PHPUNIT: ' $USE_OLD_PHPUNIT
   - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then wget https://phar.phpunit.de/phpunit-old.phar; fi;
