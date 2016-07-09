@@ -1,3 +1,5 @@
+# Attogram Framework - .travis.yml v0.0.1
+
 language: php
 
 php:
@@ -19,6 +21,8 @@ matrix:
 before_script:
   - composer self-update
   - composer --ignore-platform-reqs --verbose install
+  - wget https://phar.phpunit.de/phpunit-old.phar
 
 script:
-  - phpunit --verbose --debug
+#  - phpunit --verbose --debug
+  - php phpunit-old.phar --verbose --debug
