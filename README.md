@@ -1,11 +1,13 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.5 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.6 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
 [![Latest Unstable Version](https://poser.pugx.org/attogram/attogram-framework/v/unstable)](https://packagist.org/packages/attogram/attogram-framework)
 [![Total Downloads](https://poser.pugx.org/attogram/attogram-framework/downloads)](https://packagist.org/packages/attogram/attogram-framework)
 [![License](https://poser.pugx.org/attogram/attogram-framework/license)](https://github.com/attogram/attogram/blob/master/LICENSE.md)
+[![Code Climate](https://codeclimate.com/github/attogram/attogram/badges/gpa.svg)](https://codeclimate.com/github/attogram/attogram)
+[![Issue Count](https://codeclimate.com/github/attogram/attogram/badges/issue_count.svg)](https://codeclimate.com/github/attogram/attogram)
 [`[CHANGELOG]`](https://github.com/attogram/attogram/blob/master/CHANGELOG.md)
 [`[TODO]`](https://github.com/attogram/attogram/blob/master/TODO.md)
 
