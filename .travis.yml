@@ -5,12 +5,19 @@ language: php
 
 php:
   - 5.3
+  env: USE_OLD_PHPUNIT=1
   - 5.4
+  env: USE_OLD_PHPUNIT=1
   - 5.5
+  env: USE_OLD_PHPUNIT=0
   - 5.6
+  env: USE_OLD_PHPUNIT=0
   - 7.0
+  env: USE_OLD_PHPUNIT=0
   - hhvm
+  env: USE_OLD_PHPUNIT=0
   - nightly
+  env: USE_OLD_PHPUNIT=0
 
 matrix:
   fast_finish: true
@@ -20,8 +27,9 @@ matrix:
 before_script:
   - composer self-update
   - composer --ignore-platform-reqs --verbose install
-  - wget https://phar.phpunit.de/phpunit-old.phar
+  - echo 'TRAVIS_PHP_VERSION: ' $TRAVIS_PHP_VERSION
+  - echo 'USE_OLD_PHPUNIT: ' $USE_OLD_PHPUNIT
+  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then wget https://phar.phpunit.de/phpunit-old.phar; fi;
 
 script:
-#  - phpunit --verbose --debug
-  - php phpunit-old.phar --verbose --debug
+  - if [[ "$USE_OLD_PHPUNIT" = "1" ]]; then php phpunit-old.phar --verbose --debug; else phpunit --verbose --debug; fi;
