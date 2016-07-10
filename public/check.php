@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.9
+<?php // Attogram Framework - Check Script v0.0.10
 
 $c = new attogram_check();
 $c->check();
@@ -198,7 +198,7 @@ class attogram_check {
     $this_dir = '';
     $allowOverride = array();
     $file = new SplFileObject($conf);
-    foreach( $file as $linenum => $val ) {
+    foreach( $file as $val ) {
       $val = trim($val);
       if( !$val || $val[0] == '#' ) { continue; }
       if( preg_match('/^<Directory [\'"](.*)[\'"]>/', $val, $match) ) {
@@ -224,7 +224,7 @@ class attogram_check {
   }
 
   function page_header() {
-    ?><!DOCTYPE html>
+    print '<!DOCTYPE html>
     <html lang="en"><head><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -239,10 +239,10 @@ class attogram_check {
     .icon { font-size:30px; vertical-align:middle; padding:0; margin:0; }
     .icon-s { font-size:18px; vertical-align:middle; padding:0; margin:0; }
     </style>
-    <title>Attogram Framework Check</title></head><body><?php
+    <title>Attogram Framework Check</title></head><body>';
   }
 
   function page_footer() {
-    ?></body></html><?php
+    print '</body></html>';
   }
 } // end class attogram_check
