@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.1.5
+<?php // Attogram Framework - Guru Meditation Loader - v0.2.0
 
 namespace Attogram;
 
@@ -24,10 +24,10 @@ $guru = new guru_meditation_loader(
   $vendor_download     = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
   $required_classes    = array(
                          '\Attogram\attogram_fs',            // Attogram File System
-                         '\Attogram\logger',                 // Null Stack PSR-3 Logger
                          '\Attogram\attogram',               // The Attogram Framework
                          '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
                          '\Parsedown',                       // Markdown Parser
+                         '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
                          '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
                          '\Monolog\Handler\BufferHandler',   // Monolog Buffer Handler
                          '\Monolog\Handler\StreamHandler',   // Monolog Stream Handle
@@ -318,7 +318,7 @@ class guru_meditation_loader
         $log->pushHandler( new \Monolog\Handler\BufferHandler($streamHandler) );
         // $log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
       } else {
-        $log = new \Attogram\logger();
+        $log = new \Psr\Log\NullLogger();
       }
 
       // Save guru startup log to the Debug logger
@@ -340,7 +340,7 @@ class guru_meditation_loader
 
       // Create the Event logger
       if( !$database ) {
-        $event = new \Attogram\logger(); // no database, use null logger
+        $event = new \Psr\Log\NullLogger(); // no database, use null logger
       } else {
         // Setup the Event Logger
         $event = new \Monolog\Logger('event');
