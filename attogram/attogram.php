@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.10
+<?php // Attogram Framework - attogram class v0.2.11
 
 namespace Attogram;
 
@@ -171,10 +171,12 @@ class attogram
   {
     if( $config_val ) {
       $this->{$var_name} = $config_val;
-    } else {
-      $this->{$var_name} = $default_val;
+      $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
+      return;
     }
-    $this->log->debug('remember: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
+    $this->{$var_name} = $default_val;
+    $this->log->debug('remember: using default: ' . $var_name . ' = ' . print_r($this->{$var_name},1));
+
   }
 
   /**
@@ -217,22 +219,26 @@ class attogram
    */
   public function end_slash()
   {
-    if( !preg_match('/\/$/', $this->pathInfo)) { // No slash at end of url
-      if( is_array($this->no_end_slash) && !in_array( $this->uri[0], $this->no_end_slash ) ) {
+    if( !is_array($this->no_end_slash) ) {
+      return;
+    }
+    if( !preg_match('/\/$/', $this->pathInfo)) { // No, there is no slash at end of current url
+      if( !in_array( $this->uri[0], $this->no_end_slash ) ) {
          // This action IS NOT excepted from force slash at end
         $url = str_replace($this->pathInfo, $this->pathInfo . '/', $this->requestUri);
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url );  // Force Trailing Slash
         exit;
       }
-    } else { // Yes slash at end of url
-      if( is_array($this->no_end_slash) && in_array( $this->uri[0], $this->no_end_slash ) ) {
-        // This action IS excepted from force slash at end
-        $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $url ); // Remove Trailing Slash
-        exit;
-      }
+      return;
+    }
+    // Yes, there is a slash at end of current url
+    if( in_array( $this->uri[0], $this->no_end_slash ) ) {
+      // This action IS excepted from force slash at end
+      $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
+      header('HTTP/1.1 301 Moved Permanently');
+      header('Location: ' . $url ); // Remove Trailing Slash
+      exit;
     }
   }
 

@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.7
+<?php // Attogram Framework - Check Script v0.0.8
 
 $c = new attogram_check();
 $c->check();
@@ -40,18 +40,17 @@ class attogram_check {
     print '<pre class="' . $fileexists . '">' . $this->{$fileexists} . ' 1.0 - <strong>' . $indexFile . '</strong> exists</pre>';
     is_readable($indexFile) ? $result = 'pass' : $result = 'fail';
     print '<pre class="' . $result . '">' . $this->{$result} . ' 1.1 - <strong>' . $indexFile . '</strong> is readable</pre>';
+    $result = 'fail';
+    $val = 'Not Found';
     if( $fileexists == 'pass' ) {
       $file = new SplFileObject($indexFile);
       $result = $val = 'fail';
-      foreach( $file as $linenum=>$val ) {
+      foreach( $file as $val ) {
         if( preg_match('/new\s+guru_meditation_loader/', $val) ) {
           $result = 'pass';
           break;
         }
       }
-    } else {
-      $result = 'fail';
-      $val = 'Not Found';
     }
     print '<pre class="' . $result . '">' . $this->{$result} . ' 1.2 - <strong>' . $indexFile . '</strong> is Project Loader (found: new guru_meditation_loader)</pre>';
   }

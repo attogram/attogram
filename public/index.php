@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.1.3
+<?php // Attogram Framework - Guru Meditation Loader - v0.1.4
 
 namespace Attogram;
 
@@ -189,8 +189,8 @@ class guru_meditation_loader
       return;
     }
     $this->guru_meditation_error(
-      $err = 'autoloader file not found: ' . $this->autoloader,
-      $fix = 'Possibile Fixes:'
+      'autoloader file not found: ' . $this->autoloader,
+      'Possibile Fixes:'
       . '<br /><br />- Is the path to the autoloader wrong?  Edit <strong>' . $this->config_file
       . '</strong> and check for <strong>$config[\'autoloader\']</strong>'
       . '<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?  Run <strong>composer install</strong>'
@@ -278,11 +278,11 @@ class guru_meditation_loader
           )
       ) {
         $log = new \Monolog\Logger('debug');
-        $sh = new \Monolog\Handler\StreamHandler('php://output');
+        $streamHandler = new \Monolog\Handler\StreamHandler('php://output');
         $format = "<p class=\"text-danger squished\">%datetime%|%level_name%: %message% %context%</p>"; // %extra%
         $dateformat = 'Y-m-d|H:i:s:u';
-        $sh->setFormatter( new \Monolog\Formatter\LineFormatter( $format, $dateformat ) );
-        $log->pushHandler( new \Monolog\Handler\BufferHandler($sh) );
+        $streamHandler->setFormatter( new \Monolog\Formatter\LineFormatter( $format, $dateformat ) );
+        $log->pushHandler( new \Monolog\Handler\BufferHandler($streamHandler) );
         // $log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
       } else {
         $log = new \Attogram\logger();
@@ -296,32 +296,32 @@ class guru_meditation_loader
       }
 
       // Create database object
-      $db = false;
+      $database = false;
       if( class_exists('Attogram\sqlite_database') ) {
-        $db = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
-        if( !$db ) {
+        $database = new sqlite_database( $config['db_name'], $config['modules_dir'], $log );  // init the database, sans-connection
+        if( !$database ) {
           $log->error('guru_meditation_loader: sqlite_database initialization failed');
-        }        
+        }
       }
 
 
       // Create the Event logger
-      if( !$db ) {
+      if( !$database ) {
         $event = new \Attogram\logger(); // no database, use null logger
       } else {
         // Setup the Event Logger
         $event = new \Monolog\Logger('event');
-        $event->pushHandler( new \Attogram\event_logger( $db ) );
+        $event->pushHandler( new \Attogram\event_logger( $database ) );
       }
 
       // create Request object
       $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
       // Start the Attogram Framework!
-      $attogram = new attogram(
+      new attogram(
         $log,
         $event,
-        $db,
+        $database,
         $request,
         $config['debug']
       );
