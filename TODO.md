@@ -1,6 +1,6 @@
 # TODO: [Attogram Framework](https://github.com/attogram/attogram)
 
-* delete attogram/logger.php, instead use vendor/psr/log/Psr/Log/NullLogger.php
+* delete attogram/logger.php, instead use: vendor/psr/log/Psr/Log/NullLogger.php
 
 * [Issue #14](https://github.com/attogram/attogram/issues/14) - pull request on [composer/installers](https://github.com/composer/installers/) for Attogram modules
 
