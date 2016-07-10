@@ -1,4 +1,4 @@
-<?php // Attogram Framework - attogram class v0.2.9
+<?php // Attogram Framework - attogram class v0.2.10
 
 namespace Attogram;
 
@@ -50,16 +50,16 @@ class attogram
   /**
    * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
    * @param obj  $event    Event Log - PSR-3 logger object, interface: \Psr\Log\LoggerInterface
-   * @param obj  $db       Attogram Database object, interface: \Attogram\attogram_database
+   * @param obj  $database Attogram Database object, interface: \Attogram\attogram_database
    * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
    * @param bool $debug    (optional) Debug True/False.  Defaults to False.
    */
-  public function __construct( $log, $event, $db, $request, $debug = false )
+  public function __construct( $log, $event, $database, $request, $debug = false )
   {
     $this->start_time = microtime(1);
     $this->log = $log;
     $this->event = $event;
-    $this->db = $db;
+    $this->db = $database;
     $this->request = $request;
     $this->debug = $debug;
     $this->log->debug('START The Attogram Framework v' . self::ATTOGRAM_VERSION);
@@ -141,21 +141,21 @@ class attogram
    */
   public function set_module_templates()
   {
-    $d = attogram_fs::get_all_subdirectories( $this->modules_dir, 'templates' );
-    if( !$d ) {
+    $dirs = attogram_fs::get_all_subdirectories( $this->modules_dir, 'templates' );
+    if( !$dirs ) {
       $this->log->debug('set_module_templates: no module templates found');
       return;
     }
-    foreach( $d as $md ) {
-      foreach( array_diff( scandir($md), attogram_fs::get_skip_files() ) as $f ) {
-        $file = "$md/$f";
+    foreach( $dirs as $module_dir ) {
+      foreach( array_diff( scandir($module_dir), attogram_fs::get_skip_files() ) as $mfile ) {
+        $file = "$module_dir/$mfile";
         if( attogram_fs::is_readable_file( $file, '.php' ) ) {
-          $name = preg_replace( '/\.php$/', '', $f );
+          $name = preg_replace( '/\.php$/', '', $mfile );
           $this->templates[$name] = $file; // Set the template
           $this->log->debug('set_module_templates: ' . $name. ' = ' . $file);
-        } else {
-          $this->log->error('set_module_templates: File not readable: ' . $file);
+          continue;
         }
+        $this->log->error('set_module_templates: File not readable: ' . $file);
       }
     }
   } // end function set_module_templates()
@@ -329,13 +329,12 @@ class attogram
   } // end function route()
 
   /**
-   * checks if request is for the virtual web directory
+   * checks if request is for the virtual web directory "web/"
    * and serve the appropriate module file
    * @return void
    */
   public function virtual_web_directory() {
-    $virtual_web_directory = 'web';
-    if( !preg_match( '/^\/' . $virtual_web_directory . '\//', $this->pathInfo ) ) {
+    if( !preg_match( '/^\/' . 'web' . '\//', $this->pathInfo ) ) {
       return; // not a virtual web directory request
     }
     $test = explode('/', $this->pathInfo);
@@ -357,9 +356,7 @@ class attogram
     if( !$file ) {
       $this->error404('Virtually Nothing Found');
     }
-
     $this->do_cache_headers( $file );
-
     $mime_type = attogram_fs::get_mime_type($file);
     if( $mime_type ) {
       header('Content-Type:' . $mime_type . '; charset=utf-8');
@@ -536,20 +533,20 @@ class attogram
    */
   public function get_actionables( $dir )
   {
-    $r = array();
+    $result = array();
     if( !is_readable($dir) ) {
       $this->log->error('GET_ACTIONABLES: directory not readable: ' . $dir);
-      return $r;
+      return $result;
     }
-    foreach( array_diff( scandir($dir), attogram_fs::get_skip_files() ) as $f ) {
-      $file = $dir . '/' . $f;
+    foreach( array_diff( scandir($dir), attogram_fs::get_skip_files() ) as $afile ) {
+      $file = $dir . '/' . $afile;
       if( attogram_fs::is_readable_file($file, '.php') ) { // PHP files
-        $r[ str_replace('.php','',$f) ] = array( 'file'=>$file, 'parser'=>'php' );
+        $result[ str_replace('.php','',$afile) ] = array( 'file'=>$file, 'parser'=>'php' );
       } elseif( attogram_fs::is_readable_file($file, '.md') ) { // Markdown files
-        $r[ str_replace('.md','',$f) ] = array( 'file'=>$file, 'parser'=>'md' );
+        $result[ str_replace('.md','',$afile) ] = array( 'file'=>$file, 'parser'=>'md' );
       }
     }
-    return $r;
+    return $result;
   }
 
   /**
