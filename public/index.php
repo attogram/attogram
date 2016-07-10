@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Guru Meditation Loader - v0.1.4
+<?php // Attogram Framework - Guru Meditation Loader - v0.1.5
 
 namespace Attogram;
 
@@ -90,27 +90,60 @@ class guru_meditation_loader
   function guru_meditation_error_handler( $level, $message, $file = '', $line = '', $context = array() )
   {
 
-    $show_all = false;
-
     switch( $level ) {
-      case 1: break; // E_ERROR
-      case 2: $this->debug("E_WARNING: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 4: $this->debug("E_PARSE: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 8: $this->debug("E_NOTICE: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 16: break; // E_CORE_ERROR
-      case 32: $this->debug("E_CORE_WARNING: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 64: break; // E_COMPILE_ERROR
-      case 128: $this->debug("E_COMPILE_WARNING: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 256: break; // E_USER_ERROR
-      case 512: $this->debug("E_USER_WARNING: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 1024: $this->debug("E_USER_NOTICE: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 2048: $this->debug("E_STRICT: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 4096: $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 8192: $this->debug("E_DEPECIATED: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 16384: $this->debug("E_USER_DEPECIATED: file:$file line:$line $message"); if($show_all){break;}else{return;}
-      case 30719: break; // E_ALL
-      default: break; // E_UNKNOWN
+      case 1:
+        $this->debug("E_ERROR: file:$file line:$line $message");
+        break;
+      case 2:
+        $this->debug("E_WARNING: file:$file line:$line $message");
+        return;
+      case 4:
+        $this->debug("E_PARSE: file:$file line:$line $message");
+        return;
+      case 8:
+        $this->debug("E_NOTICE: file:$file line:$line $message");
+        return;
+      case 16:
+        $this->debug("E_CORE_ERROR: file:$file line:$line $message");
+        break;
+      case 32:
+        $this->debug("E_CORE_WARNING: file:$file line:$line $message");
+        return;
+      case 64:
+        $this->debug("E_COMPILE_ERROR: file:$file line:$line $message");
+        break;
+      case 128:
+        $this->debug("E_COMPILE_WARNING: file:$file line:$line $message");
+        return;
+      case 256:
+        $this->debug("E_USER_ERROR: file:$file line:$line $message");
+        break;
+      case 512:
+        $this->debug("E_USER_WARNING: file:$file line:$line $message");
+        return;
+      case 1024:
+        $this->debug("E_USER_NOTICE: file:$file line:$line $message");
+        return;
+      case 2048:
+        $this->debug("E_STRICT: file:$file line:$line $message");
+        return;
+      case 4096:
+        $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message");
+        return;
+      case 8192:
+        $this->debug("E_DEPECIATED: file:$file line:$line $message");
+        return;
+      case 16384:
+        $this->debug("E_USER_DEPECIATED: file:$file line:$line $message");
+        return;
+      case 30719:
+        $this->debug("E_ALL: file:$file line:$line $message");
+        break;
+      default:
+        $this->debug("E_UNKNOWN: file:$file line:$line $message");
+        break;
     }
+
     $this->guru_meditation_error(
       "Sadness $level: $message"
       . ( (isset( $file ) && $file) ? "<pre>File: $file</pre>" : '' )
