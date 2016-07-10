@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.8
+<?php // Attogram Framework - Check Script v0.0.9
 
 $c = new attogram_check();
 $c->check();
@@ -68,7 +68,7 @@ class attogram_check {
     $good_uri = $this->good_uri();
     if( $filereadable == 'pass' ) {
       $file = new SplFileObject($htaccessFile);
-      foreach( $file as $linenum=>$val ) {
+      foreach( $file as $val ) {
         if( preg_match('/^#/', $val) ) { continue; } // # comments
         if( preg_match('/FallbackResource/', $val) ) {
           $count['FallbackResource']++;
