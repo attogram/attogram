@@ -2,8 +2,6 @@
 
 * setup codacy checks to NOT ignore ./templates/*
 
-* delete attogram/logger.php, instead use: vendor/psr/log/Psr/Log/NullLogger.php
-
 * [Issue #14](https://github.com/attogram/attogram/issues/14) - pull request on [composer/installers](https://github.com/composer/installers/) for Attogram modules
 
 * [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
