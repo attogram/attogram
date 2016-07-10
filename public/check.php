@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Check Script v0.0.6
+<?php // Attogram Framework - Check Script v0.0.7
 
 $c = new attogram_check();
 $c->check();
@@ -145,9 +145,9 @@ class attogram_check {
     isset($_SERVER['SERVER_SOFTWARE']) ? $serverSoftware = $_SERVER['SERVER_SOFTWARE'] : $serverSoftware = '';
     $serverSoftwareArray = explode(' ', $serverSoftware);
     $serverNameString = $serverSoftwareArray[0];
-    $serverNameStringArray = explode('/', $serverNameString);
-    $apache = $serverNameStringArray[0];
-    $apache_version = $serverNameStringArray[1];
+    $serverNameArray = explode('/', $serverNameString);
+    $apache = $serverNameArray[0];
+    $apache_version = $serverNameArray[1];
     ( $apache == 'Apache' ) ? $result = 'pass' : $result = 'fail';
     print '<pre class="' . $result . '">' . $this->{$result} . ' 4.0 - <strong>Apache Server</strong> in use</pre>';
     (version_compare( $apache_version, '2.2.16' ) >= 0) ? $result = 'pass' : $result = 'fail';
