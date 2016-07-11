@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.0
+// Attogram Framework - Check Script v0.1.1
 
 $c = new attogram_check();
 $c->check();
@@ -11,9 +11,9 @@ class attogram_check
     public function __construct()
     {
         $this->pass = '<span class="icon-s"><strong>💚 Pass</strong></span>'; // ✔ ☑  🆗 💚 😊
-    $this->fail = '<span class="icon-s"><strong>🔴 Fail</strong></span>'; // ✖ ❌ ❎ ❕ ❗ 🔵 🔴 💔 😢 🙀 😿  🍅 💩
-    $this->unknown = '<span class="icon-s"><strong>🔳 Skip</strong></span>'; // 💢 ❓ ❔ 😥 😴 ⭕ 🔳
-    $this->divider = '<hr />';
+        $this->fail = '<span class="icon-s"><strong>🔴 Fail</strong></span>'; // ✖ ❌ ❎ ❕ ❗ 🔵 🔴 💔 😢 🙀 😿  🍅 💩
+        $this->unknown = '<span class="icon-s"><strong>🔳 Skip</strong></span>'; // 💢 ❓ ❔ 😥 😴 ⭕ 🔳
+        $this->divider = '<hr />';
         $this->spacer = ' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
     }
 
@@ -21,10 +21,10 @@ class attogram_check
     {
         $this->page_header();
         echo '<h1><span class="icon">🔬</span> Attogram Framework Check</h1>'
-    .'<p><span class="icon">👉</span> <strong>'.__DIR__.'</strong>'
-    .$this->spacer.'<a href="'.@$_SERVER['SCRIPT_NAME'].'"><span class="icon">🔃</span></a>'
-    .$this->spacer.'<span class="icon">🕑</span> '.gmdate('Y-m-d H:i:s').' UTC'
-    .$this->spacer.'<a href="./"><span class="icon">🏠</span></a></p>';
+        .'<p><span class="icon">👉</span> <strong>'.__DIR__.'</strong>'
+        .$this->spacer.'<a href="'.@$_SERVER['SCRIPT_NAME'].'"><span class="icon">🔃</span></a>'
+        .$this->spacer.'<span class="icon">🕑</span> '.gmdate('Y-m-d H:i:s').' UTC'
+        .$this->spacer.'<a href="./"><span class="icon">🏠</span></a></p>';
         echo $this->divider;
         $this->check_index();
         echo $this->divider;
@@ -169,19 +169,19 @@ class attogram_check
         (version_compare($apache_version, '2.2.16') >= 0) ? $result = 'pass' : $result = 'fail';
         echo '<pre class="'.$result.'">'.$this->{$result}.' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is '.$apache_version.')</pre>';
         $apache_finder = array(
-      '/etc/apache2/apache2.conf',
-      '/etc/apache2/httpd.conf',
-      '/etc/apache2/httpd2.conf',
-      '/etc/httpd/conf/httpd.conf',
-      '/etc/httpd/httpd.conf',
-      '/Program Files/Apache Software Foundation/Apache2.2/conf/httpd.conf',
-      '/usr/local/apache2/conf/httpd.conf',
-      '/usr/local/etc/apache22/httpd.conf',
-      '/usr/local/etc/apache2/httpd.conf',
-      '/usr/pkg/etc/httpd/httpd.conf',
-      '/var/www/conf/httpd.conf',
-      '/xampp/apache/conf/httpd.conf',
-    );
+            '/etc/apache2/apache2.conf',
+            '/etc/apache2/httpd.conf',
+            '/etc/apache2/httpd2.conf',
+            '/etc/httpd/conf/httpd.conf',
+            '/etc/httpd/httpd.conf',
+            '/Program Files/Apache Software Foundation/Apache2.2/conf/httpd.conf',
+            '/usr/local/apache2/conf/httpd.conf',
+            '/usr/local/etc/apache22/httpd.conf',
+            '/usr/local/etc/apache2/httpd.conf',
+            '/usr/pkg/etc/httpd/httpd.conf',
+            '/var/www/conf/httpd.conf',
+            '/xampp/apache/conf/httpd.conf',
+        );
         $apache_found = array();
         foreach ($apache_finder as $afc) {
             if (is_file($afc) && is_readable($afc)) {
@@ -199,7 +199,7 @@ class attogram_check
         }
         echo '<pre class="'.$result42.'">'.$this->{$result42}.' 4.2 - <strong>Apache conf</strong> exists ('.$result42_found.')</pre>';
         echo '<pre class="'.$result43.'">'.$this->{$result43}.' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
-    .(isset($this->apache_override_dir) ? $this->apache_override_dir : '?').')</pre>';
+          .(isset($this->apache_override_dir) ? $this->apache_override_dir : '?').')</pre>';
     }
 
     public function good_uri()
@@ -229,8 +229,8 @@ class attogram_check
             if (preg_match('/^AllowOverride /', $val)) {
                 $allowOverride[$this_dir] = $val;
             }
-      //if( preg_match('/^DirectoryIndex /', $val) ) {
-      //}
+        //if( preg_match('/^DirectoryIndex /', $val) ) {
+        //}
         }
         $home_dir = str_replace('\\', '/', __DIR__);
         if (!$allowOverride) {
@@ -250,25 +250,26 @@ class attogram_check
     public function page_header()
     {
         echo '<!DOCTYPE html>
-    <html lang="en"><head><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-    body { margin:0 40px 0 40px; font-size:18px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
-    a { text-decoration:none; }
-    h1, p, pre { padding:0; margin:0; }
-    hr { height:1px; border:0; background:#E0E0E0; }
-    .pass { color:#006600; }
-    .fail { color:#FF0000; }
-    .unknown { color:#778899; }
-    .icon { font-size:30px; vertical-align:middle; padding:0; margin:0; }
-    .icon-s { font-size:18px; vertical-align:middle; padding:0; margin:0; }
-    </style>
-    <title>Attogram Framework Check</title></head><body>';
+<html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { margin:0 40px 0 40px; font-size:18px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+a { text-decoration:none; }
+h1, p, pre { padding:0; margin:0; }
+hr { height:1px; border:0; background:#E0E0E0; }
+.pass { color:#006600; }
+.fail { color:#FF0000; }
+.unknown { color:#778899; }
+.icon { font-size:30px; vertical-align:middle; padding:0; margin:0; }
+.icon-s { font-size:18px; vertical-align:middle; padding:0; margin:0; }
+</style>
+<title>Attogram Framework Check</title></head><body>';
     }
 
     public function page_footer()
     {
         echo '</body></html>';
     }
+
 } // end class attogram_check

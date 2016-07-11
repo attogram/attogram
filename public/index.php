@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.3.0
+// Attogram Framework - Guru Meditation Loader - v0.3.1
 
 namespace Attogram;
 
@@ -24,19 +24,19 @@ $guru = new guru_meditation_loader(
     $vendor_autoloader = $config['autoloader'],
     $vendor_download = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
     $required_classes = array(
-                           '\Attogram\attogram_fs',            // Attogram File System
-                           '\Attogram\attogram',               // The Attogram Framework
-                           '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
-                           '\Parsedown',                       // Markdown Parser
-                           '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
-                           '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
-                           '\Monolog\Handler\BufferHandler',   // Monolog Buffer Handler
-                           '\Monolog\Handler\StreamHandler',   // Monolog Stream Handle
-                           '\Monolog\Logger',                  // Monolog PSR-3 logger
-                           ),
+        '\Attogram\attogram_fs',            // Attogram File System
+        '\Attogram\attogram',               // The Attogram Framework
+        '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
+        '\Parsedown',                       // Markdown Parser
+        '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
+        '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
+        '\Monolog\Handler\BufferHandler',   // Monolog Buffer Handler
+        '\Monolog\Handler\StreamHandler',   // Monolog Stream Handle
+        '\Monolog\Logger',                  // Monolog PSR-3 logger
+    ),
     $required_interfaces = array(
-                           '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
-                           )
+        '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
+    )
 );
 
 /** ************************************************************************* */
@@ -51,115 +51,108 @@ class guru_meditation_loader
     public $required_interfaces;
     public $autoloader;
 
-  /**
-   * set the Guru vars.
-   */
-  public function __construct($project_name, $config_file, $project_classes, $default_autoloader,
-                        $vendor_download, array $required_classes, array $required_interfaces)
-  {
-      error_reporting(E_ALL);
-      ini_set('display_errors', E_ALL);
-    //error_reporting(            E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
-    //ini_set( 'display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
-    set_error_handler(array($this, 'guru_meditation_error_handler'));
-      register_shutdown_function(array($this, 'guru_meditation_shutdown'));
-      $this->project_name = $project_name;
-      $this->config_file = $config_file;
-      $this->project_classes = $project_classes;
-      $this->default_autoloader = $default_autoloader;
-      $this->vendor_download = $vendor_download;
-      $this->required_classes = $required_classes;
-      $this->required_interfaces = $required_interfaces;
+    /**
+     * set the Guru vars.
+     */
+    public function __construct(
+        $project_name,
+        $config_file,
+        $project_classes,
+        $default_autoloader,
+        $vendor_download,
+        array $required_classes,
+        array $required_interfaces
+    ) {
+        error_reporting(E_ALL);
+        ini_set('display_errors', E_ALL);
+        //error_reporting(            E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
+        //ini_set( 'display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
+        set_error_handler(array($this, 'guru_meditation_error_handler'));
+        register_shutdown_function(array($this, 'guru_meditation_shutdown'));
+        $this->project_name = $project_name;
+        $this->config_file = $config_file;
+        $this->project_classes = $project_classes;
+        $this->default_autoloader = $default_autoloader;
+        $this->vendor_download = $vendor_download;
+        $this->required_classes = $required_classes;
+        $this->required_interfaces = $required_interfaces;
+        $this->debug('START Guru Meditation Loader: '.$this->project_name);
+        $this->meditate();             // load the attogram configuration -- get config[ autoloader, modules_dir, debug ]
+        $this->expand_consciousness(); // run the composer vendor autoloader
+        $this->focus_mind();           // include attogram project classes
+        $this->focus_inner_eye();      // include modules includes
+        $this->inner_awareness();      // check for required classes
+        $this->inner_emptiness();      // check for required interfaces
+        $this->meditate_deeper();      // load the modules configurations - (needs attogram_fs class)
+        $this->tranquility();          // Load The Attogram Framework
+    } // end function __construct()
 
-      $this->debug('START Guru Meditation Loader: '.$this->project_name);
+    /**
+     * Catch any errors.
+     */
+    public function guru_meditation_error_handler($level, $message, $file = '', $line = '', $context = array())
+    {
+        switch ($level) {
+            case 1:
+                $this->debug("E_ERROR: file:$file line:$line $message");
+                break;
+            case 2:
+                $this->debug("E_WARNING: file:$file line:$line $message");
+                return;
+            case 4:
+                $this->debug("E_PARSE: file:$file line:$line $message");
+                return;
+            case 8:
+                $this->debug("E_NOTICE: file:$file line:$line $message");
+                return;
+            case 16:
+                $this->debug("E_CORE_ERROR: file:$file line:$line $message");
+                break;
+            case 32:
+                $this->debug("E_CORE_WARNING: file:$file line:$line $message");
+                return;
+            case 64:
+                $this->debug("E_COMPILE_ERROR: file:$file line:$line $message");
+                break;
+            case 128:
+                $this->debug("E_COMPILE_WARNING: file:$file line:$line $message");
+                return;
+            case 256:
+                $this->debug("E_USER_ERROR: file:$file line:$line $message");
+                break;
+            case 512:
+                $this->debug("E_USER_WARNING: file:$file line:$line $message");
+                return;
+            case 1024:
+                $this->debug("E_USER_NOTICE: file:$file line:$line $message");
+                return;
+            case 2048:
+                $this->debug("E_STRICT: file:$file line:$line $message");
+                return;
+            case 4096:
+                $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message");
+                return;
+            case 8192:
+                $this->debug("E_DEPECIATED: file:$file line:$line $message");
+                return;
+            case 16384:
+                $this->debug("E_USER_DEPECIATED: file:$file line:$line $message");
+                return;
+            case 30719:
+                $this->debug("E_ALL: file:$file line:$line $message");
+                break;
+          default:
+              $this->debug("E_UNKNOWN: file:$file line:$line $message");
+              break;
+        }
 
-      $this->meditate();             // load the attogram configuration -- get config[ autoloader, modules_dir, debug ]
-    $this->expand_consciousness(); // run the composer vendor autoloader
-    $this->focus_mind();           // include attogram project classes
-    $this->focus_inner_eye();      // include modules includes
-    $this->inner_awareness();      // check for required classes
-    $this->inner_emptiness();      // check for required interfaces
-    $this->meditate_deeper();      // load the modules configurations - (needs attogram_fs class)
-    $this->tranquility();          // Load The Attogram Framework
-  } // end function __construct()
-
-  /**
-   * Catch any errors.
-   */
-  public function guru_meditation_error_handler($level, $message, $file = '', $line = '', $context = array())
-  {
-      switch ($level) {
-      case 1:
-        $this->debug("E_ERROR: file:$file line:$line $message");
-        break;
-      case 2:
-        $this->debug("E_WARNING: file:$file line:$line $message");
-
-        return;
-      case 4:
-        $this->debug("E_PARSE: file:$file line:$line $message");
-
-        return;
-      case 8:
-        $this->debug("E_NOTICE: file:$file line:$line $message");
-
-        return;
-      case 16:
-        $this->debug("E_CORE_ERROR: file:$file line:$line $message");
-        break;
-      case 32:
-        $this->debug("E_CORE_WARNING: file:$file line:$line $message");
-
-        return;
-      case 64:
-        $this->debug("E_COMPILE_ERROR: file:$file line:$line $message");
-        break;
-      case 128:
-        $this->debug("E_COMPILE_WARNING: file:$file line:$line $message");
-
-        return;
-      case 256:
-        $this->debug("E_USER_ERROR: file:$file line:$line $message");
-        break;
-      case 512:
-        $this->debug("E_USER_WARNING: file:$file line:$line $message");
-
-        return;
-      case 1024:
-        $this->debug("E_USER_NOTICE: file:$file line:$line $message");
-
-        return;
-      case 2048:
-        $this->debug("E_STRICT: file:$file line:$line $message");
-
-        return;
-      case 4096:
-        $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message");
-
-        return;
-      case 8192:
-        $this->debug("E_DEPECIATED: file:$file line:$line $message");
-
-        return;
-      case 16384:
-        $this->debug("E_USER_DEPECIATED: file:$file line:$line $message");
-
-        return;
-      case 30719:
-        $this->debug("E_ALL: file:$file line:$line $message");
-        break;
-      default:
-        $this->debug("E_UNKNOWN: file:$file line:$line $message");
-        break;
-    }
-
-      $this->guru_meditation_error(
-      "Sadness $level: $message"
-      .((isset($file) && $file) ? "<pre>File: $file</pre>" : '')
-      .((isset($line) && $line) ? "<pre>Line: $line</pre>" : '')
-      .(isset($context['project_name']) ? '<pre>Context: '.$context['project_name'].'</pre>' : '')
-    );
-      exit;
+        $this->guru_meditation_error(
+            "Sadness $level: $message"
+            . ((isset($file) && $file) ? "<pre>File: $file</pre>" : '')
+            . ((isset($line) && $line) ? "<pre>Line: $line</pre>" : '')
+            . (isset($context['project_name']) ? '<pre>Context: ' . $context['project_name'] . '</pre>' : '')
+        );
+        exit;
   }
 
   /**
@@ -170,8 +163,10 @@ class guru_meditation_loader
       $last = error_get_last();
       switch ($last['type']) {
       case E_ERROR:
-        $this->guru_meditation_error('Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message']));
-    }
+          $this->guru_meditation_error(
+              'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
+          );
+      }
   }
 
   /**
