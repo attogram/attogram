@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - event_logger class v0.1.0
+// Attogram Framework - event_logger class v0.1.1
 
 namespace attogram;
 
@@ -31,12 +31,14 @@ class event_logger extends AbstractProcessingHandler
     protected function write(array $record)
     {
         $this->database->queryb(
-        'INSERT INTO event (channel,level,message,time) VALUES (:channel,:level,:message,:time)',
-        array('channel' => $record['channel'],
-              'level' => $record['level'],
-              'message' => $record['formatted'],
-              'time' => $record['datetime']->format('U'),
-        )
-      );
+            'INSERT INTO event (channel,level,message,time) VALUES (:channel,:level,:message,:time)',
+            array(
+                'channel' => $record['channel'],
+                'level' => $record['level'],
+                'message' => $record['formatted'],
+                'time' => $record['datetime']->format('U')
+            )
+        );
     }
+
 } // end class class event_logger
