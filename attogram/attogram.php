@@ -277,32 +277,32 @@ class attogram
         }
     }
 
-  /**
-   * route() - decide what action to take based on URI request.
-   */
-  public function route()
-  {
-      if (is_dir($this->uri[0])) {  // requesting a directory?
-      $this->log->error('ROUTE: 403 Action Forbidden');
-          $this->error404('No spelunking allowed');
-      }
+    /**
+     * route() - decide what action to take based on URI request.
+     */
+    public function route()
+    {
+        if (is_dir($this->uri[0])) {  // requesting a directory?
+            $this->log->error('ROUTE: 403 Action Forbidden');
+            $this->error404('No spelunking allowed');
+        }
 
-      if ($this->uri[0] == '') { // The Homepage
-          $this->uri[0] = 'home';
-      }
+        if ($this->uri[0] == '') { // The Homepage
+            $this->uri[0] = 'home';
+        }
 
-      $this->log->debug('ROUTE: action: uri[0]: '.$this->uri[0]);
+        $this->log->debug('ROUTE: action: uri[0]: '.$this->uri[0]);
 
-      $actions = $this->get_actions();
+        $actions = $this->get_actions();
 
-      if ($this->is_admin()) {
-          foreach ($this->get_admin_actions() as $name => $actionable) {
-              $actions[$name] = $actionable;
-          }
-      }
+        if ($this->is_admin()) {
+            foreach ($this->get_admin_actions() as $name => $actionable) {
+                $actions[$name] = $actionable;
+            }
+        }
 
-      if (isset($actions[$this->uri[0]])) {
-          switch ($actions[$this->uri[0]]['parser']) {
+        if (isset($actions[$this->uri[0]])) {
+            switch ($actions[$this->uri[0]]['parser']) {
               case 'php':
                   $this->action = $actions[$this->uri[0]]['file'];
                   if (!is_file($this->action)) {
@@ -323,122 +323,122 @@ class attogram
                   $this->log->error('ROUTE: No Parser Found');
                   $this->error404('No Way Out');
                   break;
-          } // end switch on parser
-      } //end if action set
+            } // end switch on parser
+        } //end if action set
 
-      if ($this->uri[0] == 'home') { // missing the Home Page!
-          $this->default_homepage();
-          return;
-      }
+        if ($this->uri[0] == 'home') { // missing the Home Page!
+            $this->default_homepage();
+            return;
+        }
 
-      $this->log->error('ROUTE: Action not found.  uri[0]='.$this->uri[0]);
-      $this->error404('This is not the action you are looking for');
+        $this->log->error('ROUTE: Action not found.  uri[0]='.$this->uri[0]);
+        $this->error404('This is not the action you are looking for');
 
-  } // end function route()
+    } // end function route()
 
-  /**
-   * checks if request is for the virtual web directory "web/"
-   * and serve the appropriate module file.
-   */
-  public function virtual_web_directory()
-  {
-      if (!preg_match('/^\/'.'web'.'\//', $this->pathInfo)) {
-          return; // not a virtual web directory request
-      }
-      $test = explode('/', $this->pathInfo);
-      if (sizeof($test) < 3 || $test[2] == '') { // empty request
-          $this->error404('Virtual Nothingness Found');
-      }
-      $trash = array_shift($test); // take off top level
-      $trash = array_shift($test); // take off virtual web directory
-      $req = implode('/', $test); // the virtual web request
-      $mod = attogram_fs::get_all_subdirectories($this->modules_dir, 'public');
-      $file = false;
-      foreach ($mod as $m) {
-          $test_file = $m.'/'.$req;
-          if (!is_readable($test_file) || is_dir($test_file)) {
-              continue;
-          }
-          $file = $test_file; // found file -- cascade set the file
-      }
-      if (!$file) {
-          $this->error404('Virtually Nothing Found');
-      }
-      $this->do_cache_headers($file);
-      $mime_type = attogram_fs::get_mime_type($file);
-      if ($mime_type) {
-          header('Content-Type:'.$mime_type.'; charset=utf-8');
-          $result = readfile($file); // send file to browser
-          if (!$result) {
-              $this->log->error('virtual_web_directory: can not read file: '.htmlentities($file));
-              $this->error404('Virtually unreadable');
-          }
-          exit;
-      }
-      if (!(include($file))) { // include native PHP file
-          $this->log->error('virtual_web_directory: can not include file: '.htmlentities($file));
-          $this->error404('Virtually unincludeable');
-      }
-      exit;
-  } // end function virtual_web_directory()
+    /**
+     * checks if request is for the virtual web directory "web/"
+     * and serve the appropriate module file.
+     */
+    public function virtual_web_directory()
+    {
+        if (!preg_match('/^\/'.'web'.'\//', $this->pathInfo)) {
+            return; // not a virtual web directory request
+        }
+        $test = explode('/', $this->pathInfo);
+        if (sizeof($test) < 3 || $test[2] == '') { // empty request
+            $this->error404('Virtual Nothingness Found');
+        }
+        $trash = array_shift($test); // take off top level
+        $trash = array_shift($test); // take off virtual web directory
+        $req = implode('/', $test); // the virtual web request
+        $mod = attogram_fs::get_all_subdirectories($this->modules_dir, 'public');
+        $file = false;
+        foreach ($mod as $m) {
+            $test_file = $m.'/'.$req;
+            if (!is_readable($test_file) || is_dir($test_file)) {
+                continue;
+            }
+            $file = $test_file; // found file -- cascade set the file
+        }
+        if (!$file) {
+            $this->error404('Virtually Nothing Found');
+        }
+        $this->do_cache_headers($file);
+        $mime_type = attogram_fs::get_mime_type($file);
+        if ($mime_type) {
+            header('Content-Type:'.$mime_type.'; charset=utf-8');
+            $result = readfile($file); // send file to browser
+            if (!$result) {
+                $this->log->error('virtual_web_directory: can not read file: '.htmlentities($file));
+                $this->error404('Virtually unreadable');
+            }
+            exit;
+        }
+        if (!(include($file))) { // include native PHP file
+            $this->log->error('virtual_web_directory: can not include file: '.htmlentities($file));
+            $this->error404('Virtually unincludeable');
+        }
+        exit;
+    } // end function virtual_web_directory()
 
-  /**
-   * send HTTP cache headers.
-   *
-   * @param string $file
-   */
-  public function do_cache_headers($file)
-  {
-      if (!$lastmod = filemtime($file)) {
-          $lastmod = time();
-      }
-      header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastmod).' GMT');
-      header('Etag: '.$lastmod);
-      $server_if_mod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
-      $server_if_none = trim($_SERVER['HTTP_IF_NONE_MATCH']);
-      if ($server_if_mod == $lastmod || $server_if_none == $lastmod) {
-          header('HTTP/1.1 304 Not Modified');
-          exit;
-      }
-  } // end function do_cache_headers()
+    /**
+     * send HTTP cache headers.
+     *
+     * @param string $file
+     */
+    public function do_cache_headers($file)
+    {
+        if (!$lastmod = filemtime($file)) {
+            $lastmod = time();
+        }
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastmod).' GMT');
+        header('Etag: '.$lastmod);
+        $server_if_mod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
+        $server_if_none = trim($_SERVER['HTTP_IF_NONE_MATCH']);
+        if ($server_if_mod == $lastmod || $server_if_none == $lastmod) {
+            header('HTTP/1.1 304 Not Modified');
+            exit;
+        }
+    } // end function do_cache_headers()
 
-  /**
-   * Do requests for exception files: sitemap.xml, robots.txt.
-   */
-  public function exception_files()
-  {
-      switch ($this->pathInfo) {
-          case '/robots.txt':
-              header('Content-Type: text/plain; charset=utf-8');
-              echo 'Sitemap: '.$this->get_site_url().'/sitemap.xml';
-              exit;
-          case '/sitemap.xml':
-              $site = $this->get_site_url().'/';
-              $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
-              .'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-              .'<url><loc>'.$site.'</loc></url>';
-              foreach (array_keys($this->get_actions()) as $action) {
-                  if ($action == 'home' || $action == 'user') {
-                      continue;
-                  }
-                  $sitemap .= '<url><loc>'.$site.$action.'/</loc></url>';
-              }
-              $sitemap .= '</urlset>';
-              header('Content-Type: text/xml; charset=utf-8');
-              echo $sitemap;
-              exit;
-      }
-  }
+    /**
+     * Do requests for exception files: sitemap.xml, robots.txt.
+     */
+    public function exception_files()
+    {
+        switch ($this->pathInfo) {
+            case '/robots.txt':
+                header('Content-Type: text/plain; charset=utf-8');
+                echo 'Sitemap: '.$this->get_site_url().'/sitemap.xml';
+                exit;
+            case '/sitemap.xml':
+                $site = $this->get_site_url().'/';
+                $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
+                .'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                .'<url><loc>'.$site.'</loc></url>';
+                foreach (array_keys($this->get_actions()) as $action) {
+                    if ($action == 'home' || $action == 'user') {
+                        continue;
+                    }
+                    $sitemap .= '<url><loc>'.$site.$action.'/</loc></url>';
+                }
+                $sitemap .= '</urlset>';
+                header('Content-Type: text/xml; charset=utf-8');
+                echo $sitemap;
+                exit;
+        }
+    }
 
-  /**
-   * get HTML from a markdown file.
-   *
-   * @param string $file The markdown file to parse
-   *
-   * @return string      HTML fragment or false
-   */
-   public function get_markdown($file)
-   {
+    /**
+     * get HTML from a markdown file
+     *
+     * @param string $file The markdown file to parse
+     *
+     * @return string      HTML fragment or false
+     */
+    public function get_markdown($file)
+    {
         if (!attogram_fs::is_readable_file($file, '.md')) {
             $this->log->error('GET_MARKDOWN: can not read file: '.$this->web_display($file));
             return false;
