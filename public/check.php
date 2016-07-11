@@ -1,4 +1,5 @@
 <?php
+// Attogram Framework - Check Script v0.1.0
 
 $c = new attogram_check();
 $c->check();
