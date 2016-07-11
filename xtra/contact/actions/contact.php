@@ -1,4 +1,4 @@
-<?php// Attogram Framework - Contact Page v0.0.2
+<?php// Attogram Framework - Contact Page v0.1.0
 
 namespace Attogram;
 
@@ -43,7 +43,9 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
   <div class="form-group">
     <label for="email">Your Email:</label>
     <input class="form-control" type="text" name="email" size="55" value="<?php
-      if( isset($_SESSION['attogram_email']) ) { print htmlentities($_SESSION['attogram_email']); } ?>" />
+      if (isset($_SESSION['attogram_email'])) {
+          echo htmlentities($_SESSION['attogram_email']);
+      } ?>" />
   </div>
 
   <div class="form-group">
