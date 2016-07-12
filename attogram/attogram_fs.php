@@ -122,37 +122,37 @@ class AttogramFS
      */
     public static function get_mime_type($file)
     {
-        $mime_type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
+        $mimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
         switch (pathinfo($file, PATHINFO_EXTENSION)) { // https://bugs.php.net/bug.php?id=53035
             case 'css':
-                $mime_type = 'text/css';
+                $mimeType = 'text/css';
                 break;
             case 'js':
-                $mime_type = 'application/javascript';
+                $mimeType = 'application/javascript';
                 break;
             case 'xml':
-                $mime_type = 'text/xml';
+                $mimeType = 'text/xml';
                 break;
             case 'php':
-                $mime_type = false; // do not do content type header, not needed for native php
+                $mimeType = false; // do not do content type header, not needed for native php
                 break;
             case 'eot':
-                $mime_type = 'application/vnd.ms-fontobject';
+                $mimeType = 'application/vnd.ms-fontobject';
                 break;
             case 'svg':
-                $mime_type = 'image/svg+xml';
+                $mimeType = 'image/svg+xml';
                 break;
             case 'ttf':
-                $mime_type = 'application/font-sfnt';
+                $mimeType = 'application/font-sfnt';
                 break;
             case 'woff':
-                $mime_type = 'application/font-woff';
+                $mimeType = 'application/font-woff';
                 break;
             case 'woff2':
-                $mime_type = 'application/font-woff2';
+                $mimeType = 'application/font-woff2';
                 break;
         }
-        return $mime_type;
+        return $mimeType;
     }
 
 } // end class AttogramFS

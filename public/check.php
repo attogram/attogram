@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.3
+// Attogram Framework - Check Script v0.1.4
 
 $c = new AttogramCheck();
 $c->check();
@@ -70,7 +70,7 @@ class AttogramCheck
         $count['FallbackResource'] = $count['ErrorDocument 404'] = $count['ErrorDocument 403'] = $count['DirectoryIndex'] = 0;
         $found['FallbackResource'] = $found['ErrorDocument 404'] = $found['ErrorDocument 403'] = $found['DirectoryIndex'] = '?';
         $result22 = $result23 = $result24 = $result25 = $result26 = $result27 = $result28 = $result29 = 'fail';
-        $good_uri = $this->good_uri();
+        $goodUri = $this->good_uri();
         if ($filereadable == 'pass') {
             $file = new SplFileObject($htaccessFile);
             foreach ($file as $val) {
@@ -81,7 +81,7 @@ class AttogramCheck
             ++$count['FallbackResource'];
             if (preg_match('/FallbackResource\s+(.*)\s+$/', $val, $match)) {
                 $found['FallbackResource'] = trim($match[1]);
-                if (trim($match[1]) == $good_uri) {
+                if (trim($match[1]) == $goodUri) {
                     $result26 = 'pass';
                 }
             }
@@ -91,7 +91,7 @@ class AttogramCheck
                     ++$count['ErrorDocument 403'];
                     if (preg_match('/ErrorDocument\s+403\s+(.*)\s+$/', $val, $match)) {
                         $found['ErrorDocument 403'] = trim($match[1]);
-                        if (trim($match[1]) == $good_uri) {
+                        if (trim($match[1]) == $goodUri) {
                             $result27 = 'pass';
                         }
                     }
@@ -101,7 +101,7 @@ class AttogramCheck
                     ++$count['ErrorDocument 404'];
                     if (preg_match('/ErrorDocument\s+404\s+(.*)\s+$/', $val, $match)) {
                         $found['ErrorDocument 404'] = trim($match[1]);
-                        if (trim($match[1]) == $good_uri) {
+                        if (trim($match[1]) == $goodUri) {
                             $result28 = 'pass';
                         }
                     }
@@ -136,9 +136,9 @@ class AttogramCheck
         echo '<pre class="'.$result23.'">'.$this->{$result23}.' 2.3 - <strong>ErrorDocument 403</strong> found once (found: '.$count['ErrorDocument 403'].')</pre>';
         echo '<pre class="'.$result24.'">'.$this->{$result24}.' 2.4 - <strong>ErrorDocument 404</strong> found once (found: '.$count['ErrorDocument 404'].')</pre>';
         echo '<pre class="'.$result25.'">'.$this->{$result25}.' 2.5 - <strong>DirectoryIndex</strong> found once (found: '.$count['DirectoryIndex'].')</pre>';
-        echo '<pre class="'.$result26.'">'.$this->{$result26}.' 2.6 - <strong>FallbackResource '.$good_uri.'</strong> (found: '.$found['FallbackResource'].')</pre>';
-        echo '<pre class="'.$result27.'">'.$this->{$result27}.' 2.7 - <strong>ErrorDocument 403 '.$good_uri.'</strong> (found: '.$found['ErrorDocument 403'].')</pre>';
-        echo '<pre class="'.$result28.'">'.$this->{$result28}.' 2.8 - <strong>ErrorDocument 404 '.$good_uri.'</strong> (found: '.$found['ErrorDocument 404'].')</pre>';
+        echo '<pre class="'.$result26.'">'.$this->{$result26}.' 2.6 - <strong>FallbackResource '.$goodUri.'</strong> (found: '.$found['FallbackResource'].')</pre>';
+        echo '<pre class="'.$result27.'">'.$this->{$result27}.' 2.7 - <strong>ErrorDocument 403 '.$goodUri.'</strong> (found: '.$found['ErrorDocument 403'].')</pre>';
+        echo '<pre class="'.$result28.'">'.$this->{$result28}.' 2.8 - <strong>ErrorDocument 404 '.$goodUri.'</strong> (found: '.$found['ErrorDocument 404'].')</pre>';
         echo '<pre class="'.$result29.'">'.$this->{$result29}.' 2.9 - <strong>DirectoryIndex index.php</strong> (found: '.$found['DirectoryIndex'].')</pre>';
     }
 
@@ -163,12 +163,12 @@ class AttogramCheck
         $serverNameString = $serverSoftwareArray[0];
         $serverNameArray = explode('/', $serverNameString);
         $apache = $serverNameArray[0];
-        $apache_version = $serverNameArray[1];
+        $apacheVersion = $serverNameArray[1];
         ($apache == 'Apache') ? $result = 'pass' : $result = 'fail';
         echo '<pre class="'.$result.'">'.$this->{$result}.' 4.0 - <strong>Apache Server</strong> in use</pre>';
-        (version_compare($apache_version, '2.2.16') >= 0) ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is '.$apache_version.')</pre>';
-        $apache_finder = array(
+        (version_compare($apacheVersion, '2.2.16') >= 0) ? $result = 'pass' : $result = 'fail';
+        echo '<pre class="'.$result.'">'.$this->{$result}.' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is '.$apacheVersion.')</pre>';
+        $apacheFinder = array(
             '/etc/apache2/apache2.conf',
             '/etc/apache2/httpd.conf',
             '/etc/apache2/httpd2.conf',
@@ -182,24 +182,24 @@ class AttogramCheck
             '/var/www/conf/httpd.conf',
             '/xampp/apache/conf/httpd.conf',
         );
-        $apache_found = array();
-        foreach ($apache_finder as $afc) {
+        $apacheFound = array();
+        foreach ($apacheFinder as $afc) {
             if (is_file($afc) && is_readable($afc)) {
-                $apache_found[] = $afc;
+                $apacheFound[] = $afc;
                 break; // only do first found...
             }
         }
-        if (sizeof($apache_found) == 1) {
+        if (sizeof($apacheFound) == 1) {
             $result42 = 'pass';
-            $result42_found = $apache_found[0];
-            $result43 = $this->apache_conf_examine($apache_found[0]);
+            $result42Found = $apacheFound[0];
+            $result43 = $this->apache_conf_examine($apacheFound[0]);
         } else {
             $result42 = $result43 = 'fail';
-            $result42_found = 'Not Found';
+            $result42Found = 'Not Found';
         }
-        echo '<pre class="'.$result42.'">'.$this->{$result42}.' 4.2 - <strong>Apache conf</strong> exists ('.$result42_found.')</pre>';
+        echo '<pre class="'.$result42.'">'.$this->{$result42}.' 4.2 - <strong>Apache conf</strong> exists ('.$result42Found.')</pre>';
         echo '<pre class="'.$result43.'">'.$this->{$result43}.' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
-          .(isset($this->apache_override_dir) ? $this->apache_override_dir : '?').')</pre>';
+          .(isset($this->apacheOverrideDir) ? $this->apacheOverrideDir : '?').')</pre>';
     }
 
     public function good_uri()
@@ -215,7 +215,7 @@ class AttogramCheck
 
     public function apache_conf_examine($conf)
     {
-        $this_dir = '';
+        $thisDir = '';
         $allowOverride = array();
         $file = new SplFileObject($conf);
         foreach ($file as $val) {
@@ -224,21 +224,21 @@ class AttogramCheck
                 continue;
             }
             if (preg_match('/^<Directory [\'"](.*)[\'"]>/', $val, $match)) {
-                $this_dir = $match[1];
+                $thisDir = $match[1];
             }
             if (preg_match('/^AllowOverride /', $val)) {
-                $allowOverride[$this_dir] = $val;
+                $allowOverride[$thisDir] = $val;
             }
         //if( preg_match('/^DirectoryIndex /', $val) ) {
         //}
         }
-        $home_dir = str_replace('\\', '/', __DIR__);
+        $homeDir = str_replace('\\', '/', __DIR__);
         if (!$allowOverride) {
             return 'fail';
         }
         foreach ($allowOverride as $dir => $allowCheck) {
-            if ($dir && preg_match('~'.$dir.'~', $home_dir) && $allowCheck == 'AllowOverride All') {
-                $this->apache_override_dir = $dir;
+            if ($dir && preg_match('~'.$dir.'~', $homeDir) && $allowCheck == 'AllowOverride All') {
+                $this->apacheOverrideDir = $dir;
 
                 return 'pass';
             }

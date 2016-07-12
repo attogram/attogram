@@ -355,11 +355,11 @@ class Attogram
         $mod = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($mod as $m) {
-            $test_file = $m.'/'.$req;
-            if (!is_readable($test_file) || is_dir($test_file)) {
+            $testFile = $m.'/'.$req;
+            if (!is_readable($testFile) || is_dir($testFile)) {
                 continue;
             }
-            $file = $test_file; // found file -- cascade set the file
+            $file = $testFile; // found file -- cascade set the file
         }
         if (!$file) {
             $this->error404('Virtually Nothing Found');
@@ -394,9 +394,9 @@ class Attogram
         }
         header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastmod).' GMT');
         header('Etag: '.$lastmod);
-        $server_if_mod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
-        $server_if_none = trim($_SERVER['HTTP_IF_NONE_MATCH']);
-        if ($server_if_mod == $lastmod || $server_if_none == $lastmod) {
+        $serverIfMod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
+        $serverIfNone = trim($_SERVER['HTTP_IF_NONE_MATCH']);
+        if ($serverIfMod == $lastmod || $serverIfNone == $lastmod) {
             header('HTTP/1.1 304 Not Modified');
             exit;
         }
