@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.8 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.9 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -99,7 +99,7 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
   * $this->getSiteUrl()
   * $this->error404($error_message)
   * $this->isAdmin()
-  * $this->is_logged_in()
+  * $this->isLoggedIn()
 * Depth settings in `./public/config.php`
   * `$config['depth']['insert-action-name-here']`
 * End Slash settings in `./public/config.php`
