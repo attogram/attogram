@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - List Module - List Page v0.1.3
 
-namespace attogram;
+namespace Attogram;
 
 $this->pageHeader('Attogram - List');
 

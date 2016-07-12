@@ -1,6 +1,6 @@
 <?php// Attogram Framework - Contact Page v0.1.3
 
-namespace attogram;
+namespace Attogram;
 
 $this->pageHeader('Attogram - Contact');
 

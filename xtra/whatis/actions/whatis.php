@@ -8,7 +8,7 @@
 
 */
 
-namespace attogram;
+namespace Attogram;
 
 $items = array(
   'PHP' => 'The PHP programming language ...',

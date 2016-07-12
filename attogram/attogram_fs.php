@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - attogram_fs class v0.1.3
 
-namespace attogram;
+namespace Attogram;
 
 /**
  * Filesystem related functions.

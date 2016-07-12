@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - event_logger class v0.1.1
 
-namespace attogram;
+namespace Attogram;
 
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;

@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - Main Configuration File Example v0.1.1
 
-namespace attogram;
+namespace Attogram;
 
 global $config;
 

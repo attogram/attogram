@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - Guru Meditation Loader - v0.3.3
 
-namespace attogram;
+namespace Attogram;
 
 global $config;
 

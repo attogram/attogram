@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - Page Footer v0.2.3
 
-namespace attogram;
+namespace Attogram;
 
 $divider = '&nbsp;&nbsp; | &nbsp;&nbsp;';
 echo '

@@ -1,6 +1,6 @@
 <?php // Attogram Framework - List Module - List Admin v0.1.3
 
-namespace attogram;
+namespace Attogram;
 
 $this->pageHeader('Attogram - Admin - Lists');
 ?>

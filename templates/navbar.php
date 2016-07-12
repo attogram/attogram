@@ -1,6 +1,6 @@
 <?php // Attogram Framework - Navbar v0.1.4
 
-namespace attogram;
+namespace Attogram;
 
 ?>
 <nav class="navbar navbar-default">

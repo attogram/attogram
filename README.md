@@ -70,7 +70,7 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
 * Modules may have the following subdirectories:
  * `actions/` - The Public Actions (.php or .md markdown files)  If present, the `home` action is used as the home page.
  * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
- * `configs/`- Configurations via `namespace attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
+ * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
  * `includes/` - Included files, loaded at startup (.php files only)
  * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
  * `templates/` - Templates, to override default Attogram templates  (.php files only)

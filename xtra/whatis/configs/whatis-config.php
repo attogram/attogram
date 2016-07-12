@@ -1,7 +1,7 @@
 <?php
 // Attogram Framework - Whatis module - config v0.1.1
 
-namespace attogram;
+namespace Attogram;
 
 global $config;
 
