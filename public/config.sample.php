@@ -8,7 +8,7 @@ global $config;
 // Uncomment to change default values...
 
 // The Attogram installation directory, with trailing slash
-// $config['attogram_dir'] = '../';
+// $config['attogramDirectory'] = '../';
 
 // Debug/logging - true or false
 // $config['debug'] = false;
@@ -21,16 +21,16 @@ global $config;
 // $config['admins'] = array( '127.0.0.1', '::1', );
 
 // composer vendor autoloader
-// $config['autoloader'] = $config['attogram_dir'] . 'vendor/autoload.php';
+// $config['autoloader'] = $config['attogramDirectory'] . 'vendor/autoload.php';
 
 // Modules Directory, with no trailing slash
-// $config['modules_dir'] = $config['attogram_dir'] . 'modules';
+// $config['modules_dir'] = $config['attogramDirectory'] . 'modules';
 
 // Templates directory, with no trailing slash
-// $config['templates_dir'] = $config['attogram_dir'] . 'templates';
+// $config['templates_dir'] = $config['attogramDirectory'] . 'templates';
 
 // The database name (full path to sqlite database file)
-// $config['db_name'] = $config['attogram_dir'] . 'db/global';
+// $config['db_name'] = $config['attogramDirectory'] . 'db/global';
 
 // Depth Settings
 // By default, all pages are allowed 1 levels (depth) in the URLs

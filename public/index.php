@@ -7,20 +7,20 @@ global $config;
 
 // Default configuration
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
-$config['attogram_dir'] = '../'; // with trailing slash
-$config['autoloader'] = $config['attogram_dir'].'vendor/autoload.php';
-$config['modules_dir'] = $config['attogram_dir'].'modules';   // without trailing slash
-$config['templates_dir'] = $config['attogram_dir'].'templates'; // without trailing slash
+$config['attogramDirectory'] = '../'; // with trailing slash
+$config['autoloader'] = $config['attogramDirectory'].'vendor/autoload.php';
+$config['modules_dir'] = $config['attogramDirectory'].'modules';   // without trailing slash
+$config['templates_dir'] = $config['attogramDirectory'].'templates'; // without trailing slash
 $config['debug'] = false;
 $config['site_name'] = 'The Attogram Framework';
 $config['admins'] = array('127.0.0.1', '::1');
-$config['db_name'] = $config['attogram_dir'].'db/global';
+$config['db_name'] = $config['attogramDirectory'].'db/global';
 
 // Load the Project
 $guru = new guru_meditation_loader(
     $project_name = $config['site_name'],
     $config_file = './config.php',
-    $project_classes = $config['attogram_dir'].'attogram/',
+    $project_classes = $config['attogramDirectory'].'attogram/',
     $vendor_autoloader = $config['autoloader'],
     $vendor_download = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
     $required_classes = array(

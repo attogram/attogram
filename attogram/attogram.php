@@ -27,7 +27,7 @@ class attogram
     public $database;      // (object) The Attogram Database Object
     public $request;       // (object) Symfony HttpFoundation Request object
     public $project_repository;// (string) URL to Attogram Framework GitHub Project
-    public $attogram_dir;  // (string) path to this installation
+    public $attogramDirectory;  // (string) path to this installation
     public $modules_dir;   // (string) path to the modules directory
     public $templates_dir; // (string) path to the templates directory
     public $templates;     // (array) list of templates
@@ -91,18 +91,18 @@ class attogram
             $config['debug'] = false;
         }
         $this->remember('debug', $config['debug'], false);
-        if (!isset($config['attogram_dir'])) {
-            $config['attogram_dir'] = '../';
+        if (!isset($config['attogramDirectory'])) {
+            $config['attogramDirectory'] = '../';
         }
-        $this->remember('attogram_dir', $config['attogram_dir'],          '../');
+        $this->remember('attogramDirectory', $config['attogramDirectory'],          '../');
         if (!isset($config['modules_dir'])) {
-            $config['modules_dir'] = $this->attogram_dir.'modules';
+            $config['modules_dir'] = $this->attogramDirectory.'modules';
         }
-        $this->remember('modules_dir', $config['modules_dir'], $this->attogram_dir.'modules');
+        $this->remember('modules_dir', $config['modules_dir'], $this->attogramDirectory.'modules');
         if (!isset($config['templates_dir'])) {
-            $config['templates_dir'] = $this->attogram_dir.'templates';
+            $config['templates_dir'] = $this->attogramDirectory.'templates';
         }
-        $this->remember('templates_dir', $config['templates_dir'], $this->attogram_dir.'templates');
+        $this->remember('templates_dir', $config['templates_dir'], $this->attogramDirectory.'templates');
         $this->set_module_templates();
         if (!isset($this->templates['header'])) {
             $this->templates['header'] = $this->templates_dir.'/header.php';
