@@ -365,7 +365,7 @@ class Attogram
             $this->error404('Virtually Nothing Found');
         }
         $this->doCacheHeaders($file);
-        $mimeType = $this->get_mimeType($file);
+        $mimeType = $this->getMimeType($file);
         if ($mimeType) {
             header('Content-Type:'.$mimeType.'; charset=utf-8');
             $result = readfile($file); // send file to browser
