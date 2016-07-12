@@ -1,4 +1,4 @@
-<?php // Attogram Framework - List Module - List Admin v0.1.0
+<?php // Attogram Framework - List Module - List Admin v0.1.1
 
 namespace Attogram;
 
@@ -8,12 +8,12 @@ $this->page_header('Attogram - Admin - Lists');
 <?php
 
 $sql = 'SELECT count(id) AS count, list FROM list GROUP BY list';
-$lists = $this->db->query($sql);
+$lists = $this->database->query($sql);
 echo '<b>'.count($lists).'</b> <a href="">Lists</a>';
 echo ' &nbsp; - &nbsp; <a target="_db" href="../db-admin/?table=list&action=row_create">Create New Item</a></p>';
 
 $sql = 'SELECT * FROM list ORDER BY list, ordering, id DESC';
-$items = $this->db->query($sql);
+$items = $this->database->query($sql);
 
 echo '<ul>';
 foreach ($lists as $list) {

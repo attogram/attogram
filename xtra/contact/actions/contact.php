@@ -1,4 +1,4 @@
-<?php// Attogram Framework - Contact Page v0.1.0
+<?php// Attogram Framework - Contact Page v0.1.1
 
 namespace Attogram;
 
@@ -17,13 +17,13 @@ if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
   $ok_msg = '<div class="container">Thank You.  Message received.</div>';
 
-  if( $this->db->queryb($sql,$bind) ) {
+  if( $this->database->queryb($sql,$bind) ) {
     print $ok_msg;
     include($this->templates_dir . '/footer.php');
     exit;
   }
 
-  //if( $this->db->get_db()->errorCode() == 'HY000' ) {
+  //if( $this->database->get_db()->errorCode() == 'HY000' ) {
   //  $this->error[] = 'Message system offline';
   //  include($this->templates_dir . '/footer.php');
   //  exit;

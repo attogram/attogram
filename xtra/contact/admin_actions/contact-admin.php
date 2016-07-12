@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Message Admin v0.1.0
+<?php // Attogram Framework - Message Admin v0.1.1
 
 namespace Attogram;
 
@@ -8,7 +8,7 @@ $this->page_header('Attogram - Admin - Messages');
 <?php
 
 $sql = 'SELECT * FROM contact ORDER BY id DESC';
-$m = $this->db->query($sql);
+$m = $this->database->query($sql);
 
 echo '<strong>'.count($m).'</strong> <a href="">Messages</a><hr />';
 

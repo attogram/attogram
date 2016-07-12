@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.1
+// Attogram Framework - attogram class v0.3.2
 
 namespace attogram;
 
@@ -24,7 +24,7 @@ class attogram
     public $debug;         // (boolean) debug on/off
     public $log;           // (object) Debug Log - PSR-3 Logger object
     public $event;         // (object) Event Log - PSR-3 Logger object
-    public $db;            // (object) The Attogram Database Object
+    public $database;      // (object) The Attogram Database Object
     public $request;       // (object) Symfony HttpFoundation Request object
     public $project_repository;// (string) URL to Attogram Framework GitHub Project
     public $attogram_dir;  // (string) path to this installation
@@ -59,7 +59,7 @@ class attogram
         $this->start_time = microtime(1);
         $this->log = $log;
         $this->event = $event;
-        $this->db = $database;
+        $this->database = $database;
         $this->request = $request;
         $this->debug = $debug;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
