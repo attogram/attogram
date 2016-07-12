@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.7
+// Attogram Framework - attogram class v0.3.8
 
 namespace Attogram;
 
