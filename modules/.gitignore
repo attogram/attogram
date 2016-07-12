@@ -1,1 +1,2 @@
-disabled
+disabled/*
+!disabled/README.md
