@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.8
+// Attogram Framework - attogram class v0.3.9
 
 namespace Attogram;
 
@@ -153,7 +153,7 @@ class Attogram
             return;
         }
         foreach ($dirs as $moduleDir) {
-            foreach (array_diff(scandir($moduleDir), AttogramFS::get_skip_files()) as $mfile) {
+            foreach (array_diff(scandir($moduleDir), AttogramFS::getSkipFiles()) as $mfile) {
                 $file = "$moduleDir/$mfile";
                 if (AttogramFS::isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
@@ -327,7 +327,7 @@ class Attogram
         } //end if action set
 
         if ($this->uri[0] == 'home') { // missing the Home Page!
-            $this->default_homepage();
+            $this->defaultHomepage();
             return;
         }
 
@@ -365,9 +365,9 @@ class Attogram
             $this->error404('Virtually Nothing Found');
         }
         $this->do_cache_headers($file);
-        $mime_type = AttogramFS::get_mime_type($file);
-        if ($mime_type) {
-            header('Content-Type:'.$mime_type.'; charset=utf-8');
+        $mimeType = AttogramFS::get_mimeType($file);
+        if ($mimeType) {
+            header('Content-Type:'.$mimeType.'; charset=utf-8');
             $result = readfile($file); // send file to browser
             if (!$result) {
                 $this->log->error('virtualWebDirectory: can not read file: '.htmlentities($file));
@@ -553,7 +553,7 @@ class Attogram
             $this->log->error('GET_ACTIONABLES: directory not readable: '.$dir);
             return $result;
         }
-        foreach (array_diff(scandir($dir), AttogramFS::get_skip_files()) as $afile) {
+        foreach (array_diff(scandir($dir), AttogramFS::getSkipFiles()) as $afile) {
             $file = $dir.'/'.$afile;
             if (AttogramFS::isReadableFile($file, '.php')) { // PHP files
                 $result[ str_replace('.php', '', $afile) ] = array('file' => $file, 'parser' => 'php');
@@ -639,9 +639,9 @@ class Attogram
     /**
      * Show the default home page.
      */
-    public function default_homepage()
+    public function defaultHomepage()
     {
-        $this->log->error('using default_homepage');
+        $this->log->error('using defaultHomepage');
         $this->pageHeader('Home');
         echo '<div class="container">'
         .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'

@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramFS class v0.1.5
+// Attogram Framework - AttogramFS class v0.1.6
 
 namespace Attogram;
 
@@ -22,7 +22,7 @@ class AttogramFS
             return array();
         }
         $result = array();
-        foreach (array_diff(scandir($dir), self::get_skip_files()) as $d) {
+        foreach (array_diff(scandir($dir), self::getSkipFiles()) as $d) {
             $md = $dir.'/'.$d;
             if (!is_readable($md)) {
                 continue;
@@ -43,13 +43,13 @@ class AttogramFS
      *
      * @return array       List of the files successfully included
      */
-    public static function include_all_php_files_in_directory($dir)
+    public static function includeAllPhpFilesInDirectory($dir)
     {
         $included = array();
         if (!is_readable($dir)) {
             return $included;
         }
-        foreach (array_diff(scandir($dir), self::get_skip_files()) as $f) {
+        foreach (array_diff(scandir($dir), self::getSkipFiles()) as $f) {
             $ff = $dir.'/'.$f;
             if (!self::isReadableFile($ff, '.php')) {
                 continue;
@@ -59,7 +59,7 @@ class AttogramFS
             }
         }
         return $included;
-    } // end function include_all_php_files_in_directory()
+    } // end function includeAllPhpFilesInDirectory()
 
     /**
      * Tests if is a file exist, is readable, and is of a certain type.
@@ -86,7 +86,7 @@ class AttogramFS
      *
      * @return array
      */
-    public static function get_skip_files()
+    public static function getSkipFiles()
     {
         return array('.', '..', '.htaccess');
     }
@@ -98,7 +98,7 @@ class AttogramFS
      *
      * @return array List of the files successfully loaded
      */
-    public static function load_module_subdirectories($modulesDirectory, $subdirectory)
+    public static function loadModuleSubdirectories($modulesDirectory, $subdirectory)
     {
         global $config;
         $included = array();
@@ -107,11 +107,11 @@ class AttogramFS
             return $included;
         }
         foreach ($dirs as $d) {
-            $inc = self::include_all_php_files_in_directory($d);
+            $inc = self::includeAllPhpFilesInDirectory($d);
             $included = array_merge($included, $inc);
         }
         return $included;
-    } // end function load_module_subdirectories()
+    } // end function loadModuleSubdirectories()
 
     /**
      * get the mime type of a file.
@@ -120,7 +120,7 @@ class AttogramFS
      *
      * @return string       The mime type, or false
      */
-    public static function get_mime_type($file)
+    public static function getMimeType($file)
     {
         $mimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
         switch (pathinfo($file, PATHINFO_EXTENSION)) { // https://bugs.php.net/bug.php?id=53035

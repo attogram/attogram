@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.3.5
+// Attogram Framework - Guru Meditation Loader - v0.3.6
 
 namespace Attogram;
 
@@ -206,7 +206,7 @@ class GuruMeditationLoader
     {
         global $config;
         //if( !class_exists('AttogramFS') ) ....
-        $count = AttogramFS::load_module_subdirectories($config['modulesDirectory'], 'configs');
+        $count = AttogramFS::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
             foreach ($count as $c) {
                 $this->debug('meditateDeeper: OK: '.$c);
             }
@@ -257,7 +257,7 @@ class GuruMeditationLoader
     {
       global $config;
       //if( !class_exists('AttogramFS') ) ....
-      $count = AttogramFS::load_module_subdirectories($config['modulesDirectory'], 'includes');
+      $count = AttogramFS::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
           foreach ($count as $c) {
               $this->debug('focusInnerEye: OK: '.$c);
           }

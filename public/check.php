@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.4
+// Attogram Framework - Check Script v0.1.5
 
 $c = new AttogramCheck();
 $c->check();
@@ -26,18 +26,18 @@ class AttogramCheck
         .$this->spacer.'<span class="icon">🕑</span> '.gmdate('Y-m-d H:i:s').' UTC'
         .$this->spacer.'<a href="./"><span class="icon">🏠</span></a></p>';
         echo $this->divider;
-        $this->check_index();
+        $this->checkIndex();
         echo $this->divider;
-        $this->check_htaccess();
+        $this->checkHtaccess();
         echo $this->divider;
-        $this->check_php();
+        $this->checkPhp();
         echo $this->divider;
-        $this->check_apache();
+        $this->checkApache();
         echo $this->divider.'<p><span class="icon">🏁</span> Attogram Framework Check completed</p>';
         $this->pageFooter();
     }
 
-    public function check_index()
+    public function checkIndex()
     {
         $indexFile = './index.php';
         file_exists($indexFile) ? $fileexists = 'pass' : $fileexists = 'fail';
@@ -59,7 +59,7 @@ class AttogramCheck
         echo '<pre class="'.$result.'">'.$this->{$result}.' 1.2 - <strong>'.$indexFile.'</strong> is Project Loader (found: new GuruMeditationLoader)</pre>';
     }
 
-    public function check_htaccess()
+    public function checkHtaccess()
     {
         $htaccessFile = './.htaccess';
         file_exists($htaccessFile) ? $result = 'pass' : $result = 'fail';
@@ -70,7 +70,7 @@ class AttogramCheck
         $count['FallbackResource'] = $count['ErrorDocument 404'] = $count['ErrorDocument 403'] = $count['DirectoryIndex'] = 0;
         $found['FallbackResource'] = $found['ErrorDocument 404'] = $found['ErrorDocument 403'] = $found['DirectoryIndex'] = '?';
         $result22 = $result23 = $result24 = $result25 = $result26 = $result27 = $result28 = $result29 = 'fail';
-        $goodUri = $this->good_uri();
+        $goodUri = $this->goodUri();
         if ($filereadable == 'pass') {
             $file = new SplFileObject($htaccessFile);
             foreach ($file as $val) {
@@ -142,7 +142,7 @@ class AttogramCheck
         echo '<pre class="'.$result29.'">'.$this->{$result29}.' 2.9 - <strong>DirectoryIndex index.php</strong> (found: '.$found['DirectoryIndex'].')</pre>';
     }
 
-    public function check_php()
+    public function checkPhp()
     {
         $version = phpversion();
         (version_compare($version, '5.3.3') >= 0) ? $result = 'pass' : $result = 'fail';
@@ -156,7 +156,7 @@ class AttogramCheck
         echo '<pre class="'.$result.'">'.$this->{$result}.' 3.2 - <strong>PDO sqlite</strong> driver installed</pre>';
     }
 
-    public function check_apache()
+    public function checkApache()
     {
         isset($_SERVER['SERVER_SOFTWARE']) ? $serverSoftware = $_SERVER['SERVER_SOFTWARE'] : $serverSoftware = '';
         $serverSoftwareArray = explode(' ', $serverSoftware);
@@ -192,7 +192,7 @@ class AttogramCheck
         if (sizeof($apacheFound) == 1) {
             $result42 = 'pass';
             $result42Found = $apacheFound[0];
-            $result43 = $this->apache_conf_examine($apacheFound[0]);
+            $result43 = $this->apacheConfExamine($apacheFound[0]);
         } else {
             $result42 = $result43 = 'fail';
             $result42Found = 'Not Found';
@@ -202,7 +202,7 @@ class AttogramCheck
           .(isset($this->apacheOverrideDir) ? $this->apacheOverrideDir : '?').')</pre>';
     }
 
-    public function good_uri()
+    public function goodUri()
     {
         $indexFile = '/index.php';
         if (!isset($_SERVER['DOCUMENT_ROOT'])) {
@@ -213,7 +213,7 @@ class AttogramCheck
         return str_replace($docroot, '', str_replace('\\', '/', __DIR__)).$indexFile;
     }
 
-    public function apache_conf_examine($conf)
+    public function apacheConfExamine($conf)
     {
         $thisDir = '';
         $allowOverride = array();
