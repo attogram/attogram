@@ -1,0 +1,9 @@
+languages:
+  Ruby: false
+  JavaScript: true
+  PHP: true
+  Python: false
+exclude_paths:
+  - "public/web/jquery.min.js"  
+  - "public/web/bootstrap/js/bootstrap.min.js"
+  - "public/web/bootstrap/css/bootstrap.min.css"
