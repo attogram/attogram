@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.9
+// Attogram Framework - attogram class v0.4.0
 
 namespace Attogram;
 
@@ -147,15 +147,15 @@ class Attogram
      */
     public function setModuleTemplates()
     {
-        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'templates');
+        $dirs = $this->getAllSubdirectories($this->modulesDirectory, 'templates');
         if (!$dirs) {
             $this->log->debug('setModuleTemplates: no module templates found');
             return;
         }
         foreach ($dirs as $moduleDir) {
-            foreach (array_diff(scandir($moduleDir), AttogramFS::getSkipFiles()) as $mfile) {
+            foreach (array_diff(scandir($moduleDir), $this->getSkipFiles()) as $mfile) {
                 $file = "$moduleDir/$mfile";
-                if (AttogramFS::isReadableFile($file, '.php')) {
+                if ($this->isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
                     $this->templates[$name] = $file; // Set the template
                     $this->log->debug('setModuleTemplates: '.$name.' = '.$file);
@@ -352,7 +352,7 @@ class Attogram
         $trash = array_shift($test); // take off top level
         $trash = array_shift($test); // take off virtual web directory
         $req = implode('/', $test); // the virtual web request
-        $mod = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'public');
+        $mod = $this->getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($mod as $m) {
             $testFile = $m.'/'.$req;
@@ -365,7 +365,7 @@ class Attogram
             $this->error404('Virtually Nothing Found');
         }
         $this->doCacheHeaders($file);
-        $mimeType = AttogramFS::get_mimeType($file);
+        $mimeType = $this->get_mimeType($file);
         if ($mimeType) {
             header('Content-Type:'.$mimeType.'; charset=utf-8');
             $result = readfile($file); // send file to browser
@@ -439,7 +439,7 @@ class Attogram
      */
     public function getMarkdown($file)
     {
-        if (!AttogramFS::isReadableFile($file, '.md')) {
+        if (!$this->isReadableFile($file, '.md')) {
             $this->log->error('GET_MARKDOWN: can not read file: '.$this->webDisplay($file));
             return false;
         }
@@ -501,7 +501,7 @@ class Attogram
         if (is_array($this->actions)) {
             return $this->actions;
         }
-        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'actions');
+        $dirs = $this->getAllSubdirectories($this->modulesDirectory, 'actions');
         if (!$dirs) {
             $this->log->debug('getActions: No module actions found');
         }
@@ -526,7 +526,7 @@ class Attogram
         if (is_array($this->adminActions)) {
             return $this->adminActions;
         }
-        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'admin_actions');
+        $dirs = $this->getAllSubdirectories($this->modulesDirectory, 'admin_actions');
         if (!$dirs) {
             $this->log->debug('getAdminActions: No module admin actions found');
         }
@@ -553,11 +553,11 @@ class Attogram
             $this->log->error('GET_ACTIONABLES: directory not readable: '.$dir);
             return $result;
         }
-        foreach (array_diff(scandir($dir), AttogramFS::getSkipFiles()) as $afile) {
+        foreach (array_diff(scandir($dir), $this->getSkipFiles()) as $afile) {
             $file = $dir.'/'.$afile;
-            if (AttogramFS::isReadableFile($file, '.php')) { // PHP files
+            if ($this->isReadableFile($file, '.php')) { // PHP files
                 $result[ str_replace('.php', '', $afile) ] = array('file' => $file, 'parser' => 'php');
-            } elseif (AttogramFS::isReadableFile($file, '.md')) { // Markdown files
+            } elseif ($this->isReadableFile($file, '.md')) { // Markdown files
                 $result[ str_replace('.md', '', $afile) ] = array('file' => $file, 'parser' => 'md');
             }
         }
@@ -607,7 +607,7 @@ class Attogram
     public function pageHeader($title = '')
     {
         $file = $this->templates['header'];
-        if (AttogramFS::isReadableFile($file, '.php')) {
+        if ($this->isReadableFile($file, '.php')) {
             include $file;
             $this->log->debug('pageHeader, title: '.$title);
             return;
@@ -625,7 +625,7 @@ class Attogram
     public function pageFooter()
     {
         $file = $this->templates['footer'];
-        if (AttogramFS::isReadableFile($file, '.php')) {
+        if ($this->isReadableFile($file, '.php')) {
             include $file;
             $this->log->debug('pageFooter');
             return;
@@ -677,7 +677,7 @@ class Attogram
     {
         //$this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
         header('HTTP/1.0 404 Not Found');
-        if (AttogramFS::isReadableFile($this->templates['fof'], '.php')) {
+        if ($this->isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];
             exit;
         }
@@ -706,6 +706,156 @@ class Attogram
             return false;
         }
         return htmlentities($string, ENT_COMPAT, 'UTF-8');
+    }
+
+
+    // Attogram Filesystem
+
+    /**
+     * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name.
+     *
+     * @param string $dir  The directory to search within (ie: modules directory)
+     * @param string $name The name of the subdirectories to find
+     *
+     * @return array       List of the directories found
+     */
+    public static function getAllSubdirectories($dir, $name)
+    {
+        if (!isset($dir) || !$dir || !is_string($dir) || !is_readable($dir)) {
+            return array();
+        }
+        $result = array();
+        foreach (array_diff(scandir($dir), self::getSkipFiles()) as $d) {
+            $md = $dir.'/'.$d;
+            if (!is_readable($md)) {
+                continue;
+            }
+            $md .= '/'.$name;
+            if (!is_readable($md)) {
+                continue;
+            }
+            $result[] = $md;
+        }
+        return $result;
+    } // end function getAllSubdirectories()
+
+    /**
+     * Include all php files in a specific directory.
+     *
+     * @param  string $dir The directory to search
+     *
+     * @return array       List of the files successfully included
+     */
+    public static function includeAllPhpFilesInDirectory($dir)
+    {
+        $included = array();
+        if (!is_readable($dir)) {
+            return $included;
+        }
+        foreach (array_diff(scandir($dir), self::getSkipFiles()) as $f) {
+            $ff = $dir.'/'.$f;
+            if (!self::isReadableFile($ff, '.php')) {
+                continue;
+            }
+            if ((include($ff))) {
+                $included[] = $ff;
+            }
+        }
+        return $included;
+    } // end function includeAllPhpFilesInDirectory()
+
+    /**
+     * Tests if is a file exist, is readable, and is of a certain type.
+     *
+     * @param  string $file The name of the file to test
+     * @param  string $type (optional) The file extension to allow. Defaults to '.php'
+     *
+     * @return bool
+     */
+    public static function isReadableFile($file = false, $type = '.php')
+    {
+        if (!$file || !$type || $type == '' || !is_string($type) || !is_string($file) || !is_readable($file)) {
+            return false;
+        }
+        if (preg_match('/'.$type.'$/', $file)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * get an array of filenames to skip.
+     *
+     * @return array
+     */
+    public static function getSkipFiles()
+    {
+        return array('.', '..', '.htaccess');
+    }
+
+    /**
+     * Examines each module for a named subdirectory, then includes all *.php files from that directory.
+     *
+     * @param string $modulesDirectory
+     *
+     * @return array List of the files successfully loaded
+     */
+    public static function loadModuleSubdirectories($modulesDirectory, $subdirectory)
+    {
+        global $config;
+        $included = array();
+        $dirs = self::getAllSubdirectories($modulesDirectory, $subdirectory);
+        if (!$dirs) {
+            return $included;
+        }
+        foreach ($dirs as $dir) {
+            $inc = self::includeAllPhpFilesInDirectory($dir);
+            $included = array_merge($included, $inc);
+        }
+        return $included;
+    } // end function loadModuleSubdirectories()
+
+    /**
+     * get the mime type of a file.
+     *
+     * @param string $file  The file to examine
+     *
+     * @return string       The mime type, or false
+     */
+    public static function getMimeType($file)
+    {
+        $mimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
+        switch (pathinfo($file, PATHINFO_EXTENSION)) { // https://bugs.php.net/bug.php?id=53035
+            case 'css':
+                $mimeType = 'text/css';
+                break;
+            case 'js':
+                $mimeType = 'application/javascript';
+                break;
+            case 'xml':
+                $mimeType = 'text/xml';
+                break;
+            case 'php':
+                $mimeType = false; // do not do content type header, not needed for native php
+                break;
+            case 'eot':
+                $mimeType = 'application/vnd.ms-fontobject';
+                break;
+            case 'svg':
+                $mimeType = 'image/svg+xml';
+                break;
+            case 'ttf':
+                $mimeType = 'application/font-sfnt';
+                break;
+            case 'woff':
+                $mimeType = 'application/font-woff';
+                break;
+            case 'woff2':
+                $mimeType = 'application/font-woff2';
+                break;
+        }
+        return $mimeType;
     }
 
 } // END of class attogram

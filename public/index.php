@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.3.6
+// Attogram Framework - Guru Meditation Loader - v0.4.0
 
 namespace Attogram;
 
@@ -24,7 +24,6 @@ $guru = new GuruMeditationLoader(
     $config['autoloader'], // $vendor_autoloader
     'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
     array( // $requiredClasses
-        '\attogram\AttogramFS',            // Attogram File System
         '\attogram\attogram',               // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
         '\Parsedown',                       // Markdown Parser
@@ -206,7 +205,7 @@ class GuruMeditationLoader
     {
         global $config;
         //if( !class_exists('AttogramFS') ) ....
-        $count = AttogramFS::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
+        $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
             foreach ($count as $c) {
                 $this->debug('meditateDeeper: OK: '.$c);
             }
@@ -257,7 +256,7 @@ class GuruMeditationLoader
     {
       global $config;
       //if( !class_exists('AttogramFS') ) ....
-      $count = AttogramFS::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
+      $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
           foreach ($count as $c) {
               $this->debug('focusInnerEye: OK: '.$c);
           }

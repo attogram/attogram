@@ -24,7 +24,7 @@ if (!isset($title) || !$title || !is_string($title)) {
 
 $navbar = $this->templates['navbar'];
 
-if (AttogramFS::isReadableFile($navbar, 'php')) {
+if ($this->isReadableFile($navbar, 'php')) {
     include $navbar;
 } else {
     $this->log->error('Missing navbar template: '.$navbar);
