@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.3.1
+// Attogram Framework - Guru Meditation Loader - v0.3.2
 
 namespace Attogram;
 
@@ -152,118 +152,116 @@ class guru_meditation_loader
             . ((isset($line) && $line) ? "<pre>Line: $line</pre>" : '')
             . (isset($context['project_name']) ? '<pre>Context: ' . $context['project_name'] . '</pre>' : '')
         );
-        exit;
-  }
+    }
 
-  /**
-   * Catch any fatal errors at shutdown.
-   */
-  public function guru_meditation_shutdown()
-  {
-      $last = error_get_last();
-      switch ($last['type']) {
-      case E_ERROR:
-          $this->guru_meditation_error(
-              'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
-          );
-      }
-  }
+    /**
+     * Catch any fatal errors at shutdown.
+     */
+    public function guru_meditation_shutdown()
+    {
+        $last = error_get_last();
+        switch ($last['type']) {
+        case E_ERROR:
+            $this->guru_meditation_error(
+                'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
+            );
+        }
+    }
 
-  /**
-   * load the config file.
-   */
-  public function meditate()
-  {
+    /**
+     * load the config file.
+     */
+    public function meditate()
+    {
+        global $config;
+        if (is_file($this->config_file)) {
+            if (!is_readable($this->config_file)) {
+                $this->guru_meditation_error('Config file exists, but is not readable: '.$this->config_file);
+            }
+            $included = (include($this->config_file));
+            if (!$included) {
+                $this->guru_meditation_error('Config file exists, but include failed: '.$this->config_file);
+            }
+            $this->debug('meditate: OK: '.$this->config_file);
+        } else {
+            $this->debug('meditate: config_file is NOT a file');
+        }
+        if (!isset($config)) {
+            $this->debug('meditate: $config NOT set');
+            $config = array();
+        }
+        if (!is_array($config)) {
+            $this->guru_meditation_error('$config is not an array');
+        }
+        if (!isset($config['autoloader'])) {
+            $config['autoloader'] = $this->default_autoloader;
+        }
+        $this->autoloader = $config['autoloader'];
+    } // end function meditate()
+
+    /**
+     * load module configs.
+     */
+    public function meditate_deeper()
+    {
+        global $config;
+        //if( !class_exists('attogram_fs') ) ....
+        $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'configs');
+            foreach ($count as $c) {
+                $this->debug('meditate_deeper: OK: '.$c);
+            }
+    }
+
+    /**
+     * run the vendor autoloader.
+     */
+    public function expand_consciousness()
+    {
+        if (isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader)) {
+            $included = (include($this->autoloader));
+            if (!$included) {
+                $this->guru_meditation_error('Autoloader file exists, but include failed: '.$this->autoloader);
+            }
+            $this->debug('expand_consciousness: OK: '.$this->autoloader);
+            return;
+        }
+        $this->guru_meditation_error(
+            'autoloader file not found: '.$this->autoloader,
+            'Possibile Fixes:'
+            .'<br /><br />- Is the path to the autoloader wrong?  Edit <strong>'.$this->config_file
+            .'</strong> and check for <strong>$config[\'autoloader\']</strong>'
+            .'<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?  Run <strong>composer install</strong>'
+            .'<br /><br />- Can\'t run composer? <a href="'.$this->vendor_download
+            .'"><strong>download the vendor zip file</strong></a> and install manually'
+        );
+    } // end function expand_consciousness()
+
+    public function focus_mind()
+    {
+        if (!is_dir($this->project_classes)) {
+            $this->guru_meditation_error('Missing project directory: '.$this->project_classes);
+        }
+        if (!is_readable($this->project_classes)) {
+            $this->guru_meditation_error('Project directory is unreadable: '.$this->project_classes);
+        }
+        foreach (array_diff(scandir($this->project_classes), array('.', '..')) as $f) {
+            $included = (include_once($this->project_classes.$f));
+            if (!$included) {
+                $this->guru_meditation_error('Failed to include project file: '.$this->project_classes.$f);
+            }
+            $this->debug('focus_mind: OK: '.$this->project_classes.$f);
+        }
+    } // end function focus_mind()
+
+    public function focus_inner_eye()
+    {
       global $config;
-      if (is_file($this->config_file)) {
-          if (!is_readable($this->config_file)) {
-              $this->guru_meditation_error('Config file exists, but is not readable: '.$this->config_file);
+      //if( !class_exists('attogram_fs') ) ....
+      $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'includes');
+          foreach ($count as $c) {
+              $this->debug('focus_inner_eye: OK: '.$c);
           }
-          $included = (include($this->config_file));
-          if (!$included) {
-              $this->guru_meditation_error('Config file exists, but include failed: '.$this->config_file);
-          }
-          $this->debug('meditate: OK: '.$this->config_file);
-      } else {
-          $this->debug('meditate: config_file is NOT a file');
-      }
-      if (!isset($config)) {
-          $this->debug('meditate: $config NOT set');
-          $config = array();
-      }
-      if (!is_array($config)) {
-          $this->guru_meditation_error('$config is not an array');
-      }
-      if (!isset($config['autoloader'])) {
-          $config['autoloader'] = $this->default_autoloader;
-      }
-      $this->autoloader = $config['autoloader'];
-  } // end function meditate()
-
-  /**
-   * load module configs.
-   */
-  public function meditate_deeper()
-  {
-      global $config;
-    //if( !class_exists('attogram_fs') ) ....
-    $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'configs');
-      foreach ($count as $c) {
-          $this->debug('meditate_deeper: OK: '.$c);
-      }
-  }
-
-  /**
-   * run the vendor autoloader.
-   */
-  public function expand_consciousness()
-  {
-      if (isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader)) {
-          $included = (include($this->autoloader));
-          if (!$included) {
-              $this->guru_meditation_error('Autoloader file exists, but include failed: '.$this->autoloader);
-          }
-          $this->debug('expand_consciousness: OK: '.$this->autoloader);
-
-          return;
-      }
-      $this->guru_meditation_error(
-      'autoloader file not found: '.$this->autoloader,
-      'Possibile Fixes:'
-      .'<br /><br />- Is the path to the autoloader wrong?  Edit <strong>'.$this->config_file
-      .'</strong> and check for <strong>$config[\'autoloader\']</strong>'
-      .'<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?  Run <strong>composer install</strong>'
-      .'<br /><br />- Can\'t run composer? <a href="'.$this->vendor_download
-      .'"><strong>download the vendor zip file</strong></a> and install manually'
-    );
-  } // end function expand_consciousness()
-
-  public function focus_mind()
-  {
-      if (!is_dir($this->project_classes)) {
-          $this->guru_meditation_error('Missing project directory: '.$this->project_classes);
-      }
-      if (!is_readable($this->project_classes)) {
-          $this->guru_meditation_error('Project directory is unreadable: '.$this->project_classes);
-      }
-      foreach (array_diff(scandir($this->project_classes), array('.', '..')) as $f) {
-          $included = (include_once($this->project_classes.$f));
-          if (!$included) {
-              $this->guru_meditation_error('Failed to include project file: '.$this->project_classes.$f);
-          }
-          $this->debug('focus_mind: OK: '.$this->project_classes.$f);
-      }
-  } // end function focus_mind()
-
-  public function focus_inner_eye()
-  {
-      global $config;
-    //if( !class_exists('attogram_fs') ) ....
-    $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'includes');
-      foreach ($count as $c) {
-          $this->debug('focus_inner_eye: OK: '.$c);
-      }
-  }
+    }
 
     public function inner_awareness()
     {
@@ -281,111 +279,107 @@ class guru_meditation_loader
         $this->guru_meditation_error('Required Class Missing: '.implode(', ', $missing));
     } // end function inner_awareness()
 
-  public function inner_emptiness()
-  {
-      $missing = array();
-      foreach ($this->required_interfaces as $c) {
-          if (!interface_exists($c)) {
-              $missing[] = $c;
-              $this->debug('inner_emptiness: Required Inteface NOT FOUND: '.$c);
-          }
-          $this->debug('inner_emptiness: OK: '.$c);
-      }
-      if (!$missing) {
-          return;
-      }
-      $this->guru_meditation_error('Required Interface Missing: '.implode(', ', $missing));
-  } // end function inner_emptiness()
-
-  public function tranquility()
-  {
-      global $config;
-
-      // Speed things up! gz compession
-      if (ob_start('ob_gzhandler')) {
-          $this->debug('tranquility: ob_gzhandler active');
-      }
-
-      // Create the Debug Logger
-      if (
-          (isset($config['debug']) && is_bool($config['debug']) && $config['debug']) // $config['debug'] = true
-        ||
-          (isset($_GET['debug'])   // admin debug url override ?debug
-            && isset($config['admins'])
-            && is_array($config['admins'])
-            && in_array($_SERVER['REMOTE_ADDR'], $config['admins'])
-          )
-      ) {
-          $log = new \Monolog\Logger('debug');
-          $streamHandler = new \Monolog\Handler\StreamHandler('php://output');
-          $format = '<p class="text-danger squished">%datetime%|%level_name%: %message% %context%</p>'; // %extra%
-        $dateformat = 'Y-m-d|H:i:s:u';
-          $streamHandler->setFormatter(new \Monolog\Formatter\LineFormatter($format, $dateformat));
-          $log->pushHandler(new \Monolog\Handler\BufferHandler($streamHandler));
-        // $log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
-      } else {
-          $log = new \Psr\Log\NullLogger();
-      }
-
-      // Save guru startup log to the Debug logger
-      if (isset($config['guru_meditation_loader']) && is_array($config['guru_meditation_loader'])) {
-          foreach ($config['guru_meditation_loader'] as $g) {
-              $log->debug($g);
-          }
-      }
-
-      // Create database object
-      $database = false;
-      if (class_exists('Attogram\sqlite_database')) {
-          $database = new sqlite_database($config['db_name'], $config['modules_dir'], $log);  // init the database, sans-connection
-        if (!$database) {
-            $log->error('guru_meditation_loader: sqlite_database initialization failed');
+    public function inner_emptiness()
+    {
+        $missing = array();
+        foreach ($this->required_interfaces as $c) {
+            if (!interface_exists($c)) {
+                $missing[] = $c;
+                $this->debug('inner_emptiness: Required Inteface NOT FOUND: '.$c);
+            }
+            $this->debug('inner_emptiness: OK: '.$c);
         }
-      }
+        if (!$missing) {
+            return;
+        }
+        $this->guru_meditation_error('Required Interface Missing: '.implode(', ', $missing));
+    } // end function inner_emptiness()
 
-      // Create the Event logger
-      if (!$database) {
-          $event = new \Psr\Log\NullLogger(); // no database, use null logger
-      } else {
-          // Setup the Event Logger
-        $event = new \Monolog\Logger('event');
-          $event->pushHandler(new \Attogram\event_logger($database));
-      }
+    public function tranquility()
+    {
+        global $config;
+        // Speed things up! gz compession
+        if (ob_start('ob_gzhandler')) {
+            $this->debug('tranquility: ob_gzhandler active');
+        }
+        // Create the Debug Logger
+        if (
+                (
+                    isset($config['debug'])   // debug is true...
+                    && is_bool($config['debug'])
+                    && $config['debug']
+                ) || (
+                    isset($_GET['debug'])   // admin debug url override ?debug
+                    && isset($config['admins'])
+                    && is_array($config['admins'])
+                    && in_array($_SERVER['REMOTE_ADDR'], $config['admins'])
+               )
+        ) {
+            $log = new \Monolog\Logger('debug');
+            $streamHandler = new \Monolog\Handler\StreamHandler('php://output');
+            $format = '<p class="text-danger squished">%datetime%|%level_name%: %message% %context%</p>'; // %extra%
+            $dateformat = 'Y-m-d|H:i:s:u';
+            $streamHandler->setFormatter(new \Monolog\Formatter\LineFormatter($format, $dateformat));
+            $log->pushHandler(new \Monolog\Handler\BufferHandler($streamHandler));
+            // $log->pushHandler( new \Monolog\Handler\BrowserConsoleHandler ); // dev
+        } else {
+            $log = new \Psr\Log\NullLogger();
+        }
+        // Save guru startup log to the Debug logger
+        if (isset($config['guru_meditation_loader']) && is_array($config['guru_meditation_loader'])) {
+            foreach ($config['guru_meditation_loader'] as $g) {
+                $log->debug($g);
+            }
+        }
+        // Create database object
+        $database = false;
+        if (class_exists('Attogram\sqlite_database')) {
+            $database = new sqlite_database($config['db_name'], $config['modules_dir'], $log);  // init the database, sans-connection
+            if (!$database) {
+                $log->error('guru_meditation_loader: sqlite_database initialization failed');
+            }
+        }
+        // Create the Event logger
+        if (!$database) {
+            $event = new \Psr\Log\NullLogger(); // no database, use null logger
+        } else {
+            // Setup the Event Logger
+            $event = new \Monolog\Logger('event');
+            $event->pushHandler(new \Attogram\event_logger($database));
+        }
+        // create Request object
+        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        // Start the Attogram Framework!
+        new attogram(
+            $log,
+            $event,
+            $database,
+            $request,
+            $config['debug']
+        );
+    } // end function tranquility()
 
-      // create Request object
-      $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-
-      // Start the Attogram Framework!
-      new attogram(
-        $log,
-        $event,
-        $database,
-        $request,
-        $config['debug']
-      );
-  } // end function tranquility()
-
-  public function debug($msg)
-  {
-      global $config;
-      $config['guru_meditation_loader'][] = $msg;
-  }
+    public function debug($msg)
+    {
+        global $config;
+        $config['guru_meditation_loader'][] = $msg;
+    }
 
     public function guru_meditation_error($error = '', $fix = '')
     {
         global $config;
         echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
-    .'<meta name="viewport" content="width=device-width, initial-scale=1">'
-    .'<title>Guru Meditation Error</title>'
-    .'<style>'
-    .' body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }'
-    .' a { text-decoration:none; }'
-    .' .icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }'
-    .' .err { color:red; }'
-    .' .fix { font-size:18px; color:black;  }'
-    .' .log { font-size:15px; color:#333366; }'
-    .'</style></head><body>'
-    .'<p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
+        .'<meta name="viewport" content="width=device-width, initial-scale=1">'
+        .'<title>Guru Meditation Error</title>'
+        .'<style>'
+        .' body { margin:0 0 0 30px; font-size:22px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }'
+        .' a { text-decoration:none; }'
+        .' .icon { font-size:60px; vertical-align:middle; padding:0px; margin:10px; }'
+        .' .err { color:red; }'
+        .' .fix { font-size:18px; color:black;  }'
+        .' .log { font-size:15px; color:#333366; }'
+        .'</style></head><body>'
+        .'<p><a href=""><span class="icon">😢</span></a> Guru Meditation Error</p>';
         if ($error) {
             echo '<p class="err"><a href=""><span class="icon">💔</span></a> '.$error.'</p>';
         }
@@ -399,4 +393,5 @@ class guru_meditation_loader
         echo '</body></html>';
         exit;
     } // end function guru_meditation_error()
+
 } // end class guru_meditation_error()
