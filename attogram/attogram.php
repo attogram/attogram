@@ -26,7 +26,7 @@ class attogram
     public $event;         // (object) Event Log - PSR-3 Logger object
     public $db;            // (object) The Attogram Database Object
     public $request;       // (object) Symfony HttpFoundation Request object
-    public $project_github;// (string) URL to Attogram Framework GitHub Project
+    public $project_repository;// (string) URL to Attogram Framework GitHub Project
     public $attogram_dir;  // (string) path to this installation
     public $modules_dir;   // (string) path to the modules directory
     public $templates_dir; // (string) path to the templates directory
@@ -63,7 +63,7 @@ class attogram
         $this->request = $request;
         $this->debug = $debug;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
-        $this->project_github = 'https://github.com/attogram/attogram';
+        $this->project_repository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
         $this->set_request(); // set all the request-related variables we need
         $this->log->debug("host: $this->host  IP: $this->clientIp");
@@ -631,7 +631,7 @@ class attogram
             return;
         }
         // Default page footer
-        echo '<hr /><p>Powered by <a href="'.$this->project_github.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
+        echo '<hr /><p>Powered by <a href="'.$this->project_repository.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
         echo '</body></html>';
         $this->log->error('missing page_footer '.$file.' - using default footer');
     }
