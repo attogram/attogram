@@ -364,7 +364,7 @@ class Attogram
         if (!$file) {
             $this->error404('Virtually Nothing Found');
         }
-        $this->do_cache_headers($file);
+        $this->doCacheHeaders($file);
         $mimeType = AttogramFS::get_mimeType($file);
         if ($mimeType) {
             header('Content-Type:'.$mimeType.'; charset=utf-8');
@@ -387,7 +387,7 @@ class Attogram
      *
      * @param string $file
      */
-    public function do_cache_headers($file)
+    public function doCacheHeaders($file)
     {
         if (!$lastmod = filemtime($file)) {
             $lastmod = time();
@@ -400,7 +400,7 @@ class Attogram
             header('HTTP/1.1 304 Not Modified');
             exit;
         }
-    } // end function do_cache_headers()
+    } // end function doCacheHeaders()
 
     /**
      * Do requests for exception files: sitemap.xml, robots.txt.

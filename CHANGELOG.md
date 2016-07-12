@@ -42,7 +42,7 @@
 - allow HTML in event log messages
 - renamed core modules to [`./modules/_attogram/`](./modules/_attogram/), [`./modules/_database/`](./modules/_database/), and [`./modules/_user/`](./modules/_user/)
 - moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/) for faster loading/caching
-- new attogram function: [`do_cache_headers($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
+- new attogram function: [`doCacheHeaders($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
 sets Last-Modified and Etag headers, and responds to HTTP_IF_MODIFIED_SINCE / HTTP_IF_NONE_MATCH requests for better caching of virtual web directory files
 - new attogram function:  [`getMarkdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
 returns string of HTML version of markdown file
