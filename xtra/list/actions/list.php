@@ -1,7 +1,7 @@
 <?php
-// Attogram Framework - List Module - List Page v0.1.1
+// Attogram Framework - List Module - List Page v0.1.2
 
-namespace Attogram;
+namespace attogram;
 
 $this->page_header('Attogram - List');
 
@@ -24,7 +24,7 @@ foreach ($lists as $list) {
     echo '</ol>';
 }
 
-if ($this->is_admin()) {
+if ($this->isAdmin()) {
     echo '<p>(<a href="../list-admin/">List Admin</a>)</p>';
 }
 

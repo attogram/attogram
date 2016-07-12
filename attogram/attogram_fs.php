@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram_fs class v0.1.1
+// Attogram Framework - attogram_fs class v0.1.2
 
 namespace attogram;
 
@@ -94,15 +94,15 @@ class attogram_fs
     /**
      * Examines each module for a named subdirectory, then includes all *.php files from that directory.
      *
-     * @param string $modules_directory
+     * @param string $modulesDirectory
      *
      * @return array List of the files successfully loaded
      */
-    public static function load_module_subdirectories($modules_directory, $subdirectory)
+    public static function load_module_subdirectories($modulesDirectory, $subdirectory)
     {
         global $config;
         $included = array();
-        $dirs = self::get_all_subdirectories($modules_directory, $subdirectory);
+        $dirs = self::get_all_subdirectories($modulesDirectory, $subdirectory);
         if (!$dirs) {
             return $included;
         }

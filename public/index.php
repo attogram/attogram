@@ -1,7 +1,7 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.3.2
+// Attogram Framework - Guru Meditation Loader - v0.3.3
 
-namespace Attogram;
+namespace attogram;
 
 global $config;
 
@@ -9,23 +9,23 @@ global $config;
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
 $config['attogramDirectory'] = '../'; // with trailing slash
 $config['autoloader'] = $config['attogramDirectory'].'vendor/autoload.php';
-$config['modules_dir'] = $config['attogramDirectory'].'modules';   // without trailing slash
-$config['templates_dir'] = $config['attogramDirectory'].'templates'; // without trailing slash
+$config['modulesDirectory'] = $config['attogramDirectory'].'modules';   // without trailing slash
+$config['templatesDirectory'] = $config['attogramDirectory'].'templates'; // without trailing slash
 $config['debug'] = false;
-$config['site_name'] = 'The Attogram Framework';
+$config['siteName'] = 'The Attogram Framework';
 $config['admins'] = array('127.0.0.1', '::1');
-$config['db_name'] = $config['attogramDirectory'].'db/global';
+$config['databaseName'] = $config['attogramDirectory'].'db/global';
 
 // Load the Project
 $guru = new guru_meditation_loader(
-    $project_name = $config['site_name'],
+    $project_name = $config['siteName'],
     $config_file = './config.php',
     $project_classes = $config['attogramDirectory'].'attogram/',
     $vendor_autoloader = $config['autoloader'],
     $vendor_download = 'https://github.com/attogram/attogram-vendor/archive/master.zip',
     $required_classes = array(
-        '\Attogram\attogram_fs',            // Attogram File System
-        '\Attogram\attogram',               // The Attogram Framework
+        '\attogram\attogram_fs',            // Attogram File System
+        '\attogram\attogram',               // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
         '\Parsedown',                       // Markdown Parser
         '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
@@ -77,7 +77,7 @@ class guru_meditation_loader
         $this->required_classes = $required_classes;
         $this->required_interfaces = $required_interfaces;
         $this->debug('START Guru Meditation Loader: '.$this->project_name);
-        $this->meditate();             // load the attogram configuration -- get config[ autoloader, modules_dir, debug ]
+        $this->meditate();             // load the attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
         $this->expand_consciousness(); // run the composer vendor autoloader
         $this->focus_mind();           // include attogram project classes
         $this->focus_inner_eye();      // include modules includes
@@ -206,7 +206,7 @@ class guru_meditation_loader
     {
         global $config;
         //if( !class_exists('attogram_fs') ) ....
-        $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'configs');
+        $count = attogram_fs::load_module_subdirectories($config['modulesDirectory'], 'configs');
             foreach ($count as $c) {
                 $this->debug('meditate_deeper: OK: '.$c);
             }
@@ -257,7 +257,7 @@ class guru_meditation_loader
     {
       global $config;
       //if( !class_exists('attogram_fs') ) ....
-      $count = attogram_fs::load_module_subdirectories($config['modules_dir'], 'includes');
+      $count = attogram_fs::load_module_subdirectories($config['modulesDirectory'], 'includes');
           foreach ($count as $c) {
               $this->debug('focus_inner_eye: OK: '.$c);
           }
@@ -332,12 +332,14 @@ class guru_meditation_loader
             }
         }
         // Create database object
-        $database = false;
-        if (class_exists('Attogram\sqlite_database')) {
-            $database = new sqlite_database($config['db_name'], $config['modules_dir'], $log);  // init the database, sans-connection
+        $database = false; // TODO replace with null database object
+        if (class_exists('\attogram\sqlite_database')) {
+            $database = new sqlite_database($config['databaseName'], $config['modulesDirectory'], $log);  // init the database, sans-connection
             if (!$database) {
                 $log->error('guru_meditation_loader: sqlite_database initialization failed');
             }
+        } else {
+            $log->error('guru_meditation_loader: sqlite_database class not found');
         }
         // Create the Event logger
         if (!$database) {
@@ -345,7 +347,7 @@ class guru_meditation_loader
         } else {
             // Setup the Event Logger
             $event = new \Monolog\Logger('event');
-            $event->pushHandler(new \Attogram\event_logger($database));
+            $event->pushHandler(new \attogram\event_logger($database));
         }
         // create Request object
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();

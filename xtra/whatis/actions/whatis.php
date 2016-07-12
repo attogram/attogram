@@ -1,14 +1,14 @@
-<?php // Attogram Framework - Whatis module - whatis action v0.1.0
+<?php // Attogram Framework - Whatis module - whatis action v0.1.1
 /*
   Example Attogram subpath usage
 
   - config settings:
   $config['depth']['whatis'] = 2;
-  $config['no_end_slash'][] = 'whatis';
+  $config['noEndSlash'][] = 'whatis';
 
 */
 
-namespace Attogram;
+namespace attogram;
 
 $items = array(
   'PHP' => 'The PHP programming language ...',

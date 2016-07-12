@@ -1,9 +1,9 @@
-<?php // Attogram Framework - Page Header v0.1.0
+<?php // Attogram Framework - Page Header v0.1.1
 
-namespace Attogram;
+namespace attogram;
 
 if (!isset($title) || !$title || !is_string($title)) {
-    $title = $this->site_name;
+    $title = $this->siteName;
 }
 
 ?><!DOCTYPE html>

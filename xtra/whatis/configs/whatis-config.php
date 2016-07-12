@@ -1,9 +1,9 @@
 <?php
-// Attogram Framework - Whatis module - config v0.1.0
+// Attogram Framework - Whatis module - config v0.1.1
 
-namespace Attogram;
+namespace attogram;
 
 global $config;
 
 $config['depth']['whatis'] = 2;
-$config['no_end_slash'][] = 'whatis';
+$config['noEndSlash'][] = 'whatis';

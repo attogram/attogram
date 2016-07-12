@@ -1,6 +1,6 @@
-<?php // Attogram Framework - Navbar v0.1.0
+<?php // Attogram Framework - Navbar v0.1.1
 
-namespace Attogram;
+namespace attogram;
 
 ?>
 <nav class="navbar navbar-default">
@@ -12,7 +12,7 @@ namespace Attogram;
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php echo $this->path; ?>/"><?php echo $this->site_name; ?></a>
+      <a class="navbar-brand" href="<?php echo $this->path; ?>/"><?php echo $this->siteName; ?></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><?php
@@ -28,8 +28,8 @@ namespace Attogram;
     ?></ul>
       <ul class="nav navbar-nav navbar-right">
 <?php
-  if (class_exists('\Attogram\attogram_user')) {
-      if (\Attogram\attogram_user::is_logged_in()) {
+  if (class_exists('\attogram\attogram_user')) {
+      if (\attogram_user::is_logged_in()) {
           echo '<li><a href="'.$this->path.'/user/"><span class="icon-s">👤</span> <b>'
       .((isset($_SESSION['attogram_username']) && $_SESSION['attogram_username'])  ? $_SESSION['attogram_username'] : 'user')
       .'</b></a></li>';
@@ -42,11 +42,11 @@ namespace Attogram;
       }
   } // end if user module active
 
-  if ($this->is_admin() && $this->get_admin_actions()) {
+  if ($this->isAdmin() && $this->getAdminActions()) {
       echo '<li class="dropdown">'
     .'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'
     .'Admin <span class="caret"></span></a><ul class="dropdown-menu">';
-      foreach (array_keys($this->get_admin_actions()) as $a) {
+      foreach (array_keys($this->getAdminActions()) as $a) {
           echo '<li><a href="'.$this->path.'/'.$a.'/">'.$a.'</a></li>';
       }
       echo '</ul></li>';

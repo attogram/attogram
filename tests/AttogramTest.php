@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.0
+// Attogram Framework - Attogram Test v0.1.1
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
@@ -10,6 +10,6 @@ class AttogramTest extends PHPUnit\Framework\TestCase
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('Attogram\attogram'), 'Attogram\attogram class not found');
+        $this->assertTrue(class_exists('\attogram\attogram'), 'attogram class not found');
     }
 }

@@ -1,6 +1,6 @@
-<?php // Attogram Framework - Message Admin v0.1.1
+<?php // Attogram Framework - Message Admin v0.1.2
 
-namespace Attogram;
+namespace attogram;
 
 $this->page_header('Attogram - Admin - Messages');
 ?>

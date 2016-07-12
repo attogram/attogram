@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.6 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.7 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -70,7 +70,7 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
 * Modules may have the following subdirectories:
  * `actions/` - The Public Actions (.php or .md markdown files)  If present, the `home` action is used as the home page.
  * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
- * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
+ * `configs/`- Configurations via `namespace attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
  * `includes/` - Included files, loaded at startup (.php files only)
  * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
  * `templates/` - Templates, to override default Attogram templates  (.php files only)
@@ -98,12 +98,12 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
   * $this->log->debug(), ->error(), etc.
   * $this->get_site_url()
   * $this->error404($error_message)
-  * $this->is_admin()
+  * $this->isAdmin()
   * $this->is_logged_in()
 * Depth settings in `./public/config.php`
   * `$config['depth']['insert-action-name-here']`
 * End Slash settings in `./public/config.php`
-  * `$config['no_end_slash'][] = 'insert-action-name-here'`
+  * `$config['noEndSlash'][] = 'insert-action-name-here'`
 
 ## Markdown pages
 * Markdown filenames must end in `.md`
@@ -113,7 +113,7 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
 * delete the pages corresponding file from the `./actions/` directory
 
 ## Admin pages
-* create/delete the same as normal pages, but in the `./admin_actions/` directory
+* create/delete the same as normal pages, but in the `./adminActions/` directory
 
 ## Database tables
 * To add a table, add a file into `./tables/` directory

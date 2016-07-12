@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.2
+// Attogram Framework - attogram class v0.3.3
 
 namespace attogram;
 
@@ -26,31 +26,31 @@ class attogram
     public $event;         // (object) Event Log - PSR-3 Logger object
     public $database;      // (object) The Attogram Database Object
     public $request;       // (object) Symfony HttpFoundation Request object
-    public $project_repository;// (string) URL to Attogram Framework GitHub Project
+    public $projectRepository;// (string) URL to Attogram Framework GitHub Project
     public $attogramDirectory;  // (string) path to this installation
-    public $modules_dir;   // (string) path to the modules directory
-    public $templates_dir; // (string) path to the templates directory
+    public $modulesDirectory;   // (string) path to the modules directory
+    public $templatesDirectory; // (string) path to the templates directory
     public $templates;     // (array) list of templates
-    public $site_name;     // (string) The Site Name
+    public $siteName;     // (string) The Site Name
     public $depth;         // (array) Allowed depth settings
-    public $no_end_slash;  // (array) actions to NOT force slash at end
+    public $noEndSlash;  // (array) actions to NOT force slash at end
     public $host;          // (string) Client Hostname
     public $clientIp;      // (string) Client IP Address
     public $pathInfo;      // (string)
     public $requestUri;    // (string)
     public $path;          // (string) Relative URL path to this installation
     public $uri;           // (array) The Current URI
-    public $db_name;       // (string) path + filename of the sqlite database file
+    public $databaseName;       // (string) path + filename of the sqlite database file
     public $actions;       // (array) memory variable for $this->get_actions()
     public $action;        // (string) The Current Action name
     public $admins;        // (array) Administrator IP addresses
-    public $is_admin;      // (boolean) memory variable for $this->is_admin()
-    public $admin_actions; // (array) memory variable for $this->get_admin_actions()
+    public $isAdmin;      // (boolean) memory variable for $this->isAdmin()
+    public $adminActions; // (array) memory variable for $this->getAdminActions()
 
     /**
      * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
      * @param obj  $event    Event Log - PSR-3 logger object, interface: \Psr\Log\LoggerInterface
-     * @param obj  $database Attogram Database object, interface: \Attogram\attogram_database
+     * @param obj  $database Attogram Database object, interface: \attogram_database
      * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
      * @param bool $debug    (optional) Debug True/False.  Defaults to False.
      */
@@ -63,7 +63,7 @@ class attogram
         $this->request = $request;
         $this->debug = $debug;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
-        $this->project_repository = 'https://github.com/attogram/attogram';
+        $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
         $this->set_request(); // set all the request-related variables we need
         $this->log->debug("host: $this->host  IP: $this->clientIp");
@@ -95,39 +95,39 @@ class attogram
             $config['attogramDirectory'] = '../';
         }
         $this->remember('attogramDirectory', $config['attogramDirectory'],          '../');
-        if (!isset($config['modules_dir'])) {
-            $config['modules_dir'] = $this->attogramDirectory.'modules';
+        if (!isset($config['modulesDirectory'])) {
+            $config['modulesDirectory'] = $this->attogramDirectory.'modules';
         }
-        $this->remember('modules_dir', $config['modules_dir'], $this->attogramDirectory.'modules');
-        if (!isset($config['templates_dir'])) {
-            $config['templates_dir'] = $this->attogramDirectory.'templates';
+        $this->remember('modulesDirectory', $config['modulesDirectory'], $this->attogramDirectory.'modules');
+        if (!isset($config['templatesDirectory'])) {
+            $config['templatesDirectory'] = $this->attogramDirectory.'templates';
         }
-        $this->remember('templates_dir', $config['templates_dir'], $this->attogramDirectory.'templates');
+        $this->remember('templatesDirectory', $config['templatesDirectory'], $this->attogramDirectory.'templates');
         $this->set_module_templates();
         if (!isset($this->templates['header'])) {
-            $this->templates['header'] = $this->templates_dir.'/header.php';
+            $this->templates['header'] = $this->templatesDirectory.'/header.php';
         }
         if (!isset($this->templates['navbar'])) {
-            $this->templates['navbar'] = $this->templates_dir.'/navbar.php';
+            $this->templates['navbar'] = $this->templatesDirectory.'/navbar.php';
         }
         if (!isset($this->templates['footer'])) {
-            $this->templates['footer'] = $this->templates_dir.'/footer.php';
+            $this->templates['footer'] = $this->templatesDirectory.'/footer.php';
         }
         if (!isset($this->templates['fof'])) {
-            $this->templates['fof'] = $this->templates_dir.'/404.php';
+            $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
-        if (!isset($config['db_name'])) {
-            $config['db_name'] = '../db/global';
+        if (!isset($config['databaseName'])) {
+            $config['databaseName'] = '../db/global';
         }
-        $this->remember('db_name', $config['db_name'], '../db/global');
-        if (!isset($config['site_name'])) {
-            $config['site_name'] = 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>';
+        $this->remember('databaseName', $config['databaseName'], '../db/global');
+        if (!isset($config['siteName'])) {
+            $config['siteName'] = 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>';
         }
-        $this->remember('site_name', $config['site_name'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
-        if (!isset($config['no_end_slash'])) {
-            $config['no_end_slash'] = array();
+        $this->remember('siteName', $config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
+        if (!isset($config['noEndSlash'])) {
+            $config['noEndSlash'] = array();
         }
-        $this->remember('no_end_slash', $config['no_end_slash'], array());
+        $this->remember('noEndSlash', $config['noEndSlash'], array());
         if (!isset($config['depth'])) {
             $config['depth'] = array();
         }
@@ -147,7 +147,7 @@ class attogram
      */
     public function set_module_templates()
     {
-        $dirs = attogram_fs::get_all_subdirectories($this->modules_dir, 'templates');
+        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'templates');
         if (!$dirs) {
             $this->log->debug('set_module_templates: no module templates found');
             return;
@@ -224,11 +224,11 @@ class attogram
      */
     public function end_slash()
     {
-        if (!is_array($this->no_end_slash)) {
+        if (!is_array($this->noEndSlash)) {
             return;
         }
         if (!preg_match('/\/$/', $this->pathInfo)) { // No, there is no slash at end of current url
-            if (!in_array($this->uri[0], $this->no_end_slash)) {
+            if (!in_array($this->uri[0], $this->noEndSlash)) {
                 // This action IS NOT excepted from force slash at end
                 $url = str_replace($this->pathInfo, $this->pathInfo.'/', $this->requestUri);
                 header('HTTP/1.1 301 Moved Permanently');
@@ -238,7 +238,7 @@ class attogram
             return;
         }
         // Yes, there is a slash at end of current url
-        if (in_array($this->uri[0], $this->no_end_slash)) {
+        if (in_array($this->uri[0], $this->noEndSlash)) {
             // This action IS excepted from force slash at end
             $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
             header('HTTP/1.1 301 Moved Permanently');
@@ -295,8 +295,8 @@ class attogram
 
         $actions = $this->get_actions();
 
-        if ($this->is_admin()) {
-            foreach ($this->get_admin_actions() as $name => $actionable) {
+        if ($this->isAdmin()) {
+            foreach ($this->getAdminActions() as $name => $actionable) {
                 $actions[$name] = $actionable;
             }
         }
@@ -352,7 +352,7 @@ class attogram
         $trash = array_shift($test); // take off top level
         $trash = array_shift($test); // take off virtual web directory
         $req = implode('/', $test); // the virtual web request
-        $mod = attogram_fs::get_all_subdirectories($this->modules_dir, 'public');
+        $mod = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($mod as $m) {
             $test_file = $m.'/'.$req;
@@ -501,7 +501,7 @@ class attogram
         if (is_array($this->actions)) {
             return $this->actions;
         }
-        $dirs = attogram_fs::get_all_subdirectories($this->modules_dir, 'actions');
+        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'actions');
         if (!$dirs) {
             $this->log->debug('get_actions: No module actions found');
         }
@@ -517,29 +517,29 @@ class attogram
     } // end function get_actions()
 
     /**
-     * get_admin_actions() - create list of all admin pages from the admin directory.
+     * getAdminActions() - create list of all admin pages from the admin directory.
      *
      * @return array
      */
-    public function get_admin_actions()
+    public function getAdminActions()
     {
-        if (is_array($this->admin_actions)) {
-            return $this->admin_actions;
+        if (is_array($this->adminActions)) {
+            return $this->adminActions;
         }
-        $dirs = attogram_fs::get_all_subdirectories($this->modules_dir, 'admin_actions');
+        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'adminActions');
         if (!$dirs) {
-            $this->log->debug('get_admin_actions: No module admin actions found');
+            $this->log->debug('getAdminActions: No module admin actions found');
         }
-        $this->admin_actions = array();
+        $this->adminActions = array();
         foreach ($dirs as $d) {
             foreach ($this->get_actionables($d) as $name => $actionable) {
-                $this->admin_actions[$name] = $actionable;
+                $this->adminActions[$name] = $actionable;
             }
         }
-        asort($this->admin_actions);
-        $this->log->debug('get_admin_actions: ', array_keys($this->admin_actions));
-        return $this->admin_actions;
-    } // end function get_admin_actions()
+        asort($this->adminActions);
+        $this->log->debug('getAdminActions: ', array_keys($this->adminActions));
+        return $this->adminActions;
+    } // end function getAdminActions()
 
     /**
      * get_actionables - create list of all useable action files from a directory.
@@ -565,23 +565,23 @@ class attogram
     }
 
     /**
-     * is_admin() - is access from an admin IP?
+     * isAdmin() - is access from an admin IP?
      *
      * @return bool
      */
-    public function is_admin()
+    public function isAdmin()
     {
-        if (isset($this->is_admin) && is_bool($this->is_admin)) {
-            return $this->is_admin;
+        if (isset($this->isAdmin) && is_bool($this->isAdmin)) {
+            return $this->isAdmin;
         }
         if (isset($_GET['noadmin'])) {
-            $this->is_admin = false;
-            $this->log->debug('is_admin false - noadmin override');
+            $this->isAdmin = false;
+            $this->log->debug('isAdmin false - noadmin override');
             return false;
         }
         if (!isset($this->admins) || !is_array($this->admins)) {
-            $this->is_admin = false;
-            $this->log->error('is_admin false - missing $this->admins  array');
+            $this->isAdmin = false;
+            $this->log->error('isAdmin false - missing $this->admins  array');
             return false;
         }
         if (is_object($this->request)) {
@@ -590,12 +590,12 @@ class attogram
             $cip = $_SERVER['REMOTE_ADDR'];
         }
         if (@in_array($cip, $this->admins)) {
-            $this->is_admin = true;
-            $this->log->debug('is_admin true '.$cip);
+            $this->isAdmin = true;
+            $this->log->debug('isAdmin true '.$cip);
             return true;
         }
-        $this->is_admin = false;
-        $this->log->debug('is_admin false '.$cip);
+        $this->isAdmin = false;
+        $this->log->debug('isAdmin false '.$cip);
         return false;
     }
 
@@ -631,7 +631,7 @@ class attogram
             return;
         }
         // Default page footer
-        echo '<hr /><p>Powered by <a href="'.$this->project_repository.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
+        echo '<hr /><p>Powered by <a href="'.$this->projectRepository.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
         echo '</body></html>';
         $this->log->error('missing page_footer '.$file.' - using default footer');
     }
@@ -656,12 +656,12 @@ class attogram
             echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
         }
         echo '</ul><p>';
-        if ($this->is_admin()) {
+        if ($this->isAdmin()) {
             echo '<p>Admin Actions:<ul>';
-            if (!$this->get_admin_actions()) {
+            if (!$this->getAdminActions()) {
                 echo '<li><em>No admin actions yet</em></li>';
             }
-            foreach ($this->get_admin_actions() as $name => $val) {
+            foreach ($this->getAdminActions() as $name => $val) {
                 echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
             }
             echo '</ul></p>';
