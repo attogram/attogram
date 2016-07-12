@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.3
+// Attogram Framework - attogram class v0.3.4
 
 namespace attogram;
 
@@ -20,32 +20,32 @@ class attogram
 {
     const ATTOGRAM_VERSION = '0.7.5';
 
-    public $start_time;    // (float) microsecond time of awakening
+    public $startTime;    // (float) microsecond time of awakening
     public $debug;         // (boolean) debug on/off
     public $log;           // (object) Debug Log - PSR-3 Logger object
     public $event;         // (object) Event Log - PSR-3 Logger object
     public $database;      // (object) The Attogram Database Object
     public $request;       // (object) Symfony HttpFoundation Request object
-    public $projectRepository;// (string) URL to Attogram Framework GitHub Project
+    public $projectRepository;  // (string) URL to Attogram Framework GitHub Project
     public $attogramDirectory;  // (string) path to this installation
     public $modulesDirectory;   // (string) path to the modules directory
     public $templatesDirectory; // (string) path to the templates directory
     public $templates;     // (array) list of templates
-    public $siteName;     // (string) The Site Name
+    public $siteName;      // (string) The Site Name
     public $depth;         // (array) Allowed depth settings
-    public $noEndSlash;  // (array) actions to NOT force slash at end
+    public $noEndSlash;    // (array) actions to NOT force slash at end
     public $host;          // (string) Client Hostname
     public $clientIp;      // (string) Client IP Address
     public $pathInfo;      // (string)
     public $requestUri;    // (string)
     public $path;          // (string) Relative URL path to this installation
     public $uri;           // (array) The Current URI
-    public $databaseName;       // (string) path + filename of the sqlite database file
+    public $databaseName;  // (string) path + filename of the sqlite database file
     public $actions;       // (array) memory variable for $this->get_actions()
     public $action;        // (string) The Current Action name
     public $admins;        // (array) Administrator IP addresses
-    public $isAdmin;      // (boolean) memory variable for $this->isAdmin()
-    public $adminActions; // (array) memory variable for $this->getAdminActions()
+    public $isAdmin;       // (boolean) memory variable for $this->isAdmin()
+    public $adminActions;  // (array) memory variable for $this->getAdminActions()
 
     /**
      * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
@@ -56,7 +56,7 @@ class attogram
      */
     public function __construct($log, $event, $database, $request, $debug = false)
     {
-        $this->start_time = microtime(1);
+        $this->startTime = microtime(1);
         $this->log = $log;
         $this->event = $event;
         $this->database = $database;
@@ -74,7 +74,7 @@ class attogram
         $this->check_depth(); // is URI short enough?
         $this->sessioning(); // start sessions
         $this->route(); // Send us where we want to go
-        $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(1) - $this->start_time));
+        $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(1) - $this->startTime));
     } // end function __construct()
 
     /**
@@ -526,7 +526,7 @@ class attogram
         if (is_array($this->adminActions)) {
             return $this->adminActions;
         }
-        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'adminActions');
+        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'admin_actions');
         if (!$dirs) {
             $this->log->debug('getAdminActions: No module admin actions found');
         }

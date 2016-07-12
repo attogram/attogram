@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Page Footer v0.2.1
+// Attogram Framework - Page Footer v0.2.2
 
 namespace attogram;
 
@@ -17,7 +17,7 @@ echo '
     '.$divider.'
     <span style="white-space: nowrap">👤 '.$this->clientIp.'</span>
     '.$divider.'
-    <span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->start_time), 3, PHP_ROUND_HALF_UP).' seconds</span>
+    <span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->startTime), 3, PHP_ROUND_HALF_UP).' seconds</span>
     </small>
   </p>
  </div>
