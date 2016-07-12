@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram_fs class v0.1.2
+// Attogram Framework - attogram_fs class v0.1.3
 
 namespace attogram;
 
@@ -16,7 +16,7 @@ class attogram_fs
      *
      * @return array       List of the directories found
      */
-    public static function get_all_subdirectories($dir, $name)
+    public static function getAllSubdirectories($dir, $name)
     {
         if (!isset($dir) || !$dir || !is_string($dir) || !is_readable($dir)) {
             return array();
@@ -34,7 +34,7 @@ class attogram_fs
             $result[] = $md;
         }
         return $result;
-    } // end function get_all_subdirectories()
+    } // end function getAllSubdirectories()
 
     /**
      * Include all php files in a specific directory.
@@ -51,7 +51,7 @@ class attogram_fs
         }
         foreach (array_diff(scandir($dir), self::get_skip_files()) as $f) {
             $ff = $dir.'/'.$f;
-            if (!self::is_readable_file($ff, '.php')) {
+            if (!self::isReadableFile($ff, '.php')) {
                 continue;
             }
             if ((include($ff))) {
@@ -69,7 +69,7 @@ class attogram_fs
      *
      * @return bool
      */
-    public static function is_readable_file($file = false, $type = '.php')
+    public static function isReadableFile($file = false, $type = '.php')
     {
         if (!$file || !$type || $type == '' || !is_string($type) || !is_string($file) || !is_readable($file)) {
             return false;
@@ -102,7 +102,7 @@ class attogram_fs
     {
         global $config;
         $included = array();
-        $dirs = self::get_all_subdirectories($modulesDirectory, $subdirectory);
+        $dirs = self::getAllSubdirectories($modulesDirectory, $subdirectory);
         if (!$dirs) {
             return $included;
         }

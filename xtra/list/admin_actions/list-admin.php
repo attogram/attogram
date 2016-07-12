@@ -1,8 +1,8 @@
-<?php // Attogram Framework - List Module - List Admin v0.1.2
+<?php // Attogram Framework - List Module - List Admin v0.1.3
 
 namespace attogram;
 
-$this->page_header('Attogram - Admin - Lists');
+$this->pageHeader('Attogram - Admin - Lists');
 ?>
 <div class="container">
 <?php
@@ -37,4 +37,4 @@ echo '</ul>';
 ?>
 </div>
 <?php
-$this->page_footer();
+$this->pageFooter();

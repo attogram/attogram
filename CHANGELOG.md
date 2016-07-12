@@ -44,7 +44,7 @@
 - moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/) for faster loading/caching
 - new attogram function: [`do_cache_headers($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
 sets Last-Modified and Etag headers, and responds to HTTP_IF_MODIFIED_SINCE / HTTP_IF_NONE_MATCH requests for better caching of virtual web directory files
-- new attogram function:  [`get_markdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
+- new attogram function:  [`getMarkdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
 returns string of HTML version of markdown file
 - misc refactoring and design tests
 

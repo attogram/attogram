@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Page Footer v0.2.2
+// Attogram Framework - Page Footer v0.2.3
 
 namespace attogram;
 
@@ -9,7 +9,7 @@ echo '
  <div class="container-fluid">
   <p>
     <small>
-    <span style="white-space: nowrap"><a href="'.$this->get_site_url().'/">'.$this->siteName.'</a></span>
+    <span style="white-space: nowrap"><a href="'.$this->getSiteUrl().'/">'.$this->siteName.'</a></span>
     '.$divider.'
     <span style="white-space: nowrap">🚀 Powered by <a target="github" href="'.$this->projectRepository.'">Attogram <small>v'.attogram::ATTOGRAM_VERSION.'</small></a></span>
     '.$divider.'

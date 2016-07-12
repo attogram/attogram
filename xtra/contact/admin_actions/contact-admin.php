@@ -1,8 +1,8 @@
-<?php // Attogram Framework - Message Admin v0.1.2
+<?php // Attogram Framework - Message Admin v0.1.3
 
 namespace attogram;
 
-$this->page_header('Attogram - Admin - Messages');
+$this->pageHeader('Attogram - Admin - Messages');
 ?>
 <div class="container">
 <?php
@@ -26,4 +26,4 @@ foreach ($m as $message) {
 ?>
 </div>
 <?php
-$this->page_footer();
+$this->pageFooter();

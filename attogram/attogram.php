@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.4
+// Attogram Framework - attogram class v0.3.6
 
 namespace attogram;
 
@@ -41,7 +41,7 @@ class attogram
     public $path;          // (string) Relative URL path to this installation
     public $uri;           // (array) The Current URI
     public $databaseName;  // (string) path + filename of the sqlite database file
-    public $actions;       // (array) memory variable for $this->get_actions()
+    public $actions;       // (array) memory variable for $this->getActions()
     public $action;        // (string) The Current Action name
     public $admins;        // (array) Administrator IP addresses
     public $isAdmin;       // (boolean) memory variable for $this->isAdmin()
@@ -65,13 +65,13 @@ class attogram
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
-        $this->set_request(); // set all the request-related variables we need
+        $this->setRequest(); // set all the request-related variables we need
         $this->log->debug("host: $this->host  IP: $this->clientIp");
-        $this->exception_files(); // do robots.txt, sitemap.xml
-        $this->virtual_web_directory(); // do virtual web directory requests
-        $this->set_uri(); // make array of the URI request
-        $this->end_slash(); // force slash at end, or force no slash at end
-        $this->check_depth(); // is URI short enough?
+        $this->exceptionFiles(); // do robots.txt, sitemap.xml
+        $this->virtualWebDirectory(); // do virtual web directory requests
+        $this->setUri(); // make array of the URI request
+        $this->endSlash(); // force slash at end, or force no slash at end
+        $this->checkDepth(); // is URI short enough?
         $this->sessioning(); // start sessions
         $this->route(); // Send us where we want to go
         $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(1) - $this->startTime));
@@ -103,7 +103,7 @@ class attogram
             $config['templatesDirectory'] = $this->attogramDirectory.'templates';
         }
         $this->remember('templatesDirectory', $config['templatesDirectory'], $this->attogramDirectory.'templates');
-        $this->set_module_templates();
+        $this->setModuleTemplates();
         if (!isset($this->templates['header'])) {
             $this->templates['header'] = $this->templatesDirectory.'/header.php';
         }
@@ -145,49 +145,49 @@ class attogram
     /**
      * Set module templates.
      */
-    public function set_module_templates()
+    public function setModuleTemplates()
     {
-        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'templates');
+        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'templates');
         if (!$dirs) {
-            $this->log->debug('set_module_templates: no module templates found');
+            $this->log->debug('setModuleTemplates: no module templates found');
             return;
         }
-        foreach ($dirs as $module_dir) {
-            foreach (array_diff(scandir($module_dir), attogram_fs::get_skip_files()) as $mfile) {
-                $file = "$module_dir/$mfile";
-                if (attogram_fs::is_readable_file($file, '.php')) {
+        foreach ($dirs as $moduleDir) {
+            foreach (array_diff(scandir($moduleDir), attogram_fs::get_skip_files()) as $mfile) {
+                $file = "$moduleDir/$mfile";
+                if (attogram_fs::isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
                     $this->templates[$name] = $file; // Set the template
-                    $this->log->debug('set_module_templates: '.$name.' = '.$file);
+                    $this->log->debug('setModuleTemplates: '.$name.' = '.$file);
                     continue;
                 }
-                $this->log->error('set_module_templates: File not readable: '.$file);
+                $this->log->error('setModuleTemplates: File not readable: '.$file);
             }
         }
-    } // end function set_module_templates()
+    } // end function setModuleTemplates()
 
     /**
      * set a system configuration variable.
      *
-     * @param string $var_name    The name of the variable
-     * @param string $config_val  The setting for the variable
-     * @param string $default_val The default setting for the variable, if $config_val is empty
+     * @param string $varName    The name of the variable
+     * @param string $configVal  The setting for the variable
+     * @param string $defaultVal The default setting for the variable, if $config_val is empty
      */
-    public function remember($var_name, $config_val = '', $default_val)
+    public function remember($varName, $configVal = '', $defaultVal)
     {
-        if ($config_val) {
-            $this->{$var_name} = $config_val;
-            $this->log->debug('remember: '.$var_name.' = '.print_r($this->{$var_name}, 1));
+        if ($configVal) {
+            $this->{$varName} = $configVal;
+            $this->log->debug('remember: '.$varName.' = '.print_r($this->{$varName}, 1));
             return;
         }
-        $this->{$var_name} = $default_val;
-        $this->log->debug('remember: using default: '.$var_name.' = '.print_r($this->{$var_name}, 1));
+        $this->{$varName} = $defaultVal;
+        $this->log->debug('remember: using default: '.$varName.' = '.print_r($this->{$varName}, 1));
     }
 
     /**
-     * set_request().
+     * setRequest().
      */
-    public function set_request()
+    public function setRequest()
     {
         $this->host = $this->request->getHost();
         $this->clientIp = $this->request->getClientIp();
@@ -199,30 +199,30 @@ class attogram
     /**
      * set uri array.
      */
-    public function set_uri()
+    public function setUri()
     {
         $this->uri = explode('/', $this->pathInfo);
         if (sizeof($this->uri) == 1) {
-            $this->log->debug('set_uri', $this->uri);
+            $this->log->debug('setUri', $this->uri);
             return; // super top level request
         }
         if ($this->uri[0] == '') {
             $trash = array_shift($this->uri); // take off first blank entry
         }
         if (sizeof($this->uri) == 1) {
-            $this->log->debug('set_uri', $this->uri);
+            $this->log->debug('setUri', $this->uri);
             return; // top level request
         }
         if ($this->uri[sizeof($this->uri) - 1] == '') {
             $trash = array_pop($this->uri); // take off last blank entry
         }
-        $this->log->debug('set_uri', $this->uri);
+        $this->log->debug('setUri', $this->uri);
     }
 
     /**
-     * end_slash().
+     * endSlash().
      */
-    public function end_slash()
+    public function endSlash()
     {
         if (!is_array($this->noEndSlash)) {
             return;
@@ -248,9 +248,9 @@ class attogram
     }
 
     /**
-     * check_depth().
+     * checkDepth().
      */
-    public function check_depth()
+    public function checkDepth()
     {
         $depth = $this->depth['*']; // default depth
         if (isset($this->depth[$this->uri[0]])) {
@@ -293,7 +293,7 @@ class attogram
 
         $this->log->debug('ROUTE: action: uri[0]: '.$this->uri[0]);
 
-        $actions = $this->get_actions();
+        $actions = $this->getActions();
 
         if ($this->isAdmin()) {
             foreach ($this->getAdminActions() as $name => $actionable) {
@@ -317,7 +317,7 @@ class attogram
                   include $this->action;
                   return;
               case 'md':
-                  $this->do_markdown($actions[$this->uri[0]]['file']);
+                  $this->doMarkdown($actions[$this->uri[0]]['file']);
                   return;
               default:
                   $this->log->error('ROUTE: No Parser Found');
@@ -340,7 +340,7 @@ class attogram
      * checks if request is for the virtual web directory "web/"
      * and serve the appropriate module file.
      */
-    public function virtual_web_directory()
+    public function virtualWebDirectory()
     {
         if (!preg_match('/^\/'.'web'.'\//', $this->pathInfo)) {
             return; // not a virtual web directory request
@@ -352,7 +352,7 @@ class attogram
         $trash = array_shift($test); // take off top level
         $trash = array_shift($test); // take off virtual web directory
         $req = implode('/', $test); // the virtual web request
-        $mod = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'public');
+        $mod = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($mod as $m) {
             $test_file = $m.'/'.$req;
@@ -370,17 +370,17 @@ class attogram
             header('Content-Type:'.$mime_type.'; charset=utf-8');
             $result = readfile($file); // send file to browser
             if (!$result) {
-                $this->log->error('virtual_web_directory: can not read file: '.htmlentities($file));
+                $this->log->error('virtualWebDirectory: can not read file: '.htmlentities($file));
                 $this->error404('Virtually unreadable');
             }
             exit;
         }
         if (!(include($file))) { // include native PHP file
-            $this->log->error('virtual_web_directory: can not include file: '.htmlentities($file));
+            $this->log->error('virtualWebDirectory: can not include file: '.htmlentities($file));
             $this->error404('Virtually unincludeable');
         }
         exit;
-    } // end function virtual_web_directory()
+    } // end function virtualWebDirectory()
 
     /**
      * send HTTP cache headers.
@@ -405,19 +405,19 @@ class attogram
     /**
      * Do requests for exception files: sitemap.xml, robots.txt.
      */
-    public function exception_files()
+    public function exceptionFiles()
     {
         switch ($this->pathInfo) {
             case '/robots.txt':
                 header('Content-Type: text/plain; charset=utf-8');
-                echo 'Sitemap: '.$this->get_site_url().'/sitemap.xml';
+                echo 'Sitemap: '.$this->getSiteUrl().'/sitemap.xml';
                 exit;
             case '/sitemap.xml':
-                $site = $this->get_site_url().'/';
+                $site = $this->getSiteUrl().'/';
                 $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
                 .'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                 .'<url><loc>'.$site.'</loc></url>';
-                foreach (array_keys($this->get_actions()) as $action) {
+                foreach (array_keys($this->getActions()) as $action) {
                     if ($action == 'home' || $action == 'user') {
                         continue;
                     }
@@ -437,10 +437,10 @@ class attogram
      *
      * @return string      HTML fragment or false
      */
-    public function get_markdown($file)
+    public function getMarkdown($file)
     {
-        if (!attogram_fs::is_readable_file($file, '.md')) {
-            $this->log->error('GET_MARKDOWN: can not read file: '.$this->web_display($file));
+        if (!attogram_fs::isReadableFile($file, '.md')) {
+            $this->log->error('GET_MARKDOWN: can not read file: '.$this->webDisplay($file));
             return false;
         }
         if (!class_exists('Parsedown')) {
@@ -449,16 +449,16 @@ class attogram
         }
         $page = @file_get_contents($file);
         if ($page === false) {
-            $this->log->error('GET_MARKDOWN: can not get file contents: '.$this->web_display($file));
+            $this->log->error('GET_MARKDOWN: can not get file contents: '.$this->webDisplay($file));
             return false;
         }
         $content = \Parsedown::instance()->text($page);
         if (!$content) {
-            $this->log->error('GET_MARKDOWN: parse failed on file: '.$this->web_display($file));
+            $this->log->error('GET_MARKDOWN: parse failed on file: '.$this->webDisplay($file));
             return false;
         }
         return $content;
-    } // end function get_markdown
+    } // end function getMarkdown
 
     /**
      * display a Markdown document, with standard page header and footer.
@@ -466,7 +466,7 @@ class attogram
      * @param string $file The markdown file to load
      * @param string $title (optional) Page title
      */
-    public function do_markdown($file, $title = '')
+    public function doMarkdown($file, $title = '')
     {
         $this->log->debug('DO_MARKDOWN: '.$file);
         if (!$title) {
@@ -476,45 +476,45 @@ class attogram
         // $title = trim( strtok($page, "\n") );
         // get first line of file, use as page title
 
-        $this->page_header($title);
-        echo '<div class="container">'.$this->get_markdown($file).'</div>';
-        $this->page_footer();
+        $this->pageHeader($title);
+        echo '<div class="container">'.$this->getMarkdown($file).'</div>';
+        $this->pageFooter();
     }
 
     /**
-     * get_site_url().
+     * getSiteUrl().
      *
      * @return string
      */
-    public function get_site_url()
+    public function getSiteUrl()
     {
         return $this->request->getSchemeAndHttpHost().$this->path;
     }
 
     /**
-     * get_actions() - create list of all pages from the actions directory.
+     * getActions() - create list of all pages from the actions directory.
      *
      * @return array
      */
-    public function get_actions()
+    public function getActions()
     {
         if (is_array($this->actions)) {
             return $this->actions;
         }
-        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'actions');
+        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'actions');
         if (!$dirs) {
-            $this->log->debug('get_actions: No module actions found');
+            $this->log->debug('getActions: No module actions found');
         }
         $this->actions = array();
         foreach ($dirs as $d) {
-            foreach ($this->get_actionables($d) as $name => $actionable) {
+            foreach ($this->getActionables($d) as $name => $actionable) {
                 $this->actions[$name] = $actionable;
             }
         }
         asort($this->actions);
-        $this->log->debug('get_actions: ', array_keys($this->actions));
+        $this->log->debug('getActions: ', array_keys($this->actions));
         return $this->actions;
-    } // end function get_actions()
+    } // end function getActions()
 
     /**
      * getAdminActions() - create list of all admin pages from the admin directory.
@@ -526,13 +526,13 @@ class attogram
         if (is_array($this->adminActions)) {
             return $this->adminActions;
         }
-        $dirs = attogram_fs::get_all_subdirectories($this->modulesDirectory, 'admin_actions');
+        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'admin_actions');
         if (!$dirs) {
             $this->log->debug('getAdminActions: No module admin actions found');
         }
         $this->adminActions = array();
         foreach ($dirs as $d) {
-            foreach ($this->get_actionables($d) as $name => $actionable) {
+            foreach ($this->getActionables($d) as $name => $actionable) {
                 $this->adminActions[$name] = $actionable;
             }
         }
@@ -542,11 +542,11 @@ class attogram
     } // end function getAdminActions()
 
     /**
-     * get_actionables - create list of all useable action files from a directory.
+     * getActionables - create list of all useable action files from a directory.
      *
      * @return array
      */
-    public function get_actionables($dir)
+    public function getActionables($dir)
     {
         $result = array();
         if (!is_readable($dir)) {
@@ -555,9 +555,9 @@ class attogram
         }
         foreach (array_diff(scandir($dir), attogram_fs::get_skip_files()) as $afile) {
             $file = $dir.'/'.$afile;
-            if (attogram_fs::is_readable_file($file, '.php')) { // PHP files
+            if (attogram_fs::isReadableFile($file, '.php')) { // PHP files
                 $result[ str_replace('.php', '', $afile) ] = array('file' => $file, 'parser' => 'php');
-            } elseif (attogram_fs::is_readable_file($file, '.md')) { // Markdown files
+            } elseif (attogram_fs::isReadableFile($file, '.md')) { // Markdown files
                 $result[ str_replace('.md', '', $afile) ] = array('file' => $file, 'parser' => 'md');
             }
         }
@@ -600,40 +600,40 @@ class attogram
     }
 
     /**
-     * page_header() - the web page header.
+     * pageHeader() - the web page header.
      *
      * @param string $title The web page title
      */
-    public function page_header($title = '')
+    public function pageHeader($title = '')
     {
         $file = $this->templates['header'];
-        if (attogram_fs::is_readable_file($file, '.php')) {
+        if (attogram_fs::isReadableFile($file, '.php')) {
             include $file;
-            $this->log->debug('page_header, title: '.$title);
+            $this->log->debug('pageHeader, title: '.$title);
             return;
         }
         // Default page header
         echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         .'<meta name="viewport" content="width=device-width, initial-scale=1">'
         .'<title>'.$title.'</title></head><body>';
-        $this->log->error('missing page_header '.$file.' - using default header');
+        $this->log->error('missing pageHeader '.$file.' - using default header');
     }
 
     /**
-     * page_footer() - the web page footer.
+     * pageFooter() - the web page footer.
      */
-    public function page_footer()
+    public function pageFooter()
     {
         $file = $this->templates['footer'];
-        if (attogram_fs::is_readable_file($file, '.php')) {
+        if (attogram_fs::isReadableFile($file, '.php')) {
             include $file;
-            $this->log->debug('page_footer');
+            $this->log->debug('pageFooter');
             return;
         }
         // Default page footer
         echo '<hr /><p>Powered by <a href="'.$this->projectRepository.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
         echo '</body></html>';
-        $this->log->error('missing page_footer '.$file.' - using default footer');
+        $this->log->error('missing pageFooter '.$file.' - using default footer');
     }
 
     /**
@@ -642,17 +642,17 @@ class attogram
     public function default_homepage()
     {
         $this->log->error('using default_homepage');
-        $this->page_header('Home');
+        $this->pageHeader('Home');
         echo '<div class="container">'
         .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'
         .'<p>To replace this page, create a file named '
         .'<code>home.php</code> or <code>home.md</code> '
         .' in any <code>modules/*/actions/</code> directory</p>'
         .'<p>Public Actions:<ul>';
-        if (!$this->get_actions()) {
+        if (!$this->getActions()) {
             echo '<li><em>No actions yet</em></li>';
         }
-        foreach ($this->get_actions() as $name => $val) {
+        foreach ($this->getActions() as $name => $val) {
             echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
         }
         echo '</ul><p>';
@@ -667,7 +667,7 @@ class attogram
             echo '</ul></p>';
         }
         echo '</div>';
-        $this->page_footer();
+        $this->pageFooter();
     }
 
     /**
@@ -677,19 +677,19 @@ class attogram
     {
         //$this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
         header('HTTP/1.0 404 Not Found');
-        if (attogram_fs::is_readable_file($this->templates['fof'], '.php')) {
+        if (attogram_fs::isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];
             exit;
         }
         // Default 404 page
         $this->log->error('ERROR404: 404 template not found');
-        $this->page_header('404 Not Found');
+        $this->pageHeader('404 Not Found');
         echo '<div class="container"><h1>404 Not Found</h1>';
         if ($error) {
             echo '<p>'.htmlentities($error).'</p>';
         }
         echo '</div>';
-        $this->page_footer();
+        $this->pageFooter();
         exit;
     }
 
@@ -700,7 +700,7 @@ class attogram
      *
      * @return string  The cleaned string, or false
      */
-    public function web_display($string)
+    public function webDisplay($string)
     {
         if (!is_string($string)) {
             return false;

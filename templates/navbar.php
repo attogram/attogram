@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Navbar v0.1.3
+<?php // Attogram Framework - Navbar v0.1.4
 
 namespace attogram;
 
@@ -16,7 +16,7 @@ namespace attogram;
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><?php
-        foreach (array_keys($this->get_actions()) as $a) {
+        foreach (array_keys($this->getActions()) as $a) {
             switch ($a) {
               case 'home': case 'login': case 'user':
                 continue;
@@ -36,7 +36,7 @@ namespace attogram;
             echo '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
         } else {
 
-            if (array_key_exists('login', $this->get_actions())) { // if User Module is loaded
+            if (array_key_exists('login', $this->getActions())) { // if User Module is loaded
                 echo '<li><a href="'.$this->path
                 .'/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
             }

@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.7 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.8 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -93,10 +93,10 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
 * PHP filenames must end in `.php`
 * The Attogram object is available via the `$this` variable
 * Helpful functions:
-  * $this->page_header($title)
-  * $this->page_footer()
+  * $this->pageHeader($title)
+  * $this->pageFooter()
   * $this->log->debug(), ->error(), etc.
-  * $this->get_site_url()
+  * $this->getSiteUrl()
   * $this->error404($error_message)
   * $this->isAdmin()
   * $this->is_logged_in()

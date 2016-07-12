@@ -1,11 +1,11 @@
 <?php
-// Attogram Framework - 404 Page Template v0.1.0
+// Attogram Framework - 404 Page Template v0.1.1
 
 header('HTTP/1.0 404 Not Found');
 
 $title = '😕 404 Not Found';
 
-$this->page_header($title);
+$this->pageHeader($title);
 
 echo '<div class="container"><h1>'.$title.'</h1>';
 
@@ -15,4 +15,4 @@ if (isset($error) && $error) {
 
 echo '</div>';
 
-$this->page_footer();
+$this->pageFooter();

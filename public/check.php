@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.1
+// Attogram Framework - Check Script v0.1.2
 
 $c = new attogram_check();
 $c->check();
@@ -19,7 +19,7 @@ class attogram_check
 
     public function check()
     {
-        $this->page_header();
+        $this->pageHeader();
         echo '<h1><span class="icon">🔬</span> Attogram Framework Check</h1>'
         .'<p><span class="icon">👉</span> <strong>'.__DIR__.'</strong>'
         .$this->spacer.'<a href="'.@$_SERVER['SCRIPT_NAME'].'"><span class="icon">🔃</span></a>'
@@ -34,7 +34,7 @@ class attogram_check
         echo $this->divider;
         $this->check_apache();
         echo $this->divider.'<p><span class="icon">🏁</span> Attogram Framework Check completed</p>';
-        $this->page_footer();
+        $this->pageFooter();
     }
 
     public function check_index()
@@ -247,7 +247,7 @@ class attogram_check
         return 'fail';
     }
 
-    public function page_header()
+    public function pageHeader()
     {
         echo '<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -267,7 +267,7 @@ hr { height:1px; border:0; background:#E0E0E0; }
 <title>Attogram Framework Check</title></head><body>';
     }
 
-    public function page_footer()
+    public function pageFooter()
     {
         echo '</body></html>';
     }

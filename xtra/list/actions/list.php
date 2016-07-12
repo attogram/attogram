@@ -1,9 +1,9 @@
 <?php
-// Attogram Framework - List Module - List Page v0.1.2
+// Attogram Framework - List Module - List Page v0.1.3
 
 namespace attogram;
 
-$this->page_header('Attogram - List');
+$this->pageHeader('Attogram - List');
 
 echo '<div class="container">';
 
@@ -30,4 +30,4 @@ if ($this->isAdmin()) {
 
 echo '</div>';
 
-$this->page_footer();
+$this->pageFooter();

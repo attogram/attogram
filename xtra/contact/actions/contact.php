@@ -1,8 +1,8 @@
-<?php// Attogram Framework - Contact Page v0.1.2
+<?php// Attogram Framework - Contact Page v0.1.3
 
 namespace attogram;
 
-$this->page_header('Attogram - Contact');
+$this->pageHeader('Attogram - Contact');
 
 if( isset($_POST['msg']) && isset($_POST['email']) ) {
 
@@ -58,4 +58,4 @@ if( isset($_POST['msg']) || isset($_POST['email']) ) { print 'ERROR<hr />'; }
 </form>
 </div>
 <?php
-$this->page_footer();
+$this->pageFooter();

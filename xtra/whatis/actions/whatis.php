@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Whatis module - whatis action v0.1.1
+<?php // Attogram Framework - Whatis module - whatis action v0.1.2
 /*
   Example Attogram subpath usage
 
@@ -34,7 +34,7 @@ if (!array_key_exists($item, $items)) {
     $this->error404();
     exit;
 }
-$this->page_header("What is $item?");
+$this->pageHeader("What is $item?");
 ?>
 <div class="container">
 
@@ -44,4 +44,4 @@ $this->page_header("What is $item?");
 
 </div>
 <?php
-$this->page_footer();
+$this->pageFooter();
