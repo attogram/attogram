@@ -2,9 +2,14 @@
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.5...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.6...HEAD)
 
-## [v0.7.5](https://github.com/attogram/attogram/compare/v0.7.5...v0.7.5) - 2016-07-11
+## [v0.7.6](https://github.com/attogram/attogram/compare/v0.7.5...v0.7.6) - 2016-07-12
+- continued refactoring/renaming/cleanup for PSR-1 + PSR-2 Code style conventions
+- Merged AttogramFS class into main Attogram class
+- new `modules/disabled/` directory as a holding area for disabled modules
+
+## [v0.7.5](https://github.com/attogram/attogram/compare/v0.7.4...v0.7.5) - 2016-07-11
 - lots of refactoring/cleanup for PSR-1 + PSR-2 Code style conventions
 - removed `attogram/logger.php`, now using \Psr\Log\NullLogger
 - Codacy integration: https://www.codacy.com/app/attogram-project/attogram/dashboard
