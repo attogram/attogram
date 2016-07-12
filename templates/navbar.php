@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Navbar v0.1.2
+<?php // Attogram Framework - Navbar v0.1.3
 
 namespace attogram;
 
@@ -35,14 +35,13 @@ namespace attogram;
             .'</b></a></li>';
             echo '<li><a href="?logoff"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> logoff</a></li>';
         } else {
+
             if (array_key_exists('login', $this->get_actions())) { // if User Module is loaded
                 echo '<li><a href="'.$this->path
                 .'/login/">login <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a></li>';
             }
         }
-    } else {
-      $this->log->notice('navbar.php: attogram_user module not active');
-    } // end if user module active
+    }  // end if user module active
 
     if ($this->isAdmin() && $this->getAdminActions()) {
         echo '<li class="dropdown">'
