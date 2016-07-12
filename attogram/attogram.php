@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.3.6
+// Attogram Framework - attogram class v0.3.7
 
 namespace Attogram;
 
@@ -16,7 +16,7 @@ namespace Attogram;
  * @license (MIT or GPL-3.0+)
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
  */
-class attogram
+class Attogram
 {
     const ATTOGRAM_VERSION = '0.7.5';
 
@@ -50,7 +50,7 @@ class attogram
     /**
      * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
      * @param obj  $event    Event Log - PSR-3 logger object, interface: \Psr\Log\LoggerInterface
-     * @param obj  $database Attogram Database object, interface: \attogram_database
+     * @param obj  $database Attogram Database object, interface: \AttogramDatabase
      * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
      * @param bool $debug    (optional) Debug True/False.  Defaults to False.
      */
@@ -147,15 +147,15 @@ class attogram
      */
     public function setModuleTemplates()
     {
-        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'templates');
+        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'templates');
         if (!$dirs) {
             $this->log->debug('setModuleTemplates: no module templates found');
             return;
         }
         foreach ($dirs as $moduleDir) {
-            foreach (array_diff(scandir($moduleDir), attogram_fs::get_skip_files()) as $mfile) {
+            foreach (array_diff(scandir($moduleDir), AttogramFS::get_skip_files()) as $mfile) {
                 $file = "$moduleDir/$mfile";
-                if (attogram_fs::isReadableFile($file, '.php')) {
+                if (AttogramFS::isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
                     $this->templates[$name] = $file; // Set the template
                     $this->log->debug('setModuleTemplates: '.$name.' = '.$file);
@@ -352,7 +352,7 @@ class attogram
         $trash = array_shift($test); // take off top level
         $trash = array_shift($test); // take off virtual web directory
         $req = implode('/', $test); // the virtual web request
-        $mod = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'public');
+        $mod = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($mod as $m) {
             $test_file = $m.'/'.$req;
@@ -365,7 +365,7 @@ class attogram
             $this->error404('Virtually Nothing Found');
         }
         $this->do_cache_headers($file);
-        $mime_type = attogram_fs::get_mime_type($file);
+        $mime_type = AttogramFS::get_mime_type($file);
         if ($mime_type) {
             header('Content-Type:'.$mime_type.'; charset=utf-8');
             $result = readfile($file); // send file to browser
@@ -439,7 +439,7 @@ class attogram
      */
     public function getMarkdown($file)
     {
-        if (!attogram_fs::isReadableFile($file, '.md')) {
+        if (!AttogramFS::isReadableFile($file, '.md')) {
             $this->log->error('GET_MARKDOWN: can not read file: '.$this->webDisplay($file));
             return false;
         }
@@ -501,7 +501,7 @@ class attogram
         if (is_array($this->actions)) {
             return $this->actions;
         }
-        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'actions');
+        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'actions');
         if (!$dirs) {
             $this->log->debug('getActions: No module actions found');
         }
@@ -526,7 +526,7 @@ class attogram
         if (is_array($this->adminActions)) {
             return $this->adminActions;
         }
-        $dirs = attogram_fs::getAllSubdirectories($this->modulesDirectory, 'admin_actions');
+        $dirs = AttogramFS::getAllSubdirectories($this->modulesDirectory, 'admin_actions');
         if (!$dirs) {
             $this->log->debug('getAdminActions: No module admin actions found');
         }
@@ -553,11 +553,11 @@ class attogram
             $this->log->error('GET_ACTIONABLES: directory not readable: '.$dir);
             return $result;
         }
-        foreach (array_diff(scandir($dir), attogram_fs::get_skip_files()) as $afile) {
+        foreach (array_diff(scandir($dir), AttogramFS::get_skip_files()) as $afile) {
             $file = $dir.'/'.$afile;
-            if (attogram_fs::isReadableFile($file, '.php')) { // PHP files
+            if (AttogramFS::isReadableFile($file, '.php')) { // PHP files
                 $result[ str_replace('.php', '', $afile) ] = array('file' => $file, 'parser' => 'php');
-            } elseif (attogram_fs::isReadableFile($file, '.md')) { // Markdown files
+            } elseif (AttogramFS::isReadableFile($file, '.md')) { // Markdown files
                 $result[ str_replace('.md', '', $afile) ] = array('file' => $file, 'parser' => 'md');
             }
         }
@@ -607,7 +607,7 @@ class attogram
     public function pageHeader($title = '')
     {
         $file = $this->templates['header'];
-        if (attogram_fs::isReadableFile($file, '.php')) {
+        if (AttogramFS::isReadableFile($file, '.php')) {
             include $file;
             $this->log->debug('pageHeader, title: '.$title);
             return;
@@ -625,7 +625,7 @@ class attogram
     public function pageFooter()
     {
         $file = $this->templates['footer'];
-        if (attogram_fs::isReadableFile($file, '.php')) {
+        if (AttogramFS::isReadableFile($file, '.php')) {
             include $file;
             $this->log->debug('pageFooter');
             return;
@@ -677,7 +677,7 @@ class attogram
     {
         //$this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
         header('HTTP/1.0 404 Not Found');
-        if (attogram_fs::isReadableFile($this->templates['fof'], '.php')) {
+        if (AttogramFS::isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];
             exit;
         }

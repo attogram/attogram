@@ -1,12 +1,12 @@
 <?php
-// Attogram Framework - Check Script v0.1.2
+// Attogram Framework - Check Script v0.1.3
 
-$c = new attogram_check();
+$c = new AttogramCheck();
 $c->check();
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-class attogram_check
+class AttogramCheck
 {
     public function __construct()
     {
@@ -50,13 +50,13 @@ class attogram_check
             $file = new SplFileObject($indexFile);
             $result = $val = 'fail';
             foreach ($file as $val) {
-                if (preg_match('/new\s+guru_meditation_loader/', $val)) {
+                if (preg_match('/new\s+GuruMeditationLoader/', $val)) {
                     $result = 'pass';
                     break;
                 }
             }
         }
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 1.2 - <strong>'.$indexFile.'</strong> is Project Loader (found: new guru_meditation_loader)</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}.' 1.2 - <strong>'.$indexFile.'</strong> is Project Loader (found: new GuruMeditationLoader)</pre>';
     }
 
     public function check_htaccess()
@@ -272,4 +272,4 @@ hr { height:1px; border:0; background:#E0E0E0; }
         echo '</body></html>';
     }
 
-} // end class attogram_check
+} // end class AttogramCheck

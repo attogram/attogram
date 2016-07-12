@@ -1,12 +1,12 @@
 <?php
-// Attogram Framework - attogram_fs class v0.1.3
+// Attogram Framework - AttogramFS class v0.1.4
 
 namespace Attogram;
 
 /**
  * Filesystem related functions.
  */
-class attogram_fs
+class AttogramFS
 {
     /**
      * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name.
@@ -155,4 +155,4 @@ class attogram_fs
         return $mime_type;
     }
 
-} // end class attogram_fs
+} // end class AttogramFS

@@ -1,12 +1,12 @@
 <?php
-// Attogram Framework - event_logger class v0.1.1
+// Attogram Framework - EventLogger class v0.1.2
 
 namespace Attogram;
 
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 
-class event_logger extends AbstractProcessingHandler
+class EventLogger extends AbstractProcessingHandler
 {
     private $database;
 
@@ -41,4 +41,4 @@ class event_logger extends AbstractProcessingHandler
         );
     }
 
-} // end class class event_logger
+} // end class class EventLogger
