@@ -1,2 +1,3 @@
-disabled/*
-!disabled/README.md
+*
+!.gitignore
+!README.md
