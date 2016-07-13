@@ -313,7 +313,7 @@ class Attogram
                       $this->log->error('ROUTE: Unreadable action');
                       $this->error404('The pages of the book are blank');
                   }
-                  $this->log->debug('ROUTE:   include '.$this->action);
+                  $this->log->debug('ROUTE: include '.$this->action);
                   include $this->action;
                   return;
               case 'md':
@@ -543,8 +543,8 @@ class Attogram
 
     /**
      * getActionables - create list of all useable action files from a directory.
-     *
-     * @return array
+     * @param string $dir The directory to scan
+     * @return array List of actions
      */
     public function getActionables($dir)
     {
@@ -556,9 +556,16 @@ class Attogram
         foreach (array_diff(scandir($dir), $this->getSkipFiles()) as $afile) {
             $file = $dir.'/'.$afile;
             if ($this->isReadableFile($file, '.php')) { // PHP files
-                $result[ str_replace('.php', '', $afile) ] = array('file' => $file, 'parser' => 'php');
-            } elseif ($this->isReadableFile($file, '.md')) { // Markdown files
-                $result[ str_replace('.md', '', $afile) ] = array('file' => $file, 'parser' => 'md');
+                $result[str_replace('.php', '', $afile)] = array('file' => $file, 'parser' => 'php');
+                continue;
+            }
+            if ($this->isReadableFile($file, '.md')) { // Markdown files
+                $result[str_replace('.md', '', $afile)] = array('file' => $file, 'parser' => 'md');
+                continue;
+            }
+            if ($this->isReadableFile($file, '.html')) { // HTML files
+                $result[str_replace('.html', '', $afile)] = array('file' => $file, 'parser' => 'php');
+                continue;
             }
         }
         return $result;
