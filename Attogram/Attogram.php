@@ -807,6 +807,9 @@ class Attogram
     {
         $mimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
         switch (pathinfo($file, PATHINFO_EXTENSION)) { // https://bugs.php.net/bug.php?id=53035
+            case 'html':
+                $mimeType = 'text/html';
+                break;
             case 'css':
                 $mimeType = 'text/css';
                 break;
