@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabase interface 0.1.0
+// Attogram Framework - AttogramDatabase interface 0.1.1
 
 namespace Attogram;
 

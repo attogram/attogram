@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - EventLogger class v0.1.2
+// Attogram Framework - EventLogger class v0.1.3
 
 namespace Attogram;
 

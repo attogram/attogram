@@ -1,5 +1,4 @@
 <?php
-// Attogram Framework - AttogramDatabase interface 0.1.0
 
 namespace Attogram;
 
