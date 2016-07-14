@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.5
+// Attogram Framework - Check Script v0.1.6
 
 $c = new AttogramCheck();
 $c->check();
@@ -189,13 +189,12 @@ class AttogramCheck
                 break; // only do first found...
             }
         }
+        $result42 = $result43 = 'fail';
+        $result42Found = 'Not Found';
         if (sizeof($apacheFound) == 1) {
             $result42 = 'pass';
             $result42Found = $apacheFound[0];
             $result43 = $this->apacheConfExamine($apacheFound[0]);
-        } else {
-            $result42 = $result43 = 'fail';
-            $result42Found = 'Not Found';
         }
         echo '<pre class="'.$result42.'">'.$this->{$result42}.' 4.2 - <strong>Apache conf</strong> exists ('.$result42Found.')</pre>';
         echo '<pre class="'.$result43.'">'.$this->{$result43}.' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '

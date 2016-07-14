@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.4.0
+// Attogram Framework - attogram class v0.4.1
 
 namespace Attogram;
 
@@ -591,11 +591,8 @@ class Attogram
             $this->log->error('isAdmin false - missing $this->admins  array');
             return false;
         }
-        if (is_object($this->request)) {
-            $cip = $this->request->getClientIp();
-        } else {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        }
+        $cip = $this->request->getClientIp();
+
         if (@in_array($cip, $this->admins)) {
             $this->isAdmin = true;
             $this->log->debug('isAdmin true '.$cip);
