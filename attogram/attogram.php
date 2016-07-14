@@ -112,10 +112,6 @@ class Attogram
         if (!isset($this->templates['fof'])) {
             $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
-        if (!isset($config['databaseName'])) {
-            $config['databaseName'] = '../db/global';
-        }
-        $this->remember('databaseName', $config['databaseName'], '../db/global');
         if (!isset($config['siteName'])) {
             $config['siteName'] = 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>';
         }
