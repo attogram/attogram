@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.4
+// Attogram Framework - Attogram class v0.4.5
 
 namespace Attogram;
 
@@ -83,10 +83,6 @@ class Attogram
             $config['admins'] = array('127.0.0.1', '::1');
         }
         $this->remember('admins', $config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
-        if (!isset($config['debug'])) {
-            $config['debug'] = false;
-        }
-        $this->remember('debug', $config['debug'], false);
         if (!isset($config['attogramDirectory'])) {
             $config['attogramDirectory'] = '../';
         }
