@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.4.3
+// Attogram Framework - Attogram class v0.4.3
 
 namespace Attogram;
 
@@ -11,7 +11,7 @@ namespace Attogram;
  * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
  *
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
- * _or_ the GNU General Public License version 3 (GPL-3.0+), at your choosing.
+ * or the GNU General Public License version 3 (GPL-3.0+), at your choosing.
  *
  * @license (MIT or GPL-3.0+)
  * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
@@ -35,7 +35,6 @@ class Attogram
     public $noEndSlash;         // (array) actions to NOT force slash at end
     public $path;               // (string) Relative URL path to this installation
     public $uri;                // (array) The Current URI
-    public $databaseName;       // (string) path + filename of the sqlite database file
     public $actions;            // (array) memory variable for $this->getActions()
     public $action;             // (string) The Current Action name
     public $admins;             // (array) Administrator IP addresses
