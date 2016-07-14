@@ -244,9 +244,13 @@ class GuruMeditationLoader
             $included = (include_once($this->projectClasses.$f));
             if (!$included) {
                 $this->guruMeditationError('Failed to include project file: '.$this->projectClasses.$f);
+                $result[] = $this->projectClasses.$f;
             }
-            $this->debug('focusMind: OK: '.$this->projectClasses.$f);
         }
+        if (isset($result)) {
+            $this->debug('focusMind: OK: '.implode(', ', $result));
+        }
+
     } // end function focusMind()
 
     public function focusInnerEye()
@@ -264,9 +268,10 @@ class GuruMeditationLoader
                 $missing[] = $c;
                 $this->debug('innerAwareness: Required Class NOT FOUND: '.$c);
             }
-            $this->debug('innerAwareness: OK: '.$c);
+            $result[] = $c;
         }
-        if (!$missing) {
+        if (!$missing && isset($result)) {
+            $this->debug('innerAwareness: OK: '.implode(', ', $result));
             return;
         }
         $this->guruMeditationError('Required Class Missing: '.implode(', ', $missing));
