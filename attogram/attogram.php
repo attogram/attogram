@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.4.2
+// Attogram Framework - attogram class v0.4.3
 
 namespace Attogram;
 
@@ -61,6 +61,7 @@ class Attogram
         $this->database = $database;
         $this->request = $request;
         $this->path = $this->request->getBasePath();
+        $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
         $this->exceptionFiles(); // do robots.txt, sitemap.xml
