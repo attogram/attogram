@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.5
+// Attogram Framework - Attogram class v0.4.6
 
 namespace Attogram;
 
@@ -79,22 +79,10 @@ class Attogram
     public function awaken()
     {
         global $config; // The Global Configuration Array
-        if (!isset($config['admins'])) {
-            $config['admins'] = array('127.0.0.1', '::1');
-        }
-        $this->remember('admins', $config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
-        if (!isset($config['attogramDirectory'])) {
-            $config['attogramDirectory'] = '../';
-        }
-        $this->remember('attogramDirectory', $config['attogramDirectory'],          '../');
-        if (!isset($config['modulesDirectory'])) {
-            $config['modulesDirectory'] = $this->attogramDirectory.'modules';
-        }
-        $this->remember('modulesDirectory', $config['modulesDirectory'], $this->attogramDirectory.'modules');
-        if (!isset($config['templatesDirectory'])) {
-            $config['templatesDirectory'] = $this->attogramDirectory.'templates';
-        }
-        $this->remember('templatesDirectory', $config['templatesDirectory'], $this->attogramDirectory.'templates');
+        $this->remember('admins', @$config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
+        $this->remember('attogramDirectory', @$config['attogramDirectory'], '../');
+        $this->remember('modulesDirectory', @$config['modulesDirectory'], $this->attogramDirectory.'modules');
+        $this->remember('templatesDirectory', @$config['templatesDirectory'], $this->attogramDirectory.'templates');
         $this->setModuleTemplates();
         if (!isset($this->templates['header'])) {
             $this->templates['header'] = $this->templatesDirectory.'/header.php';
@@ -108,18 +96,9 @@ class Attogram
         if (!isset($this->templates['fof'])) {
             $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
-        if (!isset($config['siteName'])) {
-            $config['siteName'] = 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>';
-        }
-        $this->remember('siteName', $config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
-        if (!isset($config['noEndSlash'])) {
-            $config['noEndSlash'] = array();
-        }
-        $this->remember('noEndSlash', $config['noEndSlash'], array());
-        if (!isset($config['depth'])) {
-            $config['depth'] = array();
-        }
-        $this->remember('depth', $config['depth'], array()); // Depth settings
+        $this->remember('siteName', @$config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
+        $this->remember('noEndSlash', @$config['noEndSlash'], array());
+        $this->remember('depth', @$config['depth'], array()); // Depth settings
         if (!isset($this->depth[''])) { // check:  homepage depth defined
             $this->depth[''] = 1;
             $this->log->debug('awaken: set homepage depth: 1');
