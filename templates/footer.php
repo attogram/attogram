@@ -15,7 +15,7 @@ echo '
     '.$divider.'
     <span style="white-space: nowrap">🕑 '.gmdate('Y-m-d H:i:s').' UTC</span>
     '.$divider.'
-    <span style="white-space: nowrap">👤 '.$this->clientIp.'</span>
+    <span style="white-space: nowrap">👤 '.$this->request->getClientIp().'</span>
     '.$divider.'
     <span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->startTime), 3, PHP_ROUND_HALF_UP).' seconds</span>
     </small>

@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - attogram class v0.4.1
+// Attogram Framework - attogram class v0.4.2
 
 namespace Attogram;
 
@@ -21,7 +21,6 @@ class Attogram
     const ATTOGRAM_VERSION = '0.7.8-pre';
 
     public $startTime;          // (float) microsecond time of awakening
-    public $debug;              // (boolean) debug on/off
     public $log;                // (object) Debug Log - PSR-3 Logger object
     public $event;              // (object) Event Log - PSR-3 Logger object
     public $database;           // (object) The Attogram Database Object
@@ -34,10 +33,6 @@ class Attogram
     public $siteName;           // (string) The Site Name
     public $depth;              // (array) Allowed depth settings
     public $noEndSlash;         // (array) actions to NOT force slash at end
-    public $host;               // (string) Client Hostname
-    public $clientIp;           // (string) Client IP Address
-    public $pathInfo;           // (string)
-    public $requestUri;         // (string)
     public $path;               // (string) Relative URL path to this installation
     public $uri;                // (array) The Current URI
     public $databaseName;       // (string) path + filename of the sqlite database file
@@ -48,25 +43,27 @@ class Attogram
     public $adminActions;       // (array) memory variable for $this->getAdminActions()
 
     /**
-     * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
-     * @param obj  $event    Event Log - PSR-3 logger object, interface: \Psr\Log\LoggerInterface
-     * @param obj  $database Attogram Database object, interface: \AttogramDatabase
-     * @param obj  $request  \Symfony\Component\HttpFoundation\Request object
-     * @param bool $debug    (optional) Debug True/False.  Defaults to False.
+     * @param obj  $log      Debug PSR-3 logger object, interface: \Psr\Log\LoggerInterface
+     * @param obj  $event    Event PSR-3 logger object, interface: \Psr\Log\LoggerInterface
+     * @param obj  $database Attogram Database object, interface: \Attogram\AttogramDatabase
+     * @param obj  $request  Request object, \Symfony\Component\HttpFoundation\Request
      */
-    public function __construct($log, $event, $database, $request, $debug = false)
-    {
+    public function __construct(
+        \Psr\Log\LoggerInterface $log,
+        \Psr\Log\LoggerInterface $event,
+        \Attogram\AttogramDatabase $database,
+        \Symfony\Component\HttpFoundation\Request $request
+    ) {
         $this->startTime = microtime(1);
         $this->log = $log;
         $this->event = $event;
         $this->database = $database;
         $this->request = $request;
-        $this->debug = $debug;
+        $this->path = $this->request->getBasePath();
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
-        $this->setRequest(); // set all the request-related variables we need
-        $this->log->debug("host: $this->host  IP: $this->clientIp");
+        $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
         $this->exceptionFiles(); // do robots.txt, sitemap.xml
         $this->virtualWebDirectory(); // do virtual web directory requests
         $this->setUri(); // make array of the URI request
@@ -185,23 +182,11 @@ class Attogram
     }
 
     /**
-     * setRequest().
-     */
-    public function setRequest()
-    {
-        $this->host = $this->request->getHost();
-        $this->clientIp = $this->request->getClientIp();
-        $this->pathInfo = $this->request->getPathInfo();
-        $this->requestUri = $this->request->getRequestUri();
-        $this->path = $this->request->getBasePath();
-    }
-
-    /**
      * set uri array.
      */
     public function setUri()
     {
-        $this->uri = explode('/', $this->pathInfo);
+        $this->uri = explode('/', $this->request->getPathInfo());
         if (sizeof($this->uri) == 1) {
             $this->log->debug('setUri', $this->uri);
             return; // super top level request
@@ -227,10 +212,10 @@ class Attogram
         if (!is_array($this->noEndSlash)) {
             return;
         }
-        if (!preg_match('/\/$/', $this->pathInfo)) { // No, there is no slash at end of current url
+        if (!preg_match('/\/$/', $this->request->getPathInfo())) { // No, there is no slash at end of current url
             if (!in_array($this->uri[0], $this->noEndSlash)) {
                 // This action IS NOT excepted from force slash at end
-                $url = str_replace($this->pathInfo, $this->pathInfo.'/', $this->requestUri);
+                $url = str_replace($this->request->getPathInfo(), $this->request->getPathInfo().'/', $this->request->getRequestUri());
                 header('HTTP/1.1 301 Moved Permanently');
                 header('Location: '.$url);  // Force Trailing Slash
                 exit;
@@ -240,7 +225,7 @@ class Attogram
         // Yes, there is a slash at end of current url
         if (in_array($this->uri[0], $this->noEndSlash)) {
             // This action IS excepted from force slash at end
-            $url = str_replace($this->pathInfo, rtrim($this->pathInfo, ' /'), $this->requestUri);
+            $url = str_replace($this->request->getPathInfo(), rtrim($this->request->getPathInfo(), ' /'), $this->request->getRequestUri());
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: '.$url); // Remove Trailing Slash
             exit;
@@ -342,10 +327,10 @@ class Attogram
      */
     public function virtualWebDirectory()
     {
-        if (!preg_match('/^\/'.'web'.'\//', $this->pathInfo)) {
+        if (!preg_match('/^\/'.'web'.'\//', $this->request->getPathInfo())) {
             return; // not a virtual web directory request
         }
-        $test = explode('/', $this->pathInfo);
+        $test = explode('/', $this->request->getPathInfo());
         if (sizeof($test) < 3 || $test[2] == '') { // empty request
             $this->error404('Virtual Nothingness Found');
         }
@@ -407,7 +392,7 @@ class Attogram
      */
     public function exceptionFiles()
     {
-        switch ($this->pathInfo) {
+        switch ($this->request->getPathInfo()) {
             case '/robots.txt':
                 header('Content-Type: text/plain; charset=utf-8');
                 echo 'Sitemap: '.$this->getSiteUrl().'/sitemap.xml';

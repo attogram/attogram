@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.0
+// Attogram Framework - Guru Meditation Loader - v0.4.1
 
 namespace Attogram;
 
@@ -24,7 +24,7 @@ $guru = new GuruMeditationLoader(
     $config['autoloader'], // $vendor_autoloader
     'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
     array( // $requiredClasses
-        '\attogram\attogram',               // The Attogram Framework
+        '\Attogram\Attogram',               // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
         '\Parsedown',                       // Markdown Parser
         '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
@@ -76,9 +76,9 @@ class GuruMeditationLoader
         $this->requiredClasses = $requiredClasses;
         $this->requiredInterfaces = $requiredInterfaces;
         $this->debug('START Guru Meditation Loader: '.$this->projectName);
-        $this->meditate();             // load the attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
+        $this->meditate();             // load the Attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
         $this->expandConsciousness(); // run the composer vendor autoloader
-        $this->focusMind();           // include attogram project classes
+        $this->focusMind();           // include Attogram project classes
         $this->focusInnerEye();      // include modules includes
         $this->innerAwareness();      // check for required classes
         $this->innerEmptiness();      // check for required interfaces
@@ -332,7 +332,7 @@ class GuruMeditationLoader
         }
         // Create database object
         $database = false; // TODO replace with null database object
-        if (class_exists('\attogram\SqliteDatabase')) {
+        if (class_exists('\Attogram\SqliteDatabase')) {
             $database = new SqliteDatabase($config['databaseName'], $config['modulesDirectory'], $log);  // init the database, sans-connection
             if (!$database) {
                 $log->error('GuruMeditationLoader: SqliteDatabase initialization failed');
@@ -346,7 +346,7 @@ class GuruMeditationLoader
         } else {
             // Setup the Event Logger
             $event = new \Monolog\Logger('event');
-            $event->pushHandler(new \attogram\EventLogger($database));
+            $event->pushHandler(new \Attogram\EventLogger($database));
         }
         // create Request object
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
@@ -355,8 +355,7 @@ class GuruMeditationLoader
             $log,
             $event,
             $database,
-            $request,
-            $config['debug']
+            $request
         );
     } // end function tranquility()
 
