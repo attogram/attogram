@@ -2,7 +2,11 @@
 * Repository: https://github.com/attogram/attogram
 * Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.6...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.7...HEAD)
+
+## [v0.7.7](https://github.com/attogram/attogram/compare/v0.7.6...v0.7.7) - 2016-07-14
+- Allow `.html` actions and admin_actions
+- continued cleanup
 
 ## [v0.7.6](https://github.com/attogram/attogram/compare/v0.7.5...v0.7.6) - 2016-07-12
 - continued refactoring/renaming/cleanup for PSR-1 + PSR-2 Code style conventions
