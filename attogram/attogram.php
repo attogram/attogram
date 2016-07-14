@@ -18,34 +18,34 @@ namespace Attogram;
  */
 class Attogram
 {
-    const ATTOGRAM_VERSION = '0.7.7';
+    const ATTOGRAM_VERSION = '0.7.8-pre';
 
-    public $startTime;    // (float) microsecond time of awakening
-    public $debug;         // (boolean) debug on/off
-    public $log;           // (object) Debug Log - PSR-3 Logger object
-    public $event;         // (object) Event Log - PSR-3 Logger object
-    public $database;      // (object) The Attogram Database Object
-    public $request;       // (object) Symfony HttpFoundation Request object
+    public $startTime;          // (float) microsecond time of awakening
+    public $debug;              // (boolean) debug on/off
+    public $log;                // (object) Debug Log - PSR-3 Logger object
+    public $event;              // (object) Event Log - PSR-3 Logger object
+    public $database;           // (object) The Attogram Database Object
+    public $request;            // (object) Symfony HttpFoundation Request object
     public $projectRepository;  // (string) URL to Attogram Framework GitHub Project
     public $attogramDirectory;  // (string) path to this installation
     public $modulesDirectory;   // (string) path to the modules directory
     public $templatesDirectory; // (string) path to the templates directory
-    public $templates;     // (array) list of templates
-    public $siteName;      // (string) The Site Name
-    public $depth;         // (array) Allowed depth settings
-    public $noEndSlash;    // (array) actions to NOT force slash at end
-    public $host;          // (string) Client Hostname
-    public $clientIp;      // (string) Client IP Address
-    public $pathInfo;      // (string)
-    public $requestUri;    // (string)
-    public $path;          // (string) Relative URL path to this installation
-    public $uri;           // (array) The Current URI
-    public $databaseName;  // (string) path + filename of the sqlite database file
-    public $actions;       // (array) memory variable for $this->getActions()
-    public $action;        // (string) The Current Action name
-    public $admins;        // (array) Administrator IP addresses
-    public $isAdmin;       // (boolean) memory variable for $this->isAdmin()
-    public $adminActions;  // (array) memory variable for $this->getAdminActions()
+    public $templates;          // (array) list of templates
+    public $siteName;           // (string) The Site Name
+    public $depth;              // (array) Allowed depth settings
+    public $noEndSlash;         // (array) actions to NOT force slash at end
+    public $host;               // (string) Client Hostname
+    public $clientIp;           // (string) Client IP Address
+    public $pathInfo;           // (string)
+    public $requestUri;         // (string)
+    public $path;               // (string) Relative URL path to this installation
+    public $uri;                // (array) The Current URI
+    public $databaseName;       // (string) path + filename of the sqlite database file
+    public $actions;            // (array) memory variable for $this->getActions()
+    public $action;             // (string) The Current Action name
+    public $admins;             // (array) Administrator IP addresses
+    public $isAdmin;            // (boolean) memory variable for $this->isAdmin()
+    public $adminActions;       // (array) memory variable for $this->getAdminActions()
 
     /**
      * @param obj  $log      Debug Log - PSR-3 logger object, interface:\Psr\Log\LoggerInterface
@@ -269,7 +269,7 @@ class Attogram
     {
         session_start();
         $this->log->debug('Session started.', $_SESSION);
-        if (isset($_GET['logoff'])) {
+        if ($this->request->query->has('logoff')) {
             session_unset();
             session_destroy();
             session_start();
@@ -394,8 +394,8 @@ class Attogram
         }
         header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastmod).' GMT');
         header('Etag: '.$lastmod);
-        $serverIfMod = @strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
-        $serverIfNone = trim($_SERVER['HTTP_IF_NONE_MATCH']);
+        $serverIfMod = @strtotime($this->request->server->get('HTTP_IF_MODIFIED_SINCE'));
+        $serverIfNone = trim($this->request->server->get('HTTP_IF_NONE_MATCH'));
         if ($serverIfMod == $lastmod || $serverIfNone == $lastmod) {
             header('HTTP/1.1 304 Not Modified');
             exit;
@@ -581,7 +581,7 @@ class Attogram
         if (isset($this->isAdmin) && is_bool($this->isAdmin)) {
             return $this->isAdmin;
         }
-        if (isset($_GET['noadmin'])) {
+        if ($this->request->query->has('noadmin')) {
             $this->isAdmin = false;
             $this->log->debug('isAdmin false - noadmin override');
             return false;
