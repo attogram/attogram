@@ -20,7 +20,7 @@ $config['databaseName'] = $config['attogramDirectory'].'db/global';
 $guru = new GuruMeditationLoader(
     $config['siteName'], // $projectName
     './config.php', // $configFile
-    $config['attogramDirectory'].'attogram/', // $projectClasses
+    $config['attogramDirectory'].'Attogram/', // $projectClasses
     $config['autoloader'], // $vendor_autoloader
     'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
     array( // $requiredClasses
@@ -76,14 +76,14 @@ class GuruMeditationLoader
         $this->requiredClasses = $requiredClasses;
         $this->requiredInterfaces = $requiredInterfaces;
         $this->debug('START Guru Meditation Loader: '.$this->projectName);
-        $this->meditate();             // load the Attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
+        $this->meditate();            // load the Attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
         $this->expandConsciousness(); // run the composer vendor autoloader
         $this->focusMind();           // include Attogram project classes
-        $this->focusInnerEye();      // include modules includes
+        $this->focusInnerEye();       // include modules includes
         $this->innerAwareness();      // check for required classes
         $this->innerEmptiness();      // check for required interfaces
         $this->meditateDeeper();      // load the modules configurations - (needs AttogramFS class)
-        $this->tranquility();          // Load The Attogram Framework
+        $this->tranquility();         // Load The Attogram Framework
     } // end function __construct()
 
     /**
@@ -204,11 +204,8 @@ class GuruMeditationLoader
     public function meditateDeeper()
     {
         global $config;
-        //if( !class_exists('AttogramFS') ) ....
         $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
-            foreach ($count as $c) {
-                $this->debug('meditateDeeper: OK: '.$c);
-            }
+        $this->debug('meditateDeeper: OK: ' . implode(', ', $count));
     }
 
     /**
@@ -254,12 +251,9 @@ class GuruMeditationLoader
 
     public function focusInnerEye()
     {
-      global $config;
-      //if( !class_exists('AttogramFS') ) ....
-      $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
-          foreach ($count as $c) {
-              $this->debug('focusInnerEye: OK: '.$c);
-          }
+        global $config;
+        $counts = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
+        $this->debug('focusInnerEye: OK: ' . implode(', ', $counts));
     }
 
     public function innerAwareness()
@@ -330,32 +324,23 @@ class GuruMeditationLoader
                 $log->debug($g);
             }
         }
-        // Create database object
-        $database = false; // TODO replace with null database object
-        if (class_exists('\Attogram\SqliteDatabase')) {
+        // Create database and event objects
+        if (class_exists('\Attogram\SqliteDatabase')) { // if database module installed...
             $database = new SqliteDatabase($config['databaseName'], $config['modulesDirectory'], $log);  // init the database, sans-connection
-            if (!$database) {
-                $log->error('GuruMeditationLoader: SqliteDatabase initialization failed');
-            }
-        } else {
-            $log->error('GuruMeditationLoader: SqliteDatabase class not found');
-        }
-        // Create the Event logger
-        if (!$database) {
-            $event = new \Psr\Log\NullLogger(); // no database, use null logger
-        } else {
-            // Setup the Event Logger
-            $event = new \Monolog\Logger('event');
+            $event = new \Monolog\Logger('event'); // Setup the Event Logger
             $event->pushHandler(new \Attogram\EventLogger($database));
         }
-        // create Request object
-        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        if (!isset($database) || !$database) {
+            $database = new NullDatabase();
+            $event = new \Psr\Log\NullLogger();
+        }
+
         // Start the Attogram Framework!
         new Attogram(
             $log,
             $event,
             $database,
-            $request
+            \Symfony\Component\HttpFoundation\Request::createFromGlobals()
         );
     } // end function tranquility()
 

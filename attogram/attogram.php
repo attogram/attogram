@@ -56,14 +56,13 @@ class Attogram
     ) {
         $this->startTime = microtime(1);
         $this->log = $log;
+        $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->event = $event;
         $this->database = $database;
         $this->request = $request;
         $this->path = $this->request->getBasePath();
-        $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
-        $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
         $this->exceptionFiles(); // do robots.txt, sitemap.xml
         $this->virtualWebDirectory(); // do virtual web directory requests
         $this->setUri(); // make array of the URI request
