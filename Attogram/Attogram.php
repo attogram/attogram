@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.9
+// Attogram Framework - Attogram class v0.4.10
 
 namespace Attogram;
 
@@ -640,12 +640,12 @@ class Attogram
 
         echo '<p><br /><hr />To replace this home page:<ul>'
             .'<li>Goto the top level of your <a href="' . $this->projectRepository . '">Attogram Framework</a> installation</li>'
-            .'<li>Create a new module directory: <code>modules/mymodule/</code></li>'
+            .'<li>Create a new module directory:<code>modules/mymodule/</code></li>'
             .'<li>Create an actions directory within the module: <code>modules/mymodule/actions/</code></li>'
-            .'<li>Create a <strong>home</strong> action, in PHP, Markdown, or HTML:<ul>'
-                . '<li><code>modules/mymodule/actions/home.php</code></li>'
-                . '<li>or <code>modules/mymodule/actions/home.md</code></li>'
-                . '<li>or <code>modules/mymodule/actions/home.html</code></li>'
+            .'<li>Create one <strong>home</strong> action:<ul>'
+                . '<li>in PHP: <code>modules/mymodule/actions/home.php</code></li>'
+                . '<li><em>or</em> in Markdown: <code>modules/mymodule/actions/home.md</code></li>'
+                . '<li><em>or</em> in HTML: <code>modules/mymodule/actions/home.html</code></li>'
             .'</ul></li>'
             .'</ul></p>'
             .'</div>';
