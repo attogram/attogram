@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.8
+// Attogram Framework - Attogram class v0.4.9
 
 namespace Attogram;
 
@@ -620,8 +620,8 @@ class Attogram
         echo '<div class="container">'
         .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'
         .'<p>To replace this page, create a file named '
-        .'<code>home.php</code> or <code>home.md</code> '
-        .' in any <code>modules/*/actions/</code> directory</p>'
+        .'<code>home.php</code> or <code>home.md</code> or <code>home.html</code>'
+        .' in any <code>modules/*/actions/</code> directory.</p>'
         .'<p>Public Actions:<ul>';
         if (!$this->getActions()) {
             echo '<li><em>No actions yet</em></li>';
