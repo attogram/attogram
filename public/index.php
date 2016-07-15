@@ -314,7 +314,7 @@ class GuruMeditationLoader
                     $request->query->has('debug')   // admin debug url override ?debug
                     && isset($config['admins'])
                     && is_array($config['admins'])
-                    && in_array($_SERVER['REMOTE_ADDR'], $config['admins'])
+                    && in_array($request->getClientIp(), $config['admins'])
                )
         ) {
             $log = new \Monolog\Logger('debug');
