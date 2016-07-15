@@ -167,11 +167,6 @@ class GuruMeditationLoader
         }
     }
 
-    public function loadConfigFile()
-    {
-
-    }
-
     /**
      * set the system configuration
      */
@@ -180,7 +175,7 @@ class GuruMeditationLoader
         global $config;
         if (is_file($this->configFile)) {
             if (!is_readable($this->configFile)) {
-                $this->guruMeditationError('Config file exists, but is not readable: '.$this->configFile);
+                $this->guruMeditationError('Config file not readable: '.$this->configFile);
             }
             $included = (include($this->configFile));
             if (!$included) {

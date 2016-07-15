@@ -5,7 +5,7 @@ languages:
   Python: false
 
 exclude_paths:
-  - "vendor/*"s
+  - "vendor/*"
   - "public/web/jquery.min.js"
   - "public/web/bootstrap/js/bootstrap.min.js"
   - "public/web/bootstrap/css/bootstrap.min.css"
