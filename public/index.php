@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.4
+// Attogram Framework - Guru Meditation Loader - v0.4.5
 
 namespace Attogram;
 
@@ -33,6 +33,7 @@ $guru = new GuruMeditationLoader(
     ),
     array( // $requiredInterfaces
         '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
+        '\Attogram\AttogramDatabase' // Attogram Database Interface
     )
 );
 
@@ -202,7 +203,11 @@ class GuruMeditationLoader
     {
         global $config;
         $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
-        $this->debug('meditateDeeper: OK: ' . implode(', ', $count));
+        if ($count) {
+            $this->debug('meditateDeeper: OK: ' . implode(', ', $count));
+            return;
+        }
+        $this->debug('meditateDeeper: no module configs found');
     }
 
     /**
@@ -282,9 +287,10 @@ class GuruMeditationLoader
                 $missing[] = $c;
                 $this->debug('innerEmptiness: Required Inteface NOT FOUND: '.$c);
             }
-            $this->debug('innerEmptiness: OK: '.$c);
+            $result[] = $c;
         }
-        if (!$missing) {
+        if (!$missing && isset($result)) {
+            $this->debug('innerEmptiness: OK: '.implode(', ', $result));
             return;
         }
         $this->guruMeditationError('Required Interface Missing: '.implode(', ', $missing));

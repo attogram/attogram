@@ -1,6 +1,6 @@
 # TODO: [Attogram Framework](https://github.com/attogram/attogram)
 
-* setup codacy checks to NOT ignore ./templates/*
+* web admin system to turn on/off modules (via moving module directories between `./modules/` and `./modules_disabled/`)
 
 * [Issue #14](https://github.com/attogram/attogram/issues/14) - pull request on [composer/installers](https://github.com/composer/installers/) for Attogram modules
 
