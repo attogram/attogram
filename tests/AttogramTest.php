@@ -1,15 +1,15 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.1
+// Attogram Framework - Attogram Test v0.1.2
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        include_once __DIR__.'/../attogram/attogram.php';
+        include_once __DIR__.'/../Attogram/Attogram.php';
     }
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('\attogram\attogram'), 'attogram class not found');
+        $this->assertTrue(class_exists('\Attogram\Attogram'), 'Attogram class not found');
     }
 }
