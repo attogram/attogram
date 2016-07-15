@@ -1,4 +1,4 @@
-<?php // Attogram Framework - Page Header v0.1.3
+<?php // Attogram Framework - Page Header v0.1.4
 
 namespace Attogram;
 
@@ -16,8 +16,8 @@ echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">',
 '<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>',
 '<![endif]-->',
 '<title>'.$title.'</title>',
-'<script src="<?php echo $this->path; ?>/web/jquery.min.js"></script>',
-'<script src="<?php echo $this->path; ?>/web/bootstrap/js/bootstrap.min.js"></script>',
+'<script src="'.$this->path.'/web/jquery.min.js"></script>',
+'<script src="'.$this->path.'/web/bootstrap/js/bootstrap.min.js"></script>',
 '</head><body><noscript><div class="alert alert-danger">Please enable Javascript</div></noscript>';
 
 $navbar = $this->templates['navbar'];
