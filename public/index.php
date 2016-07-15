@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.1
+// Attogram Framework - Guru Meditation Loader - v0.4.2
 
 namespace Attogram;
 
@@ -9,7 +9,7 @@ global $config;
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
 $config['attogramDirectory'] = '../'; // with trailing slash
 $config['autoloader'] = $config['attogramDirectory'].'vendor/autoload.php';
-$config['modulesDirectory'] = $config['attogramDirectory'].'modules';   // without trailing slash
+$config['modulesDirectory'] = $config['attogramDirectory'].'modules'; // without trailing slash
 $config['templatesDirectory'] = $config['attogramDirectory'].'templates'; // without trailing slash
 $config['debug'] = false;
 $config['siteName'] = 'The Attogram Framework';
@@ -21,17 +21,17 @@ $guru = new GuruMeditationLoader(
     $config['siteName'], // $projectName
     './config.php', // $configFile
     $config['attogramDirectory'].'Attogram/', // $projectClasses
-    $config['autoloader'], // $vendor_autoloader
+    $config['autoloader'], // $defaultAutoloader
     'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
     array( // $requiredClasses
-        '\Attogram\Attogram',               // The Attogram Framework
+        '\Attogram\Attogram', // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
-        '\Parsedown',                       // Markdown Parser
-        '\Psr\Log\NullLogger',              // PSR-3 Null Logger Object
+        '\Parsedown', // Markdown Parser
+        '\Psr\Log\NullLogger', // PSR-3 Null Logger Object
         '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
-        '\Monolog\Handler\BufferHandler',   // Monolog Buffer Handler
-        '\Monolog\Handler\StreamHandler',   // Monolog Stream Handle
-        '\Monolog\Logger',                  // Monolog PSR-3 logger
+        '\Monolog\Handler\BufferHandler', // Monolog Buffer Handler
+        '\Monolog\Handler\StreamHandler', // Monolog Stream Handle
+        '\Monolog\Logger', // Monolog PSR-3 logger
     ),
     array( // $requiredInterfaces
         '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
@@ -62,20 +62,20 @@ class GuruMeditationLoader
         array $requiredClasses,
         array $requiredInterfaces
     ) {
-        error_reporting(E_ALL);
-        ini_set('display_errors', E_ALL);
-        //error_reporting(            E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
-        //ini_set( 'display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
+        error_reporting(E_ALL); // display all errors
+        ini_set('display_errors', E_ALL); // display all errors
+        //error_reporting(E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
+        //ini_set('display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
         set_error_handler(array($this, 'guruMeditationErrorHandler'));
         register_shutdown_function(array($this, 'guruMeditationShutdown'));
-        $this->projectName = $projectName;
-        $this->configFile = $configFile;
-        $this->projectClasses = $projectClasses;
-        $this->defaultAutoloader = $defaultAutoloader;
-        $this->vendorDownload = $vendorDownload;
-        $this->requiredClasses = $requiredClasses;
-        $this->requiredInterfaces = $requiredInterfaces;
         $this->debug('START Guru Meditation Loader: '.$this->projectName);
+        $this->projectName        = $projectName;
+        $this->configFile         = $configFile;
+        $this->projectClasses     = $projectClasses;
+        $this->defaultAutoloader  = $defaultAutoloader;
+        $this->vendorDownload     = $vendorDownload;
+        $this->requiredClasses    = $requiredClasses;
+        $this->requiredInterfaces = $requiredInterfaces;
         $this->meditate();            // load the Attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
         $this->expandConsciousness(); // run the composer vendor autoloader
         $this->focusMind();           // include Attogram project classes
@@ -167,8 +167,13 @@ class GuruMeditationLoader
         }
     }
 
+    public function loadConfigFile()
+    {
+
+    }
+
     /**
-     * load the config file.
+     * set the system configuration
      */
     public function meditate()
     {
