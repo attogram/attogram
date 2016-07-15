@@ -300,6 +300,10 @@ class GuruMeditationLoader
         if (ob_start('ob_gzhandler')) {
             $this->debug('tranquility: ob_gzhandler active');
         }
+
+        // Create the Request object
+        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
         // Create the Debug Logger
         if (
                 (
@@ -307,7 +311,7 @@ class GuruMeditationLoader
                     && is_bool($config['debug'])
                     && $config['debug']
                 ) || (
-                    isset($_GET['debug'])   // admin debug url override ?debug
+                    $request->query->has('debug')   // admin debug url override ?debug
                     && isset($config['admins'])
                     && is_array($config['admins'])
                     && in_array($_SERVER['REMOTE_ADDR'], $config['admins'])
@@ -329,6 +333,7 @@ class GuruMeditationLoader
                 $log->debug($g);
             }
         }
+
         // Create database and event objects
         if (class_exists('\Attogram\SqliteDatabase')) { // if database module installed...
             $database = new SqliteDatabase($config['databaseName'], $config['modulesDirectory'], $log);  // init the database, sans-connection
@@ -340,13 +345,13 @@ class GuruMeditationLoader
             $event = new \Psr\Log\NullLogger();
         }
 
-        // Start the Attogram Framework!
-        new Attogram(
-            $log,
-            $event,
-            $database,
-            \Symfony\Component\HttpFoundation\Request::createFromGlobals()
+        new Attogram(   // Start the Attogram Framework!
+            $log,       // The Debug Logger Object
+            $event,     // The Event Logger Object
+            $database,  // The Attogram Database Object
+            $request    // The Request Object
         );
+
     } // end function tranquility()
 
     public function debug($msg)
