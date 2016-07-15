@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.7
+// Attogram Framework - Attogram class v0.4.8
 
 namespace Attogram;
 
@@ -322,10 +322,10 @@ class Attogram
         $trash = array_shift($test); // take off top level
         $trash = array_shift($test); // take off virtual web directory
         $req = implode('/', $test); // the virtual web request
-        $mod = $this->getAllSubdirectories($this->modulesDirectory, 'public');
+        $modulesDirectories = $this->getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
-        foreach ($mod as $m) {
-            $testFile = $m.'/'.$req;
+        foreach ($modulesDirectories as $moduleDirectory) {
+            $testFile = $moduleDirectory.'/'.$req;
             if (!is_readable($testFile) || is_dir($testFile)) {
                 continue;
             }
@@ -345,7 +345,7 @@ class Attogram
             }
             exit;
         }
-        if (!(include($file))) { // include native PHP file
+        if (!(include($file))) { // include native PHP or HTML file
             $this->log->error('virtualWebDirectory: can not include file: '.htmlentities($file));
             $this->error404('Virtually unincludeable');
         }
@@ -777,7 +777,6 @@ class Attogram
      */
     public static function loadModuleSubdirectories($modulesDirectory, $subdirectory)
     {
-        global $config;
         $included = array();
         $dirs = self::getAllSubdirectories($modulesDirectory, $subdirectory);
         if (!$dirs) {
