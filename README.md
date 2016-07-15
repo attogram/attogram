@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.9 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.10 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -113,7 +113,7 @@ goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tab
 * delete the pages corresponding file from the `./actions/` directory
 
 ## Admin pages
-* create/delete the same as normal pages, but in the `./adminActions/` directory
+* create/delete the same as normal pages, but in the `./admin_actions/` directory
 
 ## Database tables
 * To add a table, add a file into `./tables/` directory
