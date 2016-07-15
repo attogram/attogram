@@ -3,8 +3,6 @@
 
 namespace Attogram;
 
-global $config;
-
 // Default configuration
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
 $config['attogramDirectory'] = '../'; // with trailing slash
@@ -172,7 +170,6 @@ class GuruMeditationLoader
      */
     public function meditate()
     {
-        global $config;
         if (is_file($this->configFile)) {
             if (!is_readable($this->configFile)) {
                 $this->guruMeditationError('Config file not readable: '.$this->configFile);
@@ -332,6 +329,7 @@ class GuruMeditationLoader
             foreach ($config['GuruMeditationLoader'] as $g) {
                 $log->debug($g);
             }
+            unset($config['GuruMeditationLoader']);
         }
 
         // Create database and event objects
