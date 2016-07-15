@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.10
+// Attogram Framework - Attogram class v0.4.11
 
 namespace Attogram;
 
@@ -619,26 +619,26 @@ class Attogram
         $this->pageHeader('Home');
         echo '<div class="container">'
         .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'
-        .'<p>Public pages:<ul>';
+        .'<br />Public pages:<ul>';
         if (!$this->getActions()) {
             echo '<li><em>None yet</em></li>';
         }
         foreach ($this->getActions() as $name => $val) {
             echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
         }
-        echo '</ul><p>';
+        echo '</ul>';
         if ($this->isAdmin()) {
-            echo '<p>Admin pages:<ul>';
+            echo '<br />Admin pages:<ul>';
             if (!$this->getAdminActions()) {
                 echo '<li><em>None yet</em></li>';
             }
             foreach ($this->getAdminActions() as $name => $val) {
                 echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
             }
-            echo '</ul></p>';
+            echo '</ul>';
         }
 
-        echo '<p><br /><hr />To replace this home page:<ul>'
+        echo '<br /><br /><hr />To replace this home page:<ul>'
             .'<li>Goto the top level of your <a href="' . $this->projectRepository . '">Attogram Framework</a> installation</li>'
             .'<li>Create a new module directory:<code>modules/mymodule/</code></li>'
             .'<li>Create an actions directory within the module: <code>modules/mymodule/actions/</code></li>'
@@ -647,7 +647,7 @@ class Attogram
                 . '<li><em>or</em> in Markdown: <code>modules/mymodule/actions/home.md</code></li>'
                 . '<li><em>or</em> in HTML: <code>modules/mymodule/actions/home.html</code></li>'
             .'</ul></li>'
-            .'</ul></p>'
+            .'</ul>'
             .'</div>';
         $this->pageFooter();
     }
