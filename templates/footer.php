@@ -17,7 +17,7 @@ echo '
     '.$divider.'
     <span style="white-space: nowrap">👤 '.$this->request->getClientIp().'</span>
     '.$divider.'
-    <span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->startTime), 3, PHP_ROUND_HALF_UP).' seconds</span>
+    <span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->startTime), 6, PHP_ROUND_HALF_UP).' seconds</span>
     </small>
   </p>
  </div>

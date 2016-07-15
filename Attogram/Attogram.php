@@ -619,28 +619,36 @@ class Attogram
         $this->pageHeader('Home');
         echo '<div class="container">'
         .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'
-        .'<p>To replace this page, create a file named '
-        .'<code>home.php</code> or <code>home.md</code> or <code>home.html</code>'
-        .' in any <code>modules/*/actions/</code> directory.</p>'
-        .'<p>Public Actions:<ul>';
+        .'<p>Public pages:<ul>';
         if (!$this->getActions()) {
-            echo '<li><em>No actions yet</em></li>';
+            echo '<li><em>None yet</em></li>';
         }
         foreach ($this->getActions() as $name => $val) {
             echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
         }
         echo '</ul><p>';
         if ($this->isAdmin()) {
-            echo '<p>Admin Actions:<ul>';
+            echo '<p>Admin pages:<ul>';
             if (!$this->getAdminActions()) {
-                echo '<li><em>No admin actions yet</em></li>';
+                echo '<li><em>None yet</em></li>';
             }
             foreach ($this->getAdminActions() as $name => $val) {
                 echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
             }
             echo '</ul></p>';
         }
-        echo '</div>';
+
+        echo '<p><br /><hr />To replace this home page:<ul>'
+            .'<li>Goto the top level of your <a href="' . $this->projectRepository . '">Attogram Framework</a> installation</li>'
+            .'<li>Create a new module directory: <code>modules/mymodule/</code></li>'
+            .'<li>Create an actions directory within the module: <code>modules/mymodule/actions/</code></li>'
+            .'<li>Create a <strong>home</strong> action, in PHP, Markdown, or HTML:<ul>'
+                . '<li><code>modules/mymodule/actions/home.php</code></li>'
+                . '<li>or <code>modules/mymodule/actions/home.md</code></li>'
+                . '<li>or <code>modules/mymodule/actions/home.html</code></li>'
+            .'</ul></li>'
+            .'</ul></p>'
+            .'</div>';
         $this->pageFooter();
     }
 
