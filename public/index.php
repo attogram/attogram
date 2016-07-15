@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.2
+// Attogram Framework - Guru Meditation Loader - v0.4.4
 
 namespace Attogram;
 
@@ -82,7 +82,7 @@ class GuruMeditationLoader
         $this->focusInnerEye();       // include modules includes
         $this->innerAwareness();      // check for required classes
         $this->innerEmptiness();      // check for required interfaces
-        $this->meditateDeeper();      // load the modules configurations - (needs AttogramFS class)
+        $this->meditateDeeper();      // load the modules configurations
         $this->tranquility();         // Load The Attogram Framework
     } // end function __construct()
 

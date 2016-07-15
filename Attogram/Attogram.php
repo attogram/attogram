@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.6
+// Attogram Framework - Attogram class v0.4.7
 
 namespace Attogram;
 
@@ -25,6 +25,7 @@ class Attogram
     public $event;              // (object) Event Log - PSR-3 Logger object
     public $database;           // (object) The Attogram Database Object
     public $request;            // (object) Symfony HttpFoundation Request object
+    public $path;               // (string) Relative URL path to this installation
     public $projectRepository;  // (string) URL to Attogram Framework GitHub Project
     public $attogramDirectory;  // (string) path to this installation
     public $modulesDirectory;   // (string) path to the modules directory
@@ -33,7 +34,6 @@ class Attogram
     public $siteName;           // (string) The Site Name
     public $depth;              // (array) Allowed depth settings
     public $noEndSlash;         // (array) actions to NOT force slash at end
-    public $path;               // (string) Relative URL path to this installation
     public $uri;                // (array) The Current URI
     public $actions;            // (array) memory variable for $this->getActions()
     public $action;             // (string) The Current Action name
@@ -46,21 +46,35 @@ class Attogram
      * @param obj  $event    Event PSR-3 logger object, interface: \Psr\Log\LoggerInterface
      * @param obj  $database Attogram Database object, interface: \Attogram\AttogramDatabase
      * @param obj  $request  Request object, \Symfony\Component\HttpFoundation\Request
+     * @param array $configuration  (optional) List of configuration values
      */
     public function __construct(
         \Psr\Log\LoggerInterface $log,
         \Psr\Log\LoggerInterface $event,
         \Attogram\AttogramDatabase $database,
-        \Symfony\Component\HttpFoundation\Request $request
+        \Symfony\Component\HttpFoundation\Request $request,
+        array $configuration = array()
     ) {
+
+        global $config; // The Global Configuration Array // TODO TMP DEV
+
         $this->startTime = microtime(1);
         $this->log = $log;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->event = $event;
         $this->database = $database;
+
         $this->request = $request;
         $this->path = $this->request->getBasePath();
         $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
+
+        $this->config = $configuration;
+
+        if( is_array($config) ) {  // TODO TMP DEV - global $config use?
+          $this->config = $config;
+        }
+        $this->log->debug('CONFIG:', $this->config);
+
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
         $this->exceptionFiles(); // do robots.txt, sitemap.xml
@@ -78,11 +92,12 @@ class Attogram
      */
     public function awaken()
     {
-        global $config; // The Global Configuration Array
-        $this->remember('admins', @$config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
-        $this->remember('attogramDirectory', @$config['attogramDirectory'], '../');
-        $this->remember('modulesDirectory', @$config['modulesDirectory'], $this->attogramDirectory.'modules');
-        $this->remember('templatesDirectory', @$config['templatesDirectory'], $this->attogramDirectory.'templates');
+
+
+        $this->remember('admins', @$this->config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
+        $this->remember('attogramDirectory', @$this->config['attogramDirectory'], '../');
+        $this->remember('modulesDirectory', @$this->config['modulesDirectory'], $this->attogramDirectory.'modules');
+        $this->remember('templatesDirectory', @$this->config['templatesDirectory'], $this->attogramDirectory.'templates');
         $this->setModuleTemplates();
         if (!isset($this->templates['header'])) {
             $this->templates['header'] = $this->templatesDirectory.'/header.php';
@@ -96,9 +111,9 @@ class Attogram
         if (!isset($this->templates['fof'])) {
             $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
-        $this->remember('siteName', @$config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
-        $this->remember('noEndSlash', @$config['noEndSlash'], array());
-        $this->remember('depth', @$config['depth'], array()); // Depth settings
+        $this->remember('siteName', @$this->config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
+        $this->remember('noEndSlash', @$this->config['noEndSlash'], array());
+        $this->remember('depth', @$this->config['depth'], array()); // Depth settings
         if (!isset($this->depth[''])) { // check:  homepage depth defined
             $this->depth[''] = 1;
             $this->log->debug('awaken: set homepage depth: 1');
