@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.5
+// Attogram Framework - Guru Meditation Loader - v0.4.6
 
 namespace Attogram;
 
@@ -167,28 +167,36 @@ class GuruMeditationLoader
     }
 
     /**
+     * load the master config file
+     */
+    public function loadConsciousness()
+    {
+        if (!is_file($this->configFile)) {
+            $this->debug('loadConsciousness: NO config file: '.$this->configFile);
+            return;
+        }
+        if (!is_readable($this->configFile)) {
+            $this->guruMeditationError('loadConsciousness: Config file NOT readable: '.$this->configFile);
+        }
+        if (!(include($this->configFile))) {
+            $this->guruMeditationError('loadConsciousness: Config file include FAILED: '.$this->configFile);
+        }
+        $this->debug('loadConsciousness: OK: '.$this->configFile);
+    }
+
+
+    /**
      * set the system configuration
      */
     public function meditate()
     {
-        if (is_file($this->configFile)) {
-            if (!is_readable($this->configFile)) {
-                $this->guruMeditationError('Config file not readable: '.$this->configFile);
-            }
-            $included = (include($this->configFile));
-            if (!$included) {
-                $this->guruMeditationError('Config file exists, but include failed: '.$this->configFile);
-            }
-            $this->debug('meditate: OK: '.$this->configFile);
-        } else {
-            $this->debug('meditate: configFile is NOT a file');
-        }
+        $this->loadConsciousness();
+
         if (!isset($config)) {
-            $this->debug('meditate: $config NOT set');
             $config = array();
         }
         if (!is_array($config)) {
-            $this->guruMeditationError('$config is not an array');
+            $this->guruMeditationError('meditate: $config is not an array');
         }
         if (!isset($config['autoloader'])) {
             $config['autoloader'] = $this->defaultAutoloader;
@@ -204,10 +212,10 @@ class GuruMeditationLoader
         global $config;
         $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
         if ($count) {
-            $this->debug('meditateDeeper: OK: ' . implode(', ', $count));
+            $this->debug('meditateDeeper: module configs OK: ' . implode(', ', $count));
             return;
         }
-        $this->debug('meditateDeeper: no module configs found');
+        $this->debug('meditateDeeper: NO module configs');
     }
 
     /**
