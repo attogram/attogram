@@ -1,14 +1,15 @@
 <?php
-// Attogram Framework - Attogram class v0.4.11
+// Attogram Framework - Attogram class v0.4.12
 
 namespace Attogram;
 
 /**
- * Attogram Framework.
+ * Attogram Framework
  *
- * The Attogram Framework provides developers a PHP skeleton starter site with
- * content modules, file-based URL routing, IP-protected backend, user system,
- * integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
+ * The Attogram Framework provides developers a PHP skeleton starter site
+ * with a content module system, file-based URL routing, IP-protected backend,
+ * Markdown parser, jQuery and Bootstrap.  Core modules available to add
+ * an integrated SQLite database with web admin, user system, and more.
  *
  * The Attogram Framework is Dual Licensed under the MIT License (MIT)
  * or the GNU General Public License version 3 (GPL-3.0+), at your choosing.

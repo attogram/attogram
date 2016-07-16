@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.10 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.11 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -12,13 +12,11 @@
 [`[CHANGELOG]`](https://github.com/attogram/attogram/blob/master/CHANGELOG.md)
 [`[TODO]`](https://github.com/attogram/attogram/blob/master/TODO.md)
 
-The Attogram Framework provides developers a PHP skeleton starter site with
-content modules, file-based URL routing, IP-protected backend, user system,
-integrated SQLite database with web admin, Markdown parser, jQuery and Bootstrap.
+The Attogram Framework provides developers a PHP skeleton starter site with a content module system, file-based URL routing, IP-protected backend, Markdown parser, jQuery and Bootstrap.  
+
+Core modules available to add an integrated SQLite database with web admin, user system, and more.
 
 After that, Attogram tries to stay out of your way while you do your thing!
-
-_Attogram now has modules!  Updated docs coming soon..._
 
 ## More Info
 * Attogram Framework @ GitHub: https://github.com/attogram/attogram
@@ -51,7 +49,10 @@ _Attogram now has modules!  Updated docs coming soon..._
 * default admin IPs is localhost in ip4 and ip6: `array( '127.0.0.1', '::1' )`
 * admin page requests from non-admin IPs will result in a 404 Page Not Found error
 
+_Attogram now has modules!  Updated docs coming soon..._
+
 ## Setup: Database
+* Install the Attogram Database Module
 * Make sure the database file `./db/global` is writeable by the web server
 * Tables are lazily created when needed.  To create all tables at once,
 goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tables**
