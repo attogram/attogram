@@ -1,19 +1,25 @@
 # Attogram Framework CHANGELOG
-* Repository: https://github.com/attogram/attogram
-* Click version number to view a diff comparison of changes since the previous release
+
+- Repository: <https://github.com/attogram/attogram>
+- Click version number to view a diff comparison of changes since the previous release
 
 ## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.7...HEAD)
 
+- Work in progress...
+
 ## [v0.7.7](https://github.com/attogram/attogram/compare/v0.7.6...v0.7.7) - 2016-07-14
+
 - Allow `.html` actions and admin_actions
 - continued cleanup
 
 ## [v0.7.6](https://github.com/attogram/attogram/compare/v0.7.5...v0.7.6) - 2016-07-12
+
 - continued refactoring/renaming/cleanup for PSR-1 + PSR-2 Code style conventions
 - Merged AttogramFS class into main Attogram class
 - new `modules/disabled/` directory as a holding area for disabled modules
 
 ## [v0.7.5](https://github.com/attogram/attogram/compare/v0.7.4...v0.7.5) - 2016-07-11
+
 - lots of refactoring/cleanup for PSR-1 + PSR-2 Code style conventions
 - removed `attogram/logger.php`, now using \Psr\Log\NullLogger
 - Codacy integration: https://www.codacy.com/app/attogram-project/attogram/dashboard
@@ -21,30 +27,35 @@
 - Project stat badges on README
 
 ## [v0.7.4](https://github.com/attogram/attogram/compare/v0.7.3...v0.7.4) - 2016-07-09
+
 - updates to Travis CI integration: https://travis-ci.org/attogram/attogram
  - for PHP 5.3 and PHP 5.4: use old phpunit, do not do code coverage
  - for PHP 5.5+: use new phpunit, do code coverage
 - continued testing setup
 
 ## [v0.7.3](https://github.com/attogram/attogram/compare/v0.7.2...v0.7.3) - 2016-07-08
+
 - Removed all modules from main distribution.  Core modules now have their own repository:
- - https://github.com/attogram/attogram-base
- - https://github.com/attogram/attogram-database
- - https://github.com/attogram/attogram-user
-- setup framework for Travis CI integration: https://travis-ci.org/attogram/attogram
+ - <https://github.com/attogram/attogram-base>
+ - <https://github.com/attogram/attogram-database>
+ - <https://github.com/attogram/attogram-user>
+- setup framework for Travis CI integration: <https://travis-ci.org/attogram/attogram>
 - setup framework for future phpunit Unit Testing
 - bugfixes on numeric actions, missing db object, empty menus
 - pimp buttons on the [README](https://github.com/attogram/attogram/blob/master/README.md)
 
 ## [v0.7.2](https://github.com/attogram/attogram/compare/v0.7.1...v0.7.2) - 2016-07-07
+
 - bugfix to allow numeric actions ( ./actions/123.php, ./actions/123.md, etc. )
 - New [TODO](./TODO.md): [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
 
 ## [v0.7.1](https://github.com/attogram/attogram/compare/v0.7.0...v0.7.1) - 2016-07-05
+
 - updated formatting and links in this `./CHANGELOG.md` file
 - updated [`./TODO.md`](./TODO.md) with new + existing [open issues](https://github.com/attogram/attogram/issues) from github
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
+
 - started this `CHANGELOG.md`!
 - started [`TODO.md`](./TODO.md)
 - fix for proper Bootstrap container div on editor pages
@@ -58,12 +69,13 @@ returns string of HTML version of markdown file
 - misc refactoring and design tests
 
 ## [v0.6.9](https://github.com/attogram/attogram/compare/3b97137...v0.6.9) - 2016-07-03
+
 - Event log system added
 - UTF-8 header fixes
 - new public actions: [`./modules/_attogram/actions/readme.php`](./modules/_attogram/actions/readme.php), [`./modules/_attogram/actions/license.php`](./modules/_attogram/actions/license.php)
 - new hard-coded homepage shows when no `home.php` or `home.md` actions found
 - misc bug fixes and design updates
-- announcement: https://www.patreon.com/posts/6016378
+- announcement: <https://www.patreon.com/posts/6016378>
 
 ## [v0.6.8](https://github.com/attogram/attogram/compare/v0.6.7...3b97137) - 2016-07-01
 ## [v0.6.7](https://github.com/attogram/attogram/compare/v0.6.6...v0.6.7) - 2016-06-30
