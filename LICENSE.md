@@ -1,6 +1,5 @@
-Attogram Framework License
-==================
-[//]: # ( Attogram Framework - License.md (markdown) - v0.2.3 )
+# Attogram Framework License
+[//]: # ( Attogram Framework - License.md (markdown) - v0.2.4 )
 
 The Attogram Framework is an open source project.
 
@@ -14,7 +13,7 @@ The Attogram Framework distribution includes <a href="#other">other open source 
 
 <strong>Attogram Framework - MIT License</strong>
 
-Copyright (c) 2016 Attogram Developers https://github.com/attogram/attogram/
+Copyright (c) 2016 Attogram Developers <https://github.com/attogram/attogram/>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +37,7 @@ THE SOFTWARE.
 
 <strong>Attogram Framework - GNU General Public License</strong>
 
-Copyright (C) 2016 Attogram Developers https://github.com/attogram/attogram/
+Copyright (C) 2016 Attogram Developers <https://github.com/attogram/attogram/>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -742,7 +741,7 @@ Public License instead of this License.  But first, please read
 
 Other Open Source Software included with the Attogram Framework distribution:
 
-* phpLiteAdmin - GPL License - https://www.phpliteadmin.org/
-* jQuery - MIT License - http://jquery.org/license/
-* Bootstrap - MIT License - http://getbootstrap.com/
-* Parsedown - MIT License - http://parsedown.org/
+* phpLiteAdmin - GPL License - <https://www.phpliteadmin.org/>
+* jQuery - MIT License - <http://jquery.org/license/>
+* Bootstrap - MIT License - <http://getbootstrap.com/>
+* Parsedown - MIT License - <http://parsedown.org/>
