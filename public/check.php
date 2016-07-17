@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.7
+// Attogram Framework - Check Script v0.1.8
 
 namespace Attogram;
 
@@ -10,6 +10,13 @@ $c->check();
 ////////////////////////////////////////////////////////////////////////////////
 class AttogramCheck
 {
+    public $pass;
+    public $fail;
+    public $unknown;
+    public $divider;
+    public $spacer;
+    public $apacheOverrideDir;
+
     public function __construct()
     {
         $this->pass = '<span class="icon-s"><strong>💚 Pass</strong></span>'; // ✔ ☑  🆗 💚 😊
@@ -77,18 +84,18 @@ class AttogramCheck
             $file = new SplFileObject($htaccessFile);
             foreach ($file as $val) {
                 if (preg_match('/^#/', $val)) {
-                    continue;
-                } // # comments
-        if (preg_match('/FallbackResource/', $val)) {
-            ++$count['FallbackResource'];
-            if (preg_match('/FallbackResource\s+(.*)\s+$/', $val, $match)) {
-                $found['FallbackResource'] = trim($match[1]);
-                if (trim($match[1]) == $goodUri) {
-                    $result26 = 'pass';
+                    continue; // # comments
                 }
-            }
-            continue;
-        }
+                if (preg_match('/FallbackResource/', $val)) {
+                    ++$count['FallbackResource'];
+                    if (preg_match('/FallbackResource\s+(.*)\s+$/', $val, $match)) {
+                        $found['FallbackResource'] = trim($match[1]);
+                        if (trim($match[1]) == $goodUri) {
+                            $result26 = 'pass';
+                        }
+                    }
+                    continue;
+                }
                 if (preg_match('/ErrorDocument\s+403/', $val)) {
                     ++$count['ErrorDocument 403'];
                     if (preg_match('/ErrorDocument\s+403\s+(.*)\s+$/', $val, $match)) {
@@ -120,9 +127,9 @@ class AttogramCheck
                     continue;
                 }
             } // end foreach line of file
-      if (isset($count['FallbackResource']) && $count['FallbackResource'] == 1) {
-          $result22 = 'pass';
-      }
+            if (isset($count['FallbackResource']) && $count['FallbackResource'] == 1) {
+                $result22 = 'pass';
+            }
             if (isset($count['ErrorDocument 403']) && $count['ErrorDocument 403'] == 1) {
                 $result23 = 'pass';
             }
@@ -133,7 +140,7 @@ class AttogramCheck
                 $result25 = 'pass';
             }
         } // end file check
-    $result = 'unknown';
+        $result = 'unknown';
         echo '<pre class="'.$result22.'">'.$this->{$result22}.' 2.2 - <strong>FallbackResource</strong> found once (found: '.$count['FallbackResource'].')</pre>';
         echo '<pre class="'.$result23.'">'.$this->{$result23}.' 2.3 - <strong>ErrorDocument 403</strong> found once (found: '.$count['ErrorDocument 403'].')</pre>';
         echo '<pre class="'.$result24.'">'.$this->{$result24}.' 2.4 - <strong>ErrorDocument 404</strong> found once (found: '.$count['ErrorDocument 404'].')</pre>';
