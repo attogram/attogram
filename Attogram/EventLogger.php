@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - EventLogger class v0.1.3
+// Attogram Framework - EventLogger class v0.1.4
 
 namespace Attogram;
 
@@ -40,5 +40,4 @@ class EventLogger extends AbstractProcessingHandler
             )
         );
     }
-
 } // end class class EventLogger

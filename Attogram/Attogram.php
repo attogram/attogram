@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.13
+// Attogram Framework - Attogram class v0.4.14
 
 namespace Attogram;
 
@@ -843,5 +843,4 @@ class Attogram
         }
         return $mimeType;
     }
-
 } // END of class attogram

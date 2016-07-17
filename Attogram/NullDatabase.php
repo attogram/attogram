@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabase interface 0.1.1
+// Attogram Framework - AttogramDatabase interface 0.1.2
 
 namespace Attogram;
 
@@ -51,5 +51,4 @@ class NullDatabase implements AttogramDatabase
     {
         return 0;
     }
-
 } // end interface AttogramDatabase

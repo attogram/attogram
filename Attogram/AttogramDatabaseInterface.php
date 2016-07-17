@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabase Interface 0.1.2
+// Attogram Framework - AttogramDatabase Interface 0.1.3
 
 namespace Attogram;
 
@@ -39,5 +39,4 @@ interface AttogramDatabase
      * @return int             The number of entries
      */
     public function getTableCount($table, $idField = 'id', $where = '');
-
 } // end interface AttogramDatabase
