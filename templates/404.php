@@ -10,7 +10,7 @@ $this->pageHeader($title);
 echo '<div class="container"><h1>'.$title.'</h1>';
 
 if (isset($error) && $error) {
-    echo '<h2>💔 <code>'.htmlentities($error).'</code></h2>';
+    echo '<h2>💔 <code>'.$this->webDisplay($error).'</code></h2>';
 }
 
 echo '</div>';

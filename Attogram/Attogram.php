@@ -344,13 +344,13 @@ class Attogram
             header('Content-Type:'.$mimeType.'; charset=utf-8');
             $result = readfile($file); // send file to browser
             if (!$result) {
-                $this->log->error('virtualWebDirectory: can not read file: '.htmlentities($file));
+                $this->log->error('virtualWebDirectory: can not read file: '.$this->webDisplay($file));
                 $this->error404('Virtually unreadable');
             }
             exit;
         }
         if (!(include($file))) { // include native PHP or HTML file
-            $this->log->error('virtualWebDirectory: can not include file: '.htmlentities($file));
+            $this->log->error('virtualWebDirectory: can not include file: '.$this->webDisplay($file));
             $this->error404('Virtually unincludeable');
         }
         exit;
@@ -632,7 +632,7 @@ class Attogram
         }
         foreach ($this->getActions() as $name => $val) {
             echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'
-                .htmlentities($name).'</a></li>';
+                .$this->webDisplay($name).'</a></li>';
         }
         echo '</ul>';
         if ($this->isAdmin()) {
