@@ -13,7 +13,7 @@
 - use Symfony\Component\HttpFoundation\Request for _GET, _POST and _SERVER
 - prep for injection of $config at startup, instead of using global $config
 - continued style updatess for PSR-1, PSR-2, and more
-- updated [codeclimate](https://travis-ci.org/attogram/attogram) engine setup
+- updated [codeclimate](https://codeclimate.com/github/attogram/attogram) engine setup
 - various bugfixes and refactors
 
 ## [v0.7.7](https://github.com/attogram/attogram/compare/v0.7.6...v0.7.7) - 2016-07-14
