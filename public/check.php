@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Check Script v0.1.10
+// Attogram Framework - Check Script v0.1.11
 
 namespace Attogram;
 
@@ -29,10 +29,12 @@ class AttogramCheck
     {
         $this->pageHeader();
         echo '<h1><span class="icon">🔬</span> Attogram Framework Check</h1>'
-        .'<p><span class="icon">👉</span> <strong>'.__DIR__.'</strong>'
-        .$this->spacer.'<a href="'.@$_SERVER['SCRIPT_NAME'].'"><span class="icon">🔃</span></a>'
-        .$this->spacer.'<span class="icon">🕑</span> '.gmdate('Y-m-d H:i:s').' UTC'
-        .$this->spacer.'<a href="./"><span class="icon">🏠</span></a></p>';
+            .'<p><span class="icon">👉</span> <strong>'.__DIR__.'</strong>'
+            .$this->spacer.'<a href="'.@$_SERVER['SCRIPT_NAME']
+            .'"><span class="icon">🔃</span></a>'
+            .$this->spacer.'<span class="icon">🕑</span> '
+            .gmdate('Y-m-d H:i:s').' UTC'
+            .$this->spacer.'<a href="./"><span class="icon">🏠</span></a></p>';
         echo $this->divider;
         $this->checkIndex();
         echo $this->divider;
@@ -64,7 +66,9 @@ class AttogramCheck
                 }
             }
         }
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 1.2 - <strong>'.$indexFile.'</strong> is Project Loader (found: new GuruMeditationLoader)</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 1.2 - <strong>'.$indexFile
+            .'</strong> is Project Loader (found: new GuruMeditationLoader)</pre>';
     }
 
     public function checkHtaccess()
