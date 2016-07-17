@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.7
+// Attogram Framework - Guru Meditation Loader - v0.4.8
 
 namespace Attogram;
 
@@ -84,87 +84,6 @@ class GuruMeditationLoader
         $this->meditateDeeper();      // load the modules configurations
         $this->tranquility();         // Load The Attogram Framework
     } // end function __construct()
-
-    /**
-     * Catch any errors.
-     */
-    public function guruMeditationErrorHandler($level, $message, $file = '', $line = '', $context = array())
-    {
-        switch ($level) {
-            case 1:
-                $this->debug("E_ERROR: file:$file line:$line $message");
-                break;
-            case 2:
-                $this->debug("E_WARNING: file:$file line:$line $message");
-                return;
-            case 4:
-                $this->debug("E_PARSE: file:$file line:$line $message");
-                return;
-            case 8:
-                $this->debug("E_NOTICE: file:$file line:$line $message");
-                return;
-            case 16:
-                $this->debug("E_CORE_ERROR: file:$file line:$line $message");
-                break;
-            case 32:
-                $this->debug("E_CORE_WARNING: file:$file line:$line $message");
-                return;
-            case 64:
-                $this->debug("E_COMPILE_ERROR: file:$file line:$line $message");
-                break;
-            case 128:
-                $this->debug("E_COMPILE_WARNING: file:$file line:$line $message");
-                return;
-            case 256:
-                $this->debug("E_USER_ERROR: file:$file line:$line $message");
-                break;
-            case 512:
-                $this->debug("E_USER_WARNING: file:$file line:$line $message");
-                return;
-            case 1024:
-                $this->debug("E_USER_NOTICE: file:$file line:$line $message");
-                return;
-            case 2048:
-                $this->debug("E_STRICT: file:$file line:$line $message");
-                return;
-            case 4096:
-                $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message");
-                return;
-            case 8192:
-                $this->debug("E_DEPECIATED: file:$file line:$line $message");
-                return;
-            case 16384:
-                $this->debug("E_USER_DEPECIATED: file:$file line:$line $message");
-                return;
-            case 30719:
-                $this->debug("E_ALL: file:$file line:$line $message");
-                break;
-          default:
-              $this->debug("E_UNKNOWN: file:$file line:$line $message");
-              break;
-        }
-
-        $this->guruMeditationError(
-            "Sadness $level: $message"
-            . ((isset($file) && $file) ? "<pre>File: $file</pre>" : '')
-            . ((isset($line) && $line) ? "<pre>Line: $line</pre>" : '')
-            . (isset($context['project_name']) ? '<pre>Context: ' . $context['project_name'] . '</pre>' : '')
-        );
-    }
-
-    /**
-     * Catch any fatal errors at shutdown.
-     */
-    public function guruMeditationShutdown()
-    {
-        $last = error_get_last();
-        switch ($last['type']) {
-        case E_ERROR:
-            $this->guruMeditationError(
-                'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
-            );
-        }
-    }
 
     /**
      * load the master config file
@@ -400,4 +319,85 @@ class GuruMeditationLoader
         echo '</body></html>';
         exit;
     } // end function guruMeditationError()
+
+    /**
+     * Catch any errors.
+     */
+    public function guruMeditationErrorHandler($level, $message, $file = '', $line = '', $context = array())
+    {
+        switch ($level) {
+            case 1:
+                $this->debug("E_ERROR: file:$file line:$line $message");
+                break;
+            case 2:
+                $this->debug("E_WARNING: file:$file line:$line $message");
+                return;
+            case 4:
+                $this->debug("E_PARSE: file:$file line:$line $message");
+                return;
+            case 8:
+                $this->debug("E_NOTICE: file:$file line:$line $message");
+                return;
+            case 16:
+                $this->debug("E_CORE_ERROR: file:$file line:$line $message");
+                break;
+            case 32:
+                $this->debug("E_CORE_WARNING: file:$file line:$line $message");
+                return;
+            case 64:
+                $this->debug("E_COMPILE_ERROR: file:$file line:$line $message");
+                break;
+            case 128:
+                $this->debug("E_COMPILE_WARNING: file:$file line:$line $message");
+                return;
+            case 256:
+                $this->debug("E_USER_ERROR: file:$file line:$line $message");
+                break;
+            case 512:
+                $this->debug("E_USER_WARNING: file:$file line:$line $message");
+                return;
+            case 1024:
+                $this->debug("E_USER_NOTICE: file:$file line:$line $message");
+                return;
+            case 2048:
+                $this->debug("E_STRICT: file:$file line:$line $message");
+                return;
+            case 4096:
+                $this->debug("E_RECOVERABLE_EROR: file:$file line:$line $message");
+                return;
+            case 8192:
+                $this->debug("E_DEPECIATED: file:$file line:$line $message");
+                return;
+            case 16384:
+                $this->debug("E_USER_DEPECIATED: file:$file line:$line $message");
+                return;
+            case 30719:
+                $this->debug("E_ALL: file:$file line:$line $message");
+                break;
+          default:
+              $this->debug("E_UNKNOWN: file:$file line:$line $message");
+              break;
+        }
+
+        $this->guruMeditationError(
+            "Sadness $level: $message"
+            . ((isset($file) && $file) ? "<pre>File: $file</pre>" : '')
+            . ((isset($line) && $line) ? "<pre>Line: $line</pre>" : '')
+            . (isset($context['project_name']) ? '<pre>Context: ' . $context['project_name'] . '</pre>' : '')
+        );
+    }
+
+    /**
+     * Catch any fatal errors at shutdown.
+     */
+    public function guruMeditationShutdown()
+    {
+        $last = error_get_last();
+        switch ($last['type']) {
+        case E_ERROR:
+            $this->guruMeditationError(
+                'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
+            );
+        }
+    }
 } // end class GuruMeditationLoader

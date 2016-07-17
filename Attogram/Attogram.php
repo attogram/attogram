@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.15
+// Attogram Framework - Attogram class v0.4.16
 
 namespace Attogram;
 
@@ -475,11 +475,12 @@ class Attogram
         if (is_array($this->actions)) {
             return $this->actions;
         }
+        $this->actions = array();
         $dirs = $this->getAllSubdirectories($this->modulesDirectory, 'actions');
         if (!$dirs) {
             $this->log->debug('getActions: No module actions found');
+            return $this->actions;
         }
-        $this->actions = array();
         foreach ($dirs as $d) {
             foreach ($this->getActionables($d) as $name => $actionable) {
                 $this->actions[$name] = $actionable;
@@ -667,13 +668,15 @@ class Attogram
     }
 
     /**
-     * error404() - display a 404 error page to user and exit.
+     * Display a 404 error page to user and exit.
+     * @param string $error  Error message to display to user
      */
     public function error404($error = '')
     {
         header('HTTP/1.0 404 Not Found');
         if ($this->isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];
+            $this->log->debug('ERROR404: exit');
             exit;
         }
         // Default 404 page
@@ -681,10 +684,11 @@ class Attogram
         $this->pageHeader('404 Not Found');
         echo '<div class="container"><h1>404 Not Found</h1>';
         if ($error) {
-            echo '<p>'.htmlentities($error).'</p>';
+            echo '<p>'.$this->webDisplay($error).'</p>';
         }
         echo '</div>';
         $this->pageFooter();
+        $this->log->debug('ERROR404: exit');
         exit;
     }
 
