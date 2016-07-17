@@ -1,12 +1,11 @@
 <?php
-// Attogram Framework - Check Script v0.1.8
+// Attogram Framework - Check Script v0.1.10
 
 namespace Attogram;
 
 $c = new AttogramCheck();
 $c->check();
 
-////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 class AttogramCheck
 {
@@ -19,9 +18,9 @@ class AttogramCheck
 
     public function __construct()
     {
-        $this->pass = '<span class="icon-s"><strong>💚 Pass</strong></span>'; // ✔ ☑  🆗 💚 😊
-        $this->fail = '<span class="icon-s"><strong>🔴 Fail</strong></span>'; // ✖ ❌ ❎ ❕ ❗ 🔵 🔴 💔 😢 🙀 😿  🍅 💩
-        $this->unknown = '<span class="icon-s"><strong>🔳 Skip</strong></span>'; // 💢 ❓ ❔ 😥 😴 ⭕ 🔳
+        $this->pass = '<span class="icon-s"><strong>💚 Pass</strong></span>';
+        $this->fail = '<span class="icon-s"><strong>🔴 Fail</strong></span>';
+        $this->unknown = '<span class="icon-s"><strong>🔳 Skip</strong></span>';
         $this->divider = '<hr />';
         $this->spacer = ' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
     }
@@ -72,13 +71,18 @@ class AttogramCheck
     {
         $htaccessFile = './.htaccess';
         file_exists($htaccessFile) ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 2.0 - <strong>'.$htaccessFile.'</strong> exists</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}.' 2.0 - <strong>'
+            .$htaccessFile.'</strong> exists</pre>';
         is_readable($htaccessFile) ? $filereadable = 'pass' : $filereadable = 'fail';
-        echo '<pre class="'.$filereadable.'">'.$this->{$filereadable}.' 2.1 - <strong>'.$htaccessFile.'</strong> is readable</pre>';
+        echo '<pre class="'.$filereadable.'">'.$this->{$filereadable}
+            .' 2.1 - <strong>'.$htaccessFile.'</strong> is readable</pre>';
         $count = $found = array();
-        $count['FallbackResource'] = $count['ErrorDocument 404'] = $count['ErrorDocument 403'] = $count['DirectoryIndex'] = 0;
-        $found['FallbackResource'] = $found['ErrorDocument 404'] = $found['ErrorDocument 403'] = $found['DirectoryIndex'] = '?';
-        $result22 = $result23 = $result24 = $result25 = $result26 = $result27 = $result28 = $result29 = 'fail';
+        $count['FallbackResource'] = $count['ErrorDocument 404']
+            = $count['ErrorDocument 403'] = $count['DirectoryIndex'] = 0;
+        $found['FallbackResource'] = $found['ErrorDocument 404']
+            = $found['ErrorDocument 403'] = $found['DirectoryIndex'] = '?';
+        $result22 = $result23 = $result24 = $result25 = $result26
+            = $result27 = $result28 = $result29 = 'fail';
         $goodUri = $this->goodUri();
         if ($filereadable == 'pass') {
             $file = new SplFileObject($htaccessFile);
@@ -141,42 +145,69 @@ class AttogramCheck
             }
         } // end file check
         $result = 'unknown';
-        echo '<pre class="'.$result22.'">'.$this->{$result22}.' 2.2 - <strong>FallbackResource</strong> found once (found: '.$count['FallbackResource'].')</pre>';
-        echo '<pre class="'.$result23.'">'.$this->{$result23}.' 2.3 - <strong>ErrorDocument 403</strong> found once (found: '.$count['ErrorDocument 403'].')</pre>';
-        echo '<pre class="'.$result24.'">'.$this->{$result24}.' 2.4 - <strong>ErrorDocument 404</strong> found once (found: '.$count['ErrorDocument 404'].')</pre>';
-        echo '<pre class="'.$result25.'">'.$this->{$result25}.' 2.5 - <strong>DirectoryIndex</strong> found once (found: '.$count['DirectoryIndex'].')</pre>';
-        echo '<pre class="'.$result26.'">'.$this->{$result26}.' 2.6 - <strong>FallbackResource '.$goodUri.'</strong> (found: '.$found['FallbackResource'].')</pre>';
-        echo '<pre class="'.$result27.'">'.$this->{$result27}.' 2.7 - <strong>ErrorDocument 403 '.$goodUri.'</strong> (found: '.$found['ErrorDocument 403'].')</pre>';
-        echo '<pre class="'.$result28.'">'.$this->{$result28}.' 2.8 - <strong>ErrorDocument 404 '.$goodUri.'</strong> (found: '.$found['ErrorDocument 404'].')</pre>';
-        echo '<pre class="'.$result29.'">'.$this->{$result29}.' 2.9 - <strong>DirectoryIndex index.php</strong> (found: '.$found['DirectoryIndex'].')</pre>';
+        echo '<pre class="'.$result22.'">'.$this->{$result22}
+            .' 2.2 - <strong>FallbackResource</strong> found once (found: '
+            .$count['FallbackResource'].')</pre>';
+        echo '<pre class="'.$result23.'">'.$this->{$result23}
+            .' 2.3 - <strong>ErrorDocument 403</strong> found once (found: '
+            .$count['ErrorDocument 403'].')</pre>';
+        echo '<pre class="'.$result24.'">'.$this->{$result24}
+            .' 2.4 - <strong>ErrorDocument 404</strong> found once (found: '
+            .$count['ErrorDocument 404'].')</pre>';
+        echo '<pre class="'.$result25.'">'.$this->{$result25}
+            .' 2.5 - <strong>DirectoryIndex</strong> found once (found: '
+            .$count['DirectoryIndex'].')</pre>';
+        echo '<pre class="'.$result26.'">'.$this->{$result26}
+            .' 2.6 - <strong>FallbackResource '.$goodUri.'</strong> (found: '
+            .$found['FallbackResource'].')</pre>';
+        echo '<pre class="'.$result27.'">'.$this->{$result27}
+            .' 2.7 - <strong>ErrorDocument 403 '.$goodUri.'</strong> (found: '
+            .$found['ErrorDocument 403'].')</pre>';
+        echo '<pre class="'.$result28.'">'.$this->{$result28}
+            .' 2.8 - <strong>ErrorDocument 404 '.$goodUri.'</strong> (found: '
+            .$found['ErrorDocument 404'].')</pre>';
+        echo '<pre class="'.$result29.'">'.$this->{$result29}
+            .' 2.9 - <strong>DirectoryIndex index.php</strong> (found: '
+            .$found['DirectoryIndex'].')</pre>';
     }
 
     public function checkPhp()
     {
         $version = phpversion();
-        (version_compare($version, '5.3.3') >= 0) ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 3.0 - <strong>PHP</strong> Version is >= 5.3.3 (current is '.$version.')</pre>';
+        (version_compare($version, '5.3.3') >= 0)
+            ? $result = 'pass' : $result = 'fail';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 3.0 - <strong>PHP</strong> Version is >= 5.3.3 (current is '
+            .$version.')</pre>';
         class_exists('PDO') ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 3.1 - <strong>PDO</strong> extension enabled</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 3.1 - <strong>PDO</strong> extension enabled</pre>';
         $result = 'fail';
         if (class_exists('PDO')) {
-            in_array('sqlite', \PDO::getAvailableDrivers()) ? $result = 'pass' : $result = 'fail';
+            in_array('sqlite', \PDO::getAvailableDrivers())
+                ? $result = 'pass' : $result = 'fail';
         }
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 3.2 - <strong>PDO sqlite</strong> driver installed</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 3.2 - <strong>PDO sqlite</strong> driver installed</pre>';
     }
 
     public function checkApache()
     {
-        isset($_SERVER['SERVER_SOFTWARE']) ? $serverSoftware = $_SERVER['SERVER_SOFTWARE'] : $serverSoftware = '';
+        isset($_SERVER['SERVER_SOFTWARE'])
+            ? $serverSoftware = $_SERVER['SERVER_SOFTWARE'] : $serverSoftware = '';
         $serverSoftwareArray = explode(' ', $serverSoftware);
         $serverNameString = $serverSoftwareArray[0];
         $serverNameArray = explode('/', $serverNameString);
         $apache = $serverNameArray[0];
         $apacheVersion = $serverNameArray[1];
         ($apache == 'Apache') ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 4.0 - <strong>Apache Server</strong> in use</pre>';
-        (version_compare($apacheVersion, '2.2.16') >= 0) ? $result = 'pass' : $result = 'fail';
-        echo '<pre class="'.$result.'">'.$this->{$result}.' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is '.$apacheVersion.')</pre>';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 4.0 - <strong>Apache Server</strong> in use</pre>';
+        (version_compare($apacheVersion, '2.2.16') >= 0)
+            ? $result = 'pass' : $result = 'fail';
+        echo '<pre class="'.$result.'">'.$this->{$result}
+            .' 4.1 - <strong>Apache version</strong> is >= 2.2.16 (current is '
+            .$apacheVersion.')</pre>';
         $apacheFinder = array(
             '/etc/apache2/apache2.conf',
             '/etc/apache2/httpd.conf',
@@ -205,9 +236,12 @@ class AttogramCheck
             $result42Found = $apacheFound[0];
             $result43 = $this->apacheConfExamine($apacheFound[0]);
         }
-        echo '<pre class="'.$result42.'">'.$this->{$result42}.' 4.2 - <strong>Apache conf</strong> exists ('.$result42Found.')</pre>';
-        echo '<pre class="'.$result43.'">'.$this->{$result43}.' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
-          .(isset($this->apacheOverrideDir) ? $this->apacheOverrideDir : '?').')</pre>';
+        echo '<pre class="'.$result42.'">'.$this->{$result42}
+            .' 4.2 - <strong>Apache conf</strong> exists ('.$result42Found.')</pre>';
+        echo '<pre class="'.$result43.'">'.$this->{$result43}
+            .' 4.3 - <strong>Apache conf</strong> has "AllowOveride all" (Directory section = '
+            .(isset($this->apacheOverrideDir) ? $this->apacheOverrideDir : '?')
+            .')</pre>';
     }
 
     public function goodUri()
@@ -217,8 +251,11 @@ class AttogramCheck
             return $indexFile;
         }
         $docroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
-
-        return str_replace($docroot, '', str_replace('\\', '/', __DIR__)).$indexFile;
+        return str_replace(
+            $docroot,
+            '',
+            str_replace('\\', '/', __DIR__)
+        ).$indexFile;
     }
 
     public function apacheConfExamine($conf)
@@ -247,7 +284,6 @@ class AttogramCheck
         foreach ($allowOverride as $dir => $allowCheck) {
             if ($dir && preg_match('~'.$dir.'~', $homeDir) && $allowCheck == 'AllowOverride All') {
                 $this->apacheOverrideDir = $dir;
-
                 return 'pass';
             }
         }
