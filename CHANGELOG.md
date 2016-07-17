@@ -22,13 +22,13 @@
 
 - lots of refactoring/cleanup for PSR-1 + PSR-2 Code style conventions
 - removed `attogram/logger.php`, now using \Psr\Log\NullLogger
-- Codacy integration: https://www.codacy.com/app/attogram-project/attogram/dashboard
-- Codeclimate integration: https://codeclimate.com/github/attogram/attogram
+- Codacy integration: <https://www.codacy.com/app/attogram-project/attogram/dashboard>
+- Codeclimate integration: <https://codeclimate.com/github/attogram/attogram>
 - Project stat badges on README
 
 ## [v0.7.4](https://github.com/attogram/attogram/compare/v0.7.3...v0.7.4) - 2016-07-09
 
-- updates to Travis CI integration: https://travis-ci.org/attogram/attogram
+- updates to Travis CI integration: <https://travis-ci.org/attogram/attogram>
  - for PHP 5.3 and PHP 5.4: use old phpunit, do not do code coverage
  - for PHP 5.5+: use new phpunit, do code coverage
 - continued testing setup
@@ -47,12 +47,14 @@
 ## [v0.7.2](https://github.com/attogram/attogram/compare/v0.7.1...v0.7.2) - 2016-07-07
 
 - bugfix to allow numeric actions ( ./actions/123.php, ./actions/123.md, etc. )
-- New [TODO](./TODO.md): [Issue #13](https://github.com/attogram/attogram/issues/13) - Update [`./README.md`](./README.md)
+- New [TODO](./TODO.md): [Issue #13](https://github.com/attogram/attogram/issues/13)
+- Update [`./README.md`](./README.md)
 
 ## [v0.7.1](https://github.com/attogram/attogram/compare/v0.7.0...v0.7.1) - 2016-07-05
 
 - updated formatting and links in this `./CHANGELOG.md` file
-- updated [`./TODO.md`](./TODO.md) with new + existing [open issues](https://github.com/attogram/attogram/issues) from github
+- updated [`./TODO.md`](./TODO.md) with new + existing
+  [open issues](https://github.com/attogram/attogram/issues) from github
 
 ## [v0.7.0](https://github.com/attogram/attogram/compare/v0.6.9...v0.7.0) - 2016-07-05
 
@@ -60,19 +62,27 @@
 - started [`TODO.md`](./TODO.md)
 - fix for proper Bootstrap container div on editor pages
 - allow HTML in event log messages
-- renamed core modules to [`./modules/_attogram/`](./modules/_attogram/), [`./modules/_database/`](./modules/_database/), and [`./modules/_user/`](./modules/_user/)
-- moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/) for faster loading/caching
-- new attogram function: [`doCacheHeaders($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
-sets Last-Modified and Etag headers, and responds to HTTP_IF_MODIFIED_SINCE / HTTP_IF_NONE_MATCH requests for better caching of virtual web directory files
-- new attogram function:  [`getMarkdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
-returns string of HTML version of markdown file
+- renamed core modules to [`./modules/_attogram/`](./modules/_attogram/),
+  [`./modules/_database/`](./modules/_database/),
+  and [`./modules/_user/`](./modules/_user/)
+- moved bootstrap, jquery and css files back to [`./public/web/`](./public/web/)
+  for faster loading/caching
+- new attogram function:
+  [`doCacheHeaders($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L379)
+  sets Last-Modified and Etag headers, and responds to HTTP_IF_MODIFIED_SINCE /
+  HTTP_IF_NONE_MATCH requests for better caching of virtual web directory files
+- new attogram function:
+  [`getMarkdown($file)`](https://github.com/attogram/attogram/blob/2d0bbcc05d1ccecae31c8da247facd3e24306fed/attogram/attogram.php#L427)
+  returns string of HTML version of markdown file
 - misc refactoring and design tests
 
 ## [v0.6.9](https://github.com/attogram/attogram/compare/3b97137...v0.6.9) - 2016-07-03
 
 - Event log system added
 - UTF-8 header fixes
-- new public actions: [`./modules/_attogram/actions/readme.php`](./modules/_attogram/actions/readme.php), [`./modules/_attogram/actions/license.php`](./modules/_attogram/actions/license.php)
+- new public actions:
+  [`./modules/_attogram/actions/readme.php`](./modules/_attogram/actions/readme.php),
+  [`./modules/_attogram/actions/license.php`](./modules/_attogram/actions/license.php)
 - new hard-coded homepage shows when no `home.php` or `home.md` actions found
 - misc bug fixes and design updates
 - announcement: <https://www.patreon.com/posts/6016378>
