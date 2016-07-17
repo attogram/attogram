@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.12 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.13 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -38,24 +38,31 @@ After that, Attogram tries to stay out of your way while you do your thing!
 
 * Get Attogram:
 
-  * use Composer: `composer create-project attogram/attogram-framework your-install-directory`
+  * use Composer:
+    `composer create-project attogram/attogram-framework your-install-directory`
   * or manually install:
 
-    * Download latest code from GitHub:[`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
-    * If composer is not available, also download the vendor distribution from [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip) and move the `./vendor/` directory to the top level of your install directory.
+    * Download latest code from GitHub:
+      [`https://github.com/attogram/attogram/archive/master.zip`](https://github.com/attogram/attogram/archive/master.zip)
+    * If composer is not available, also download the vendor distribution from
+      [`https://github.com/attogram/attogram-vendor/archive/master.zip`](https://github.com/attogram/attogram-vendor/archive/master.zip)
+      and move the `./vendor/` directory to the top level of your install directory.
 
 * Setup your web server to use the `./public/` directory as the web site root.
-
-* edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403** and **ErrorDocument 404** to the full web path to the index.php file in the install directory.
-
-* (optional) copy `./public/config.sample.php` to `./public/config.php` and edit to change default settings .
+* edit `./public/.htaccess`, set **FallbackResource**, **ErrorDocument 403**
+  and **ErrorDocument 404** to the full web path to the index.php file in
+  the install directory.
+* (optional) copy `./public/config.sample.php` to `./public/config.php` and
+  edit to change default settings .
 
 ## Setup: Admin
 
 * admin pages are IP protected
-* change the allowed admin IPs by setting `$config['admins']` in `./public/config.php`
+* change the allowed admin IPs by setting `$config['admins']` in
+  `./public/config.php`
 * default admin IPs is localhost in ip4 and ip6: `array( '127.0.0.1', '::1' )`
-* admin page requests from non-admin IPs will result in a 404 Page Not Found error
+* admin page requests from non-admin IPs will result in a
+  404 Page Not Found error
 
 _Attogram now has modules!  Updated docs coming soon..._
 
@@ -63,33 +70,48 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 * Install the Attogram Database Module
 * Make sure the database file `./db/global` is writeable by the web server
-* Tables are lazily created when needed.  To create all tables at once,
-goto the [**db-setup admin page**](../db-setup/) and click **Create Attogram Tables**
-* phpLiteAdmin is available for database administration, goto the [**db-admin admin page**](../db-admin/), default password is **attogram**
+* Tables are lazily created when needed.  
+* To create all tables at once, goto the
+  [**db-tables admin page**](../db-tables/) and click **Create Attogram Tables**
+* phpLiteAdmin is available for database administration, goto the
+  [**db-admin admin page**](../db-admin/), default password is **attogram**
 
 ## Setup: Users
 
-* load the homepage, goto admin action [**users**](../users/), click **Create New User**
+* load the homepage, goto admin action [**users**](../users/),
+  click **Create New User**
 * enter username, password, etc. and click **Insert**
 * load the homepage, click [**login**](../login), login as the new user
 
 ## Attogram Modules
 
 * Easily create modules to extend Attogram!
-* Each module lives in its own subdirectory within the Attogram `./modules/` directory.
+* Each module lives in its own subdirectory within the Attogram
+  `./modules/` directory.
 
 ### Module Structure
 
 * Modules may have the following subdirectories:
- * `actions/` - The Public Actions (.php or .md markdown files)  If present, the `home` action is used as the home page.
- * `admin_actions/` - The backend admin-only Actions (.php or .md markdown files)
- * `configs/`- Configurations via `namespace Attogram; global $config; $config['configname'] = ...`, loaded at startup (.php files only)
- * `includes/` - Included files, loaded at startup (.php files only)
- * `tables/` - Database table definitions. Tables are created lazily as needed (.sql files only)
- * `templates/` - Templates, to override default Attogram templates  (.php files only)
- * `public/` - Files for public consumption. Served via requests to the `web/` virtual web directory
+
+  * `actions/` - The Public Actions (.php or .md markdown files)  If present,
+    the `home` action is used as the home page.
+  * `admin_actions/` - The backend admin-only Actions
+    (.php or .md markdown files)
+  * `configs/`- Configurations via
+    `namespace Attogram; global $config; $config['configname'] = ...`,
+    loaded at startup (.php files only)
+  * `includes/` - Included files, loaded at startup (.php files only)
+  * `tables/` - Database table definitions. Tables are created lazily as needed
+    (.sql files only)
+  * `templates/` - Templates, to override default Attogram templates  
+    (.php files only)
+  * `public/` - Files for public consumption. Served via requests to the
+    `web/` virtual web directory
+
 * Modules are loaded in _directory list order_.
- * Actions and files _cascade_: a duplicate action name or file will overwrite any previous modules action or file of the same name.
+
+  * Actions and files _cascade_: a duplicate action name or file will overwrite
+    any previous modules action or file of the same name.
 
 ### Core Modules:
 

@@ -1,9 +1,10 @@
 <?php
-// Attogram Framework - Page Footer v0.3.0
+// Attogram Framework - Page Footer v0.3.1
 
 namespace Attogram;
 
 $divider = '&nbsp;&nbsp; | &nbsp;&nbsp;';
+
 echo
     '<footer class="footer">',
     '<div class="container-fluid">',
@@ -16,5 +17,5 @@ echo
     $divider,
     '<span style="white-space: nowrap">👤 '.$this->request->getClientIp().'</span>',
     $divider,
-    '<span style="white-space: nowrap">🏁 '.round((microtime(1) - $this->startTime), 6, PHP_ROUND_HALF_UP).' seconds</span>',
+    '<span style="white-space: nowrap">🏁 '.round((microtime(true) - $this->startTime), 6, PHP_ROUND_HALF_UP).' seconds</span>',
     '</small></p></div></footer></body></html>';

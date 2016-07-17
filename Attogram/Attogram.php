@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.12
+// Attogram Framework - Attogram class v0.4.13
 
 namespace Attogram;
 
@@ -37,7 +37,6 @@ class Attogram
     public $noEndSlash;         // (array) actions to NOT force slash at end
     public $uri;                // (array) The Current URI
     public $actions;            // (array) memory variable for $this->getActions()
-    public $action;             // (string) The Current Action name
     public $admins;             // (array) Administrator IP addresses
     public $isAdmin;            // (boolean) memory variable for $this->isAdmin()
     public $adminActions;       // (array) memory variable for $this->getAdminActions()
@@ -59,7 +58,7 @@ class Attogram
 
         global $config; // The Global Configuration Array // TODO TMP DEV
 
-        $this->startTime = microtime(1);
+        $this->startTime = microtime(true);
         $this->log = $log;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->event = $event;
@@ -85,7 +84,7 @@ class Attogram
         $this->checkDepth(); // is URI short enough?
         $this->sessioning(); // start sessions
         $this->route(); // Send us where we want to go
-        $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(1) - $this->startTime));
+        $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(true) - $this->startTime));
     } // end function __construct()
 
     /**
@@ -160,11 +159,11 @@ class Attogram
     {
         if ($configVal) {
             $this->{$varName} = $configVal;
-            $this->log->debug('remember: '.$varName.' = '.print_r($this->{$varName}, 1));
+            $this->log->debug('remember: '.$varName.' = '.print_r($this->{$varName}, true));
             return;
         }
         $this->{$varName} = $defaultVal;
-        $this->log->debug('remember: using default: '.$varName.' = '.print_r($this->{$varName}, 1));
+        $this->log->debug('remember: using default: '.$varName.' = '.print_r($this->{$varName}, true));
     }
 
     /**
@@ -275,17 +274,17 @@ class Attogram
         if (isset($actions[$this->uri[0]])) {
             switch ($actions[$this->uri[0]]['parser']) {
               case 'php':
-                  $this->action = $actions[$this->uri[0]]['file'];
-                  if (!is_file($this->action)) {
+                  $action = $actions[$this->uri[0]]['file'];
+                  if (!is_file($action)) {
                       $this->log->error('ROUTE: Missing action');
                       $this->error404('Attempted actionless');
                   }
-                  if (!is_readable($this->action)) {
+                  if (!is_readable($action)) {
                       $this->log->error('ROUTE: Unreadable action');
                       $this->error404('The pages of the book are blank');
                   }
-                  $this->log->debug('ROUTE: include '.$this->action);
-                  include $this->action;
+                  $this->log->debug('ROUTE: include '.$action);
+                  include $action;
                   return;
               case 'md':
                   $this->doMarkdown($actions[$this->uri[0]]['file']);
