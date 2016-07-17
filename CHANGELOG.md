@@ -3,9 +3,18 @@
 - Repository: <https://github.com/attogram/attogram>
 - Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.7...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.8...HEAD)
 
 - Work in progress...
+
+## [v0.7.8](https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8) - 2016-07-14
+
+- merged in filesystem object into main Attogram object
+- use Symfony\Component\HttpFoundation\Request for _GET, _POST and _SERVER
+- prep for injection of $config at startup, instead of using global $config
+- continued style updatess for PSR-1, PSR-2, and more
+- updated [codeclimate](https://travis-ci.org/attogram/attogram) engine setup
+- various bugfixes and refactors
 
 ## [v0.7.7](https://github.com/attogram/attogram/compare/v0.7.6...v0.7.7) - 2016-07-14
 
