@@ -1,5 +1,7 @@
 <?php
-// Attogram Framework - Check Script v0.1.6
+// Attogram Framework - Check Script v0.1.7
+
+namespace Attogram;
 
 $c = new AttogramCheck();
 $c->check();
@@ -270,5 +272,4 @@ hr { height:1px; border:0; background:#E0E0E0; }
     {
         echo '</body></html>';
     }
-
 } // end class AttogramCheck

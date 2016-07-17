@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.14
+// Attogram Framework - Attogram class v0.4.15
 
 namespace Attogram;
 
@@ -70,7 +70,7 @@ class Attogram
 
         $this->config = $configuration;
 
-        if( is_array($config) ) {  // TODO TMP DEV - global $config use?
+        if (is_array($config)) {  // TODO TMP DEV - global $config use?
           $this->config = $config;
         }
         $this->log->debug('CONFIG:', $this->config);
@@ -111,7 +111,10 @@ class Attogram
         if (!isset($this->templates['fof'])) {
             $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
-        $this->remember('siteName', @$this->config['siteName'], 'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>');
+        $this->remember(
+            'siteName', @$this->config['siteName'],
+            'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>'
+        );
         $this->remember('noEndSlash', @$this->config['noEndSlash'], array());
         $this->remember('depth', @$this->config['depth'], array()); // Depth settings
         if (!isset($this->depth[''])) { // check:  homepage depth defined
@@ -197,10 +200,15 @@ class Attogram
         if (!is_array($this->noEndSlash)) {
             return;
         }
-        if (!preg_match('/\/$/', $this->request->getPathInfo())) { // No, there is no slash at end of current url
+        // No, there is no slash at end of current url
+        if (!preg_match('/\/$/', $this->request->getPathInfo())) {
             if (!in_array($this->uri[0], $this->noEndSlash)) {
                 // This action IS NOT excepted from force slash at end
-                $url = str_replace($this->request->getPathInfo(), $this->request->getPathInfo().'/', $this->request->getRequestUri());
+                $url = str_replace(
+                    $this->request->getPathInfo(),
+                    $this->request->getPathInfo().'/',
+                    $this->request->getRequestUri()
+                );
                 header('HTTP/1.1 301 Moved Permanently');
                 header('Location: '.$url);  // Force Trailing Slash
                 exit;
@@ -210,7 +218,11 @@ class Attogram
         // Yes, there is a slash at end of current url
         if (in_array($this->uri[0], $this->noEndSlash)) {
             // This action IS excepted from force slash at end
-            $url = str_replace($this->request->getPathInfo(), rtrim($this->request->getPathInfo(), ' /'), $this->request->getRequestUri());
+            $url = str_replace(
+                $this->request->getPathInfo(),
+                rtrim($this->request->getPathInfo(), ' /'),
+                $this->request->getRequestUri()
+            );
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: '.$url); // Remove Trailing Slash
             exit;
@@ -256,21 +268,16 @@ class Attogram
             $this->log->error('ROUTE: 403 Action Forbidden');
             $this->error404('No spelunking allowed');
         }
-
         if ($this->uri[0] == '') { // The Homepage
             $this->uri[0] = 'home';
         }
-
         $this->log->debug('ROUTE: action: uri[0]: '.$this->uri[0]);
-
         $actions = $this->getActions();
-
         if ($this->isAdmin()) {
             foreach ($this->getAdminActions() as $name => $actionable) {
                 $actions[$name] = $actionable;
             }
         }
-
         if (isset($actions[$this->uri[0]])) {
             switch ($actions[$this->uri[0]]['parser']) {
               case 'php':
@@ -295,15 +302,12 @@ class Attogram
                   break;
             } // end switch on parser
         } //end if action set
-
         if ($this->uri[0] == 'home') { // missing the Home Page!
             $this->defaultHomepage();
             return;
         }
-
         $this->log->error('ROUTE: Action not found.  uri[0]='.$this->uri[0]);
         $this->error404('This is not the action you are looking for');
-
     } // end function route()
 
     /**
@@ -605,8 +609,9 @@ class Attogram
             return;
         }
         // Default page footer
-        echo '<hr /><p>Powered by <a href="'.$this->projectRepository.'">Attogram v'.ATTOGRAM_VERSION.'</a></p>';
-        echo '</body></html>';
+        echo '<hr /><p>Powered by <a href="'.$this->projectRepository.'">Attogram v'
+            .ATTOGRAM_VERSION.'</a></p>'
+            .'</body></html>';
         $this->log->error('missing pageFooter '.$file.' - using default footer');
     }
 
@@ -618,13 +623,15 @@ class Attogram
         $this->log->error('using defaultHomepage');
         $this->pageHeader('Home');
         echo '<div class="container">'
-        .'<h1>Welcome to the Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small></h1>'
+        .'<h1>Welcome to the Attogram Framework <small>v'
+        .self::ATTOGRAM_VERSION.'</small></h1>'
         .'<br />Public pages:<ul>';
         if (!$this->getActions()) {
             echo '<li><em>None yet</em></li>';
         }
         foreach ($this->getActions() as $name => $val) {
-            echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
+            echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'
+                .htmlentities($name).'</a></li>';
         }
         echo '</ul>';
         if ($this->isAdmin()) {
@@ -633,24 +640,29 @@ class Attogram
                 echo '<li><em>None yet</em></li>';
             }
             foreach ($this->getAdminActions() as $name => $val) {
-                echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'.htmlentities($name).'</a></li>';
+                echo '<li><a href="'.$this->path.'/'.urlencode($name).'/">'
+                    .htmlentities($name).'</a></li>';
             }
             echo '</ul>';
         }
 
         $exampleModule = 'MyModuleName';
         echo '<br /><hr />To replace this home page:<ul>'
-            .'<li>Goto the top level of your <a href="' . $this->projectRepository . '">Attogram Framework</a> installation'
-                .'<ul><li><code>cd ' . realpath($this->attogramDirectory) . '</code></li></ul></li>'
+            .'<li>Goto the top level of your <a href="'.$this->projectRepository
+            .'">Attogram Framework</a> installation'.'<ul><li><code>cd '
+            .realpath($this->attogramDirectory).'</code></li></ul></li>'
             .'<li>Create a new module and actions directory:'
-                .'<ul><li><code>mkdir modules'.DIRECTORY_SEPARATOR.$exampleModule.DIRECTORY_SEPARATOR.'actions</code></li></ul></li>'
+            .'<ul><li><code>mkdir modules'.DIRECTORY_SEPARATOR.$exampleModule
+            .DIRECTORY_SEPARATOR.'actions</code></li></ul></li>'
             .'<li>Create one <strong>home</strong> action:<ul>'
-                . '<li>in PHP: <code>modules'.DIRECTORY_SEPARATOR.$exampleModule.DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR.'home.php</code></li>'
-                . '<li><em>or</em> in Markdown: <code>modules'.DIRECTORY_SEPARATOR.$exampleModule.DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR.'home.md</code></li>'
-                . '<li><em>or</em> in HTML: <code>modules'.DIRECTORY_SEPARATOR.$exampleModule.DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR.'home.html</code></li>'
-            .'</ul></li>'
-            .'</ul>'
-            .'</div>';
+            .'<li>in PHP: <code>modules'.DIRECTORY_SEPARATOR.$exampleModule
+            .DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR.'home.php</code></li>'
+            .'<li><em>or</em> in Markdown: <code>modules'.DIRECTORY_SEPARATOR
+            .$exampleModule.DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR
+            .'home.md</code></li>'
+            .'<li><em>or</em> in HTML: <code>modules'.DIRECTORY_SEPARATOR
+            .$exampleModule.DIRECTORY_SEPARATOR.'actions'.DIRECTORY_SEPARATOR.
+            'home.html</code></li></ul></li></ul></div>';
         $this->pageFooter();
     }
 
@@ -659,7 +671,6 @@ class Attogram
      */
     public function error404($error = '')
     {
-        //$this->event->error('404 Not Found: uri: [' . implode(', ', $this->uri) . '] error: ' . $error);
         header('HTTP/1.0 404 Not Found');
         if ($this->isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];

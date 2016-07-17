@@ -7,7 +7,7 @@
 
 - Work in progress...
 
-## [v0.7.8](https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8) - 2016-07-14
+## [v0.7.8](https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8) - 2016-07-17
 
 - merged in filesystem object into main Attogram object
 - use Symfony\Component\HttpFoundation\Request for _GET, _POST and _SERVER

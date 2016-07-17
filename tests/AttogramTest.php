@@ -1,5 +1,7 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.2
+// Attogram Framework - Attogram Test v0.1.3
+
+namespace Attogram;
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {

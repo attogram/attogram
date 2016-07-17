@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.6
+// Attogram Framework - Guru Meditation Loader - v0.4.7
 
 namespace Attogram;
 
@@ -400,5 +400,4 @@ class GuruMeditationLoader
         echo '</body></html>';
         exit;
     } // end function guruMeditationError()
-
 } // end class GuruMeditationLoader
