@@ -10,7 +10,7 @@
 ## [v0.7.8](https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8) - 2016-07-17
 
 - merged in filesystem object into main Attogram object
-- use Symfony\Component\HttpFoundation\Request for _GET, _POST and _SERVER
+- use Symfony\\Component\\HttpFoundation\\Request for _GET, _POST and _SERVER
 - prep for injection of $config at startup, instead of using global $config
 - continued style updatess for PSR-1, PSR-2, and more
 - updated [codeclimate](https://codeclimate.com/github/attogram/attogram) engine setup
@@ -38,16 +38,20 @@
 ## [v0.7.4](https://github.com/attogram/attogram/compare/v0.7.3...v0.7.4) - 2016-07-09
 
 - updates to Travis CI integration: <https://travis-ci.org/attogram/attogram>
+
  - for PHP 5.3 and PHP 5.4: use old phpunit, do not do code coverage
  - for PHP 5.5+: use new phpunit, do code coverage
+
 - continued testing setup
 
 ## [v0.7.3](https://github.com/attogram/attogram/compare/v0.7.2...v0.7.3) - 2016-07-08
 
 - Removed all modules from main distribution.  Core modules now have their own repository:
- - <https://github.com/attogram/attogram-base>
+
  - <https://github.com/attogram/attogram-database>
- - <https://github.com/attogram/attogram-user>
+ - <https://github.com/attogram/attogram-user
+ - <https://github.com/attogram/attogram-info>
+
 - setup framework for Travis CI integration: <https://travis-ci.org/attogram/attogram>
 - setup framework for future phpunit Unit Testing
 - bugfixes on numeric actions, missing db object, empty menus

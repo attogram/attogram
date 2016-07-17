@@ -7,9 +7,9 @@
 
 ## Core Modules
 These modules extend the skeleton Attogram Framework:
-* Attogram Base - https://github.com/attogram/attogram-base
 * Attogram Database - https://github.com/attogram/attogram-database
 * Attogram User - https://github.com/attogram/attogram-user
+* Attogram Info - https://github.com/attogram/attogram-info
 * Attogram Contact Form - https://github.com/attogram/attogram-contactform
 
 ## Website Modules:

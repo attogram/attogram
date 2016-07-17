@@ -117,7 +117,7 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 * Attogram Database - <https://github.com/attogram/attogram-database>
 * Attogram User - <https://github.com/attogram/attogram-user>
-* Attogram Base - <https://github.com/attogram/attogram-base>
+* Attogram Info - <https://github.com/attogram/attogram-info>
 * Attogram Contact Form - <https://github.com/attogram/attogram-contactform>
 
 ## Old Docs:
