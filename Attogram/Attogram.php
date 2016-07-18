@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.18
+// Attogram Framework - Attogram class v0.4.19
 
 namespace Attogram;
 
@@ -137,7 +137,7 @@ class Attogram
         }
         foreach ($dirs as $moduleDir) {
             foreach (array_diff(scandir($moduleDir), $this->getSkipFiles()) as $mfile) {
-                $file = "$moduleDir/$mfile";
+                $file = $moduleDir.DIRECTORY_SEPARATOR.$mfile;
                 if ($this->isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
                     $this->templates[$name] = $file; // Set the template
@@ -218,7 +218,7 @@ class Attogram
             // This action IS excepted from force slash at end
             $url = str_replace(
                 $this->request->getPathInfo(),
-                rtrim($this->request->getPathInfo(), ' /'),
+                rtrim($this->request->getPathInfo(), '/'),
                 $this->request->getRequestUri()
             );
             header('HTTP/1.1 301 Moved Permanently');
@@ -327,7 +327,7 @@ class Attogram
         $modulesDirectories = $this->getAllSubdirectories($this->modulesDirectory, 'public');
         $file = false;
         foreach ($modulesDirectories as $moduleDirectory) {
-            $testFile = $moduleDirectory.'/'.$req;
+            $testFile = $moduleDirectory.DIRECTORY_SEPARATOR.$req;
             if (!is_readable($testFile) || is_dir($testFile)) {
                 continue;
             }
@@ -750,7 +750,7 @@ class Attogram
             return $included;
         }
         foreach (array_diff(scandir($dir), self::getSkipFiles()) as $f) {
-            $ff = $dir.'/'.$f;
+            $ff = $dir.DIRECTORY_SEPARATOR.$f;
             if (!self::isReadableFile($ff, '.php')) {
                 continue;
             }
