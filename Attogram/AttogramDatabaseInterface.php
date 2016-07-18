@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabase Interface 0.1.3
+// Attogram Framework - AttogramDatabase Interface 0.2.0
 
 namespace Attogram;
 
@@ -39,4 +39,68 @@ interface AttogramDatabase
      * @return int             The number of entries
      */
     public function getTableCount($table, $idField = 'id', $where = '');
+
+    /**
+     * Create a table in the active SQLite database
+     * @param string $table The name of the table to create
+     * @return boolean
+     */
+    public function createTable($table);
+
+    /**
+     * tabler - HTML table with view of database table content, plus optional admin links
+     *
+     * @param  string $table         The table name
+     * @param  string $tableId      The name of the table ID field (or equivilant )
+     * @param  string $nameSingular The name of what we are editing, singular form
+     * @param  string $namePlural   The name of what we are editing, plural form
+     * @param  array  $col           Column Display Info - array of array('class'=>'...', 'title'=>'...', 'key'=>'...')
+     * @param  string $sql           SQL query to view contents of table
+     * @param  string $countSql     SQL query to get total number of items in table
+     * @param  string $publicLink   URL to the public version of this view
+     * @param  string $adminLink    URL to the admin version of this view
+     * @param  bool   $showEdit     Show edit tools
+     * @param  int    $perPage      (optional) The number of results to show per page. Defaults to 50
+     *
+     * @return string                HTML fragment
+     */
+    public function tabler(
+        $table,
+        $tableId,
+        $nameSingular,
+        $namePlural, // TODO - remove unused
+        $publicLink,
+        array $col,
+        $sql,
+        $adminLink, // TODO - remove unused
+        $showEdit,
+        $perPage
+    );
+
+    /**
+     * Show pagination links
+     * @param  int    $count   The Total Resultset Count
+     * @param  int    $limit   The # of results to list per page
+     * @param  int    $offset  The item # to start the list
+     * @param  string $preQS  (optional) URL Query String to prepend to pagination links, pairs of  name=value&name=value&...
+     * @return string          HTML fragment
+     */
+    public function pager($count, $limit, $offset, $preQS = '');
+
+    /**
+     * Get requested Query limit and offset from HTTP GET variables,
+     * error check, and then return valid limit and offset
+     * @param  int    $defaultLimit  (optional) The default limit, if not set.   Defaults to 1000
+     * @param  int    $defaultOffset (optional) The default offset, if not set.  Defaults to 0
+     * @param  int    $maxLimit      (optional) The maximum allowed limit value. Defaults to 5000
+     * @param  int    $minLimit      (optional) The minimum allowed limit value. Defaults to 100
+     * @return array                  Array of (limit,offset)
+     */
+    public function getSetLimitAndOffset(
+        $defaultLimit = 1000,
+        $defaultOffset = 0,
+        $maxLimit = 5000,
+        $minLimit = 100
+    );
+
 } // end interface AttogramDatabase
