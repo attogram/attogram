@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.16
+// Attogram Framework - Attogram class v0.4.18
 
 namespace Attogram;
 
@@ -92,10 +92,8 @@ class Attogram
      */
     public function awaken()
     {
-
-
         $this->remember('admins', @$this->config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
-        $this->remember('attogramDirectory', @$this->config['attogramDirectory'], '../');
+        $this->remember('attogramDirectory', @$this->config['attogramDirectory'], '..'.DIRECTORY_SEPARATOR);
         $this->remember('modulesDirectory', @$this->config['modulesDirectory'], $this->attogramDirectory.'modules');
         $this->remember('templatesDirectory', @$this->config['templatesDirectory'], $this->attogramDirectory.'templates');
         $this->setModuleTemplates();
@@ -529,7 +527,7 @@ class Attogram
             return $result;
         }
         foreach (array_diff(scandir($dir), $this->getSkipFiles()) as $afile) {
-            $file = $dir.'/'.$afile;
+            $file = $dir.DIRECTORY_SEPARATOR.$afile;
             if ($this->isReadableFile($file, '.php')) { // PHP files
                 $result[str_replace('.php', '', $afile)] = array('file' => $file, 'parser' => 'php');
                 continue;
@@ -725,11 +723,11 @@ class Attogram
         }
         $result = array();
         foreach (array_diff(scandir($dir), self::getSkipFiles()) as $d) {
-            $md = $dir.'/'.$d;
+            $md = $dir.DIRECTORY_SEPARATOR.$d;
             if (!is_readable($md)) {
                 continue;
             }
-            $md .= '/'.$name;
+            $md .= DIRECTORY_SEPARATOR.$name;
             if (!is_readable($md)) {
                 continue;
             }
@@ -790,7 +788,7 @@ class Attogram
      */
     public static function getSkipFiles()
     {
-        return array('.', '..', '.htaccess');
+        return array('.', '..', '.htaccess', '.gitignore', '.git', 'README.md', 'LICENSE.md', 'TODO.md');
     }
 
     /**

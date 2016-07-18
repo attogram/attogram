@@ -1,24 +1,24 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.8
+// Attogram Framework - Guru Meditation Loader - v0.4.10
 
 namespace Attogram;
 
 // Default configuration
 // Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
-$config['attogramDirectory'] = '../'; // with trailing slash
-$config['autoloader'] = $config['attogramDirectory'].'vendor/autoload.php';
+$config['attogramDirectory'] = '..'.DIRECTORY_SEPARATOR; // with trailing slash
+$config['autoloader'] = $config['attogramDirectory'].'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 $config['modulesDirectory'] = $config['attogramDirectory'].'modules'; // without trailing slash
 $config['templatesDirectory'] = $config['attogramDirectory'].'templates'; // without trailing slash
 $config['debug'] = false;
 $config['siteName'] = 'The Attogram Framework';
 $config['admins'] = array('127.0.0.1', '::1');
-$config['databaseName'] = $config['attogramDirectory'].'db/global';
+$config['databaseName'] = $config['attogramDirectory'].'db'.DIRECTORY_SEPARATOR.'global';
 
 // Load the Project
 $guru = new GuruMeditationLoader(
     $config['siteName'], // $projectName
-    './config.php', // $configFile
-    $config['attogramDirectory'].'Attogram/', // $projectClasses
+    '.'.DIRECTORY_SEPARATOR.'config.php', // $configFile
+    $config['attogramDirectory'].'Attogram'.DIRECTORY_SEPARATOR, // $projectClasses
     $config['autoloader'], // $defaultAutoloader
     'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
     array( // $requiredClasses
