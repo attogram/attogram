@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.4.19
+// Attogram Framework - Attogram class v0.5.0
 
 namespace Attogram;
 
@@ -209,7 +209,7 @@ class Attogram
                 );
                 header('HTTP/1.1 301 Moved Permanently');
                 header('Location: '.$url);  // Force Trailing Slash
-                exit;
+                $this->shutdown();
             }
             return;
         }
@@ -223,7 +223,7 @@ class Attogram
             );
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: '.$url); // Remove Trailing Slash
-            exit;
+            $this->shutdown();
         }
     }
 
@@ -345,13 +345,13 @@ class Attogram
                 $this->log->error('virtualWebDirectory: can not read file: '.$this->webDisplay($file));
                 $this->error404('Virtually unreadable');
             }
-            exit;
+            $this->shutdown();
         }
         if (!(include($file))) { // include native PHP or HTML file
             $this->log->error('virtualWebDirectory: can not include file: '.$this->webDisplay($file));
             $this->error404('Virtually unincludeable');
         }
-        exit;
+        $this->shutdown();
     } // end function virtualWebDirectory()
 
     /**
@@ -370,7 +370,7 @@ class Attogram
         $serverIfNone = trim($this->request->server->get('HTTP_IF_NONE_MATCH'));
         if ($serverIfMod == $lastmod || $serverIfNone == $lastmod) {
             header('HTTP/1.1 304 Not Modified');
-            exit;
+            $this->shutdown();
         }
     } // end function doCacheHeaders()
 
@@ -383,7 +383,7 @@ class Attogram
             case '/robots.txt':
                 header('Content-Type: text/plain; charset=utf-8');
                 echo 'Sitemap: '.$this->getSiteUrl().'/sitemap.xml';
-                exit;
+                $this->shutdown();
             case '/sitemap.xml':
                 $site = $this->getSiteUrl().'/';
                 $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -398,7 +398,7 @@ class Attogram
                 $sitemap .= '</urlset>';
                 header('Content-Type: text/xml; charset=utf-8');
                 echo $sitemap;
-                exit;
+                $this->shutdown();
         }
     }
 
@@ -675,7 +675,7 @@ class Attogram
         if ($this->isReadableFile($this->templates['fof'], '.php')) {
             include $this->templates['fof'];
             $this->log->debug('ERROR404: exit');
-            exit;
+            $this->shutdown();
         }
         // Default 404 page
         $this->log->error('ERROR404: 404 template not found');
@@ -687,7 +687,7 @@ class Attogram
         echo '</div>';
         $this->pageFooter();
         $this->log->debug('ERROR404: exit');
-        exit;
+        $this->shutdown();
     }
 
     /**
@@ -855,5 +855,13 @@ class Attogram
                 break;
         }
         return $mimeType;
+    }
+
+    /**
+     * Shutdown everything and exit!
+     */
+    public function shutdown()
+    {
+        exit;
     }
 } // END of class attogram
