@@ -44,14 +44,14 @@ class Attogram
     /**
      * @param obj  $log      Debug PSR-3 logger object, interface: \Psr\Log\LoggerInterface
      * @param obj  $event    Event PSR-3 logger object, interface: \Psr\Log\LoggerInterface
-     * @param obj  $database Attogram Database object, interface: \Attogram\AttogramDatabase
+     * @param obj  $database Attogram Database object, interface: \Attogram\AttogramDatabaseInterface
      * @param obj  $request  Request object, \Symfony\Component\HttpFoundation\Request
      * @param array $configuration  (optional) List of configuration values
      */
     public function __construct(
         \Psr\Log\LoggerInterface $log,
         \Psr\Log\LoggerInterface $event,
-        \Attogram\AttogramDatabase $database,
+        \Attogram\AttogramDatabaseInterface $database,
         \Symfony\Component\HttpFoundation\Request $request,
         array $configuration = array()
     ) {

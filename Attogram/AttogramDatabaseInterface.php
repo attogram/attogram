@@ -1,12 +1,12 @@
 <?php
-// Attogram Framework - AttogramDatabase Interface 0.2.0
+// Attogram Framework - AttogramDatabaseInterface 0.3.0
 
 namespace Attogram;
 
 /**
  * Attogram Database Object Interface
  */
-interface AttogramDatabase
+interface AttogramDatabaseInterface
 {
 
     /**
@@ -103,4 +103,4 @@ interface AttogramDatabase
         $minLimit = 100
     );
 
-} // end interface AttogramDatabase
+} // end interface AttogramDatabaseInterface

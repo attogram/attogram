@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.10
+// Attogram Framework - Guru Meditation Loader - v0.4.11
 
 namespace Attogram;
 
@@ -33,7 +33,7 @@ $guru = new GuruMeditationLoader(
     ),
     array( // $requiredInterfaces
         '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
-        '\Attogram\AttogramDatabase' // Attogram Database Interface
+        '\Attogram\AttogramDatabaseInterface' // Attogram Database Interface
     )
 );
 

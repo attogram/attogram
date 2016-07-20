@@ -1,12 +1,12 @@
 <?php
-// Attogram Framework - AttogramDatabase interface 0.1.2
+// Attogram Framework - NullDatabase class 0.1.3
 
 namespace Attogram;
 
 /**
- * Attogram Database Object Interface
+ * Attogram Null Database
  */
-class NullDatabase implements AttogramDatabase
+class NullDatabase implements AttogramDatabaseInterface
 {
 
     /**
@@ -124,5 +124,4 @@ class NullDatabase implements AttogramDatabase
     ) {
         return array(0,0);
     }
-
-} // end interface AttogramDatabase
+} // end class NullDatabase
