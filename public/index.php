@@ -317,7 +317,7 @@ class GuruMeditationLoader
             echo implode('<br />💭 ', $config['GuruMeditationLoader']);
         }
         echo '</body></html>';
-        exit;
+        exit; // Exit everything
     } // end function guruMeditationError()
 
     /**

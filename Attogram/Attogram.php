@@ -862,6 +862,6 @@ class Attogram
      */
     public function shutdown()
     {
-        exit;
+        exit; // The Final Exit
     }
 } // END of class attogram
