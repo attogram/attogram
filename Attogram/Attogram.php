@@ -19,7 +19,7 @@ namespace Attogram;
  */
 class Attogram
 {
-    const ATTOGRAM_VERSION = '0.7.8';
+    const ATTOGRAM_VERSION = '0.7.9';
 
     public $startTime;          // (float) microsecond time of awakening
     public $log;                // (object) Debug Log - PSR-3 Logger object
@@ -57,24 +57,19 @@ class Attogram
     ) {
 
         global $config; // The Global Configuration Array // TODO TMP DEV
-
         $this->startTime = microtime(true);
         $this->log = $log;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
         $this->event = $event;
         $this->database = $database;
-
         $this->request = $request;
         $this->path = $this->request->getBasePath();
         $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
-
         $this->config = $configuration;
-
         if (is_array($config)) {  // TODO TMP DEV - global $config use?
           $this->config = $config;
         }
         $this->log->debug('CONFIG:', $this->config);
-
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
         $this->exceptionFiles(); // do robots.txt, sitemap.xml
@@ -84,7 +79,7 @@ class Attogram
         $this->checkDepth(); // is URI short enough?
         $this->sessioning(); // start sessions
         $this->route(); // Send us where we want to go
-        $this->log->debug('END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(true) - $this->startTime));
+        $this->shutdown();
     } // end function __construct()
 
     /**
@@ -862,6 +857,7 @@ class Attogram
      */
     public function shutdown()
     {
+        $this->log->debug('shutdown: END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(true) - $this->startTime));
         exit; // The Final Exit
     }
 } // END of class attogram
