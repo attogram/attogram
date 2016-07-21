@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.6
+// Attogram Framework - Attogram Test v0.1.7
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
@@ -29,8 +29,8 @@ class AttogramTest extends PHPUnit\Framework\TestCase
             class_exists('\Attogram\EventLogger'),
             'EventLogger class not found'
         );
-        $this->assertTrue(class_exists(
-            '\Attogram\NullDatabase'),
+        $this->assertTrue(
+            class_exists('\Attogram\NullDatabase'),
             'NullDatabase class not found'
         );
     }
@@ -45,7 +45,7 @@ class AttogramTest extends PHPUnit\Framework\TestCase
         $this->assertFalse(
             $nullDatabase->query('vacuum'),
             'NullDatabase query failed'
-          );
+        );
         $this->assertFalse(
             $nullDatabase->query('vacuum', array('test'=>'test')),
             'NullDatabase query with bind failed'
