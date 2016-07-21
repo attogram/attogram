@@ -3,9 +3,17 @@
 - Repository: <https://github.com/attogram/attogram>
 - Click version number to view a diff comparison of changes since the previous release
 
-## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.8...HEAD)
+## [Unreleased](https://github.com/attogram/attogram/compare/v0.7.9...HEAD)
 
 - Work in progress...
+
+## [v0.7.9](https://github.com/attogram/attogram/compare/v0.7.8...v0.7.9) - 2016-07-21
+
+- `shutdown()` function for all your `exit;` needs
+- use DIRECTORY_SEPARATOR for per-OS filesystem goodness
+- renamed db interface to ``\Attogram\AttogramDatabaseInterface`
+- prep code for future removal of global $config setup
+- continued code style cleanups and minor bugfixes
 
 ## [v0.7.8](https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8) - 2016-07-17
 
