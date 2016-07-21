@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.2
+// Attogram Framework - Attogram class v0.5.3
 
 namespace Attogram;
 
@@ -174,7 +174,7 @@ class Attogram
      * @param string $configVal  The setting for the variable
      * @param string $defaultVal The default setting for the variable, if $config_val is empty
      */
-    public function remember($varName, $configVal = '', $defaultVal)
+    public function remember($varName, $configVal = '', $defaultVal = '')
     {
         if ($configVal) {
             $this->{$varName} = $configVal;
