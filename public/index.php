@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.5.1
+// Attogram Framework - Guru Meditation Loader - v0.5.2
 
 namespace Attogram;
 
@@ -239,19 +239,31 @@ class GuruMeditationLoader
     } // end function innerEmptiness()
 
     /**
-     * load module configs
+     * load module configuration files
      */
     public function meditateDeeper()
     {
-        $count = Attogram::loadModuleSubdirectories(
+        global $config; // for loading of $config variable from within the module config files
+        $configDirs = Attogram::getAllSubdirectories(
             $this->config['modulesDirectory'],
             'configs'
         );
-        if ($count) {
-            $this->debug('meditateDeeper: module configs OK: '.implode(', ', $count));
+        if (!$configDirs) {
+            $this->debug('meditateDeeper: NOT FOUND: no module configs directories');
             return;
         }
-        $this->debug('meditateDeeper: NO module configs');
+        foreach ($configDirs as $dir) {
+            //$this->debug('meditateDeeper: dir: ' . $dir);
+            Attogram::includeAllPhpFilesInDirectory($dir);
+        }
+        if (!$config) {
+            $this->debug('meditateDeeper: NOT FOUND: no config in module configs directories');
+            return;
+        }
+        foreach ($config as $configName => $configValue) {
+            $this->config[$configName] = $configValue;
+        }
+        $this->debug('meditateDepper: Module Config OK: ' . print_r($config, true));
     }
 
     public function tranquility()
