@@ -121,6 +121,6 @@ class NullDatabase implements AttogramDatabaseInterface
         $maxLimit = 5000,
         $minLimit = 100
     ) {
-        return array(0,0);
+        return array(0, 0);
     }
 } // end class NullDatabase
