@@ -1,5 +1,5 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.13 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.14 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -113,14 +113,14 @@ _Attogram now has modules!  Updated docs coming soon..._
   * Actions and files _cascade_: a duplicate action name or file will overwrite
     any previous modules action or file of the same name.
 
-### Core Modules:
+### Core Modules
 
 * Attogram Database - <https://github.com/attogram/attogram-database>
 * Attogram User - <https://github.com/attogram/attogram-user>
 * Attogram Info - <https://github.com/attogram/attogram-info>
 * Attogram Contact Form - <https://github.com/attogram/attogram-contactform>
 
-## Old Docs:
+## Old Docs
 
 ## Create a page
 

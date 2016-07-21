@@ -1,9 +1,9 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.5.0
+// Attogram Framework - Guru Meditation Loader - v0.5.1
 
 namespace Attogram;
 
-new GuruMeditationLoader(
+$guru = new GuruMeditationLoader(
     // $configFile
     'config.php',
     // $vendorDownload
@@ -100,43 +100,48 @@ class GuruMeditationLoader
 
         if (!is_file($this->configFile)) {
             $this->debug('meditate: NOT FOUND: ConfigFile: '.$this->configFile);
-            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            $this->logDefaultConfiguration();
             return;
         }
         if (!is_readable($this->configFile)) {
             $this->debug('meditate: NOT READABLE: ConfigFile: '.$this->configFile);
-            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            $this->logDefaultConfiguration();
             return;
         }
         if (!(include($this->configFile))) {
             $this->debug('meditate: INCLUDE FAILED: ConfigFile: '.$this->configFile);
-            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            $this->logDefaultConfiguration();
             return;
         }
         $this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
 
         if (!isset($config)) {
             $this->debug('meditation: NOT FOUND: no config variable in ConfigFile');
+            $this->logDefaultConfiguration();
             return;
         }
         if (!is_array($config)) {
             $this->debug('meditation: NOT FOUND: no config array in ConfigFile');
+            $this->logDefaultConfiguration();
             return;
         }
         // Override default settings with ConfigFile configuration
         foreach ($config as $configName => $configValue) {
             $this->config[$configName] = $configValue;
         }
-        $this->debug('meditate: CONFIG OK: '.print_r($this->config,true));
+        $this->debug('meditate: CONFIG OK: '.print_r($this->config, true));
     } // end function meditate()
 
+    public function logDefaultConfiguration()
+    {
+        $this->debug('DEFAULT CONFIG: '.print_r($this->config, true));
+    }
     /**
      * run the vendor autoloader
      */
     public function expandConsciousness()
     {
-        if (
-            isset($this->config['autoloader'])
+        if (isset($this->config['autoloader'])
             && is_file($this->config['autoloader'])
             && is_readable($this->config['autoloader'])
         ) {
@@ -178,17 +183,16 @@ class GuruMeditationLoader
                 'Project directory is unreadable: '.$projectClassesDir
             );
         }
-        foreach (array_diff(scandir($projectClassesDir), array('.', '..')) as $f) {
-            if (!(include_once($projectClassesDir.$f))) {
+        $result = array();
+        foreach (array_diff(scandir($projectClassesDir), array('.', '..')) as $file) {
+            if (!(include_once($projectClassesDir.$file))) {
                 $this->guruMeditationError(
-                    'Failed to include project file: '.$projectClassesDir.$f
+                    'Failed to include project file: '.$projectClassesDir.$file
                 );
-                $result[] = $projectClassesDir.$f;
+                $result[] = $projectClassesDir.$file;
             }
         }
-        if (isset($result)) {
-            $this->debug('focusMind: OK: '.implode(', ', $result));
-        }
+        $this->debug('focusMind: OK: '.implode(', ', $result));
     } // end function focusMind()
 
     public function focusInnerEye()
@@ -261,17 +265,14 @@ class GuruMeditationLoader
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
         // Create the Debug Logger
-        if (
-                (
-                    isset($this->config['debug'])   // debug is true...
-                    && is_bool($this->config['debug'])
-                    && $this->config['debug']
-                ) || (
-                    $request->query->has('debug')   // admin debug url override ?debug
-                    && isset($this->config['admins'])
-                    && is_array($this->config['admins'])
-                    && in_array($request->getClientIp(), $this->config['admins'])
-               )
+        if ((isset($this->config['debug'])   // debug is true...
+            && is_bool($this->config['debug'])
+            && $this->config['debug'])
+            ||
+            ($request->query->has('debug')   // admin debug url override ?debug
+            && isset($this->config['admins'])
+            && is_array($this->config['admins'])
+            && in_array($request->getClientIp(), $this->config['admins']))
         ) {
             $log = new \Monolog\Logger('debug');
             $streamHandler = new \Monolog\Handler\StreamHandler('php://output');
@@ -431,10 +432,11 @@ class GuruMeditationLoader
     {
         $last = error_get_last();
         switch ($last['type']) {
-        case E_ERROR:
-            $this->guruMeditationError(
-                'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
-            );
+            case E_ERROR:
+                $this->guruMeditationError(
+                    'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
+                );
+                // shutdown
         }
     }
 
