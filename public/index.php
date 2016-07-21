@@ -94,6 +94,7 @@ class GuruMeditationLoader
         $this->config['autoloader']         = '..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
         $this->config['modulesDirectory']   = '..'.DIRECTORY_SEPARATOR.'modules';
         $this->config['templatesDirectory'] = '..'.DIRECTORY_SEPARATOR.'templates';
+        $this->config['databaseName']       = '..'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR.'global';
         $this->config['debug']              = false;
         $this->config['siteName']           = 'Attogram Framework';
         $this->config['admins']             = array('127.0.0.1', '::1');
