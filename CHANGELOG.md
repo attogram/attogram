@@ -6,6 +6,8 @@
 ## [Unreleased]
 
 - Work in progress...
+- unit tests for
+  [NullDatabase.php](https://github.com/attogram/attogram/blob/master/Attogram/NullDatabase.php)
 
 ## [v0.8.1] - 2016-07-21
 
