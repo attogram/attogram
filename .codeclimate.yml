@@ -13,6 +13,13 @@ engines:
     enabled: true
   fixme:
     enabled: true
+    exclude_fingerprints:
+    - 1905708136ceaf8ae9d6f556abb64341
+    - 183a6dd1860ffef867094d098adef0b8
+    - 7849b1b852f9ffdbac07f7927a6dd500
+    - 7ee2dfc4d411754eb16a49ca7bd3e375
+    - d96d71ea9fca43b1d697dc76b74ad16a
+    - 03e3c8f573cf74dd3fc3d3ccd43c81ed
   eslint:
     enabled: true
   csslint:
