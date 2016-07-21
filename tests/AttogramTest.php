@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.5
+// Attogram Framework - Attogram Test v0.1.6
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
@@ -13,14 +13,26 @@ class AttogramTest extends PHPUnit\Framework\TestCase
 
     public function testInterfaceExists()
     {
-        $this->assertTrue(interface_exists('\Attogram\AttogramDatabaseInterface'), 'AttogramDatabaseInterface class not found');
+        $this->assertTrue(
+            interface_exists('\Attogram\AttogramDatabaseInterface'),
+            'AttogramDatabaseInterface class not found'
+        );
     }
 
     public function testClassExists()
     {
-        $this->assertTrue(class_exists('\Attogram\Attogram'), 'Attogram class not found');
-        $this->assertTrue(class_exists('\Attogram\EventLogger'), 'EventLogger class not found');
-        $this->assertTrue(class_exists('\Attogram\NullDatabase'), 'NullDatabase class not found');
+        $this->assertTrue(
+            class_exists('\Attogram\Attogram'),
+            'Attogram class not found'
+        );
+        $this->assertTrue(
+            class_exists('\Attogram\EventLogger'),
+            'EventLogger class not found'
+        );
+        $this->assertTrue(class_exists(
+            '\Attogram\NullDatabase'),
+            'NullDatabase class not found'
+        );
     }
 
     public function testNullDatabase()

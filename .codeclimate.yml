@@ -23,6 +23,14 @@ engines:
     - c7e68fcf1fc5ec9f38cdae396133c432
     - f22d0395a1ae7b0f91239f46dbbb4430
     - f4cee06cedfa66d8d6a16a165a210769
+    - cb3de21ee429dc5f406684445f1ae4cc # EventLogger.php
+    - ddb6326b37196ace70834e637248934b
+    - 44cacd5f625973682bcbdf7d6c92e799 # AttogramTest.php
+    - d4e0cbe57ff9ce2df7960ba4b8e38f04
+    - 69c93fcbf7992d11b17ecb604a1d3687
+    - 335d6e85134489f0ad002bbd6d6fca3d
+    - 0a65754197de44dbd346f141280b7680
+                   
   phpcodesniffer:
     enabled: true
   phan:
