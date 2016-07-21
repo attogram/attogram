@@ -690,11 +690,14 @@ of this License. But first, please read
 
 
 <a name="other"></a>
+
 -----
 
-Other Open Source Software included with the Attogram Framework distribution:
+## Open Source Software included with the Attogram Framework distribution
 
-* Bootstrap \- MIT License \- <http://getbootstrap.com/>
-* jQuery \- MIT License \- <http://jquery.org/license/>
-* Parsedown \- MIT License \- <http://parsedown.org/>
-* phpLiteAdmin \- GPL License \- <https://www.phpliteadmin.org/>
+| Software     | License     | URL                            |
+|--------------|-------------|--------------------------------|
+| Bootstrap    | MIT License | <http://getbootstrap.com/>     |
+| jQuery       | MIT License | <http://jquery.org/license/>   |
+| Parsedown    | MIT License | <http://parsedown.org/>        |
+| phpLiteAdmin | GPL License |<https://www.phpliteadmin.org/> |

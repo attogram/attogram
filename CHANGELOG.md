@@ -7,6 +7,10 @@
 
 - Work in progress...
 
+## [v0.8.1] - 2016-07-21
+
+- fix config for databaseName
+
 ## [v0.8.0] - 2016-07-21
 
 - fixed loader to properly get main config.php and module configs at startup
@@ -25,7 +29,8 @@
 - use [`Symfony Request`](http://symfony.com/doc/current/components/http_foundation/introduction.html)
   for \_GET, \_POST and \_SERVER
 - continued style updates for PSR-1, PSR-2, and more
-- updated [codeclimate](https://codeclimate.com/github/attogram/attogram) engine setup
+- updated [codeclimate](https://codeclimate.com/github/attogram/attogram)
+  engine setup
 - various bugfixes and refactors
 
 ## [v0.7.7] - 2016-07-14
@@ -51,14 +56,14 @@
 
 - updates to Travis CI integration: <https://travis-ci.org/attogram/attogram>
 
- - for PHP 5.3 and PHP 5.4: use old phpunit, do not do code coverage
- - for PHP 5.5+: use new phpunit, do code coverage
+ - for PHP 5.3 and PHP 5.4 use old phpunit, do not do code coverage
+ - for PHP 5.5+ use new phpunit, do code coverage
 
 - continued testing setup
 
 ## [v0.7.3] - 2016-07-08
 
-- Removed all modules from main distribution.  Core modules now have their own repository:
+- Removed all modules from main distribution.  Core modules now have their own repository
 
  - <https://github.com/attogram/attogram-database>
  - <https://github.com/attogram/attogram-user

@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.1
+// Attogram Framework - Attogram class v0.5.2
 
 namespace Attogram;
 
@@ -85,10 +85,26 @@ class Attogram
     public function awaken()
     {
         // The Site Administrator IP addresses
-        $this->remember('admins', @$this->config['admins'], array('127.0.0.1', '::1'));
-        $this->remember('attogramDirectory', @$this->config['attogramDirectory'], '..'.DIRECTORY_SEPARATOR);
-        $this->remember('modulesDirectory', @$this->config['modulesDirectory'], $this->attogramDirectory.'modules');
-        $this->remember('templatesDirectory', @$this->config['templatesDirectory'], $this->attogramDirectory.'templates');
+        $this->remember(
+            'admins',
+            @$this->config['admins'],
+            array('127.0.0.1', '::1')
+        );
+        $this->remember(
+            'attogramDirectory',
+            @$this->config['attogramDirectory'],
+            '..'.DIRECTORY_SEPARATOR
+        );
+        $this->remember(
+            'modulesDirectory',
+            @$this->config['modulesDirectory'],
+            $this->attogramDirectory.'modules'
+        );
+        $this->remember(
+            'templatesDirectory',
+            @$this->config['templatesDirectory'],
+            $this->attogramDirectory.'templates'
+        );
         $this->setModuleTemplates();
         if (!isset($this->templates['header'])) {
             $this->templates['header'] = $this->templatesDirectory.DIRECTORY_SEPARATOR.'header.php';
@@ -107,8 +123,16 @@ class Attogram
             @$this->config['siteName'],
             'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>'
         );
-        $this->remember('noEndSlash', @$this->config['noEndSlash'], array());
-        $this->remember('depth', @$this->config['depth'], array()); // Depth settings
+        $this->remember(
+            'noEndSlash',
+            @$this->config['noEndSlash'],
+            array()
+        );
+        $this->remember( // Depth settings
+            'depth',
+            @$this->config['depth'],
+            array()
+        );
         if (!isset($this->depth[''])) { // check:  homepage depth defined
             $this->depth[''] = 1;
             $this->log->debug('awaken: set homepage depth: 1');
