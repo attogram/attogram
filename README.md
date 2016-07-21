@@ -1,5 +1,6 @@
 # Attogram Framework
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.14 )
+
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.15 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -16,8 +17,9 @@ The Attogram Framework provides developers a PHP skeleton starter site with
 a content module system, file-based URL routing, IP-protected backend,
 Markdown parser, jQuery and Bootstrap.  
 
-Core modules available to add an integrated SQLite database with web admin,
-user system, and more.
+[Core modules](https://github.com/attogram/attogram/blob/master/modules/README.md)
+available to add a [SQLite database](https://github.com/attogram/attogram-database)
+with web admin, [user system](https://github.com/attogram/attogram-user), and more.
 
 After that, Attogram tries to stay out of your way while you do your thing!
 

@@ -15,7 +15,7 @@ These modules extend the skeleton Attogram Framework:
 - Attogram Info - <https://github.com/attogram/attogram-info>
 - Attogram Contact Form - <https://github.com/attogram/attogram-contactform>
 
-## Website Modules:
+## Website Modules
 
 These modules are complete websites:
 
