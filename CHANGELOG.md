@@ -7,6 +7,11 @@
 
 - Work in progress...
 
+## [v0.8.0] - 2016-07-21
+
+- fixed loader to properly get main config.php and module configs at startup
+- single return types for Attogram functions, no more mixed types
+
 ## [v0.7.9] - 2016-07-21
 
 - `shutdown()` function for all your `exit;` needs
@@ -245,7 +250,8 @@
 
 ## [v0.0.0] - 2014-09-04
 
-[Unreleased]: https://github.com/attogram/attogram/compare/v0.7.9...HEAD
+[Unreleased]: https://github.com/attogram/attogram/compare/v0.8.0...HEAD
+[v0.8.0]: https://github.com/attogram/attogram/compare/v0.7.9...v0.8.0
 [v0.7.9]: https://github.com/attogram/attogram/compare/v0.7.8...v0.7.9
 [v0.7.8]: https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8
 [v0.7.7]: https://github.com/attogram/attogram/compare/v0.7.6...v0.7.7

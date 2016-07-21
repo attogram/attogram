@@ -26,16 +26,3 @@ namespace Attogram;
 
 // Templates directory, with no trailing slash
 // $config['templatesDirectory'] = $config['attogramDirectory'] . 'templates';
-
-// The database name (full path to sqlite database file)
-// $config['databaseName'] = $config['attogramDirectory'] . 'db/global';
-
-// Depth Settings
-// By default, all pages are allowed 1 levels (depth) in the URLs
-// To change this setting per page, set the depth here:
-// $config['depth']['action_name'] = 3;
-
-// End Slash Settings
-// By default, a slash / is forced onto the end of all URLs, if not already present.
-// To allow slash-less ending URLs, list the action names here:
-// $config['noEndSlash'][] = 'action_name';
