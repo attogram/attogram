@@ -14,12 +14,31 @@ engines:
   fixme:
     enabled: true
     exclude_fingerprints:
-    - 1905708136ceaf8ae9d6f556abb64341
+    - 03e3c8f573cf74dd3fc3d3ccd43c81ed # T-O-D-O's
     - 183a6dd1860ffef867094d098adef0b8
+    - 1905708136ceaf8ae9d6f556abb64341
     - 7849b1b852f9ffdbac07f7927a6dd500
     - 7ee2dfc4d411754eb16a49ca7bd3e375
     - d96d71ea9fca43b1d697dc76b74ad16a
-    - 03e3c8f573cf74dd3fc3d3ccd43c81ed
+    - 04b868c93e307ab4d17294f44dc5458a # NullDatabase.php
+    - 2b3154278bf15c19eea6a9b5f4ba0a60
+    - 42ef692ac9c355ee0f40451b225714fa
+    - 45c527d3b3773cddb529e6d9c4064bfb
+    - 5cb290f0a55580d2aa53bea7397b555b
+    - 7ce2379e953ed664628ed9fa65d73aaa
+    - 83d78a9a484cf8094731deb7ac679db7
+    - 8afd991e4a1cec628b7b018d0f7fdef7
+    - 8e2a606fb630dcc44fecbe602a873594
+    - 8e2a606fb630dcc44fecbe602a873594
+    - 933225df9ad3187202a4e0d5347dfc08
+    - 9c29e92b2874d7eb791d98a83b0ddb74
+    - ab55f0765be1ddfd517f05e4eca576f5
+    - ab55f0765be1ddfd517f05e4eca576f5
+    - ace40d82d3b3006b24b7f219e60e4a09
+    - b7d330103ff879c70e30cb33bde0b33f
+    - c7e68fcf1fc5ec9f38cdae396133c432
+    - f22d0395a1ae7b0f91239f46dbbb4430
+    - f4cee06cedfa66d8d6a16a165a210769
   eslint:
     enabled: true
   csslint:

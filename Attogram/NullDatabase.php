@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - NullDatabase class 0.1.4
+// Attogram Framework - NullDatabase class 0.1.5
 
 namespace Attogram;
 
@@ -17,7 +17,7 @@ class NullDatabase implements AttogramDatabaseInterface
      */
     public function query($sql, array $bind = array())
     {
-        return false;
+        return array();
     }
 
     /**
@@ -75,7 +75,7 @@ class NullDatabase implements AttogramDatabaseInterface
      * @param  string $adminLink    URL to the admin version of this view
      * @param  bool   $showEdit     Show edit tools
      * @param  int    $perPage      (optional) The number of results to show per page. Defaults to 50
-     * @return string                HTML fragment
+     * @return void                 prints HTML fragment
      */
     public function tabler(
         $table,
@@ -98,8 +98,8 @@ class NullDatabase implements AttogramDatabaseInterface
      * @param  int    $limit   The # of results to list per page
      * @param  int    $offset  The item # to start the list
      * @param  string $preQS  (optional) URL Query String to prepend to pagination links,
-    *                                    pairs of  name=value&name=value&...
-     * @return string          HTML fragment
+     *                                   pairs of  name=value&name=value&...
+     * @return void                 prints HTML fragment
      */
     public function pager($count, $limit, $offset, $preQS = '')
     {
