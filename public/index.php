@@ -1,27 +1,15 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.4.11
+// Attogram Framework - Guru Meditation Loader - v0.5.0
 
 namespace Attogram;
 
-// Default configuration
-// Values may be overriden by ./public/config.php, and then ./modules/*/configs/*.php
-$config['attogramDirectory'] = '..'.DIRECTORY_SEPARATOR; // with trailing slash
-$config['autoloader'] = $config['attogramDirectory'].'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
-$config['modulesDirectory'] = $config['attogramDirectory'].'modules'; // without trailing slash
-$config['templatesDirectory'] = $config['attogramDirectory'].'templates'; // without trailing slash
-$config['debug'] = false;
-$config['siteName'] = 'The Attogram Framework';
-$config['admins'] = array('127.0.0.1', '::1');
-$config['databaseName'] = $config['attogramDirectory'].'db'.DIRECTORY_SEPARATOR.'global';
-
-// Load the Project
-$guru = new GuruMeditationLoader(
-    $config['siteName'], // $projectName
-    '.'.DIRECTORY_SEPARATOR.'config.php', // $configFile
-    $config['attogramDirectory'].'Attogram'.DIRECTORY_SEPARATOR, // $projectClasses
-    $config['autoloader'], // $defaultAutoloader
-    'https://github.com/attogram/attogram-vendor/archive/master.zip', // $vendorDownload
-    array( // $requiredClasses
+new GuruMeditationLoader(
+    // $configFile
+    'config.php',
+    // $vendorDownload
+    'https://github.com/attogram/attogram-vendor/archive/master.zip',
+    // $requiredClasses
+    array(
         '\Attogram\Attogram', // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
         '\Parsedown', // Markdown Parser
@@ -31,7 +19,8 @@ $guru = new GuruMeditationLoader(
         '\Monolog\Handler\StreamHandler', // Monolog Stream Handle
         '\Monolog\Logger', // Monolog PSR-3 logger
     ),
-    array( // $requiredInterfaces
+    // $requiredInterfaces
+    array(
         '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
         '\Attogram\AttogramDatabaseInterface' // Attogram Database Interface
     )
@@ -40,42 +29,48 @@ $guru = new GuruMeditationLoader(
 /** ************************************************************************* */
 class GuruMeditationLoader
 {
-    public $projectName;
+
+    /** @var array List of debug messages */
+    public $debugLog;
+
+    /** @var string The Main Configuration File */
     public $configFile;
-    public $projectClasses;
-    public $defaultAutoloader;
+
+    /** @var array List of configuration settings */
+    public $config;
+
+    /** @var string URL to download vendor directory */
     public $vendorDownload;
+
+    /** @var array List of required classes */
     public $requiredClasses;
+
+    /** @var array List of required Interfaces */
     public $requiredInterfaces;
+
+    /** @var string The composer autoloader.php file */
     public $autoloader;
 
     /**
-     * set the Guru vars.
+     * start the Guru Meditation Loader
+     * @param string $configFile
+     * @param string $vendorDownload
+     * @param array $requiredClasses
+     * @param array $requiredInterfaces
      */
     public function __construct(
-        $projectName,
         $configFile,
-        $projectClasses,
-        $defaultAutoloader,
         $vendorDownload,
         array $requiredClasses,
         array $requiredInterfaces
     ) {
-        error_reporting(E_ALL); // display all errors
-        ini_set('display_errors', E_ALL); // display all errors
-        //error_reporting(E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
-        //ini_set('display_errors',  E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR ); // dev - hide errors
-        set_error_handler(array($this, 'guruMeditationErrorHandler'));
-        register_shutdown_function(array($this, 'guruMeditationShutdown'));
-        $this->debug('START Guru Meditation Loader: '.$this->projectName);
-        $this->projectName        = $projectName;
+        $this->errorSetup();
+        $this->debug('START Guru Meditation Loader');
         $this->configFile         = $configFile;
-        $this->projectClasses     = $projectClasses;
-        $this->defaultAutoloader  = $defaultAutoloader;
         $this->vendorDownload     = $vendorDownload;
         $this->requiredClasses    = $requiredClasses;
         $this->requiredInterfaces = $requiredInterfaces;
-        $this->meditate();            // load the Attogram configuration -- get config[ autoloader, modulesDirectory, debug ]
+        $this->meditate();            // load the main Attogram configuration
         $this->expandConsciousness(); // run the composer vendor autoloader
         $this->focusMind();           // include Attogram project classes
         $this->focusInnerEye();       // include modules includes
@@ -83,110 +78,123 @@ class GuruMeditationLoader
         $this->innerEmptiness();      // check for required interfaces
         $this->meditateDeeper();      // load the modules configurations
         $this->tranquility();         // Load The Attogram Framework
+
     } // end function __construct()
 
     /**
-     * load the master config file
-     */
-    public function loadConsciousness()
-    {
-        if (!is_file($this->configFile)) {
-            $this->debug('loadConsciousness: NO config file: '.$this->configFile);
-            return;
-        }
-        if (!is_readable($this->configFile)) {
-            $this->guruMeditationError('loadConsciousness: Config file NOT readable: '.$this->configFile);
-        }
-        if (!(include($this->configFile))) {
-            $this->guruMeditationError('loadConsciousness: Config file include FAILED: '.$this->configFile);
-        }
-        $this->debug('loadConsciousness: OK: '.$this->configFile);
-    }
-
-
-    /**
-     * set the system configuration
+     * load the main Attogram configuration
+     * @see GuruMeditationLoader::configFile
+     * @see GuruMeditationLoader::config
      */
     public function meditate()
     {
-        $this->loadConsciousness();
+        if (!is_file($this->configFile)) {
+            $this->debug('meditate: NOT FOUND: ConfigFile: '.$this->configFile);
+            return;
+        }
+        if (!is_readable($this->configFile)) {
+            $this->debug('meditate: NOT READABLE: ConfigFile: '.$this->configFile);
+            return;
+        }
+        if (!(include($this->configFile))) {
+            $this->debug('meditate: INCLUDE FAILED: ConfigFile: '.$this->configFile);
+            return;
+        }
+        $this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
+
+        // Set default configuration
+        $this->config = array();
+        $this->config['attogramDirectory']  = '..'.DIRECTORY_SEPARATOR;
+        $this->config['autoloader']         = '..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
+        $this->config['modulesDirectory']   = '..'.DIRECTORY_SEPARATOR.'modules';
+        $this->config['templatesDirectory'] = '..'.DIRECTORY_SEPARATOR.'templates';
+        $this->config['debug']              = false;
+        $this->config['siteName']           = 'Attogram Framework';
+        $this->config['admins']             = array('127.0.0.1', '::1');
 
         if (!isset($config)) {
-            $config = array();
+            $this->debug('meditation: NOT FOUND: no config variable in ConfigFile');
+            return;
         }
         if (!is_array($config)) {
-            $this->guruMeditationError('meditate: $config is not an array');
+            $this->debug('meditation: NOT FOUND: no config array in ConfigFile');
+            return;
         }
-        if (!isset($config['autoloader'])) {
-            $config['autoloader'] = $this->defaultAutoloader;
+        // Override default settings with ConfigFile configuration
+        foreach ($config as $configName => $configValue) {
+            $this->config[$configName] = $configValue;
         }
-        $this->autoloader = $config['autoloader'];
+        $this->debug('meditate: CONFIG OK: '.print_r($this->config,true));
     } // end function meditate()
 
     /**
-     * load module configs.
-     */
-    public function meditateDeeper()
-    {
-        global $config;
-        $count = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'configs');
-        if ($count) {
-            $this->debug('meditateDeeper: module configs OK: ' . implode(', ', $count));
-            return;
-        }
-        $this->debug('meditateDeeper: NO module configs');
-    }
-
-    /**
-     * run the vendor autoloader.
+     * run the vendor autoloader
      */
     public function expandConsciousness()
     {
-        if (isset($this->autoloader) && is_file($this->autoloader) && is_readable($this->autoloader)) {
-            $included = (include($this->autoloader));
+        if (
+            isset($this->config['autoloader'])
+            && is_file($this->config['autoloader'])
+            && is_readable($this->config['autoloader'])
+        ) {
+            $included = (include($this->config['autoloader']));
             if (!$included) {
-                $this->guruMeditationError('Autoloader file exists, but include failed: '.$this->autoloader);
+                $this->guruMeditationError(
+                    'Autoloader file exists, but include failed: '.$this->config['autoloader']
+                );
             }
-            $this->debug('expandConsciousness: OK: '.$this->autoloader);
+            $this->debug('expandConsciousness: OK: '.$this->config['autoloader']);
             return;
         }
         $this->guruMeditationError(
-            'autoloader file not found: '.$this->autoloader,
+            'autoloader file not found: '.$this->config['autoloader'],
             'Possibile Fixes:'
-            .'<br /><br />- Is the path to the autoloader wrong?  Edit <strong>'.$this->configFile
-            .'</strong> and check for <strong>$config[\'autoloader\']</strong>'
-            .'<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?  Run <strong>composer install</strong>'
+            .'<br /><br />- Is the path to the autoloader wrong?  Edit <strong>'
+            .$this->configFile
+            .'</strong> and set <strong>$config[\'autoloader\']</strong>'
+            .'<br /><br />- Was <a href="http://getcomposer.org/">composer</a> not run yet?'
+            .' Run <strong>composer install</strong>'
             .'<br /><br />- Can\'t run composer? <a href="'.$this->vendorDownload
             .'"><strong>download the vendor zip file</strong></a> and install manually'
         );
     } // end function expandConsciousness()
 
+    /**
+     * include Attogram project classes
+     */
     public function focusMind()
     {
-        if (!is_dir($this->projectClasses)) {
-            $this->guruMeditationError('Missing project directory: '.$this->projectClasses);
+        $projectClassesDir = $this->config['attogramDirectory'].'Attogram'.DIRECTORY_SEPARATOR;
+        if (!is_dir($projectClassesDir)) {
+            $this->guruMeditationError(
+                'Missing project directory: '.$projectClassesDir
+            );
         }
-        if (!is_readable($this->projectClasses)) {
-            $this->guruMeditationError('Project directory is unreadable: '.$this->projectClasses);
+        if (!is_readable($projectClassesDir)) {
+            $this->guruMeditationError(
+                'Project directory is unreadable: '.$projectClassesDir
+            );
         }
-        foreach (array_diff(scandir($this->projectClasses), array('.', '..')) as $f) {
-            $included = (include_once($this->projectClasses.$f));
-            if (!$included) {
-                $this->guruMeditationError('Failed to include project file: '.$this->projectClasses.$f);
-                $result[] = $this->projectClasses.$f;
+        foreach (array_diff(scandir($projectClassesDir), array('.', '..')) as $f) {
+            if (!(include_once($projectClassesDir.$f))) {
+                $this->guruMeditationError(
+                    'Failed to include project file: '.$projectClassesDir.$f
+                );
+                $result[] = $projectClassesDir.$f;
             }
         }
         if (isset($result)) {
             $this->debug('focusMind: OK: '.implode(', ', $result));
         }
-
     } // end function focusMind()
 
     public function focusInnerEye()
     {
-        global $config;
-        $counts = Attogram::loadModuleSubdirectories($config['modulesDirectory'], 'includes');
-        $this->debug('focusInnerEye: OK: ' . implode(', ', $counts));
+        $counts = Attogram::loadModuleSubdirectories(
+            $this->config['modulesDirectory'],
+            'includes'
+        );
+        $this->debug('focusInnerEye: OK: '.implode(', ', $counts));
     }
 
     public function innerAwareness()
@@ -223,9 +231,24 @@ class GuruMeditationLoader
         $this->guruMeditationError('Required Interface Missing: '.implode(', ', $missing));
     } // end function innerEmptiness()
 
+    /**
+     * load module configs
+     */
+    public function meditateDeeper()
+    {
+        $count = Attogram::loadModuleSubdirectories(
+            $this->config['modulesDirectory'],
+            'configs'
+        );
+        if ($count) {
+            $this->debug('meditateDeeper: module configs OK: '.implode(', ', $count));
+            return;
+        }
+        $this->debug('meditateDeeper: NO module configs');
+    }
+
     public function tranquility()
     {
-        global $config;
         // Speed things up! gz compession
         if (ob_start('ob_gzhandler')) {
             $this->debug('tranquility: ob_gzhandler active');
@@ -237,14 +260,14 @@ class GuruMeditationLoader
         // Create the Debug Logger
         if (
                 (
-                    isset($config['debug'])   // debug is true...
-                    && is_bool($config['debug'])
-                    && $config['debug']
+                    isset($this->config['debug'])   // debug is true...
+                    && is_bool($this->config['debug'])
+                    && $this->config['debug']
                 ) || (
                     $request->query->has('debug')   // admin debug url override ?debug
-                    && isset($config['admins'])
-                    && is_array($config['admins'])
-                    && in_array($request->getClientIp(), $config['admins'])
+                    && isset($this->config['admins'])
+                    && is_array($this->config['admins'])
+                    && in_array($request->getClientIp(), $this->config['admins'])
                )
         ) {
             $log = new \Monolog\Logger('debug');
@@ -258,16 +281,15 @@ class GuruMeditationLoader
             $log = new \Psr\Log\NullLogger();
         }
         // Save guru startup log to the Debug logger
-        if (isset($config['GuruMeditationLoader']) && is_array($config['GuruMeditationLoader'])) {
-            foreach ($config['GuruMeditationLoader'] as $g) {
-                $log->debug($g);
+        if (isset($this->configLog) && is_array($this->configLog)) {
+            foreach ($this->configLog as $message) {
+                $log->debug($message);
             }
-            unset($config['GuruMeditationLoader']);
         }
 
         // Create database and event objects
         if (class_exists('\Attogram\SqliteDatabase')) { // if database module installed...
-            $database = new SqliteDatabase($config['databaseName'], $config['modulesDirectory'], $log);  // init the database, sans-connection
+            $database = new SqliteDatabase($this->config['databaseName'], $this->config['modulesDirectory'], $log);  // init the database, sans-connection
             $event = new \Monolog\Logger('event'); // Setup the Event Logger
             $event->pushHandler(new \Attogram\EventLogger($database));
         }
@@ -276,24 +298,27 @@ class GuruMeditationLoader
             $event = new \Psr\Log\NullLogger();
         }
 
-        new Attogram(   // Start the Attogram Framework!
-            $log,       // The Debug Logger Object
-            $event,     // The Event Logger Object
-            $database,  // The Attogram Database Object
-            $request    // The Request Object
+        new Attogram(     // Start the Attogram Framework!
+            $log,         // The Debug Logger Object
+            $event,       // The Event Logger Object
+            $database,    // The Attogram Database Object
+            $request,     // The Request Object
+            $this->config // Configuration for this installation
         );
 
     } // end function tranquility()
 
+    /**
+     * Log a debug message
+     * @param string $msg  The debug message
+     */
     public function debug($msg)
     {
-        global $config;
-        $config['GuruMeditationLoader'][] = $msg;
+        $this->configLog[] = $msg;
     }
 
     public function guruMeditationError($error = '', $fix = '')
     {
-        global $config;
         echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
         .'<meta name="viewport" content="width=device-width, initial-scale=1">'
         .'<title>Guru Meditation Error</title>'
@@ -312,9 +337,9 @@ class GuruMeditationLoader
         if ($fix) {
             echo '<p class="fix"><a href=""><span class="icon">🔧</span></a> '.$fix.'</p>';
         }
-        if (isset($_GET['debug']) && isset($config['GuruMeditationLoader'])) {
+        if (isset($_GET['debug']) && isset($this->configLog)) {
             echo '<p class="log">🕑 '.gmdate('Y-m-d H:i:s').' UTC<br />💭 ';
-            echo implode('<br />💭 ', $config['GuruMeditationLoader']);
+            echo implode('<br />💭 ', $this->configLog);
         }
         echo '</body></html>';
         exit; // Exit everything
@@ -323,8 +348,13 @@ class GuruMeditationLoader
     /**
      * Catch any errors.
      */
-    public function guruMeditationErrorHandler($level, $message, $file = '', $line = '', $context = array())
-    {
+    public function guruMeditationErrorHandler(
+        $level,
+        $message,
+        $file = '',
+        $line = '',
+        $context = array()
+    ) {
         switch ($level) {
             case 1:
                 $this->debug("E_ERROR: file:$file line:$line $message");
@@ -399,5 +429,16 @@ class GuruMeditationLoader
                 'Shutdown due to Fatal Error:<br />'.str_replace("\n", '<br />', $last['message'])
             );
         }
+    }
+
+    /**
+     * setup error and shutdown handling
+     */
+    public function errorSetup()
+    {
+        error_reporting(E_ALL); // display all errors
+        ini_set('display_errors', E_ALL); // display all errors
+        set_error_handler(array($this, 'guruMeditationErrorHandler'));
+        register_shutdown_function(array($this, 'guruMeditationShutdown'));
     }
 } // end class GuruMeditationLoader

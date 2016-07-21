@@ -54,10 +54,9 @@ class Attogram
         \Psr\Log\LoggerInterface $event,
         \Attogram\AttogramDatabaseInterface $database,
         \Symfony\Component\HttpFoundation\Request $request,
-        array $configuration = array()
+        array $config = array()
     ) {
 
-        global $config; // The Global Configuration Array // TODO TMP DEV
         $this->startTime = microtime(true);
         $this->log = $log;
         $this->log->debug('START The Attogram Framework v'.self::ATTOGRAM_VERSION);
@@ -65,11 +64,8 @@ class Attogram
         $this->database = $database;
         $this->request = $request;
         $this->path = $this->request->getBasePath();
-        $this->log->debug('host: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
-        $this->config = $configuration;
-        if (is_array($config)) {  // TODO TMP DEV - global $config use?
-          $this->config = $config;
-        }
+        $this->log->debug('HOST: '.$this->request->getHost().' IP: '.$this->request->getClientIp());
+        $this->config = $config;
         $this->log->debug('CONFIG:', $this->config);
         $this->projectRepository = 'https://github.com/attogram/attogram';
         $this->awaken(); // set the configuration
