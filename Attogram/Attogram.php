@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.0
+// Attogram Framework - Attogram class v0.5.1
 
 namespace Attogram;
 
@@ -26,6 +26,7 @@ class Attogram
     public $event;              // (object) Event Log - PSR-3 Logger object
     public $database;           // (object) The Attogram Database Object
     public $request;            // (object) Symfony HttpFoundation Request object
+    public $config;             // (array) Configuration for this installation
     public $path;               // (string) Relative URL path to this installation
     public $projectRepository;  // (string) URL to Attogram Framework GitHub Project
     public $attogramDirectory;  // (string) path to this installation
@@ -87,7 +88,8 @@ class Attogram
      */
     public function awaken()
     {
-        $this->remember('admins', @$this->config['admins'], array('127.0.0.1', '::1')); // The Site Administrator IP addresses
+        // The Site Administrator IP addresses
+        $this->remember('admins', @$this->config['admins'], array('127.0.0.1', '::1'));
         $this->remember('attogramDirectory', @$this->config['attogramDirectory'], '..'.DIRECTORY_SEPARATOR);
         $this->remember('modulesDirectory', @$this->config['modulesDirectory'], $this->attogramDirectory.'modules');
         $this->remember('templatesDirectory', @$this->config['templatesDirectory'], $this->attogramDirectory.'templates');
@@ -105,7 +107,8 @@ class Attogram
             $this->templates['fof'] = $this->templatesDirectory.'/404.php';
         }
         $this->remember(
-            'siteName', @$this->config['siteName'],
+            'siteName',
+            @$this->config['siteName'],
             'Attogram Framework <small>v'.self::ATTOGRAM_VERSION.'</small>'
         );
         $this->remember('noEndSlash', @$this->config['noEndSlash'], array());
@@ -273,26 +276,26 @@ class Attogram
         }
         if (isset($actions[$this->uri[0]])) {
             switch ($actions[$this->uri[0]]['parser']) {
-              case 'php':
-                  $action = $actions[$this->uri[0]]['file'];
-                  if (!is_file($action)) {
-                      $this->log->error('ROUTE: Missing action');
-                      $this->error404('Attempted actionless');
-                  }
-                  if (!is_readable($action)) {
-                      $this->log->error('ROUTE: Unreadable action');
-                      $this->error404('The pages of the book are blank');
-                  }
-                  $this->log->debug('ROUTE: include '.$action);
-                  include $action;
-                  return;
-              case 'md':
-                  $this->doMarkdown($actions[$this->uri[0]]['file']);
-                  return;
-              default:
-                  $this->log->error('ROUTE: No Parser Found');
-                  $this->error404('No Way Out');
-                  break;
+                case 'php':
+                    $action = $actions[$this->uri[0]]['file'];
+                    if (!is_file($action)) {
+                        $this->log->error('ROUTE: Missing action');
+                        $this->error404('Attempted actionless');
+                    }
+                    if (!is_readable($action)) {
+                        $this->log->error('ROUTE: Unreadable action');
+                        $this->error404('The pages of the book are blank');
+                    }
+                    $this->log->debug('ROUTE: include '.$action);
+                    include $action;
+                    return;
+                case 'md':
+                    $this->doMarkdown($actions[$this->uri[0]]['file']);
+                    return;
+                default:
+                    $this->log->error('ROUTE: No Parser Found');
+                    $this->error404('No Way Out');
+                    break;
             } // end switch on parser
         } //end if action set
         if ($this->uri[0] == 'home') { // missing the Home Page!
@@ -379,6 +382,7 @@ class Attogram
                 header('Content-Type: text/plain; charset=utf-8');
                 echo 'Sitemap: '.$this->getSiteUrl().'/sitemap.xml';
                 $this->shutdown();
+                // exception exit
             case '/sitemap.xml':
                 $site = $this->getSiteUrl().'/';
                 $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -394,35 +398,34 @@ class Attogram
                 header('Content-Type: text/xml; charset=utf-8');
                 echo $sitemap;
                 $this->shutdown();
+                // exception exit
         }
     }
 
     /**
      * get HTML from a markdown file
-     *
-     * @param string $file The markdown file to parse
-     *
-     * @return string      HTML fragment or false
+     * @param string $file  The markdown file to parse
+     * @return string       HTML fragment, or empty string on error
      */
     public function getMarkdown($file)
     {
         if (!$this->isReadableFile($file, '.md')) {
             $this->log->error('GET_MARKDOWN: can not read file: '.$this->webDisplay($file));
-            return false;
+            return '';
         }
         if (!class_exists('Parsedown')) {
             $this->log->error('GET_MARKDOWN: can not find parser');
-            return false;
+            return '';
         }
         $page = @file_get_contents($file);
         if ($page === false) {
             $this->log->error('GET_MARKDOWN: can not get file contents: '.$this->webDisplay($file));
-            return false;
+            return '';
         }
         $content = \Parsedown::instance()->text($page);
         if (!$content) {
             $this->log->error('GET_MARKDOWN: parse failed on file: '.$this->webDisplay($file));
-            return false;
+            return '';
         }
         return $content;
     } // end function getMarkdown
@@ -687,15 +690,13 @@ class Attogram
 
     /**
      * clean a string for web display.
-     *
      * @param string $string  The string to clean
-     *
-     * @return string  The cleaned string, or false
+     * @return string         The cleaned string, or empty string on error
      */
     public function webDisplay($string)
     {
         if (!is_string($string)) {
-            return false;
+            return '';
         }
         return htmlentities($string, ENT_COMPAT, 'UTF-8');
     }
@@ -705,10 +706,8 @@ class Attogram
 
     /**
      * Get list of all sub-subdirectories of a specific name:  $dir/[*]/$name.
-     *
      * @param string $dir  The directory to search within (ie: modules directory)
      * @param string $name The name of the subdirectories to find
-     *
      * @return array       List of the directories found
      */
     public static function getAllSubdirectories($dir, $name)
@@ -733,9 +732,7 @@ class Attogram
 
     /**
      * Include all php files in a specific directory.
-     *
      * @param  string $dir The directory to search
-     *
      * @return array       List of the files successfully included
      */
     public static function includeAllPhpFilesInDirectory($dir)
@@ -758,13 +755,11 @@ class Attogram
 
     /**
      * Tests if is a file exist, is readable, and is of a certain type.
-     *
-     * @param  string $file The name of the file to test
-     * @param  string $type (optional) The file extension to allow. Defaults to '.php'
-     *
+     * @param  string $file  The name of the file to test
+     * @param  string $type  (optional) The file extension to allow. Defaults to '.php'
      * @return bool
      */
-    public static function isReadableFile($file = false, $type = '.php')
+    public static function isReadableFile($file = '', $type = '.php')
     {
         if (!$file || !$type || $type == '' || !is_string($type) || !is_string($file) || !is_readable($file)) {
             return false;
@@ -772,7 +767,6 @@ class Attogram
         if (preg_match('/'.$type.'$/', $file)) {
             return true;
         }
-
         return false;
     }
 
@@ -788,9 +782,7 @@ class Attogram
 
     /**
      * Examines each module for a named subdirectory, then includes all *.php files from that directory.
-     *
      * @param string $modulesDirectory
-     *
      * @return array List of the files successfully loaded
      */
     public static function loadModuleSubdirectories($modulesDirectory, $subdirectory)
@@ -809,9 +801,7 @@ class Attogram
 
     /**
      * get the mime type of a file.
-     *
      * @param string $file  The file to examine
-     *
      * @return string       The mime type, or false
      */
     public static function getMimeType($file)
@@ -857,7 +847,10 @@ class Attogram
      */
     public function shutdown()
     {
-        $this->log->debug('shutdown: END Attogram v'.self::ATTOGRAM_VERSION.' timer: '.(microtime(true) - $this->startTime));
+        $this->log->debug(
+            'shutdown: END Attogram v'.self::ATTOGRAM_VERSION
+            .' timer: '.(microtime(true) - $this->startTime)
+        );
         exit; // The Final Exit
     }
 } // END of class attogram

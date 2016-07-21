@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - NullDatabase class 0.1.3
+// Attogram Framework - NullDatabase class 0.1.4
 
 namespace Attogram;
 
@@ -64,30 +64,28 @@ class NullDatabase implements AttogramDatabaseInterface
 
     /**
      * tabler - HTML table with view of database table content, plus optional admin links
-     *
      * @param  string $table         The table name
      * @param  string $tableId      The name of the table ID field (or equivilant )
      * @param  string $nameSingular The name of what we are editing, singular form
      * @param  string $namePlural   The name of what we are editing, plural form
-     * @param  array  $col           Column Display Info - array of array('class'=>'...', 'title'=>'...', 'key'=>'...')
+     * @param  array  $col           Column Display Info - array of array('class'=>'..', 'title'=>'..', 'key'=>'..')
      * @param  string $sql           SQL query to view contents of table
      * @param  string $countSql     SQL query to get total number of items in table
      * @param  string $publicLink   URL to the public version of this view
      * @param  string $adminLink    URL to the admin version of this view
      * @param  bool   $showEdit     Show edit tools
      * @param  int    $perPage      (optional) The number of results to show per page. Defaults to 50
-     *
      * @return string                HTML fragment
      */
     public function tabler(
         $table,
         $tableId,
         $nameSingular,
-        $namePlural, // TODO - remove unused
+        $namePlural,
         $publicLink,
         array $col,
         $sql,
-        $adminLink, // TODO - remove unused
+        $adminLink,
         $showEdit,
         $perPage
     ) {
@@ -99,7 +97,8 @@ class NullDatabase implements AttogramDatabaseInterface
      * @param  int    $count   The Total Resultset Count
      * @param  int    $limit   The # of results to list per page
      * @param  int    $offset  The item # to start the list
-     * @param  string $preQS  (optional) URL Query String to prepend to pagination links, pairs of  name=value&name=value&...
+     * @param  string $preQS  (optional) URL Query String to prepend to pagination links,
+    *                                    pairs of  name=value&name=value&...
      * @return string          HTML fragment
      */
     public function pager($count, $limit, $offset, $preQS = '')

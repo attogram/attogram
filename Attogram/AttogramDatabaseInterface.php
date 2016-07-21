@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabaseInterface 0.3.0
+// Attogram Framework - AttogramDatabaseInterface 0.3.1
 
 namespace Attogram;
 
@@ -64,15 +64,17 @@ interface AttogramDatabaseInterface
      *
      * @return string                HTML fragment
      */
+     // TODO - remove unused
+     // TODO - remove unused
     public function tabler(
         $table,
         $tableId,
         $nameSingular,
-        $namePlural, // TODO - remove unused
+        $namePlural,
         $publicLink,
         array $col,
         $sql,
-        $adminLink, // TODO - remove unused
+        $adminLink,
         $showEdit,
         $perPage
     );
@@ -82,7 +84,8 @@ interface AttogramDatabaseInterface
      * @param  int    $count   The Total Resultset Count
      * @param  int    $limit   The # of results to list per page
      * @param  int    $offset  The item # to start the list
-     * @param  string $preQS  (optional) URL Query String to prepend to pagination links, pairs of  name=value&name=value&...
+     * @param  string $preQS   (optional) URL Query String to prepend to pagination links,
+     *                                    pairs of  name=value&name=value&...
      * @return string          HTML fragment
      */
     public function pager($count, $limit, $offset, $preQS = '');
@@ -102,5 +105,4 @@ interface AttogramDatabaseInterface
         $maxLimit = 5000,
         $minLimit = 100
     );
-
 } // end interface AttogramDatabaseInterface

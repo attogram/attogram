@@ -1,7 +1,7 @@
 # Attogram Framework CHANGELOG
 
 - Repository: <https://github.com/attogram/attogram>
-- Click version number to view a diff comparison of changes since the previous release
+- Click the version number to view changes since the previous release
 
 ## [Unreleased]
 
@@ -19,7 +19,7 @@
 - merged in filesystem object into main Attogram object
 - use [`Symfony Request`](http://symfony.com/doc/current/components/http_foundation/introduction.html)
   for \_GET, \_POST and \_SERVER
-- continued style updatess for PSR-1, PSR-2, and more
+- continued style updates for PSR-1, PSR-2, and more
 - updated [codeclimate](https://codeclimate.com/github/attogram/attogram) engine setup
 - various bugfixes and refactors
 
@@ -37,7 +37,7 @@
 ## [v0.7.5] - 2016-07-11
 
 - lots of refactoring/cleanup for PSR-1 + PSR-2 Code style conventions
-- removed `attogram/logger.php`, now using \Psr\Log\NullLogger
+- removed `attogram/logger.php`, now using \\Psr\\Log\\NullLogger
 - Codacy integration: <https://www.codacy.com/app/attogram-project/attogram/dashboard>
 - Codeclimate integration: <https://codeclimate.com/github/attogram/attogram>
 - Project stat badges on README
