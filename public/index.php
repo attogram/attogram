@@ -13,6 +13,7 @@ $guru = new GuruMeditationLoader(
         '\Attogram\Attogram', // The Attogram Framework
         '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
         '\Parsedown', // Markdown Parser
+        '\ParsedownExtra', // Markdown Parser Extra
         '\Psr\Log\NullLogger', // PSR-3 Null Logger Object
         '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
         '\Monolog\Handler\BufferHandler', // Monolog Buffer Handler

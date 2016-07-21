@@ -430,7 +430,8 @@ class Attogram
     public function getMarkdown($file)
     {
         if (!$this->isReadableFile($file, '.md')) {
-            $this->log->error('GET_MARKDOWN: can not read file: '.$this->webDisplay($file));
+            $this->log->error('GET_MARKDOWN: can not read file: '
+                .$this->webDisplay($file));
             return '';
         }
         if (!class_exists('Parsedown')) {
@@ -439,12 +440,15 @@ class Attogram
         }
         $page = @file_get_contents($file);
         if ($page === false) {
-            $this->log->error('GET_MARKDOWN: can not get file contents: '.$this->webDisplay($file));
+            $this->log->error('GET_MARKDOWN: can not get file contents: '
+                .$this->webDisplay($file));
             return '';
         }
-        $content = \Parsedown::instance()->text($page);
+        $parser = new \ParsedownExtra();
+        $content = $parser->text($page);
         if (!$content) {
-            $this->log->error('GET_MARKDOWN: parse failed on file: '.$this->webDisplay($file));
+            $this->log->error('GET_MARKDOWN: parse failed on file: '
+                .$this->webDisplay($file));
             return '';
         }
         return $content;

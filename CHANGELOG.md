@@ -9,7 +9,7 @@
 
 ## [v0.8.1] - 2016-07-21
 
-- fix config for databaseName
+- fixed config for databaseName
 - Better Markdown parsing with
   [Parsedown Extra](https://github.com/erusev/parsedown-extra)
 
@@ -68,7 +68,7 @@
 - Removed all modules from main distribution.  Core modules now have their own repository
 
  - <https://github.com/attogram/attogram-database>
- - <https://github.com/attogram/attogram-user
+ - <https://github.com/attogram/attogram-user>
  - <https://github.com/attogram/attogram-info>
 
 - setup framework for Travis CI integration: <https://travis-ci.org/attogram/attogram>
@@ -257,7 +257,8 @@
 
 ## [v0.0.0] - 2014-09-04
 
-[Unreleased]: https://github.com/attogram/attogram/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/attogram/attogram/compare/v0.8.1...HEAD
+[v0.8.1]: https://github.com/attogram/attogram/compare/v0.8.0...v0.8.1
 [v0.8.0]: https://github.com/attogram/attogram/compare/v0.7.9...v0.8.0
 [v0.7.9]: https://github.com/attogram/attogram/compare/v0.7.8...v0.7.9
 [v0.7.8]: https://github.com/attogram/attogram/compare/v0.7.7...v0.7.8
