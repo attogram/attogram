@@ -1,25 +1,7 @@
 engines:
   phpmd:
     enabled: true
-  phpcodesniffer:
-    enabled: true
-  phan:
-    enabled: true
-    config:
-      file_extensions: "php"
-  shellcheck:
-    enabled: true
-  markdownlint:
-    enabled: true
-  fixme:
-    enabled: true
     exclude_fingerprints:
-    - 03e3c8f573cf74dd3fc3d3ccd43c81ed # T-O-D-O's
-    - 183a6dd1860ffef867094d098adef0b8
-    - 1905708136ceaf8ae9d6f556abb64341
-    - 7849b1b852f9ffdbac07f7927a6dd500
-    - 7ee2dfc4d411754eb16a49ca7bd3e375
-    - d96d71ea9fca43b1d697dc76b74ad16a
     - 04b868c93e307ab4d17294f44dc5458a # NullDatabase.php
     - 2b3154278bf15c19eea6a9b5f4ba0a60
     - 42ef692ac9c355ee0f40451b225714fa
@@ -39,6 +21,25 @@ engines:
     - c7e68fcf1fc5ec9f38cdae396133c432
     - f22d0395a1ae7b0f91239f46dbbb4430
     - f4cee06cedfa66d8d6a16a165a210769
+  phpcodesniffer:
+    enabled: true
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+  shellcheck:
+    enabled: true
+  markdownlint:
+    enabled: true
+  fixme:
+    enabled: true
+    exclude_fingerprints:
+    - 03e3c8f573cf74dd3fc3d3ccd43c81ed # T-O-D-O's
+    - 183a6dd1860ffef867094d098adef0b8
+    - 1905708136ceaf8ae9d6f556abb64341
+    - 7849b1b852f9ffdbac07f7927a6dd500
+    - 7ee2dfc4d411754eb16a49ca7bd3e375
+    - d96d71ea9fca43b1d697dc76b74ad16a
   eslint:
     enabled: true
   csslint:
