@@ -10,6 +10,8 @@
 ## [v0.8.1] - 2016-07-21
 
 - fix config for databaseName
+- Better Markdown parsing with
+  [Parsedown Extra](https://github.com/erusev/parsedown-extra)
 
 ## [v0.8.0] - 2016-07-21
 

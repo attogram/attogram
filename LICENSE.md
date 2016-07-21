@@ -6,8 +6,6 @@ The Attogram Framework is dual licensed under
 [The MIT License](http://opensource.org/licenses/MIT) or the
 [GNU General Public License](http://opensource.org/licenses/GPL-3.0), at your choosing.
 
-The Attogram Framework distribution includes [other open source projects](#other).
-
 -----
 
 ## Attogram Framework - MIT License
@@ -47,6 +45,17 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
+-----
+
+## Open Source Software included with the Attogram Framework distribution
+
+Software     | License     | URL
+:----------- | :---------- | :-----------------------------
+Bootstrap    | MIT License | <http://getbootstrap.com/>
+jQuery       | MIT License | <http://jquery.org/license/>
+Parsedown    | MIT License | <http://parsedown.org/>
+phpLiteAdmin | GPL License |<https://www.phpliteadmin.org/>
 
 -----
 
@@ -687,17 +696,3 @@ it more useful to permit linking proprietary applications with the library. If
 this is what you want to do, use the GNU Lesser General Public License instead
 of this License. But first, please read
 [http://www.gnu.org/philosophy/why-not-lgpl.html](http://www.gnu.org/philosophy/why-not-lgpl.html).
-
-
-<a name="other"></a>
-
------
-
-## Open Source Software included with the Attogram Framework distribution
-
-| Software     | License     | URL                            |
-|--------------|-------------|--------------------------------|
-| Bootstrap    | MIT License | <http://getbootstrap.com/>     |
-| jQuery       | MIT License | <http://jquery.org/license/>   |
-| Parsedown    | MIT License | <http://parsedown.org/>        |
-| phpLiteAdmin | GPL License |<https://www.phpliteadmin.org/> |
