@@ -91,16 +91,16 @@ class Attogram
         $this->remember('templatesDirectory', @$this->config['templatesDirectory'], $this->attogramDirectory.'templates');
         $this->setModuleTemplates();
         if (!isset($this->templates['header'])) {
-            $this->templates['header'] = $this->templatesDirectory.'/header.php';
+            $this->templates['header'] = $this->templatesDirectory.DIRECTORY_SEPARATOR.'header.php';
         }
         if (!isset($this->templates['navbar'])) {
-            $this->templates['navbar'] = $this->templatesDirectory.'/navbar.php';
+            $this->templates['navbar'] = $this->templatesDirectory.DIRECTORY_SEPARATOR.'navbar.php';
         }
         if (!isset($this->templates['footer'])) {
-            $this->templates['footer'] = $this->templatesDirectory.'/footer.php';
+            $this->templates['footer'] = $this->templatesDirectory.DIRECTORY_SEPARATOR.'footer.php';
         }
         if (!isset($this->templates['fof'])) {
-            $this->templates['fof'] = $this->templatesDirectory.'/404.php';
+            $this->templates['fof'] = $this->templatesDirectory.DIRECTORY_SEPARATOR.'404.php';
         }
         $this->remember(
             'siteName',

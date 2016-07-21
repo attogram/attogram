@@ -1,9 +1,7 @@
 <?php
-// Attogram Framework - Main Configuration File Example v0.1.1
+// Attogram Framework - Main Configuration File Example v0.2.0
 
 namespace Attogram;
-
-global $config;
 
 // Uncomment to change default values...
 

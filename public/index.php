@@ -88,20 +88,6 @@ class GuruMeditationLoader
      */
     public function meditate()
     {
-        if (!is_file($this->configFile)) {
-            $this->debug('meditate: NOT FOUND: ConfigFile: '.$this->configFile);
-            return;
-        }
-        if (!is_readable($this->configFile)) {
-            $this->debug('meditate: NOT READABLE: ConfigFile: '.$this->configFile);
-            return;
-        }
-        if (!(include($this->configFile))) {
-            $this->debug('meditate: INCLUDE FAILED: ConfigFile: '.$this->configFile);
-            return;
-        }
-        $this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
-
         // Set default configuration
         $this->config = array();
         $this->config['attogramDirectory']  = '..'.DIRECTORY_SEPARATOR;
@@ -111,6 +97,23 @@ class GuruMeditationLoader
         $this->config['debug']              = false;
         $this->config['siteName']           = 'Attogram Framework';
         $this->config['admins']             = array('127.0.0.1', '::1');
+
+        if (!is_file($this->configFile)) {
+            $this->debug('meditate: NOT FOUND: ConfigFile: '.$this->configFile);
+            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            return;
+        }
+        if (!is_readable($this->configFile)) {
+            $this->debug('meditate: NOT READABLE: ConfigFile: '.$this->configFile);
+            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            return;
+        }
+        if (!(include($this->configFile))) {
+            $this->debug('meditate: INCLUDE FAILED: ConfigFile: '.$this->configFile);
+            $this->debug('meditate: DEFAULT CONFIG: '.print_r($this->config,true));
+            return;
+        }
+        $this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
 
         if (!isset($config)) {
             $this->debug('meditation: NOT FOUND: no config variable in ConfigFile');
@@ -289,7 +292,11 @@ class GuruMeditationLoader
 
         // Create database and event objects
         if (class_exists('\Attogram\SqliteDatabase')) { // if database module installed...
-            $database = new SqliteDatabase($this->config['databaseName'], $this->config['modulesDirectory'], $log);  // init the database, sans-connection
+            $database = new SqliteDatabase( // init the database, sans-connection
+                $this->config['databaseName'],
+                $this->config['modulesDirectory'],
+                $log
+            );
             $event = new \Monolog\Logger('event'); // Setup the Event Logger
             $event->pushHandler(new \Attogram\EventLogger($database));
         }
