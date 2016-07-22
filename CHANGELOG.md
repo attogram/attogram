@@ -59,16 +59,16 @@
 ## [v0.7.4] - 2016-07-09
 
 - updates to Travis CI integration: <https://travis-ci.org/attogram/attogram>
- - for PHP 5.3 and PHP 5.4 use old phpunit, do not do code coverage
- - for PHP 5.5+ use new phpunit, do code coverage
+  - for PHP 5.3 and PHP 5.4 use old phpunit, do not do code coverage
+  - for PHP 5.5+ use new phpunit, do code coverage
 - continued testing setup
 
 ## [v0.7.3] - 2016-07-08
 
 - Removed all modules from main distribution.  Core modules now have their own repository
- - <https://github.com/attogram/attogram-database>
- - <https://github.com/attogram/attogram-user>
- - <https://github.com/attogram/attogram-info>
+  - <https://github.com/attogram/attogram-database>
+  - <https://github.com/attogram/attogram-user>
+  - <https://github.com/attogram/attogram-info>
 - setup framework for Travis CI integration: <https://travis-ci.org/attogram/attogram>
 - setup framework for future phpunit Unit Testing
 - bugfixes on numeric actions, missing db object, empty menus
@@ -81,6 +81,7 @@
 - Update [`./README.md`](./README.md)
 
 ## [v0.7.1] - 2016-07-05
+
 - updated formatting and links in this `./CHANGELOG.md` file
 - updated [`./TODO.md`](./TODO.md) with new + existing
   [open issues](https://github.com/attogram/attogram/issues) from github
