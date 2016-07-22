@@ -1,6 +1,6 @@
 # Attogram Framework
 
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.15 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.16 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -15,7 +15,7 @@
 
 The Attogram Framework provides developers a PHP skeleton starter site with
 a content module system, file-based URL routing, IP-protected backend,
-Markdown parser, jQuery and Bootstrap.  
+Markdown parser, jQuery and Bootstrap.
 
 [Core modules](https://github.com/attogram/attogram/blob/master/modules/README.md)
 available to add a [SQLite database](https://github.com/attogram/attogram-database)
@@ -25,10 +25,12 @@ After that, Attogram tries to stay out of your way while you do your thing!
 
 ## More Info
 
-* Attogram Framework @ GitHub: https://github.com/attogram/attogram
-* Attogram Framework @ Packagist: https://packagist.org/packages/attogram/attogram-framework
-* Attogram Framework @ Travis CI: https://travis-ci.org/attogram/attogram
-* Attogram Framework vendor package @ GitHub: [(download ZIP)](https://github.com/attogram/attogram-vendor/archive/master.zip) https://github.com/attogram/attogram-vendor
+* Attogram Framework @ GitHub: <https://github.com/attogram/attogram>
+* Attogram Framework @ Packagist: <https://packagist.org/packages/attogram/attogram-framework>
+* Attogram Framework @ Travis CI: <https://travis-ci.org/attogram/attogram>
+* Attogram Framework vendor package @ GitHub:
+  [(download ZIP)](https://github.com/attogram/attogram-vendor/archive/master.zip)
+  <https://github.com/attogram/attogram-vendor>
 
 ## Requirements
 
@@ -72,7 +74,7 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 * Install the Attogram Database Module
 * Make sure the database file `./db/global` is writeable by the web server
-* Tables are lazily created when needed.  
+* Tables are lazily created when needed.
 * To create all tables at once, goto the
   [**db-tables admin page**](../db-tables/) and click **Create Attogram Tables**
 * phpLiteAdmin is available for database administration, goto the
@@ -105,7 +107,7 @@ _Attogram now has modules!  Updated docs coming soon..._
   * `includes/` - Included files, loaded at startup (.php files only)
   * `tables/` - Database table definitions. Tables are created lazily as needed
     (.sql files only)
-  * `templates/` - Templates, to override default Attogram templates  
+  * `templates/` - Templates, to override default Attogram templates
     (.php files only)
   * `public/` - Files for public consumption. Served via requests to the
     `web/` virtual web directory
@@ -126,8 +128,10 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 ## Create a page
 
-* create a new **PHP** or **Markdown** file in the `./actions/` directory, add anything you want!
-* The filename is used as the page URL.  ./actions/**example**.php = example.com/**example**/
+* create a new **PHP** or **Markdown** file in the `./actions/` directory,
+  add anything you want!
+* The filename is used as the page URL.  
+  ./actions/**example**.php = example.com/**example**/
 
 ## PHP pages
 
@@ -173,8 +177,10 @@ _Attogram now has modules!  Updated docs coming soon..._
 
 ## Web discovery
 
-* If [`./robots.txt`](../robots.txt) does not exist, Attogram dynamically serves it, with a link to the Sitemap
-* If [`./sitemap.xml`](../sitemap.xml) does not exist, Attogram dynamically serves it, with a listing of all public pages
+* If [`./robots.txt`](../robots.txt) does not exist,
+  Attogram dynamically serves it, with a link to the Sitemap
+* If [`./sitemap.xml`](../sitemap.xml) does not exist,
+  Attogram dynamically serves it, with a listing of all public pages
 
 ## Admin URL overrides
 

@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.5.2
+// Attogram Framework - Guru Meditation Loader - v0.5.3
 
 namespace Attogram;
 
@@ -426,9 +426,9 @@ class GuruMeditationLoader
             case 30719:
                 $this->debug("E_ALL: file:$file line:$line $message");
                 break;
-          default:
-              $this->debug("E_UNKNOWN: file:$file line:$line $message");
-              break;
+            default:
+                $this->debug("E_UNKNOWN: file:$file line:$line $message");
+                break;
         }
 
         $this->guruMeditationError(
