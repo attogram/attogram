@@ -1,6 +1,6 @@
 # Attogram Framework
 
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.16 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.17 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -68,7 +68,9 @@ After that, Attogram tries to stay out of your way while you do your thing!
 * admin page requests from non-admin IPs will result in a
   404 Page Not Found error
 
-_Attogram now has modules!  Updated docs coming soon..._
+## Attogram now has modules!  Updated docs coming soon
+
+## OLD DOCS
 
 ## Setup: Database
 
@@ -124,13 +126,11 @@ _Attogram now has modules!  Updated docs coming soon..._
 * Attogram Info - <https://github.com/attogram/attogram-info>
 * Attogram Contact Form - <https://github.com/attogram/attogram-contactform>
 
-## Old Docs
-
 ## Create a page
 
 * create a new **PHP** or **Markdown** file in the `./actions/` directory,
   add anything you want!
-* The filename is used as the page URL.  
+* The filename is used as the page URL.
   ./actions/**example**.php = example.com/**example**/
 
 ## PHP pages
