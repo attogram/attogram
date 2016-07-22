@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram Test v0.1.7
+// Attogram Framework - Attogram Test v0.1.8
 
 class AttogramTest extends PHPUnit\Framework\TestCase
 {
@@ -42,13 +42,13 @@ class AttogramTest extends PHPUnit\Framework\TestCase
             $nullDatabase->initDB(),
             'NullDatabase initDB failed'
         );
-        $this->assertFalse(
+        $this->assertEquals(
             $nullDatabase->query('vacuum'),
-            'NullDatabase query failed'
+            array()
         );
-        $this->assertFalse(
+        $this->assertEquals(
             $nullDatabase->query('vacuum', array('test'=>'test')),
-            'NullDatabase query with bind failed'
+            array()
         );
         $this->assertFalse(
             $nullDatabase->queryb('vacuum'),
