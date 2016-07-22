@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.3
+// Attogram Framework - Attogram class v0.5.4
 
 namespace Attogram;
 
@@ -861,6 +861,15 @@ class Attogram
                 break;
             case 'woff2':
                 $mimeType = 'application/font-woff2';
+                break;
+            case 'ogg':
+                $mimeType = 'application/ogg';
+                break;
+            case 'oga':
+                $mimeType = 'audio/ogg';
+                break;
+            case 'ogv':
+                $mimeType = 'video/ogg';
                 break;
         }
         return $mimeType;
