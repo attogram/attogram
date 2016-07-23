@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.4
+// Attogram Framework - Attogram class v0.5.5
 
 namespace Attogram;
 
@@ -870,6 +870,9 @@ class Attogram
                 break;
             case 'ogv':
                 $mimeType = 'video/ogg';
+                break;
+            case 'json':
+                $mimeType = 'application/json';
                 break;
         }
         return $mimeType;
