@@ -1,6 +1,6 @@
 # Attogram Framework
 
-[//]: # ( Attogram Framework - README.md (markdown) - v0.1.18 )
+[//]: # ( Attogram Framework - README.md (markdown) - v0.1.19 )
 
 [![Build Status](https://travis-ci.org/attogram/attogram.svg?branch=master)](https://travis-ci.org/attogram/attogram)
 [![Latest Stable Version](https://poser.pugx.org/attogram/attogram-framework/v/stable)](https://packagist.org/packages/attogram/attogram-framework)
@@ -121,6 +121,7 @@ After that, Attogram tries to stay out of your way while you do your thing!
 
 ### Core Modules
 
+* Attogram Module Manager - <https://github.com/attogram/attogram-modulemanager>
 * Attogram Database - <https://github.com/attogram/attogram-database>
 * Attogram User - <https://github.com/attogram/attogram-user>
 * Attogram Info - <https://github.com/attogram/attogram-info>
