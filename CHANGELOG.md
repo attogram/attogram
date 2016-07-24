@@ -6,8 +6,14 @@
 ## [Unreleased]
 
 - Work in progress...
+
+## [v0.8.2] - 2016-07-24
+
+- added web virtual directory mime types: ogg, oga, ogv, json
 - unit tests for
   [NullDatabase.php](https://github.com/attogram/attogram/blob/master/Attogram/NullDatabase.php)
+- Attogram methods now have single return types, no mixed
+- minor updates and codeclimate setup
 
 ## [v0.8.1] - 2016-07-21
 

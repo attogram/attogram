@@ -19,7 +19,7 @@ namespace Attogram;
  */
 class Attogram
 {
-    const ATTOGRAM_VERSION = '0.8.1';
+    const ATTOGRAM_VERSION = '0.8.2';
 
     public $startTime;          // (float) microsecond time of awakening
     public $log;                // (object) Debug Log - PSR-3 Logger object
