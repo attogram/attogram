@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Main Configuration File Example v0.2.0
+// Attogram Framework - Main Configuration File Example v0.2.1
 
 namespace Attogram;
 
@@ -26,3 +26,8 @@ namespace Attogram;
 
 // Templates directory, with no trailing slash
 // $config['templatesDirectory'] = $config['attogramDirectory'] . 'templates';
+
+// is router?
+// false = the front controller is NOT a router script
+// true = the front controller IS a router script for the PHP built-in web server
+// $config['isRouter'] = false;

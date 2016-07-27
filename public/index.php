@@ -72,6 +72,11 @@ class GuruMeditationLoader
         $this->requiredClasses    = $requiredClasses;
         $this->requiredInterfaces = $requiredInterfaces;
         $this->meditate();            // load the main Attogram configuration
+
+        if (isset($this->config['isRouter']) && $this->config['isRouter']) {
+            //
+        }
+
         $this->expandConsciousness(); // run the composer vendor autoloader
         $this->focusMind();           // include Attogram project classes
         $this->focusInnerEye();       // include modules includes
@@ -271,9 +276,9 @@ class GuruMeditationLoader
     public function tranquility()
     {
         // Speed things up! gz compession
-        if (ob_start('ob_gzhandler')) {
-            $this->debug('tranquility: ob_gzhandler active');
-        }
+        //if (ob_start('ob_gzhandler')) {
+        //    $this->debug('tranquility: ob_gzhandler active');
+        //}
 
         // Create the Request object
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
