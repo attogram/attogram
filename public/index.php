@@ -1,30 +1,13 @@
 <?php
-// Attogram Framework - Guru Meditation Loader - v0.5.3
+// Attogram Framework - Guru Meditation Loader - v0.6.0
 
 namespace Attogram;
 
+use Symfony\Component\HttpFoundation\Request;
+
 $guru = new GuruMeditationLoader(
-    // $configFile
-    'config.php',
-    // $vendorDownload
-    'https://github.com/attogram/attogram-vendor/archive/master.zip',
-    // $requiredClasses
-    array(
-        '\Attogram\Attogram', // The Attogram Framework
-        '\Symfony\Component\HttpFoundation\Request', // HTTP Request Object
-        '\Parsedown', // Markdown Parser
-        '\ParsedownExtra', // Markdown Parser Extra
-        '\Psr\Log\NullLogger', // PSR-3 Null Logger Object
-        '\Monolog\Formatter\LineFormatter', // Monolog Line Formatter
-        '\Monolog\Handler\BufferHandler', // Monolog Buffer Handler
-        '\Monolog\Handler\StreamHandler', // Monolog Stream Handle
-        '\Monolog\Logger', // Monolog PSR-3 logger
-    ),
-    // $requiredInterfaces
-    array(
-        '\Psr\Log\LoggerInterface', // PSR-3 Logger Interface
-        '\Attogram\AttogramDatabaseInterface' // Attogram Database Interface
-    )
+    'config.php', // $configFile
+    'https://github.com/attogram/attogram-vendor/archive/master.zip' // $vendorDownload
 );
 
 /** ************************************************************************* */
@@ -43,12 +26,6 @@ class GuruMeditationLoader
     /** @var string URL to download vendor directory */
     public $vendorDownload;
 
-    /** @var array List of required classes */
-    public $requiredClasses;
-
-    /** @var array List of required Interfaces */
-    public $requiredInterfaces;
-
     /** @var string The composer autoloader.php file */
     public $autoloader;
 
@@ -56,21 +33,15 @@ class GuruMeditationLoader
      * start the Guru Meditation Loader
      * @param string $configFile
      * @param string $vendorDownload
-     * @param array $requiredClasses
-     * @param array $requiredInterfaces
      */
     public function __construct(
         $configFile,
-        $vendorDownload,
-        array $requiredClasses,
-        array $requiredInterfaces
+        $vendorDownload
     ) {
         $this->errorSetup();
         $this->debug('START Guru Meditation Loader');
         $this->configFile         = $configFile;
         $this->vendorDownload     = $vendorDownload;
-        $this->requiredClasses    = $requiredClasses;
-        $this->requiredInterfaces = $requiredInterfaces;
         $this->meditate();            // load the main Attogram configuration
 
         if (isset($this->config['isRouter']) && $this->config['isRouter']) {
@@ -78,10 +49,7 @@ class GuruMeditationLoader
         }
 
         $this->expandConsciousness(); // run the composer vendor autoloader
-        $this->focusMind();           // include Attogram project classes
         $this->focusInnerEye();       // include modules includes
-        $this->innerAwareness();      // check for required classes
-        $this->innerEmptiness();      // check for required interfaces
         $this->meditateDeeper();      // load the modules configurations
         $this->tranquility();         // Load The Attogram Framework
 
@@ -120,7 +88,7 @@ class GuruMeditationLoader
             $this->logDefaultConfiguration();
             return;
         }
-        $this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
+        //$this->debug('meditate: LOADED OK: ConfigFile: '.$this->configFile);
 
         if (!isset($config)) {
             $this->debug('meditation: NOT FOUND: no config variable in ConfigFile');
@@ -136,7 +104,7 @@ class GuruMeditationLoader
         foreach ($config as $configName => $configValue) {
             $this->config[$configName] = $configValue;
         }
-        $this->debug('meditate: CONFIG OK: '.print_r($this->config, true));
+        //$this->debug('meditate: CONFIG OK: '.print_r($this->config, true));
     } // end function meditate()
 
     public function logDefaultConfiguration()
@@ -174,34 +142,6 @@ class GuruMeditationLoader
         );
     } // end function expandConsciousness()
 
-    /**
-     * include Attogram project classes
-     */
-    public function focusMind()
-    {
-        $projectClassesDir = $this->config['attogramDirectory'].'Attogram'.DIRECTORY_SEPARATOR;
-        if (!is_dir($projectClassesDir)) {
-            $this->guruMeditationError(
-                'Missing project directory: '.$projectClassesDir
-            );
-        }
-        if (!is_readable($projectClassesDir)) {
-            $this->guruMeditationError(
-                'Project directory is unreadable: '.$projectClassesDir
-            );
-        }
-        $result = array();
-        foreach (array_diff(scandir($projectClassesDir), array('.', '..')) as $file) {
-            if (!(include_once($projectClassesDir.$file))) {
-                $this->guruMeditationError(
-                    'Failed to include project file: '.$projectClassesDir.$file
-                );
-                $result[] = $projectClassesDir.$file;
-            }
-        }
-        $this->debug('focusMind: OK: '.implode(', ', $result));
-    } // end function focusMind()
-
     public function focusInnerEye()
     {
         $counts = Attogram::loadModuleSubdirectories(
@@ -210,40 +150,6 @@ class GuruMeditationLoader
         );
         $this->debug('focusInnerEye: OK: '.implode(', ', $counts));
     }
-
-    public function innerAwareness()
-    {
-        $missing = array();
-        foreach ($this->requiredClasses as $c) {
-            if (!class_exists($c)) {
-                $missing[] = $c;
-                $this->debug('innerAwareness: Required Class NOT FOUND: '.$c);
-            }
-            $result[] = $c;
-        }
-        if (!$missing && isset($result)) {
-            $this->debug('innerAwareness: OK: '.implode(', ', $result));
-            return;
-        }
-        $this->guruMeditationError('Required Class Missing: '.implode(', ', $missing));
-    } // end function innerAwareness()
-
-    public function innerEmptiness()
-    {
-        $missing = array();
-        foreach ($this->requiredInterfaces as $c) {
-            if (!interface_exists($c)) {
-                $missing[] = $c;
-                $this->debug('innerEmptiness: Required Inteface NOT FOUND: '.$c);
-            }
-            $result[] = $c;
-        }
-        if (!$missing && isset($result)) {
-            $this->debug('innerEmptiness: OK: '.implode(', ', $result));
-            return;
-        }
-        $this->guruMeditationError('Required Interface Missing: '.implode(', ', $missing));
-    } // end function innerEmptiness()
 
     /**
      * load module configuration files
@@ -270,7 +176,7 @@ class GuruMeditationLoader
         foreach ($config as $configName => $configValue) {
             $this->config[$configName] = $configValue;
         }
-        $this->debug('meditateDepper: Module Config OK: ' . print_r($config, true));
+        //$this->debug('meditateDeeper: Module Config OK: ' . print_r($config, true));
     }
 
     public function tranquility()
@@ -281,7 +187,7 @@ class GuruMeditationLoader
         //}
 
         // Create the Request object
-        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        $request = Request::createFromGlobals();
 
         // Create the Debug Logger
         if ((isset($this->config['debug'])   // debug is true...

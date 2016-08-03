@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - Attogram class v0.5.5
+// Attogram Framework - Attogram class v0.5.6
 
 namespace Attogram;
 
@@ -135,11 +135,11 @@ class Attogram
         );
         if (!isset($this->depth[''])) { // check:  homepage depth defined
             $this->depth[''] = 1;
-            $this->log->debug('awaken: set homepage depth: 1');
+            //$this->log->debug('awaken: set homepage depth: 1');
         }
         if (!isset($this->depth['*'])) {  // check: default depth defined
             $this->depth['*'] = 1;
-            $this->log->debug('awaken: set default depth: 1');
+            //$this->log->debug('awaken: set default depth: 1');
         }
     } // end function load_config()
 
@@ -150,7 +150,7 @@ class Attogram
     {
         $dirs = $this->getAllSubdirectories($this->modulesDirectory, 'templates');
         if (!$dirs) {
-            $this->log->debug('setModuleTemplates: no module templates found');
+            //$this->log->debug('setModuleTemplates: no module templates found. Using defaults.');
             return;
         }
         foreach ($dirs as $moduleDir) {
@@ -159,12 +159,13 @@ class Attogram
                 if ($this->isReadableFile($file, '.php')) {
                     $name = preg_replace('/\.php$/', '', $mfile);
                     $this->templates[$name] = $file; // Set the template
-                    $this->log->debug('setModuleTemplates: '.$name.' = '.$file);
+                    //$this->log->debug('setModuleTemplates: '.$name.' = '.$file);
                     continue;
                 }
                 $this->log->error('setModuleTemplates: File not readable: '.$file);
             }
         }
+        $this->log->debug('SetModuleTemplates: ', $this->templates);
     } // end function setModuleTemplates()
 
     /**
@@ -178,11 +179,11 @@ class Attogram
     {
         if ($configVal) {
             $this->{$varName} = $configVal;
-            $this->log->debug('remember: '.$varName.' = '.print_r($this->{$varName}, true));
+            //$this->log->debug('remember: '.$varName.' = '.print_r($this->{$varName}, true));
             return;
         }
         $this->{$varName} = $defaultVal;
-        $this->log->debug('remember: using default: '.$varName.' = '.print_r($this->{$varName}, true));
+        //$this->log->debug('remember: using default: '.$varName.' = '.print_r($this->{$varName}, true));
     }
 
     /**
