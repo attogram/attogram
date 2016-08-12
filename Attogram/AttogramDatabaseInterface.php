@@ -1,5 +1,5 @@
 <?php
-// Attogram Framework - AttogramDatabaseInterface 0.3.2
+// Attogram Framework - AttogramDatabaseInterface 0.3.3
 
 namespace Attogram;
 
@@ -50,12 +50,12 @@ interface AttogramDatabaseInterface
     /**
      * tabler - HTML table with view of database table content, plus optional admin links
      *
-     * @param  string $table         The table name
+     * @param  string $table        The table name
      * @param  string $tableId      The name of the table ID field (or equivilant )
      * @param  string $nameSingular The name of what we are editing, singular form
      * @param  string $namePlural   The name of what we are editing, plural form
-     * @param  array  $col           Column Display Info - array of array('class'=>'...', 'title'=>'...', 'key'=>'...')
-     * @param  string $sql           SQL query to view contents of table
+     * @param  array  $col          Column Display Info - array of array('class'=>'...', 'title'=>'...', 'key'=>'...')
+     * @param  string $sql          SQL query to view contents of table
      * @param  string $countSql     SQL query to get total number of items in table
      * @param  string $publicLink   URL to the public version of this view
      * @param  string $adminLink    URL to the admin version of this view
@@ -64,8 +64,6 @@ interface AttogramDatabaseInterface
      *
      * @return void                 HTML fragment
      */
-     // TODO - remove unused
-     // TODO - return string, not print
     public function tabler(
         $table,
         $tableId,
@@ -86,7 +84,7 @@ interface AttogramDatabaseInterface
      * @param  int    $offset  The item # to start the list
      * @param  string $preQS   (optional) URL Query String to prepend to pagination links,
      *                                    pairs of  name=value&name=value&...
-     * @return void                 HTML fragment
+     * @return void            HTML fragment
      */
     public function pager($count, $limit, $offset, $preQS = '');
      // TODO - return string, not print
