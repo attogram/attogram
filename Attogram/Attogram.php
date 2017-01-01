@@ -15,7 +15,7 @@ namespace Attogram;
  * or the GNU General Public License version 3 (GPL-3.0+), at your choosing.
  *
  * @license (MIT or GPL-3.0+)
- * @copyright 2016 Attogram Framework Developers https://github.com/attogram/attogram
+ * @copyright 2017 Attogram Framework Developers https://github.com/attogram/attogram
  */
 class Attogram
 {
